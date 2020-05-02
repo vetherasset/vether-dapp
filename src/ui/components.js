@@ -1,0 +1,264 @@
+import React from 'react'
+import { Button as AntButton } from "antd"
+import { HomeOutlined, FileTextOutlined, RightSquareOutlined, CheckSquareOutlined } from '@ant-design/icons';
+
+
+export const H1 = (props) => {
+  let styles = {...props.style || {}}
+  styles.fontSize = "24px"
+  styles.fontWeight = "bold"
+  styles.color = "#FFF"
+
+    if (props.margin) {
+    styles.margin = props.margin
+  }
+
+  return (
+    <span style={styles}>
+      {props.children}
+    </span>
+  )
+}
+
+export const H2 = (props) => {
+  let styles = {...props.style || {}}
+  styles.fontSize = "20px"
+  styles.fontWeight = "bold"
+  styles.color = "#FFF"
+  styles.margin = "20px 0px"
+
+  if (props.margin) {
+    styles.margin = props.margin
+  }
+  return (
+    <span style={styles}>
+      {props.children}
+    </span>
+  )
+}
+
+export const Subtitle = (props) => {
+  let styles = {...props.style || {}}
+  styles.fontSize = "14px"
+  styles.fontWeight = "bold"
+  styles.color = "#FFF"
+  styles.margin = "20px 0px"
+
+  if (props.margin) {
+    styles.margin = props.margin
+  }
+  return (
+    <span style={styles}>
+      {props.children}
+    </span>
+  )
+}
+
+
+export const Label = (props) => {
+  let styles = {...props.style || {}}
+  styles.fontSize = "16px"
+  styles.fontWeight = "bold"
+  styles.color = "#FFF"
+  styles.margin = "20px 0px"
+
+    if (props.margin) {
+    styles.margin = props.margin
+  }
+
+  return (
+    <span style={styles}>
+      {props.children}
+    </span>
+  )
+}
+
+export const LabelGrey = (props) => {
+  let styles = {...props.style || {}}
+  styles.fontSize = "16px"
+  styles.fontWeight = "bold"
+  styles.color = "#97948E"
+  styles.margin = "20px 0px"
+
+    if (props.margin) {
+    styles.margin = props.margin
+  }
+
+  return (
+    <span style={styles}>
+      {props.children}
+    </span>
+  )
+}
+
+export const Sublabel = (props) => {
+  let styles = {...props.style || {}}
+  styles.fontSize = "14px"
+  styles.fontWeight = ""
+  styles.color = "#fff"
+  styles.margin = "20px 0px"
+
+    if (props.margin) {
+    styles.margin = props.margin
+  }
+
+  return (
+    <span style={styles}>
+      {props.children}
+    </span>
+  )
+}
+
+export const Text = (props) => {
+  let styles = {...props.style || {}}
+  styles.fontSize = "14px"
+  styles.color = "#FFF"
+  styles.margin = "20px 0px"
+
+  if (props.bold) {
+    styles.fontWeight = "bold"
+  }
+  if (props.color) {
+    styles.color = props.color
+  }
+  if (props.size) {
+    styles.fontSize = props.size
+  }
+  if (props.margin) {
+    styles.margin = props.margin
+  }
+  return (
+    <span style={styles}>
+      {props.children}
+    </span>
+  )
+}
+
+export const P = (props) => {
+  let styles = {...props.style || {}}
+  styles.fontSize = "12px"
+  styles.color = "#97948E"
+  styles.display = "block"
+  styles.fontWeight = "bold"
+  styles.display = "flex"
+  styles.alignItems = "center"
+  styles.justifyContent = "center"
+  // styles.marginLeft = -80
+  return (
+    <span style={styles}>
+      {props.children}
+    </span>
+  )
+}
+
+export const Click = (props) => {
+  let styles = {...props.style || {}}
+  styles.fontSize = "16px"
+  styles.fontWeight = "bold"
+  styles.color = "#D09800"
+  styles.textDecoration = "underline"
+  styles.marginTop = 30
+  styles.marginBottom = 30
+  styles.margin = "20px 0px"
+  return (
+    <span style={styles}>
+      {props.children}
+    </span>
+  )
+}
+
+export const Button = (props) => {
+  let styles = {...props.style || {}}
+  styles.fontSize = "16px"
+  styles.fontWeight = "bold"
+  styles.color = "#D09800"
+  styles.textDecoration = "underline"
+  styles.marginTop = 30
+  styles.marginBottom = 30
+  styles.margin = "0px 0px"
+  styles.backgroundColor = "#2B2515"
+  styles.borderColor = "#2B2515"
+  styles.display= "inline-block"
+  styles.borderBottom = "1px solid #D09800"
+  styles.height = "20px"
+  styles.padding = "0px 0px"
+
+  return (
+    <AntButton
+      disabled={props.disabled}
+      style={styles}
+      onClick={props.onClick}
+      onChange={props.onChange}
+      type={props.type}
+      loading={props.loading}
+    >
+      {props.children}
+    </AntButton>
+  )
+}
+
+
+export const Center = (props) => (
+  <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+    {props.children}
+  </div>
+)
+
+export const HR = () => (
+  <div>
+    <hr style={{border: "1px dashed #97948E", marginTop:40}}/>
+  </div>
+)
+
+export const Gap = () => (
+  <div>
+    <br></br><br></br>
+  </div>
+)
+
+export const Icon = (props) => {
+
+  let styles = {...props.style || {}}
+  styles.margin = "0px 10px 0px 0px"
+  styles.fontWeight = "bold"
+
+  if (props.color) {
+    styles.color = props.color
+  }
+  if (props.size) {
+    styles.fontSize = props.size
+  }
+  if (props.margin) {
+    styles.margin = props.margin
+  }
+
+  if(props.icon === "overview"){
+    return (
+      <HomeOutlined style={styles}>
+        {props.children}
+      </HomeOutlined>
+    )
+  }
+  if(props.icon === "acquire"){
+    return (
+      <RightSquareOutlined style={styles}>
+        {props.children}
+      </RightSquareOutlined>
+    )
+  }
+  if(props.icon === "claim"){
+    return (
+      <CheckSquareOutlined style={styles}>
+        {props.children}
+      </CheckSquareOutlined>
+    )
+  }
+  if(props.icon === "whitepaper"){
+    return (
+      <FileTextOutlined style={styles}>
+        {props.children}
+      </FileTextOutlined>
+    )
+  }
+}
+

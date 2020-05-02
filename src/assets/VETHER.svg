@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="326px" viewBox="0 0 200 326" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>VETHER</title>
+    <desc>VETHER-Icon</desc>
+    <g id="VETHER" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="Path-4" fill="#291E00" transform="translate(150.000000, 174.500000) scale(-1, 1) translate(-150.000000, -174.500000) " points="200 123 200 226 100 168"></polygon>
+        <polygon id="Path-4" fill="#795900" points="100 123 100 226 0 168"></polygon>
+        <polygon id="Path-3" fill="#D09800" points="100 1 100 123 0 168"></polygon>
+        <polygon id="Path-3" fill="#795900" transform="translate(150.000000, 84.500000) scale(-1, 1) translate(-150.000000, -84.500000) " points="200 1 200 123 100 168"></polygon>
+        <polygon id="Path-5" fill="#D09800" points="100 244 100 326 0 186"></polygon>
+        <polygon id="Path-5" fill="#795900" transform="translate(150.000000, 256.000000) scale(-1, 1) translate(-150.000000, -256.000000) " points="200 244 200 326 100 186"></polygon>
+    </g>
+</svg>

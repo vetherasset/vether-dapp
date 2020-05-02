@@ -1,0 +1,33 @@
+/*.App {
+  text-align: center;
+  margin-left:100;
+}*/
+
+body {
+  background-color: #2B2515;
+  color: #ffffff;
+  margin: 0px;
+  font-family: Courier New;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.App-link {
+  color: #D09800;
+  font-size: 14;
+}
+
+.ant-menu-inline .ant-menu-item::after{
+  border-right: 3px solid #D09800;
+}
+
+.ant-menu {
+  background: #2B2515;
+}
+
+.ant-menu-root.ant-menu-inline{
+  background-color: #2B2515;
+}
+
+
