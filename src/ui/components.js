@@ -2,12 +2,24 @@ import React from 'react'
 import { Button as AntButton } from "antd"
 import { HomeOutlined, FileTextOutlined, RightSquareOutlined, CheckSquareOutlined } from '@ant-design/icons';
 
+export const Colour = () => {
+  const colour = {
+    "black":"#110D01", 
+    "white":"#FFF",
+    "dgrey": "#2B2515",
+    "grey": "#97948E",
+    "lgrey": "#F4F4F2",
+    "rust": "#795900",
+    "gold":"#D09800"
+  }
+  return colour
+}
 
 export const H1 = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "24px"
   styles.fontWeight = "bold"
-  styles.color = "#FFF"
+  styles.color = Colour().white
 
     if (props.margin) {
     styles.margin = props.margin
@@ -24,7 +36,7 @@ export const H2 = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "20px"
   styles.fontWeight = "bold"
-  styles.color = "#FFF"
+  styles.color = Colour().white
   styles.margin = "20px 0px"
 
   if (props.margin) {
@@ -41,7 +53,7 @@ export const Subtitle = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "14px"
   styles.fontWeight = "bold"
-  styles.color = "#FFF"
+  styles.color = Colour().white
   styles.margin = "20px 0px"
 
   if (props.margin) {
@@ -59,7 +71,7 @@ export const Label = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "16px"
   styles.fontWeight = "bold"
-  styles.color = "#FFF"
+  styles.color = Colour().white
   styles.margin = "20px 0px"
 
     if (props.margin) {
@@ -77,7 +89,7 @@ export const LabelGrey = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "16px"
   styles.fontWeight = "bold"
-  styles.color = "#97948E"
+  styles.color = Colour().grey
   styles.margin = "20px 0px"
 
     if (props.margin) {
@@ -95,7 +107,7 @@ export const Sublabel = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "14px"
   styles.fontWeight = ""
-  styles.color = "#fff"
+  styles.color = Colour().white
   styles.margin = "20px 0px"
 
     if (props.margin) {
@@ -112,7 +124,7 @@ export const Sublabel = (props) => {
 export const Text = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "14px"
-  styles.color = "#FFF"
+  styles.color = Colour().white
   styles.margin = "20px 0px"
 
   if (props.bold) {
@@ -137,7 +149,7 @@ export const Text = (props) => {
 export const P = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "12px"
-  styles.color = "#97948E"
+  styles.color = Colour().grey
   styles.display = "block"
   styles.fontWeight = "bold"
   styles.display = "flex"
@@ -155,7 +167,7 @@ export const Click = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "16px"
   styles.fontWeight = "bold"
-  styles.color = "#D09800"
+  styles.color = Colour().gold
   styles.textDecoration = "underline"
   styles.marginTop = 30
   styles.marginBottom = 30
@@ -171,13 +183,13 @@ export const Button = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "16px"
   styles.fontWeight = "bold"
-  styles.color = "#D09800"
+  styles.color = Colour().gold
   styles.textDecoration = "underline"
   styles.marginTop = 30
   styles.marginBottom = 30
   styles.margin = "0px 0px"
-  styles.backgroundColor = "#2B2515"
-  styles.borderColor = "#2B2515"
+  styles.backgroundColor = Colour().dgrey
+  styles.borderColor = Colour().dgrey
   styles.display= "inline-block"
   styles.borderBottom = "1px solid #D09800"
   styles.height = "20px"

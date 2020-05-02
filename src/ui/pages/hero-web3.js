@@ -6,7 +6,7 @@ import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 
 import { Row, Col } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Click } from '../components'
+import { LabelGrey, Label, Click, Colour } from '../components'
 
 export const VetherTable = () => {
     const [loaded, setLoaded] = useState(null)
@@ -222,7 +222,7 @@ export const VetherTable = () => {
                     </Row>
                     <LabelGrey>{vetherAddr()}</LabelGrey>
                     <br></br>
-                    <Click><a href={getLink()} rel="noopener noreferrer" title="Vether Contract Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}> VIEW CONTRACT -> </a></Click>
+                    <Click><a href={getLink()} rel="noopener noreferrer" title="Vether Contract Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW CONTRACT -> </a></Click>
                 </div>
             }
         </div>

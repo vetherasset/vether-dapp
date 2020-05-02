@@ -8,6 +8,7 @@ import Hero from './ui/pages/Hero'
 import Acquire from './ui/pages/Acquire'
 import Claim from './ui/pages/Claim'
 import Whitepaper from './ui/pages/Whitepaper'
+import { Colour } from './ui/components'
 
 import { BreakpointProvider } from 'react-socks';
 
@@ -21,7 +22,7 @@ const App = () => {
 				<BreakpointProvider>
 					<Layout style={{height:"100vh"}}>
 						<Sidebar />
-						<Content style={{ background: "#2B2515", color: "#F4F4F2" , paddingLeft:50}}>
+						<Content style={{ background: Colour().dgrey, color: Colour().white , paddingLeft:50}}>
 							<Switch>
 								<Route path="/" exact component={Hero} />
 								<Route path="/overview" exact component={Hero} />

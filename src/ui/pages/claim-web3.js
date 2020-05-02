@@ -6,7 +6,7 @@ import { vetherAddr, vetherAbi } from '../../client/web3.js'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
-import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey } from '../components'
+import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey, Colour } from '../components'
 
 export const ClaimTable = () => {
 
@@ -236,7 +236,7 @@ export const ClaimTable = () => {
 												}
 												{loaded &&
 													<div>
-														<Click><a href={getLink()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+														<Click><a href={getLink()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
 													</div>
 												}
 											</div>

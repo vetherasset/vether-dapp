@@ -6,7 +6,7 @@ import { vetherAddr, vetherAbi } from '../../client/web3.js'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Click, Button, Sublabel, Gap } from '../components'
+import { LabelGrey, Label, Click, Button, Sublabel, Gap, Colour } from '../components'
 
 export const AcquireTable = () => {
 
@@ -179,7 +179,7 @@ export const AcquireTable = () => {
 									}
 									{loaded &&
 										<div>
-											<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+											<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
 											<br></br>
 											<Sublabel>Refresh to update</Sublabel>
 										</div>
