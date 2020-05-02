@@ -8,6 +8,7 @@
     "axios": "^0.19.2",
     "bignumber": "^1.1.0",
     "bignumber.js": "^9.0.0",
+    "dotenv": "^8.2.0",
     "fs": "^0.0.1-security",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",

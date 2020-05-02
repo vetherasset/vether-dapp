@@ -1,5 +1,6 @@
 import Web3 from 'web3'
 import VETHER from '../artifacts/DeployedVether.json'
+require('dotenv').config()
 //import ERC20 from '../artifacts/ERC20.json'
 // import TOKEN1 from '../artifacts/Token1.json'
 // import TOKEN2 from '../artifacts/Token2.json'
@@ -15,7 +16,7 @@ export const vetherAbi = () => {
 }
 
 export const infuraAPI = () => {
-	return 'https://rinkeby.infura.io/v3/9c3ac79a15634ba2be4be91580218365'
+	return process.env.INFURA
 }
 
 export const getWeb3 = () => {
