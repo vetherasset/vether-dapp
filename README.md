@@ -1,5 +1,7 @@
 # Vether - A strictly scarce asset
 
+![Vether-UI](https://github.com/vetherasset/vether-dapp/blob/master/git/vether-ui.png)
+
 ## DApp Interface
 
 The Vether DApp interfaces to the Vether Smart Contracts.
