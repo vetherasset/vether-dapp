@@ -7,7 +7,7 @@ import VETHER from '../artifacts/DeployedVether.json'
 // import UNISWAP from '../artifacts/UniswapExchange.json'
 
 export const vetherAddr = () => {
-	return '0x2Db2C2235a5F8daa22DdBD39875c0483b286AeA8'
+	return '0x830a6f5764b3e736f1f24427a6ea294926862195'
 }
 
 export const vetherAbi = () => {
