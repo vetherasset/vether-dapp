@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { H2, Subtitle, HR, Gap } from './components'
+import { H2, Subtitle, HR, Gap } from '../components'
 import { EraTable } from './era-web3'
 
 const Era = () => {

@@ -2,11 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi, infuraAPI } from '../client/web3.js'
+import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 
 import { Row, Col } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Click } from './components'
+import { LabelGrey, Label, Click } from '../components'
 
 export const VetherTable = () => {
     const [loaded, setLoaded] = useState(null)

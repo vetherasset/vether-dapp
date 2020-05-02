@@ -2,11 +2,11 @@ import React, { useState, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi } from '../client/web3.js'
+import { vetherAddr, vetherAbi } from '../../client/web3.js'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
-import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey } from './components'
+import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey } from '../components'
 
 export const ClaimTable = () => {
 

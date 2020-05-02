@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi, tokenAddr } from '../client/web3.js'
+import { vetherAddr, vetherAbi } from '../../client/web3.js'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Click, Button, Sublabel, Gap } from './components'
+import { LabelGrey, Label, Click, Button, Sublabel, Gap } from '../components'
 
 export const AcquireTable = () => {
 
@@ -23,7 +23,7 @@ export const AcquireTable = () => {
 	const [burnTknFlag, setBurnTknFlag] = useState(null)
 	const [tknTx, setTknTx] = useState(null)
 
-	const [customToken, setCustomToken] = useState(tokenAddr(0))
+	const [customToken, setCustomToken] = useState('0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2')
 	const [customAmount, setCustomAmount] = useState(1000)
 
 	const [walletFlag, setWalletFlag] = useState(null)
@@ -194,17 +194,10 @@ export const AcquireTable = () => {
 					<Label>BURN TOKENS</Label>
 					<Row>
 						<Col xs={16} sm={8}>
-							<Input allowClear onChange={onTokenChange} placeholder={tokenAddr(0)} />
+							<Input allowClear onChange={onTokenChange} placeholder={customToken} />
 							<br></br>
 							<Sublabel>Set custom token address to burn</Sublabel>
 							<br></br>
-							{/* <LabelGrey>{tokenAddr(0)}</LabelGrey>
-                        <br></br>
-                        <LabelGrey>{tokenAddr(1)}</LabelGrey>
-                        <br></br>
-                        <LabelGrey>{tokenAddr(2)}</LabelGrey>
-                        <br></br>
-                        <LabelGrey>{tokenAddr(3)}</LabelGrey> */}
 						</Col>
 						<Col xs={6} sm={3} style={{ marginLeft: 10, marginRight: 20 }}>
 							<Input allowClear onChange={onAmountChange} placeholder={customAmount} />

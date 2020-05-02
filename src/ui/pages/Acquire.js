@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 
-import { H2, Subtitle, Text, HR, Gap, LabelGrey, Click } from './components'
+import { H2, Subtitle, Text, HR, Gap, LabelGrey, Click } from '../components'
 import { AcquireTable } from './acquire-web3'
 
-import '../App.css';
+import '../../App.css';
 // import { Button as ButtonD } from 'antd';
 
 const Acquire = () => {

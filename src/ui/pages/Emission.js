@@ -1,8 +1,8 @@
 import React from 'react';
 
 import '../App.css';
-import { H2, Subtitle, Gap, HR } from './components'
-import { EmissionTable } from './content'
+import { H2, Subtitle, Gap, HR } from '../components'
+import { EmissionTable } from '../content'
 
 const Emission = (props) => {
 

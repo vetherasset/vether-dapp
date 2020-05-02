@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { Row, Col } from 'antd'
-import { H1, HR, Gap, Subtitle } from './components'
-import { Abstract, Logo } from './content'
+import { H1, HR, Gap, Subtitle } from '../components'
+import { Abstract, Logo } from '../content'
 import { VetherTable } from './hero-web3'
 import Era from './Era'
 
-import '../App.css';
+import '../../App.css';
 
 const Hero = (props) => {
 

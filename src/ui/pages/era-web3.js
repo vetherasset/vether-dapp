@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi } from '../client/web3.js'
+import { vetherAddr, vetherAbi } from '../../client/web3.js'
 
 import { Row, Col } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Center, Text } from './components'
+import { LabelGrey, Label, Center, Text } from '../components'
 
 
 export const EraTable = () => {

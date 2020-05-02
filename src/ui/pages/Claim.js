@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 
-import { H2, Subtitle, Click, HR, Gap, LabelGrey } from './components'
+import { H2, Subtitle, Click, HR, Gap, LabelGrey } from '../components'
 import { ClaimTable } from './claim-web3'
 
-import '../App.css';
+import '../../App.css';
 
 const Claim = () => {
 

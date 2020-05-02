@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Breakpoint } from 'react-socks';
 
-import '../App.css';
-import { H2, Text, Center, Gap } from './components'
-import { Abstract, EmissionTable } from './content'
+import '../../App.css';
+import { H2, Text, Center, Gap } from '../components'
+import { Abstract, EmissionTable } from '../content'
 
 const Whitepaper = () => {
 
