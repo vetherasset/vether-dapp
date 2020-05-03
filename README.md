@@ -26,3 +26,18 @@ yarn start
 * AntDesign
 * AntDesignIcons
 
+
+## Scraper
+
+A contract scraper is provided to scrape all Eras and Days for:
+* Burnt Ether
+* Claimed Vether
+* Vether Remaining
+
+```bash
+cd data
+node scrape.js
+```
+
+This will be the basis for future graphs and analysis. 
+
