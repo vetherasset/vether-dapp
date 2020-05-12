@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { H2, Subtitle, Click, HR, Gap, LabelGrey } from '../components'
+import { H2, Text, Subtitle, Click, HR, Gap, LabelGrey } from '../components'
 import { ClaimTable } from './claim-web3'
 
 import '../../App.css';
@@ -19,6 +19,7 @@ const Claim = () => {
 			<Gap />
 			<H2>CLAIM VETHER</H2><br />
 			<Subtitle>Claim your share of a previous day’s emission. </Subtitle>
+			<Text>Note: you cannot claim on the same day of contribution. Please wait a day. </Text><br />
 			<Gap />
 			{safari &&
 				<div>

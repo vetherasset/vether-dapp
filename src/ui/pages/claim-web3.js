@@ -4,8 +4,8 @@ import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
 import { vetherAddr, vetherAbi } from '../../client/web3.js'
 
-import { Row, Col, Input } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons';
+import { Modal, Row, Col, Input } from 'antd'
+import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey, Colour } from '../components'
 
 export const ClaimTable = () => {
@@ -15,6 +15,8 @@ export const ClaimTable = () => {
 	const [account, setAccount] = useState(
 		{ address: '', tokenBalance: '', ethBalance: '' })
 	const [contract, setContract] = useState(null)
+	const [currentDay, setCurrentDay] = useState(null)
+	const [nextDay, setNextDay] = useState(null)
 	const [arrayDays, setArrayDays] = useState(['-'])
 	const [claimAmt, setClaimAmt] = useState(null)
 	const [txHash, setTxHash] = useState(null)
@@ -52,17 +54,19 @@ export const ClaimTable = () => {
 	}
 
 	const loadBlockchainData = async () => {
-		const contract_ = new  window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		const accounts = await  window.web3.eth.getAccounts()
+		const contract_ = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+		const accounts = await window.web3.eth.getAccounts()
+		setCurrentDay(await contract_.methods.currentDay().call())
+		setNextDay(getSecondsToGo(await contract_.methods.nextDayTime().call()))
 		setContract(contract_)
-		refreshAccount( contract_, accounts[0])
+		refreshAccount(contract_, accounts[0])
 		getDays(contract_, accounts[0])
 		//console.log("accounts", accounts[0])
 	}
 
 
-	const refreshAccount = async ( contract_, account_) => {
-		var ethbalance_ = convertFromWei(await  window.web3.eth.getBalance(account_))
+	const refreshAccount = async (contract_, account_) => {
+		var ethbalance_ = convertFromWei(await window.web3.eth.getBalance(account_))
 		const vethBalance_ = convertFromWei(await contract_.methods.balanceOf(account_).call())
 
 		setAccount({
@@ -102,6 +106,12 @@ export const ClaimTable = () => {
 		return parts.join(".");
 	}
 
+	function getSecondsToGo(date) {
+        const time = (Date.now() / 1000).toFixed()
+        const seconds = (date - time)
+        return seconds
+    } 
+
 	const onEraChange = e => {
 		const day = userData.day
 		setUserData({ era: e.target.value, day: day })
@@ -111,17 +121,34 @@ export const ClaimTable = () => {
 		setUserData({ era: userData.era, day: e.target.value })
 	}
 
-	const checkShare = async () => {
-		const share_ = (new BigNumber(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())).toFixed()
-		setClaimAmt(convertFromWei(share_))
-		console.log(userData.era, userData.day, share_)
-		setCheckFlag(true)
+	const { confirm } = Modal
 
-		if (convertFromWei(share_) > 0) {
-			setZeroFlag(false)
+	const checkShare = async () => {
+		if (currentDay === userData.day){
+			handleShowModal()
 		} else {
-			setZeroFlag(true)
+			const share_ = (new BigNumber(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())).toFixed()
+			setClaimAmt(convertFromWei(share_))
+			// console.log(userData.era, userData.day, share_)
+			setCheckFlag(true)
+			
+			if (convertFromWei(share_) > 0) {
+				setZeroFlag(false)
+			} else {
+				setZeroFlag(true)
+			}
 		}
+		
+	}
+
+	const handleShowModal = () => {
+		confirm({
+			title: 'You can not claim on the day you contributed.',
+			icon: <ExclamationCircleOutlined />,
+			content: <p>Please wait for a new day ({((nextDay)/3600).toFixed(0)} hrs, {(nextDay % 60)} mins).</p>,
+			onOk() {},
+			onCancel() {},
+		  });
 	}
 
 	const claimShare = async () => {

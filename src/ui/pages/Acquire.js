@@ -46,7 +46,7 @@ const Acquire = () => {
 			<H2>MINE VETHER</H2><br />
 			<Subtitle>Run the mining client to continuously mine Vether. </Subtitle>
 			<br /><br />
-			<Click><a href='https://https://github.com/strictly-scarce/vether-miner-app' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>GET THE CLIENT -></a></Click>
+			<Click><a href='https://github.com/vetherasset/vether-miner' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>GET THE CLIENT -></a></Click>
 			<Gap />
 		</div>
 	)
