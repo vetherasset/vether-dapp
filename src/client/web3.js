@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import VETHER from '../artifacts/DeployedVether.json'
-require('dotenv').config()
+require('dotenv').config({path:"./.env"})
 //import ERC20 from '../artifacts/ERC20.json'
 // import TOKEN1 from '../artifacts/Token1.json'
 // import TOKEN2 from '../artifacts/Token2.json'
@@ -8,7 +8,7 @@ require('dotenv').config()
 // import UNISWAP from '../artifacts/UniswapExchange.json'
 
 export const vetherAddr = () => {
-	return '0xd447B74e5Ff9fAF98eB66dC59DC2C91DD47736dC'
+	return '0x31Bb711de2e457066c6281f231fb473FC5c2afd3'
 }
 
 export const vetherAbi = () => {
@@ -16,7 +16,7 @@ export const vetherAbi = () => {
 }
 
 export const infuraAPI = () => {
-	return process.env.INFURA
+	return 'https://mainnet.infura.io/v3/9c3ac79a15634ba2be4be91580218365'
 }
 
 export const getWeb3 = () => {

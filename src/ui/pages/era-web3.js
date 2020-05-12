@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 
 import { Row, Col } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -18,25 +18,19 @@ export const EraTable = () => {
     useEffect(() => {
 
         const loadBlockchainData = async () => {
-            const web3_ = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/9c3ac79a15634ba2be4be91580218365'))
+            const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))            
             const contract_ = new web3_.eth.Contract(vetherAbi(), vetherAddr())
             const emission_ = await contract_.methods.emission().call()
             const day_ = await contract_.methods.currentDay().call()
             const era_ = await contract_.methods.currentEra().call()
-            const secondsPerDay_ = await contract_.methods.secondsPerDay().call()
             const nextDay_ = await contract_.methods.nextDayTime().call()
             const nextEra_ = await contract_.methods.nextEraTime().call()
             const nextEmission_ = await contract_.methods.getNextEraEmission().call()
             const secondsToGo = getSecondsToGo(nextDay_)
 
             var currentBurn_
-            if (secondsToGo <= 0) {
-                currentBurn_ = 0
-                setCounter(secondsPerDay_-1)
-            } else {
-                currentBurn_ = await contract_.methods.mapEraDay_UnitsRemaining(era_, day_).call()
-                setCounter(secondsToGo)
-            }
+            currentBurn_ = await contract_.methods.mapEraDay_UnitsRemaining(era_, day_).call()
+            setCounter(secondsToGo)
 
             setEraData({
                 era: era_, day: day_,
@@ -67,6 +61,14 @@ export const EraTable = () => {
         const time = (Date.now() / 1000).toFixed()
         const seconds = (date - time)
         return seconds
+    }
+
+    const dayFinish = () => {
+        if (counter === 0) {
+            return "WAITING TO CHANGE DAYS"
+        } else {
+            return "END OF DAY"
+        }
     }
 
     React.useEffect(() => {
@@ -104,7 +106,7 @@ export const EraTable = () => {
             <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
 
             <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
-            <Center><LabelGrey margin={"0px 0px 20px"}>END OF DAY</LabelGrey></Center>
+            <Center><LabelGrey margin={"0px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
 
             <Center><Label margin={"0px 0px"}>{prettify(eraData.currentBurn)} ETH</Label></Center>
             <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>

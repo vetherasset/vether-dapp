@@ -22,7 +22,6 @@ export const VetherTable = () => {
         const loadBlockchainData = async () => {
 
             const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-            //console.log(vetherAbi(), vetherAddr())
             const contract_ = new web3_.eth.Contract(vetherAbi(), vetherAddr())
             const name_ = await contract_.methods.name().call()
             const symbol_ = await contract_.methods.symbol().call()
@@ -117,7 +116,7 @@ export const VetherTable = () => {
     }
 
     const getLink = useCallback(() => {
-        const link = "https://rinkeby.etherscan.io/address/"
+        const link = "https://etherscan.io/address/"
         const code = "#code"
         const linkFull = link.concat(vetherAddr()).concat(code)
         return linkFull

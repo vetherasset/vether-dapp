@@ -23,8 +23,9 @@ const Footer = (props) => {
   return (
     <Layout.Footer style={footerStyles}>
       <div>
-        <Row>
+      <Row>
           <Col>
+            <Click><a rel="noopener noreferrer" href="https://github.com/vetherasset" style={{color:"#97948E", fontSize:"12px"}} target="_blank">[CODE] -></a></Click>
           </Col>
         </Row>
         <Row>

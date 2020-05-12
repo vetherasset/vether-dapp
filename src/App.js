@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Layout } from 'antd';
 import 'antd/dist/antd.css'
 
+import Header from './ui/layout/Header'
 import Sidebar from './ui/layout/Sidebar'
 import Hero from './ui/pages/Hero'
 import Acquire from './ui/pages/Acquire'
@@ -22,7 +23,8 @@ const App = () => {
 				<BreakpointProvider>
 					<Layout style={{height:"100vh"}}>
 						<Sidebar />
-						<Content style={{ background: Colour().dgrey, color: Colour().white , paddingLeft:50}}>
+						<Header />
+						<Content style={{ background: Colour().dgrey, color: Colour().white , paddingLeft:50, paddingTop:50}}>
 							<Switch>
 								<Route path="/" exact component={Hero} />
 								<Route path="/overview" exact component={Hero} />

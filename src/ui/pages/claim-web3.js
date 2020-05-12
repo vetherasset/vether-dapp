@@ -134,7 +134,7 @@ export const ClaimTable = () => {
 	}
 
 	const getLink = () => {
-		const link = "https://rinkeby.etherscan.io/tx/"
+		const link = "https://etherscan.io/tx/"
 		const linkFull = link.concat(txHash)
 		return linkFull
 	}

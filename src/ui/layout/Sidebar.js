@@ -46,6 +46,7 @@ const Sidebar = (props) => {
 
   const sidebarStyles = {
     //width: 150,
+    paddingTop:60,
     backgroundColor: "#110D01",
     textTransform: "uppercase",
     zIndex: 1,

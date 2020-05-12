@@ -97,7 +97,7 @@ export const AcquireTable = () => {
 	}
 
 	const getLink = (tx) => {
-		const link = "https://rinkeby.etherscan.io/tx/"
+		const link = "https://etherscan.io/tx/"
 		return link.concat(tx)
 	}
 
