@@ -4,8 +4,8 @@ import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
 import { vetherAddr, vetherAbi } from '../../client/web3.js'
 
-import { Modal, Row, Col, Input } from 'antd'
-import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Row, Col, Input } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons';
 import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey, Colour } from '../components'
 
 export const ClaimTable = () => {
@@ -16,7 +16,6 @@ export const ClaimTable = () => {
 		{ address: '', tokenBalance: '', ethBalance: '' })
 	const [contract, setContract] = useState(null)
 	const [currentDay, setCurrentDay] = useState(null)
-	const [nextDay, setNextDay] = useState(null)
 	const [arrayDays, setArrayDays] = useState(['-'])
 	const [claimAmt, setClaimAmt] = useState(null)
 	const [txHash, setTxHash] = useState(null)
@@ -57,7 +56,6 @@ export const ClaimTable = () => {
 		const contract_ = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		const accounts = await window.web3.eth.getAccounts()
 		setCurrentDay(await contract_.methods.currentDay().call())
-		setNextDay(getSecondsToGo(await contract_.methods.nextDayTime().call()))
 		setContract(contract_)
 		refreshAccount(contract_, accounts[0])
 		getDays(contract_, accounts[0])
@@ -87,7 +85,7 @@ export const ClaimTable = () => {
 
 		for (var j = 0; j < daysContributed; j++) {
 			let day = await contract_.methods.mapMemberEra_Days(acc, era, j).call()
-			if (era < currentEra || (era >= currentEra && day < currentDay)) {
+			if (era < currentEra || (era >= currentEra && day <= currentDay)) {
 				arrayDays.push(day)
 			}
 		}
@@ -106,12 +104,6 @@ export const ClaimTable = () => {
 		return parts.join(".");
 	}
 
-	function getSecondsToGo(date) {
-		const time = (Date.now() / 1000).toFixed()
-		const seconds = (date - time)
-		return seconds
-	}
-
 	const onEraChange = e => {
 		const day = userData.day
 		setUserData({ era: e.target.value, day: day })
@@ -121,12 +113,9 @@ export const ClaimTable = () => {
 		setUserData({ era: userData.era, day: e.target.value })
 	}
 
-	const { confirm } = Modal
-
 	const checkShare = async () => {
 		const share_ = (new BigNumber(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())).toFixed()
 		setClaimAmt(convertFromWei(share_))
-		// console.log(userData.era, userData.day, share_)
 		setCheckFlag(true)
 		if (convertFromWei(share_) > 0 && currentDay < userData.day) {
 			setZeroFlag(false)
@@ -134,16 +123,6 @@ export const ClaimTable = () => {
 			setZeroFlag(true)
 		}
 
-	}
-
-	const handleShowModal = () => {
-		confirm({
-			title: 'You can not claim on the day you contributed.',
-			icon: <ExclamationCircleOutlined />,
-			content: <p>Please wait for a new day ({((nextDay) / 3600).toFixed(0)} hrs, {(nextDay % 60)} mins).</p>,
-			onOk() { },
-			onCancel() { },
-		});
 	}
 
 	const claimShare = async () => {
@@ -242,7 +221,8 @@ export const ClaimTable = () => {
 								<Col xs={12} sm={6} style={{ marginLeft: 0, marginRight: 30 }}>
 									<Label>{prettify(claimAmt)} VETH</Label>
 									<br></br>
-									<Text size={14}>Your unclaimed VETHER on this day</Text>
+									<Text size={14}>Your unclaimed Vether on this day.</Text><br />
+									<Text size={14}>(Please wait for the day to finish first before claiming) </Text><br />
 								</Col>
 
 								{!zeroFlag &&
@@ -269,9 +249,7 @@ export const ClaimTable = () => {
 						</div>
 					}
 				</div>
-
 			}
-
 		</div>
 	)
 }
