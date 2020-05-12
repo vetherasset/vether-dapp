@@ -107,10 +107,10 @@ export const ClaimTable = () => {
 	}
 
 	function getSecondsToGo(date) {
-        const time = (Date.now() / 1000).toFixed()
-        const seconds = (date - time)
-        return seconds
-    } 
+		const time = (Date.now() / 1000).toFixed()
+		const seconds = (date - time)
+		return seconds
+	}
 
 	const onEraChange = e => {
 		const day = userData.day
@@ -124,31 +124,26 @@ export const ClaimTable = () => {
 	const { confirm } = Modal
 
 	const checkShare = async () => {
-		if (currentDay === userData.day){
-			handleShowModal()
+		const share_ = (new BigNumber(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())).toFixed()
+		setClaimAmt(convertFromWei(share_))
+		// console.log(userData.era, userData.day, share_)
+		setCheckFlag(true)
+		if (convertFromWei(share_) > 0 && currentDay < userData.day) {
+			setZeroFlag(false)
 		} else {
-			const share_ = (new BigNumber(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())).toFixed()
-			setClaimAmt(convertFromWei(share_))
-			// console.log(userData.era, userData.day, share_)
-			setCheckFlag(true)
-			
-			if (convertFromWei(share_) > 0) {
-				setZeroFlag(false)
-			} else {
-				setZeroFlag(true)
-			}
+			setZeroFlag(true)
 		}
-		
+
 	}
 
 	const handleShowModal = () => {
 		confirm({
 			title: 'You can not claim on the day you contributed.',
 			icon: <ExclamationCircleOutlined />,
-			content: <p>Please wait for a new day ({((nextDay)/3600).toFixed(0)} hrs, {(nextDay % 60)} mins).</p>,
-			onOk() {},
-			onCancel() {},
-		  });
+			content: <p>Please wait for a new day ({((nextDay) / 3600).toFixed(0)} hrs, {(nextDay % 60)} mins).</p>,
+			onOk() { },
+			onCancel() { },
+		});
 	}
 
 	const claimShare = async () => {

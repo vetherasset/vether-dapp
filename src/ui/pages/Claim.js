@@ -18,7 +18,7 @@ const Claim = () => {
 		<div>
 			<Gap />
 			<H2>CLAIM VETHER</H2><br />
-			<Subtitle>Claim your share of a previous day’s emission. </Subtitle>
+			<Subtitle>Claim your share of a previous day’s emission. </Subtitle><br />
 			<Text>Note: you cannot claim on the same day of contribution. Please wait a day. </Text><br />
 			<Gap />
 			{safari &&

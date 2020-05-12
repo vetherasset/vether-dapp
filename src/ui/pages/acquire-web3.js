@@ -165,7 +165,7 @@ export const AcquireTable = () => {
 							<br></br>
 							<Button onClick={maxEther}>{(account.ethBalance - 0.1).toFixed(4)}</Button>
 							<br></br>
-							<LabelGrey>ETH Balance</LabelGrey>
+							<LabelGrey>Spendable ETH Balance</LabelGrey>
 						</Col>
 						<Col xs={15} sm={18} style={{ marginLeft: 20 }}>
 							<Button onClick={burnEther}> BURN >></Button>
