@@ -41,7 +41,7 @@ export const EraTable = () => {
                 era: era_, day: day_,
                 emission: convertToNumber(emission_),
                 currentBurn: convertToNumber(currentBurn_),
-                nextDay: nextDay_, nextEra: convertToDate(nextEra_),
+                nextDay: nextDay_, nextEra: nextEra_,
                 nextEmission: convertToNumber(nextEmission_)
             })
 
@@ -79,7 +79,7 @@ export const EraTable = () => {
     }
 
     function convertToDate(date) {
-        return new Date(1000 * date).toLocaleDateString("en-gb")
+        return new Date(1000 * date).toLocaleDateString()
     }
 
     function convertToTime(date) {
@@ -88,7 +88,7 @@ export const EraTable = () => {
 
     function convertToMonth(date_){
         const months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-        const date = new Date(date_)
+        const date = new Date(1000 * date_)
         let formatted_date = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear()
         return formatted_date
     }
