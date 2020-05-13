@@ -1,6 +1,6 @@
 import React from 'react'
-import { Layout, Row, Col} from 'antd';
-import { Click} from '../components'
+import { Layout, Row, Col } from 'antd';
+import { Click } from '../components'
 
 const Footer = (props) => {
 
@@ -9,9 +9,9 @@ const Footer = (props) => {
     textTransform: "uppercase",
     zIndex: 0,
     position: "absolute",
-    left:0,
-    bottom:0,
-    right:0,
+    left: 0,
+    bottom: 0,
+    right: 0,
     fontSize: 10,
     paddingTop: 5,
     paddingBottom: 25,
@@ -23,16 +23,22 @@ const Footer = (props) => {
   return (
     <Layout.Footer style={footerStyles}>
       <div>
-      <Row>
-          <Col>
-            <Click><a rel="noopener noreferrer" href="https://github.com/vetherasset" style={{color:"#97948E", fontSize:"12px"}} target="_blank">[CODE] -></a></Click>
-          </Col>
-        </Row>
         <Row>
           <Col>
-              <Click><a rel="noopener noreferrer" href="https://bitcointalk.org/index.php?topic=5243406" style={{color:"#97948E", fontSize:"12px"}} target="_blank">[ANN] -></a></Click>
+            <Click><a rel="noopener noreferrer" href="https://discord.gg/kvGgZ3" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[DISCORD] -></a></Click>
           </Col>
         </Row>
+
+          <Row>
+            <Col>
+              <Click><a rel="noopener noreferrer" href="https://github.com/vetherasset" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[CODE] -></a></Click>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Click><a rel="noopener noreferrer" href="https://bitcointalk.org/index.php?topic=5243406" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[ANN] -></a></Click>
+            </Col>
+          </Row>
       </div>
     </Layout.Footer>
   )

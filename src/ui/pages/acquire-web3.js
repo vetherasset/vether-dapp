@@ -4,8 +4,8 @@ import BigNumber from 'bignumber.js'
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi } from '../../client/web3.js'
 
-import { Row, Col, Input } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons';
+import { Modal, Row, Col, Input } from 'antd'
+import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { LabelGrey, Label, Click, Button, Sublabel, Gap, Colour } from '../components'
 
 export const AcquireTable = () => {
@@ -23,7 +23,7 @@ export const AcquireTable = () => {
 	const [burnTknFlag, setBurnTknFlag] = useState(null)
 	const [tknTx, setTknTx] = useState(null)
 
-	const [customToken, setCustomToken] = useState('0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2')
+	const [customToken, setCustomToken] = useState(null)
 	const [customAmount, setCustomAmount] = useState(1000)
 
 	const [walletFlag, setWalletFlag] = useState(null)
@@ -113,7 +113,10 @@ export const AcquireTable = () => {
 	}
 
 	const unlockToken = async () => {
-		setApproveFlag(true)
+		if (!customToken){
+			handleShowModal()
+		} else {
+			setApproveFlag(true)
 		const tokenContract_ = new window.web3.eth.Contract(vetherAbi(), customToken)
 		const fromAcc_ = account.address
 		const spender_ = vetherAddr()
@@ -125,7 +128,22 @@ export const AcquireTable = () => {
 		//console.log(approval_)
 		setApprovalAmount(approval_)
 		setApproved(true)
+		}
+		
 	}
+
+	const { confirm } = Modal
+
+	const handleShowModal = () => {
+		confirm({
+			title: 'Please enter a token address',
+			icon: <ExclamationCircleOutlined />,
+			content: <p>Please input the desired token to burn. You can find this address on Etherscan.</p>,
+			onOk() {},
+			onCancel() {},
+		  });
+	}
+
 
 	const burnToken = async () => {
 		setBurnTknFlag(true)
@@ -194,7 +212,7 @@ export const AcquireTable = () => {
 					<Label>BURN TOKENS</Label>
 					<Row>
 						<Col xs={16} sm={8}>
-							<Input allowClear onChange={onTokenChange} placeholder={customToken} />
+							<Input allowClear onChange={onTokenChange} placeholder={'0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2'} />
 							<br></br>
 							<Sublabel>Set custom token address to burn</Sublabel>
 							<br></br>
