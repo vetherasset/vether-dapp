@@ -25,18 +25,18 @@ const Footer = (props) => {
       <div>
         <Row>
           <Col>
-            <Click><a rel="noopener noreferrer" href="https://discord.gg/kvGgZ3" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[DISCORD] -></a></Click>
+          <Click><a rel="noopener noreferrer" href="https://bitcointalk.org/index.php?topic=5243406" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[ANN]</a></Click>
           </Col>
         </Row>
 
           <Row>
             <Col>
-              <Click><a rel="noopener noreferrer" href="https://github.com/vetherasset" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[CODE] -></a></Click>
+              <Click><a rel="noopener noreferrer" href="https://github.com/vetherasset" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[CODE]</a></Click>
             </Col>
           </Row>
           <Row>
             <Col>
-              <Click><a rel="noopener noreferrer" href="https://bitcointalk.org/index.php?topic=5243406" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[ANN] -></a></Click>
+            <Click><a rel="noopener noreferrer" href="https://discord.gg/kvGgZ3" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[DISCORD]</a></Click>
             </Col>
           </Row>
       </div>

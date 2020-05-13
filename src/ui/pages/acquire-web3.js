@@ -6,7 +6,7 @@ import { vetherAddr, vetherAbi } from '../../client/web3.js'
 
 import { Modal, Row, Col, Input } from 'antd'
 import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Click, Button, Sublabel, Gap, Colour } from '../components'
+import { Text, LabelGrey, Label, Click, Button, Sublabel, Gap, Colour } from '../components'
 
 export const AcquireTable = () => {
 
@@ -24,7 +24,7 @@ export const AcquireTable = () => {
 	const [tknTx, setTknTx] = useState(null)
 
 	const [customToken, setCustomToken] = useState(null)
-	const [customAmount, setCustomAmount] = useState(1000)
+	const [customAmount, setCustomAmount] = useState(null)
 
 	const [walletFlag, setWalletFlag] = useState(null)
 	//const [ethPlaceholder, setEthPlaceholder] = useState(null)
@@ -114,7 +114,9 @@ export const AcquireTable = () => {
 
 	const unlockToken = async () => {
 		if (!customToken){
-			handleShowModal()
+			handleShowModal("token")
+		} else if (!customAmount) {
+			handleShowModal("amount")
 		} else {
 			setApproveFlag(true)
 		const tokenContract_ = new window.web3.eth.Contract(vetherAbi(), customToken)
@@ -134,14 +136,33 @@ export const AcquireTable = () => {
 
 	const { confirm } = Modal
 
-	const handleShowModal = () => {
-		confirm({
-			title: 'Please enter a token address',
-			icon: <ExclamationCircleOutlined />,
-			content: <p>Please input the desired token to burn. You can find this address on Etherscan.</p>,
-			onOk() {},
-			onCancel() {},
-		  });
+	const handleShowModal = (type) => {
+		if(type === "token"){
+			confirm({
+				title: 'Please enter a token address',
+				icon: <ExclamationCircleOutlined />,
+				content: <p>Please input the desired token to burn. You can find this address on Etherscan.</p>,
+				onOk() {},
+				onCancel() {},
+			  });
+		} else if (type === "amount") {
+			confirm({
+				title: 'Please enter an amount',
+				icon: <ExclamationCircleOutlined />,
+				content: <p>Please input your balance of the token you wish to burn.</p>,
+				onOk() {},
+				onCancel() {},
+			  });
+		} else if (type === "caution") {
+			confirm({
+				title: 'Some tokens are not compatible with Vether',
+				icon: <ExclamationCircleOutlined />,
+				content: <p>If there are any errors in your MetaMask, do not proceed.</p>,
+				onOk() {burnToken()},
+				onCancel() {},
+			  });
+		}
+		
 	}
 
 
@@ -212,15 +233,15 @@ export const AcquireTable = () => {
 					<Label>BURN TOKENS</Label>
 					<Row>
 						<Col xs={16} sm={8}>
-							<Input allowClear onChange={onTokenChange} placeholder={'0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2'} />
+							<Input allowClear onChange={onTokenChange} placeholder={'Enter token address'} />
 							<br></br>
-							<Sublabel>Set custom token address to burn</Sublabel>
+							{/* <Sublabel>Set custom token address to burn</Sublabel> */}
 							<br></br>
 						</Col>
 						<Col xs={6} sm={3} style={{ marginLeft: 10, marginRight: 20 }}>
-							<Input allowClear onChange={onAmountChange} placeholder={customAmount} />
+							<Input allowClear onChange={onAmountChange} placeholder={"Enter amount"} />
 							<br></br>
-							<Sublabel>Set token amount</Sublabel>
+							{/* <Sublabel>Set token amount</Sublabel> */}
 							<br></br>
 						</Col>
 						<Col xs={8} sm={3}>
@@ -250,6 +271,10 @@ export const AcquireTable = () => {
 									<Button onClick={burnToken}> BURN >></Button>
 									<br></br>
 									<Sublabel>Burn Tokens to acquire VETHER</Sublabel>
+									<br></br>
+									<Text>Note: Some tokens are not compatible with Vether.</Text> 
+									<br></br>
+									<Text>If there are any errors in your metamask do not proceed.</Text> 
 
 									{burnTknFlag &&
 										<div>

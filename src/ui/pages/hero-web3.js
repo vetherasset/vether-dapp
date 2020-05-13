@@ -135,42 +135,32 @@ export const VetherTable = () => {
                     <Row style={{ marginLeft: 20 }}>
                         <Col xs={21} sm={11} lg={11}>
                             <Row style={{ marginTop: 10 }}>
-                                <Col xs={6}>
-                                    <LabelGrey>NAME: </LabelGrey>
-                                </Col>
-                                <Col xs={18}>
+                                <Col xs={24}>
+                                    <LabelGrey>NAME: </LabelGrey><br/>
                                     <Label>{tokenData.name}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
-                                <Col xs={6}>
-                                    <LabelGrey>SYMBOL: </LabelGrey>
-                                </Col>
-                                <Col xs={18}>
+                                <Col xs={24}>
+                                    <LabelGrey>SYMBOL: </LabelGrey><br/>
                                     <Label>{tokenData.symbol}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
-                                <Col xs={6}>
-                                    <LabelGrey>TOTAL SUPPLY: </LabelGrey>
-                                </Col>
-                                <Col xs={18}>
+                                <Col xs={24}>
+                                    <LabelGrey>TOTAL SUPPLY: </LabelGrey><br/>
                                     <Label>{prettify(tokenData.totalSupply)}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
-                                <Col xs={6}>
-                                    <LabelGrey>DECIMALS: </LabelGrey>
-                                </Col>
-                                <Col xs={18}>
+                                <Col xs={24}>
+                                    <LabelGrey>DECIMALS: </LabelGrey><br/>
                                     <Label>{tokenData.decimals}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10, marginBottom: 20 }}>
-                                <Col xs={6}>
-                                    <LabelGrey>GENESIS: </LabelGrey>
-                                </Col>
-                                <Col xs={18}>
+                                <Col xs={24}>
+                                    <LabelGrey>GENESIS: </LabelGrey><br/>
                                     <Label>{(tokenData.genesis)}</Label>
                                 </Col>
                             </Row>
@@ -178,42 +168,32 @@ export const VetherTable = () => {
 
                         <Col xs={21} sm={13} lg={13}>
                             <Row style={{ marginTop: 10 }}>
-                                <Col xs={6}>
-                                    <LabelGrey>TOTAL EMITTED: </LabelGrey>
-                                </Col>
-                                <Col xs={18}>
+                                <Col xs={24}>
+                                    <LabelGrey>TOTAL EMITTED: </LabelGrey><br/>
                                     <Label>{prettify(emissionData.totalEmitted)} VETH | ${prettify(convertToUSD(emissionData.totalEmitted))}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
-                                <Col xs={6}>
-                                    <LabelGrey>TOTAL REMAINING: </LabelGrey>
-                                </Col>
-                                <Col xs={18}>
+                                <Col xs={24}>
+                                    <LabelGrey>TOTAL REMAINING: </LabelGrey><br/>
                                     <Label>{prettify(tokenData.totalSupply - emissionData.totalEmitted)} VETH | ${prettify(convertToUSD(tokenData.totalSupply - emissionData.totalEmitted))}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
-                                <Col xs={6}>
-                                    <LabelGrey>TOTAL BURNT: </LabelGrey>
-                                </Col>
-                                <Col xs={18}>
+                                <Col xs={24}>
+                                    <LabelGrey>TOTAL BURNT: </LabelGrey><br/>
                                     <Label>{(emissionData.totalBurnt).toFixed(3)} ETH | ${prettify(convertEthtoUSD(emissionData.totalBurnt))}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
-                                <Col xs={6}>
-                                    <LabelGrey>TOTAL MARKET CAP: </LabelGrey>
-                                </Col>
-                                <Col xs={18}>
+                                <Col xs={24}>
+                                    <LabelGrey>TOTAL MARKET CAP: </LabelGrey><br/>
                                     <Label>{prettify(convertToETH(tokenData.totalSupply))} ETH | ${prettify(convertEthtoUSD(convertToETH(tokenData.totalSupply)))}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
-                                <Col xs={6}>
-                                    <LabelGrey>VETH VALUE: </LabelGrey>
-                                </Col>
-                                <Col xs={18}>
+                                <Col xs={24}>
+                                    <LabelGrey>VETH VALUE: </LabelGrey><br/>
                                     <Label> {(marketData.priceETH).toFixed(6)} ETH | ${(marketData.priceUSD).toFixed(5)}</Label>
                                 </Col>
                             </Row>

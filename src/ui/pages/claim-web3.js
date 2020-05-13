@@ -117,7 +117,8 @@ export const ClaimTable = () => {
 		const share_ = (new BigNumber(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())).toFixed()
 		setClaimAmt(convertFromWei(share_))
 		setCheckFlag(true)
-		if (convertFromWei(share_) > 0 && currentDay < userData.day) {
+		console.log(currentDay, userData.day)
+		if (convertFromWei(share_) > 0 && currentDay > userData.day) {
 			setZeroFlag(false)
 		} else {
 			setZeroFlag(true)

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
@@ -15,6 +16,9 @@ export const EraTable = () => {
     const [eraData, setEraData] = useState(
         { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
 
+    const [marketData, setMarketData] = useState(
+            { priceUSD: '', priceETH: '', ethPrice: '' })
+
     useEffect(() => {
 
         const loadBlockchainData = async () => {
@@ -27,6 +31,7 @@ export const EraTable = () => {
             const nextEra_ = await contract_.methods.nextEraTime().call()
             const nextEmission_ = await contract_.methods.getNextEraEmission().call()
             const secondsToGo = getSecondsToGo(nextDay_)
+            const totalSupply_ = await contract_.methods.totalSupply().call()
 
             var currentBurn_
             currentBurn_ = await contract_.methods.mapEraDay_UnitsRemaining(era_, day_).call()
@@ -39,6 +44,30 @@ export const EraTable = () => {
                 nextDay: nextDay_, nextEra: convertToDate(nextEra_),
                 nextEmission: convertToNumber(nextEmission_)
             })
+
+            const balance_ = await contract_.methods.balanceOf(vetherAddr()).call()
+            const totalBurnt_ = await contract_.methods.totalBurnt().call()
+            const totalFees_ = await contract_.methods.totalFees().call()
+            const totalEmitted_ = +totalSupply_ - +balance_ + +totalFees_
+
+            const ethPrice_ = await getETHPrice()
+            var priceETH_ = 0
+            var priceUSD_ = 0
+
+            if (totalEmitted_ === 0) {
+                priceETH_ = (totalBurnt_ / emission_)
+                priceUSD_ = priceETH_ * ethPrice_
+            } else {
+                priceETH_ = (totalBurnt_ / (totalEmitted_))
+                priceUSD_ = priceETH_ * ethPrice_
+            }
+
+            setMarketData({
+                priceUSD: priceUSD_,
+                priceETH: priceETH_,
+                ethPrice: ethPrice_
+            })
+
             setLoaded(true)
         }
         loadBlockchainData()
@@ -56,6 +85,13 @@ export const EraTable = () => {
     function convertToTime(date) {
         return new Date(1000 * date).toLocaleTimeString("en-gb")
     }  
+
+    function convertToMonth(date_){
+        const months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        const date = new Date(date_)
+        let formatted_date = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear()
+        return formatted_date
+    }
 
     function getSecondsToGo(date) {
         const time = (Date.now() / 1000).toFixed()
@@ -91,6 +127,27 @@ export const EraTable = () => {
         return parts.join(".");
     }
 
+    const getETHPrice = async () => {
+        // console.log(uniSwapAbi(), uniSwapAddr())
+        // const exchangeContract = new web3_.eth.Contract(uniSwapAbi(), uniSwapAddr())
+        // const ethBought = await exchangeContract.methods.getTokenToEthInputPrice('1000000000000000000').call()
+        // console.log('ethBought', ethBought)
+        // return 1/ethBought
+
+        const ethPrice = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
+        //console.log(ethPrice.data.ethereum.usd)
+        return ethPrice.data.ethereum.usd
+    }
+
+    function convertToUSD(vether) {
+        return (vether * marketData.priceUSD).toFixed(3)
+    }
+
+    function convertEthtoUSD(ether) {
+        //console.log(ether, marketData.ethPrice, ether * marketData.ethPrice)
+        return (ether * marketData.ethPrice).toFixed(3)
+    }
+
     return (
         <div>
             {!loaded && 
@@ -108,59 +165,50 @@ export const EraTable = () => {
             <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
             <Center><LabelGrey margin={"0px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
 
-            <Center><Label margin={"0px 0px"}>{prettify(eraData.currentBurn)} ETH</Label></Center>
+            <Center><Label margin={"0px 0px"}>{prettify(eraData.currentBurn)} ETH | ${prettify(convertEthtoUSD(eraData.currentBurn))}</Label></Center>
             <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
+                <br></br>
+
+            <Center><Label margin={"0px 0px"}>{prettify((eraData.currentBurn/eraData.emission).toFixed(5))} ETH | ${prettify(convertEthtoUSD(eraData.currentBurn/eraData.emission))}</Label></Center>
+            <Center><LabelGrey margin={"0px 0px 20px"}>IMPLIED VALUE OF VETHER TODAY</LabelGrey></Center>
                 <br></br>
             <Row>
                 <Col xs={21} sm={11}>
                     <Row>
-                        <Col xs={10}>
-                            <LabelGrey>CURRENT ERA: </LabelGrey>
-                        </Col>
-                        <Col xs={14}>
+                        <Col xs={24}>
+                            <LabelGrey>CURRENT ERA: </LabelGrey><br />
                             <Label>{eraData.era}</Label>
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={10}>
-                            <LabelGrey>CURRENT DAY: </LabelGrey>
-                        </Col>
-                        <Col xs={14}>
+                        <Col xs={24}>
+                            <LabelGrey>CURRENT DAY: </LabelGrey><br />
                             <Label>{eraData.day}</Label>
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={10}>
-                            <LabelGrey>CURRENT EMISSION: </LabelGrey>
-                        </Col>
-                        <Col xs={14}>
+                        <Col xs={24}>
+                            <LabelGrey>CURRENT EMISSION: </LabelGrey><br />
                             <Label>{eraData.emission}</Label><Text size={14}> VETH (per day)</Text>
                         </Col>
                     </Row>
-
                 </Col>
                 <Col xs={21} sm={13}>
                     <Row>
-                        <Col xs={10}>
-                            <LabelGrey>NEW DAY: </LabelGrey>
-                        </Col>
-                        <Col xs={14}>
-                            <Label>{convertToTime(eraData.nextDay)}</Label>
+                        <Col xs={24}>
+                            <LabelGrey>NEW DAY: </LabelGrey><br />
+                            <Label>{convertToTime(eraData.nextDay)} (local time)</Label>
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={10}>
-                            <LabelGrey>HALVING DATE: </LabelGrey>
-                        </Col>
-                        <Col xs={14}>
-                            <Label>{eraData.nextEra}</Label>
+                        <Col xs={24}>
+                            <LabelGrey>HALVING DATE: </LabelGrey><br />
+                            <Label>{convertToMonth(eraData.nextEra)}</Label>
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={10}>
-                            <LabelGrey>NEXT EMISSION: </LabelGrey>
-                        </Col>
-                        <Col xs={14}>
+                        <Col xs={24}>
+                            <LabelGrey>NEXT EMISSION: </LabelGrey><br />
                             <Label>{prettify(eraData.nextEmission)}</Label><Text size={14}> VETH (per day)</Text>
                         </Col>
                     </Row>
