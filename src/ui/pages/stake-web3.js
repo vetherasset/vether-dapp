@@ -381,7 +381,7 @@ export const RemoveLiquidityTable = () => {
 						<Col xs={12} sm={7} style={{ paddingLeft: 20 }}>
 							<Button onClick={removeLiquidity}> REMOVE >></Button>
 							<br></br>
-							<Sublabel>Burn Tokens to acquire VETHER</Sublabel>
+							<Sublabel>Remove liquidity from the pool.</Sublabel>
 							{burnTknFlag &&
 								<div>
 									{!loaded2 &&
