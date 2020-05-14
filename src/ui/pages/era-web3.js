@@ -32,8 +32,7 @@ export const EraTable = () => {
             const nextEmission_ = await contract_.methods.getNextEraEmission().call()
             const secondsToGo = getSecondsToGo(nextDay_)
 
-            var currentBurn_
-            currentBurn_ = await contract_.methods.mapEraDay_UnitsRemaining(era_, day_).call()
+            const currentBurn_ = await contract_.methods.mapEraDay_UnitsRemaining(era_, day_).call()
             setCounter(secondsToGo)
 
             setEraData({
