@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
+import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
 
 import { Row, Col } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -31,7 +32,6 @@ export const EraTable = () => {
             const nextEra_ = await contract_.methods.nextEraTime().call()
             const nextEmission_ = await contract_.methods.getNextEraEmission().call()
             const secondsToGo = getSecondsToGo(nextDay_)
-            const totalSupply_ = await contract_.methods.totalSupply().call()
 
             var currentBurn_
             currentBurn_ = await contract_.methods.mapEraDay_UnitsRemaining(era_, day_).call()
@@ -45,28 +45,10 @@ export const EraTable = () => {
                 nextEmission: convertToNumber(nextEmission_)
             })
 
-            const balance_ = await contract_.methods.balanceOf(vetherAddr()).call()
-            const totalBurnt_ = await contract_.methods.totalBurnt().call()
-            const totalFees_ = await contract_.methods.totalFees().call()
-            const totalEmitted_ = +totalSupply_ - +balance_ + +totalFees_
-
-            const ethPrice_ = await getETHPrice()
-            var priceETH_ = 0
-            var priceUSD_ = 0
-
-            if (totalEmitted_ === 0) {
-                priceETH_ = (totalBurnt_ / emission_)
-                priceUSD_ = priceETH_ * ethPrice_
-            } else {
-                priceETH_ = (totalBurnt_ / (totalEmitted_))
-                priceUSD_ = priceETH_ * ethPrice_
-            }
-
-            setMarketData({
-                priceUSD: priceUSD_,
-                priceETH: priceETH_,
-                ethPrice: ethPrice_
-            })
+            const priceEtherUSD = await getETHPrice()
+		    const priceVetherEth = await getVETHPriceInEth()
+		    const priceVetherUSD = priceEtherUSD*priceVetherEth
+		    setMarketData({ priceUSD: priceVetherUSD, priceETH: priceVetherEth, ethPrice: priceEtherUSD })
 
             setLoaded(true)
         }
@@ -127,24 +109,11 @@ export const EraTable = () => {
         return parts.join(".");
     }
 
-    const getETHPrice = async () => {
-        // console.log(uniSwapAbi(), uniSwapAddr())
-        // const exchangeContract = new web3_.eth.Contract(uniSwapAbi(), uniSwapAddr())
-        // const ethBought = await exchangeContract.methods.getTokenToEthInputPrice('1000000000000000000').call()
-        // console.log('ethBought', ethBought)
-        // return 1/ethBought
-
-        const ethPrice = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
-        //console.log(ethPrice.data.ethereum.usd)
-        return ethPrice.data.ethereum.usd
-    }
-
     function convertToUSD(vether) {
         return (vether * marketData.priceUSD).toFixed(3)
     }
 
     function convertEthtoUSD(ether) {
-        //console.log(ether, marketData.ethPrice, ether * marketData.ethPrice)
         return (ether * marketData.ethPrice).toFixed(3)
     }
 

@@ -1,11 +1,12 @@
 import Web3 from 'web3'
 import VETHER from '../artifacts/DeployedVether.json'
+import UNISWAP from '../artifacts/UniswapExchange.json'
 require('dotenv').config({path:"./.env"})
 //import ERC20 from '../artifacts/ERC20.json'
 // import TOKEN1 from '../artifacts/Token1.json'
 // import TOKEN2 from '../artifacts/Token2.json'
 // import TOKEN3 from '../artifacts/Token3.json'
-// import UNISWAP from '../artifacts/UniswapExchange.json'
+
 
 export const vetherAddr = () => {
 	return '0x31Bb711de2e457066c6281f231fb473FC5c2afd3'
@@ -23,13 +24,34 @@ export const getWeb3 = () => {
     return new Web3(Web3.givenProvider || "http://localhost:7545") 
 }
 
-// export const uniSwapAddr = () => {
-//     return `0x2a1530C4C41db0B0b2bB646CB5Eb1A67b7158667`
-// }
+export const uniSwapAddr = () => {
+    return `0x506D07722744E4A390CD7506a2Ba1A8157E63745`
+}
 
-// export const uniSwapAbi = () => {
-// 	return UNISWAP.abi
-// }
+export const uniSwapAbi = () => {
+	return UNISWAP.abi
+}
+
+export const getUniswapPriceEth = async () => {
+    const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+    const contract = new web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+    const _1 = (1*10**18).toString()
+    const valueEth = await contract.methods.getTokenToEthInputPrice(_1).call()
+    return convertFromWei(valueEth)
+}
+
+export const getUniswapBalances = async () => {
+    const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+    const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+    var ethBalance = convertFromWei(await window.web3.eth.getBalance(uniSwapAddr()))
+	const vethBalance = convertFromWei(await contract.methods.balanceOf(uniSwapAddr()).call())
+    const uniswapBalances = {"eth":ethBalance, "veth":vethBalance}
+    return uniswapBalances
+}
+
+function convertFromWei(number) {
+    return number / 1000000000000000000
+}
 
 export const getAccounts = async (i) => {
     var web3_ = getWeb3()

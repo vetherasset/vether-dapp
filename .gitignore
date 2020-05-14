@@ -5,3 +5,4 @@ firebase.json
 .firebaserc
 build/
 .env
+firebase-debug.log

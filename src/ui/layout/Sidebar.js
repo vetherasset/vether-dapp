@@ -13,6 +13,7 @@ const Sidebar = (props) => {
       "overview",
     "acquire",
     "claim",
+    "stake",
     "whitepaper"
   ]
 

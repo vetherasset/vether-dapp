@@ -8,6 +8,7 @@ import Sidebar from './ui/layout/Sidebar'
 import Hero from './ui/pages/Hero'
 import Acquire from './ui/pages/Acquire'
 import Claim from './ui/pages/Claim'
+import Stake from './ui/pages/Stake'
 import Whitepaper from './ui/pages/Whitepaper'
 import { Colour } from './ui/components'
 
@@ -30,6 +31,7 @@ const App = () => {
 								<Route path="/overview" exact component={Hero} />
 								<Route path="/acquire" exact component={Acquire} />
 								<Route path="/claim" exact component={Claim} />
+								<Route path="/stake" exact component={Stake} />
 								<Route path="/whitepaper" exact component={Whitepaper} />
 							</Switch>
 						</Content>
