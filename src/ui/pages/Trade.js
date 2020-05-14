@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import { H2, Subtitle, HR, Gap, LabelGrey, Click } from '../components'
+import { H2, Subtitle, Gap, LabelGrey, Click } from '../components'
+import {TradeTable} from './trade-web3'
 
 import '../../App.css';
 // import { Button as ButtonD } from 'antd';
@@ -21,6 +22,7 @@ const Trade = () => {
 			<Subtitle>COMING SOON</Subtitle>
 			<br /><br />
 			<Click><a href='https://uniswap.exchange/swap/0x31Bb711de2e457066c6281f231fb473FC5c2afd3' rel="noopener noreferrer" title="Uniswap Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>VIEW ON UNISWAP -></a></Click>
+			<TradeTable></TradeTable>
 			{safari &&
 				<div>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
