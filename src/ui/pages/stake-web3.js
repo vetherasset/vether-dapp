@@ -3,11 +3,11 @@ import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getUniswapPriceEth, getUniswapBalances, getEtherscanURL } from '../../client/web3.js'
-import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
+import { getETHPrice } from '../../client/market.js'
 
-import { Modal, Row, Col, Input } from 'antd'
-import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Text, LabelGrey, Label, Click, Button, Sublabel, Gap, Colour, Center, HR } from '../components'
+import { Row, Col, Input } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons';
+import { Text, LabelGrey, Label, Click, Button, Sublabel, Colour, Center } from '../components'
 
 export const PoolTable = () => {
 
@@ -29,7 +29,6 @@ export const PoolTable = () => {
 		setMarketData({ priceUSD: priceVetherUSD, priceETH: priceVetherEth, ethPrice: priceEtherUSD })
 		const uniswapBal = await getUniswapBalances()
 		setUniswapBalance(uniswapBal)
-		console.log(priceEtherUSD * uniswapBal.eth)
 	}
 
 	function prettify(amount) {
@@ -90,12 +89,11 @@ export const AddLiquidityTable = () => {
 	const [addEthFlag, setAddUniswapFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
 	const [ethAmount, setEthAmount] = useState(null)
-	const [vethAmount, setVethAmount] = useState(null)
+	// const [vethAmount, setVethAmount] = useState(null)
 	const [vetherPrice, setVetherPrice] = useState(null)
 	const [contract, setContract] = useState(null)
 	const [loaded, setLoaded] = useState(null)
-	const [walletFlag, setWalletFlag] = useState(null)
-	const [loaded2, setLoaded2] = useState(null)
+	// const [walletFlag, setWalletFlag] = useState(null)
 	const [approved, setApproved] = useState(null)
 	const [approveFlag, setApproveFlag] = useState(null)
 	const [customAmount, setCustomAmount] = useState(null)
@@ -107,7 +105,7 @@ export const AddLiquidityTable = () => {
 	}, [])
 
 	const connect = () => {
-		setWalletFlag('TRUE')
+		// setWalletFlag('TRUE')
 		ethEnabled()
 		loadBlockchainData()
 		if (!ethEnabled()) {
@@ -146,7 +144,6 @@ export const AddLiquidityTable = () => {
 		})
 		setCustomAmount(vethBalance_)
 		setEthAmount(ethBalance_)
-		console.log('ethBalance_, vethBalance_', ethBalance_, vethBalance_)
 	}
 
 	const checkApproval = async (address) => {
@@ -158,57 +155,48 @@ export const AddLiquidityTable = () => {
 		if (approval >= account.vethBalance) {
 			setApproved(true)
 		}
-		console.log('approval', approval)
 	}
 
 	const unlockToken = async () => {
-		//setApproveFlag(true)
+		setApproveFlag(true)
 		const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		const fromAcc = account.address
 		const spender = uniSwapAddr()
 		const value = convertToWei(totalSupply)
-		//console.log(spender_, val_)
 		await tokenContract.methods.approve(spender, value).send({ from: fromAcc })
-		//console.log(fromAcc_, spender_)
 		checkApproval(account.address)
 	}
 
 	const addUniswap = async () => {
 		const fromAcc = account.address
-		//const toAcc = uniSwapAddr() //getAccounts(1)
-		//console.log(fromAcc_, toAcc_, amount_)
 		const deadline = (Math.round(((new Date())/1000) + 1000)).toString()
-		//const deadline = '1589460642'
 		const min_liquidity = (1).toString()
 		const amountVeth = (convertToWei(customAmount)).toString()
 		const amountEth = (convertToWei(ethAmount)).toString()
 		setAddUniswapFlag('TRUE')
 		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-		console.log(min_liquidity, amountVeth, deadline, amountEth, fromAcc)
 		const tx = await exchangeContract.methods.addLiquidity(min_liquidity, amountVeth, deadline).send({ value: amountEth, from: fromAcc })
-		console.log(tx.transactionHash)
-		// const tx = "text"
 		setEthTx(tx.transactionHash)
 		setLoaded(true)
 		refreshAccount(contract, fromAcc)
 	}
 
-	const maxEther = () => {
-		setEthAmount(account.ethBalance - 0.1)
-	}
-	const maxVether = () => {
-		setVethAmount(account.vethBalance)
-	}
+	// const maxEther = () => {
+	// 	setEthAmount(account.ethBalance - 0.1)
+	// }
+	// const maxVether = () => {
+	// 	setVethAmount(account.vethBalance)
+	// }
 
 	const onEthAmountChange = e => {
 		setEthAmount(e.target.value)
 		setCustomAmount(e.target.value * (1/vetherPrice))
 	}
 
-	const onAmountChange = e => {
-		setCustomAmount(e.target.value)
-		setApprovalAmount(convertToWei(e.target.value))
-	}
+	// const onAmountChange = e => {
+	// 	setCustomAmount(e.target.value)
+	// 	setApprovalAmount(convertToWei(e.target.value))
+	// }
 
 	const getLink = (tx) => {
 		return getEtherscanURL().concat('tx/').concat(tx)
@@ -232,36 +220,30 @@ export const AddLiquidityTable = () => {
 		return (final).toString()
 	}
 
-	const { confirm } = Modal
+	// const { confirm } = Modal
 
-	const handleShowModal = (type) => {
-		if (type === "token") {
-			confirm({
-				title: 'Please enter a token address',
-				icon: <ExclamationCircleOutlined />,
-				content: <p>Please input the desired token to burn. You can find this address on Etherscan.</p>,
-				onOk() { },
-				onCancel() { },
-			});
-		} else if (type === "amount") {
-			confirm({
-				title: 'Please enter an amount',
-				icon: <ExclamationCircleOutlined />,
-				content: <p>Please input your balance of the token you wish to burn.</p>,
-				onOk() { },
-				onCancel() { },
-			});
-		}
-	}
+	// const handleShowModal = (type) => {
+	// 	if (type === "token") {
+	// 		confirm({
+	// 			title: 'Please enter a token address',
+	// 			icon: <ExclamationCircleOutlined />,
+	// 			content: <p>Please input the desired token to burn. You can find this address on Etherscan.</p>,
+	// 			onOk() { },
+	// 			onCancel() { },
+	// 		});
+	// 	} else if (type === "amount") {
+	// 		confirm({
+	// 			title: 'Please enter an amount',
+	// 			icon: <ExclamationCircleOutlined />,
+	// 			content: <p>Please input your balance of the token you wish to burn.</p>,
+	// 			onOk() { },
+	// 			onCancel() { },
+	// 		});
+	// 	}
+	// }
 
 	return (
 		<div>
-			{/* {!walletFlag &&
-				<div>
-					<Button onClick={connect}> > GET VETHER NOW  &lt;</Button>
-					<Gap />
-				</div>
-			} */}
 			{!approved &&
 				<Row>
 					<Col xs={24}>
@@ -290,21 +272,18 @@ export const AddLiquidityTable = () => {
 			<br></br>
 			{approved &&
 			<Row>
-				<Col xs={6}>
+				<Col xs={4}>
 					<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance - 0.01} />
 					<br></br>
-					{/* <Button onClick={maxEther}>{(account.ethBalance - 0.01).toFixed(4)}</Button> */}
 					<Label>{prettify(account.ethBalance)}</Label>
 					<br></br>
 					<LabelGrey>Spendable ETH Balance</LabelGrey>
-				</Col>
-				<Col xs={6} style={{ marginLeft: 10, marginRight: 20 }}>
-					{/* <Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onAmountChange} placeholder={account.vethBalance} /> */}
 					<br></br>
-					{/* <Button onClick={maxVether} value="test">{prettify(account.vethBalance)}</Button> */}
 					<Label>{prettify(account.vethBalance)}</Label>
 					<br></br>
 					<LabelGrey>Available VETH Balance</LabelGrey>
+				</Col>
+				<Col xs={1} style={{ marginLeft: 10, marginRight: 20 }}>
 				</Col>
 				<Col xs={10} style={{ marginLeft: 20 }}>
 					<Button onClick={addUniswap}> ADD >></Button>
@@ -331,48 +310,78 @@ export const AddLiquidityTable = () => {
 			}
 			<br></br>
 			<br></br>
-
 		</div>
 
 	)
 }
 
 export const RemoveLiquidityTable = () => {
+
+	const [account, setAccount] = useState(
+		{ address: '', vethBalance: '', uniBalance: '' })
 	const [burnTknFlag, setBurnTknFlag] = useState(null)
 	const [tknTx, setTknTx] = useState(null)
 	const [loaded2, setLoaded2] = useState(null)
-	const [approved, setApproved] = useState(true)
+	const [customAmount, setCustomAmount] = useState(100)
 
+	useEffect(() => {
+		loadBlockchainData()
+		// eslint-disable-next-line
+	}, [])
 
-	const getLink = (tx) => {
-		const link = "https://etherscan.io/tx/"
-		return link.concat(tx)
+	const loadBlockchainData = async () => {
+		var accounts = await window.web3.eth.getAccounts()
+		const account_ = await accounts[0]
+		refreshAccount(account_)
 	}
 
-	const burnToken = async () => {
+	const refreshAccount = async (account_) => {
+		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+		var uniBalance_ = await exchangeContract.methods.balanceOf(account_).call()
+		setAccount({
+			address: account_,
+			uniBalance: uniBalance_,
+		})
+	}
+
+	const getLink = (tx) => {
+		return getEtherscanURL().concat('tx/').concat(tx)
+	}
+
+	const onAmountChange = e => {
+		setCustomAmount(e.target.value)
+	}
+
+	const getUniAmount = (part) => {
+		return ((account.uniBalance * part) / 100)
+	}
+
+	const removeLiquidity = async () => {
 		setBurnTknFlag(true)
-		// console.log(customToken, customAmount, account.address)
-		// const contract_ = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		// const tx = await contract_.methods.burnTokens(customToken, approvalAmount).send({ from: account.address })
-		// setTknTx(tx.transactionHash)
+		console.log(account.uniBalance, customAmount)
+		const amount = (getUniAmount(customAmount)).toString()
+		const min_eth = (1).toString()
+		const min_tokens = (1).toString()
+		const deadline = (Math.round(((new Date())/1000) + 1000)).toString()
+		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+		const tx = await exchangeContract.methods.removeLiquidity(amount, min_eth, min_tokens, deadline).send({ from: account.address })
+		setTknTx(tx.transactionHash)
 		setLoaded2(true)
 	}
 
 	return (
 		<div>
 			<Row>
-
-				{approved &&
 					<div>
+						<Col xs={4}>
+							<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onAmountChange} placeholder={100} />
+							<br></br>
+							<Sublabel>Proportion to remove (%)</Sublabel>
+						</Col>
 						<Col xs={12} sm={7} style={{ paddingLeft: 20 }}>
-							<Button onClick={burnToken}> BURN >></Button>
+							<Button onClick={removeLiquidity}> REMOVE >></Button>
 							<br></br>
 							<Sublabel>Burn Tokens to acquire VETHER</Sublabel>
-							<br></br>
-							<Text>Note: Some tokens are not compatible with Vether.</Text>
-							<br></br>
-							<Text>If there are any errors in your metamask do not proceed.</Text>
-
 							{burnTknFlag &&
 								<div>
 									{!loaded2 &&
@@ -389,8 +398,6 @@ export const RemoveLiquidityTable = () => {
 							}
 						</Col>
 					</div>
-				}
-
 			</Row>
 		</div>
 	)

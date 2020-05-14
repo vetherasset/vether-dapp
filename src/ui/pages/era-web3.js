@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
@@ -60,10 +59,6 @@ export const EraTable = () => {
         return number / 1000000000000000000
     }
 
-    function convertToDate(date) {
-        return new Date(1000 * date).toLocaleDateString()
-    }
-
     function convertToTime(date) {
         return new Date(1000 * date).toLocaleTimeString("en-gb")
     }  
@@ -107,10 +102,6 @@ export const EraTable = () => {
         var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return parts.join(".");
-    }
-
-    function convertToUSD(vether) {
-        return (vether * marketData.priceUSD).toFixed(3)
     }
 
     function convertEthtoUSD(ether) {
