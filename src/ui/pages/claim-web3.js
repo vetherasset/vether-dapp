@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -136,9 +136,7 @@ export const ClaimTable = () => {
 	}
 
 	const getLink = () => {
-		const link = "https://etherscan.io/tx/"
-		const linkFull = link.concat(txHash)
-		return linkFull
+		return getEtherscanURL().concat('tx/').concat(txHash)
 	}
 
 	function DayItems() {
@@ -194,13 +192,13 @@ export const ClaimTable = () => {
 					</Row>
 					<Row>
 						<Col xs={6} sm={3}>
-							<Input allowClear onChange={onEraChange} placeholder={userData.era} />
+							<Input size={'large'} allowClear onChange={onEraChange} placeholder={userData.era} />
 							<br></br>
 							<Sublabel>Set Era</Sublabel>
 							<br></br>
 						</Col>
 						<Col xs={6} sm={3} style={{ marginLeft: 10, marginRight: 20 }}>
-							<Input allowClear onChange={onDayChange} placeholder={userData.day} />
+							<Input size={'large'} allowClear onChange={onDayChange} placeholder={userData.day} />
 							<br></br>
 							<Sublabel>Set Day</Sublabel>
 							<br></br>

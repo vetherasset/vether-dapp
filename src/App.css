@@ -11,6 +11,7 @@ body {
   text-align: left;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --antd-wave-shadow-color: #D09800;
 }
 
 .App-link {
@@ -30,4 +31,22 @@ body {
   background-color: #2B2515;
 }
 
+.ant-input{
+  color: #000
+}
+.ant-input:placeholder-shown{
+  color: #000
+}
+
+.ant-input:focus {
+  border-color: #D09800;
+  outline: 0;
+  -webkit-box-shadow: 0 0 0 2px rgba(87,168,233, .2);
+  box-shadow: 0 0 0 2px rgba(87,168,233, .2);
+}
+
+.ant-input::selection {
+  border-color: #D09800;
+  background: #D09800;
+}
 

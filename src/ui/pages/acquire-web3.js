@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
 
 import { Modal, Row, Col, Input } from 'antd'
 import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
@@ -97,8 +97,8 @@ export const AcquireTable = () => {
 	}
 
 	const getLink = (tx) => {
-		const link = "https://etherscan.io/tx/"
-		return link.concat(tx)
+		console.log(getEtherscanURL().concat('tx/').concat(tx))
+		return getEtherscanURL().concat('tx/').concat(tx)
 	}
 
 	const onTokenChange = e => {
@@ -200,7 +200,7 @@ export const AcquireTable = () => {
 					<Label>BURN ETHER</Label>
 					<Row>
 						<Col xs={6} sm={3}>
-							<Input style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance - 0.1} />
+							<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance - 0.1} />
 							<br></br>
 							<Button onClick={maxEther}>{(account.ethBalance - 0.1).toFixed(4)}</Button>
 							<br></br>
@@ -233,13 +233,13 @@ export const AcquireTable = () => {
 					<Label>BURN TOKENS</Label>
 					<Row>
 						<Col xs={16} sm={8}>
-							<Input allowClear onChange={onTokenChange} placeholder={'Enter token address'} />
+							<Input size={'large'} allowClear onChange={onTokenChange} placeholder={'Enter token address'} />
 							<br></br>
 							{/* <Sublabel>Set custom token address to burn</Sublabel> */}
 							<br></br>
 						</Col>
 						<Col xs={6} sm={3} style={{ marginLeft: 10, marginRight: 20 }}>
-							<Input allowClear onChange={onAmountChange} placeholder={"Enter amount"} />
+							<Input size={'large'} allowClear onChange={onAmountChange} placeholder={"Enter amount"} />
 							<br></br>
 							{/* <Sublabel>Set token amount</Sublabel> */}
 							<br></br>

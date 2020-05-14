@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import axios from 'axios'
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
 
 import { Row, Col } from 'antd'
@@ -90,9 +89,7 @@ export const VetherTable = () => {
     }
 
     const getLink = useCallback(() => {
-        const link = "https://etherscan.io/address/"
-        const code = "#code"
-        const linkFull = link.concat(vetherAddr()).concat(code)
+        const linkFull = getEtherscanURL().concat('address/').concat(vetherAddr())
         return linkFull
     }, [])
 

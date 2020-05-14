@@ -40,7 +40,6 @@ const Stake = () => {
 			<Gap />
 			<H2>ADD LIQIDITY</H2><br />
 			<Subtitle>Add liquidity to the pool (ETH and VETH) to earn on trade fees</Subtitle><br />
-			<Subtitle>Coming Soon</Subtitle>
 			<br /><br />
 			{!safari &&
 				<div>
@@ -52,11 +51,10 @@ const Stake = () => {
 			<Gap />
 			<H2>REMOVE LIQUIDITY</H2><br />
 			<Subtitle>Remove liquidity from the pool</Subtitle><br />
-			<Subtitle>Coming Soon</Subtitle>
 			<br /><br />
 			{!safari &&
 				<div>
-					{/* <RemoveLiquidityTable></RemoveLiquidityTable> */}
+					<RemoveLiquidityTable></RemoveLiquidityTable>
 				</div>
 			}
 			<HR />

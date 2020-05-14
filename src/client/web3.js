@@ -1,15 +1,23 @@
 import Web3 from 'web3'
 import VETHER from '../artifacts/DeployedVether.json'
 import UNISWAP from '../artifacts/UniswapExchange.json'
-require('dotenv').config({path:"./.env"})
-//import ERC20 from '../artifacts/ERC20.json'
-// import TOKEN1 from '../artifacts/Token1.json'
-// import TOKEN2 from '../artifacts/Token2.json'
-// import TOKEN3 from '../artifacts/Token3.json'
 
+const TESTNET = false
+
+export const getEtherscanURL = () => {
+    if(TESTNET) {
+        return "https://rinkeby.etherscan.io/"
+    } else {
+        return "https://etherscan.io/"
+    }
+}
 
 export const vetherAddr = () => {
-	return '0x31Bb711de2e457066c6281f231fb473FC5c2afd3'
+    if(TESTNET) {
+        return '0x4257e8a2052aFE4E7a52ee9233139EB28FB4BF44'
+    } else {
+        return '0x31Bb711de2e457066c6281f231fb473FC5c2afd3'
+    }
 }
 
 export const vetherAbi = () => {
@@ -17,7 +25,11 @@ export const vetherAbi = () => {
 }
 
 export const infuraAPI = () => {
-	return 'https://mainnet.infura.io/v3/9c3ac79a15634ba2be4be91580218365'
+    if(TESTNET) {
+        return 'https://rinkeby.infura.io/v3/9c3ac79a15634ba2be4be91580218365'
+    } else {
+        return 'https://mainnet.infura.io/v3/9c3ac79a15634ba2be4be91580218365'
+    }
 }
 
 export const getWeb3 = () => {
@@ -25,7 +37,11 @@ export const getWeb3 = () => {
 }
 
 export const uniSwapAddr = () => {
-    return `0x506D07722744E4A390CD7506a2Ba1A8157E63745`
+    if(TESTNET) {
+        return '0x5bDcfb5cA25651176dcc674E7d08a7f67dF72D7d'
+    } else {
+        return '0x506D07722744E4A390CD7506a2Ba1A8157E63745'
+    }
 }
 
 export const uniSwapAbi = () => {
@@ -75,8 +91,3 @@ export const getVethBalance = async (acc) => {
     var bal_ = await vetherContract().methods.balanceOf(acc).call()
     return bal_
 }
-
-// export const tokenAddr = (i) => {
-//     var tokenArray = [TOKEN1, TOKEN2, TOKEN3]
-//     return tokenArray[i].networks[5777].address
-// }
