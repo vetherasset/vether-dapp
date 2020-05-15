@@ -25,7 +25,7 @@ const Stake = () => {
 			<PoolTable></PoolTable>
 			<HR/>
 			<Gap />
-			<H2>ADD LIQIDITY</H2><br />
+			<H2>ADD LIQUIDITY</H2><br />
 			<Subtitle>Add liquidity to the pool (ETH and VETH) to earn on trade fees</Subtitle><br />
 			<br />
 			{safari &&

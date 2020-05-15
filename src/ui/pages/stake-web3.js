@@ -7,7 +7,7 @@ import { getETHPrice } from '../../client/market.js'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
-import { Text, LabelGrey, Label, Click, Button, Sublabel, Colour, Center } from '../components'
+import { H2, Text, LabelGrey, Label, Click, Button, Sublabel, Colour, Center } from '../components'
 
 export const PoolTable = () => {
 
@@ -85,11 +85,11 @@ export const AddLiquidityTable = () => {
 	const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
 
 	const [account, setAccount] = useState(
-		{ address: '', vethBalance: '', ethBalance: '' })
+		{ address: '', vethBalance: '', ethBalance: '', uniBalance:'' })
 	const [addEthFlag, setAddUniswapFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
 	const [ethAmount, setEthAmount] = useState(null)
-	// const [vethAmount, setVethAmount] = useState(null)
+	const [uniAmount, setUniAmount] = useState(null)
 	const [vetherPrice, setVetherPrice] = useState(null)
 	const [contract, setContract] = useState(null)
 	const [loaded, setLoaded] = useState(null)
@@ -98,6 +98,8 @@ export const AddLiquidityTable = () => {
 	const [approveFlag, setApproveFlag] = useState(null)
 	const [customAmount, setCustomAmount] = useState(null)
 	const [approvalAmount, setApprovalAmount] = useState(null)
+	const [uniswapBalance, setUniswapBalance] = useState(
+		{ "eth": "", "veth": '' })
 
 	useEffect(() => {
 		connect()
@@ -128,22 +130,29 @@ export const AddLiquidityTable = () => {
 		var accounts = await window.web3.eth.getAccounts()
 		const account_ = await accounts[0]
 		const contract_ = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		refreshAccount(contract_, account_)
+		await refreshAccount(contract_, account_)
 		setContract(contract_)
 		setVetherPrice(await getUniswapPriceEth())
+		const uniswapBal = await getUniswapBalances()
+		setUniswapBalance(uniswapBal)
 	}
 
 	const refreshAccount = async (contract_, account_) => {
-		var ethBalance_ = convertFromWei(await window.web3.eth.getBalance(account_))
+		const ethBalance_ = convertFromWei(await window.web3.eth.getBalance(account_))
 		const vethBalance_ = convertFromWei(await contract_.methods.balanceOf(account_).call())
+		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+		const uniBalance_ = await exchangeContract.methods.balanceOf(account_).call()
 		setAccount({
 			address: account_,
 			vethBalance: vethBalance_,
-			ethBalance: ethBalance_
+			ethBalance: ethBalance_,
+			uniBalance: uniBalance_,
 		})
 		setCustomAmount(vethBalance_)
 		setEthAmount(ethBalance_)
 		checkApproval(account_)
+		const uniAmount_ = await exchangeContract.methods.totalSupply().call()
+		setUniAmount(uniAmount_)
 	}
 
 	const checkApproval = async (address) => {
@@ -181,6 +190,11 @@ export const AddLiquidityTable = () => {
 		setEthTx(tx.transactionHash)
 		setLoaded(true)
 		refreshAccount(contract, fromAcc)
+	}
+
+	const getUniShare = () => {
+		const share = account.uniBalance / uniAmount
+		return share
 	}
 
 	// const maxEther = () => {
@@ -271,11 +285,10 @@ export const AddLiquidityTable = () => {
 				</Row>
 			}
 			<br></br>
-			<br></br>
 			{approved &&
 			<Row>
 				<Col xs={4}>
-					<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance - 0.01} />
+					<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={prettify(account.ethBalance - 0.01)} />
 					<br></br>
 					<Label>{prettify(account.ethBalance)}</Label>
 					<br></br>
@@ -285,9 +298,7 @@ export const AddLiquidityTable = () => {
 					<br></br>
 					<LabelGrey>Available VETH Balance</LabelGrey>
 				</Col>
-				<Col xs={1} style={{ marginLeft: 10, marginRight: 20 }}>
-				</Col>
-				<Col xs={10} style={{ marginLeft: 20 }}>
+				<Col xs={8} style={{ marginLeft: 20 }}>
 					<Button onClick={addUniswap}> ADD >></Button>
 					<br></br>
 					<Sublabel>ADD LIQUIDITY TO UNISWAP</Sublabel>
@@ -306,12 +317,27 @@ export const AddLiquidityTable = () => {
 							}
 						</div>
 					}
-
+				</Col>
+				<Col xs={10} style={{ marginLeft: 10, marginRight: 20 }}>
+					<H2>Your Uniswap Share:</H2>
+					<br></br>
+					<Text size={20}>{prettify(getUniShare() * 100)}%</Text>&nbsp;<Text>of the pool</Text>
+					<br></br>
+					<Row style={{ marginTop: 10}}>
+						<Col xs={4}>
+							<Label>{prettify( uniswapBalance.eth * getUniShare())}</Label>
+							<br></br>
+							<LabelGrey>ETH</LabelGrey>
+						</Col>
+						<Col xs={20}>
+							<Label>{prettify(uniswapBalance.veth * getUniShare())}</Label>
+							<br></br>
+							<LabelGrey>VETH</LabelGrey>
+						</Col>
+					</Row>
 				</Col>
 			</Row>
 			}
-			<br></br>
-			<br></br>
 		</div>
 
 	)

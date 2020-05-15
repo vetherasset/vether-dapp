@@ -59,7 +59,7 @@ export const getUniswapPriceEth = async () => {
 export const getUniswapBalances = async () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-    var ethBalance = convertFromWei(await window.web3.eth.getBalance(uniSwapAddr()))
+    const ethBalance = convertFromWei(await web3.eth.getBalance(uniSwapAddr()))
 	const vethBalance = convertFromWei(await contract.methods.balanceOf(uniSwapAddr()).call())
     const uniswapBalances = {"eth":ethBalance, "veth":vethBalance}
     return uniswapBalances
