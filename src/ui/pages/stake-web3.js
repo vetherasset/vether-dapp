@@ -131,7 +131,6 @@ export const AddLiquidityTable = () => {
 		refreshAccount(contract_, account_)
 		setContract(contract_)
 		setVetherPrice(await getUniswapPriceEth())
-		checkApproval(account_)
 	}
 
 	const refreshAccount = async (contract_, account_) => {
@@ -144,6 +143,7 @@ export const AddLiquidityTable = () => {
 		})
 		setCustomAmount(vethBalance_)
 		setEthAmount(ethBalance_)
+		checkApproval(account_)
 	}
 
 	const checkApproval = async (address) => {
@@ -151,8 +151,9 @@ export const AddLiquidityTable = () => {
 		const fromAcc = address
 		const spender = uniSwapAddr()
 		const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
+		const vethBalance_ = await tokenContract.methods.balanceOf(address).call()
 		setApprovalAmount(approval)
-		if (approval >= account.vethBalance) {
+		if (approval >= vethBalance_) {
 			setApproved(true)
 		}
 	}
