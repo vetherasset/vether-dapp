@@ -151,10 +151,10 @@ export const AddLiquidityTable = () => {
 		const fromAcc = address
 		const spender = uniSwapAddr()
 		const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
-		const vethBalance_ = await tokenContract.methods.balanceOf(address).call()
+		const vethBalance = await tokenContract.methods.balanceOf(address).call()
 		setApprovalAmount(approval)
-		// console.log(approval, vethBalance_)
-		if (+approval >= +vethBalance_) {
+		// console.log(approval, vethBalance)
+		if (+approval >= +vethBalance && +vethBalance > 0) {
 			setApproved(true)
 		}
 	}
