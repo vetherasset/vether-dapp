@@ -82,7 +82,7 @@ export const PoolTable = () => {
 
 export const AddLiquidityTable = () => {
 
-	const totalSupply = 1000000 * 10 ** 18
+	const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
 
 	const [account, setAccount] = useState(
 		{ address: '', vethBalance: '', ethBalance: '' })
@@ -153,7 +153,8 @@ export const AddLiquidityTable = () => {
 		const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
 		const vethBalance_ = await tokenContract.methods.balanceOf(address).call()
 		setApprovalAmount(approval)
-		if (approval >= vethBalance_) {
+		// console.log(approval, vethBalance_)
+		if (+approval >= +vethBalance_) {
 			setApproved(true)
 		}
 	}
@@ -163,7 +164,7 @@ export const AddLiquidityTable = () => {
 		const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		const fromAcc = account.address
 		const spender = uniSwapAddr()
-		const value = convertToWei(totalSupply)
+		const value = totalSupply.toString()
 		await tokenContract.methods.approve(spender, value).send({ from: fromAcc })
 		checkApproval(account.address)
 	}
