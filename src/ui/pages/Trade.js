@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { H2, Subtitle, Gap, LabelGrey, Click } from '../components'
 import {TradeTable} from './trade-web3'
+import {PoolTable} from './buysell-web3'
 
 import '../../App.css';
 // import { Button as ButtonD } from 'antd';
@@ -19,9 +20,10 @@ const Trade = () => {
 		<div>
 			<Gap />
 			<H2>TRADE VETHER</H2><br />
-			<Subtitle>COMING SOON</Subtitle>
+			<Subtitle>BUY AND SELL VETHER USING UNISWAP</Subtitle>
 			<br /><br />
 			<Click><a href='https://uniswap.exchange/swap/0x31Bb711de2e457066c6281f231fb473FC5c2afd3' rel="noopener noreferrer" title="Uniswap Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>VIEW ON UNISWAP -></a></Click>
+			<Click><a href='https://etherscan.io/address/0x506d07722744e4a390cd7506a2ba1a8157e63745' rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>VIEW ON ETHERSCAN -></a></Click>
 			<TradeTable></TradeTable>
 			{safari &&
 				<div>
@@ -32,7 +34,7 @@ const Trade = () => {
 			}
 			{!safari &&
 				<div>
-
+					<PoolTable></PoolTable>
 				</div>
 			}
 

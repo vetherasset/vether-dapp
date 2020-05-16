@@ -14,8 +14,7 @@ export const PoolTable = () => {
 	const [marketData, setMarketData] = useState(
 		{ priceUSD: '', priceETH: '', ethPrice: '' })
 	const [uniswapBalance, setUniswapBalance] = useState(
-		{ "eth": "", "veth": '' }
-	)
+		{ "eth": "", "veth": '' })
 
 	useEffect(() => {
 		loadBlockchainData()
