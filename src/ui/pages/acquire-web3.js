@@ -130,8 +130,7 @@ export const AcquireTable = () => {
 		//console.log(approval_)
 		setApprovalAmount(approval_)
 		setApproved(true)
-		}
-		
+		}	
 	}
 
 	const { confirm } = Modal

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { H2, Subtitle, Text, HR, Gap, LabelGrey, Click } from '../components'
 import { AcquireTable } from './acquire-web3'
+import { TokenTable } from './tokens'
 
 import '../../App.css';
 // import { Button as ButtonD } from 'antd';
@@ -37,6 +38,10 @@ const Acquire = () => {
 			{!safari &&
 				<div>
 					<AcquireTable></AcquireTable>
+					<Gap />
+					<HR />
+					<Gap />
+					<TokenTable></TokenTable>
 				</div>
 			}
 

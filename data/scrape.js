@@ -7,8 +7,8 @@ function BN2Int(BN){return((new BigNumber(BN)).toFixed()/10**18)}
 
 const main = async () => {
 
-    const provider = ethers.getDefaultProvider('rinkeby');
-    const contract = new ethers.Contract(process.env.VETHER_ADDR, vether.abi(), provider)
+    const provider = ethers.getDefaultProvider();
+    const contract = new ethers.Contract(vether.addr(), vether.abi(), provider)
     
     const currentEra = await contract.currentEra()
     const currentDay = await contract.currentDay()
