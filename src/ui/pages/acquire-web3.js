@@ -228,19 +228,17 @@ export const AcquireTable = () => {
 						</Col>
 					</Row>
 
-					<Gap />
+					{/* <Gap />
 					<Label>BURN TOKENS</Label>
 					<Row>
 						<Col xs={16} sm={8}>
 							<Input size={'large'} allowClear onChange={onTokenChange} placeholder={'Enter token address'} />
 							<br></br>
-							{/* <Sublabel>Set custom token address to burn</Sublabel> */}
 							<br></br>
 						</Col>
 						<Col xs={6} sm={3} style={{ marginLeft: 10, marginRight: 20 }}>
 							<Input size={'large'} allowClear onChange={onAmountChange} placeholder={"Enter amount"} />
 							<br></br>
-							{/* <Sublabel>Set token amount</Sublabel> */}
 							<br></br>
 						</Col>
 						<Col xs={8} sm={3}>
@@ -293,7 +291,7 @@ export const AcquireTable = () => {
 							</div>
 						}
 
-					</Row>
+					</Row> */}
 				</div>
 			}
 		</div>

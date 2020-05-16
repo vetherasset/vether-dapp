@@ -41,12 +41,16 @@ const Acquire = () => {
 					<Gap />
 					<HR />
 					<Gap />
+					<H2>BURN TOKENS</H2><br />
+					<Subtitle>Burn the tokens on your wallet to get VETHER.</Subtitle><br />
+					<Text>Note: If there are any errors in your MetaMask, do not proceed, the token is not compatible with Vether.</Text>
+					<br /><br />
 					<TokenTable></TokenTable>
 				</div>
 			}
 
 			<HR />
-
+			
 			<Gap />
 			<H2>MINE VETHER</H2><br />
 			<Subtitle>Run the mining client to continuously mine Vether. </Subtitle>

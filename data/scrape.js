@@ -3,7 +3,7 @@ const ethers = require('ethers');
 const vether = require('./vether.js')
 const BigNumber = require('bignumber.js')
 
-function BN2Int(BN){return((new BigNumber(BN)).toFixed()/10**18)}
+function BN2Int(BN){return(((new BigNumber(BN)).toFixed()/10**18).toFixed(2))}
 
 const main = async () => {
 

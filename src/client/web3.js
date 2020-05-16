@@ -1,6 +1,7 @@
 import Web3 from 'web3'
 import VETHER from '../artifacts/DeployedVether.json'
 import UNISWAP from '../artifacts/UniswapExchange.json'
+import REGISTRY from '../artifacts/UniswapRegistry.json'
 
 const TESTNET = false
 
@@ -48,12 +49,51 @@ export const uniSwapAbi = () => {
 	return UNISWAP.abi
 }
 
+export const registryAddr = () => {
+    if(TESTNET) {
+        return '0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36'
+    } else {
+        return '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95'
+    }
+}
+
+export const registryAbi = () => {
+	return REGISTRY.abi
+}
+
 export const getUniswapPriceEth = async () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
     const _1 = (1*10**18).toString()
     const valueEth = await contract.methods.getTokenToEthInputPrice(_1).call()
     return convertFromWei(valueEth)
+}
+
+export const getExchangeAddr = async (token) =>{
+    const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+    const registry = new web3.eth.Contract(registryAbi(), registryAddr())
+    const exchange = await registry.methods.getExchange(token).call()
+    console.log(exchange, token)
+    return exchange
+}
+
+export const getUniswapTokenPriceEth = async (token) => {
+    const exchange = await getExchangeAddr(token)
+    const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+    const contract = new web3.eth.Contract(uniSwapAbi(), exchange)
+    const _1 = (1*10**18).toString()
+    var valueEth;
+    try {
+        valueEth = await contract.methods.getTokenToEthInputPrice(_1).call()
+    } catch(err) {
+        valueEth = 0.00
+        console.log(err)
+    }
+    return convertFromWei(valueEth)
+}
+
+export const getGasValue = async () => {
+    
 }
 
 export const getUniswapBalances = async () => {

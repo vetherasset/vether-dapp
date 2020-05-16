@@ -1,31 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Web3 from 'web3';
-import BigNumber from 'bignumber.js'
+// import BigNumber from 'bignumber.js'
 
-import { Row, Col, Table, Input } from 'antd'
-import { vetherAddr, vetherAbi, infuraAPI, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
-import { Text, LabelGrey, Label, Click, Button, Gap, Colour } from '../components'
+// import { tokenArray3 } from './tokenArray'
+
+import { Row, Col, Table } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons';
+import { vetherAddr, vetherAbi, getUniswapTokenPriceEth, getExchangeAddr, getEtherscanURL } from '../../client/web3.js'
+import { getGasPrice, getShare } from '../../client/market.js'
+import { Text, Click, Button } from '../components'
 
 
 export const TokenTable = () => {
 
     const [account, setAccount] = useState(
         { address: '', vethBalance: '', ethBalance: '' })
-    const [contract, setContract] = useState(null)
     const [tokenTable, setTokenTable] = useState(null)
-    const [approvalAmount, setApprovalAmount] = useState(null)
-    const [approved, setApproved] = useState(null)
+    const [loadingTable, setLoadingTable] = useState([])
+    const [loaded, setLoaded] = useState(false)
 
     useEffect(() => {
         connect()
         // eslint-disable-next-line
     }, [])
 
-    const connect = () => {
+    const connect = async () => {
         // setWalletFlag('TRUE')
         ethEnabled()
-        loadBlockchainData()
+        if(!loaded){
+            await loadBlockchainData()
+        }
+        setLoaded(true)
         if (!ethEnabled()) {
             alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
         } else {
@@ -45,82 +51,155 @@ export const TokenTable = () => {
     const loadBlockchainData = async () => {
         var accounts = await window.web3.eth.getAccounts()
         const account_ = await accounts[0]
-        const contract_ = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+        // const contract_ = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
         // refreshAccount(contract_, account_)
-        setContract(contract_)
+        //setContract(contract_)
         setAccount({ address: account_ })
         await getTokens(account_)
     }
 
     const getTokens = async (address) => {
-        // const baseURL = "https://api.ethplorer.io/getAddressInfo/"
-        // const apiText = "?apiKey=freekey"
-        // const link = baseURL.concat(address).concat(apiText)
-        // console.log(link)
-        // const response = await axios.get(link)
-        // //console.log(response.data)
-        // let tokenTable_ = []
-        // let tokenObject = { address: "", name: "", balance: "", symbol: "", totalSupply: "" }
-        // response.data.tokens.forEach(element => {
-        //     if (element.tokenInfo.name) {
-        //         tokenObject = {
-        //             address: element.tokenInfo.address,
-        //             name: element.tokenInfo.name,
-        //             balance: element.balance,
-        //             symbol: element.tokenInfo.symbol,
-        //             totalSupply: element.tokenInfo.totalSupply
-        //         }
-        //         tokenTable_.push(tokenObject)
-        //     }
-        // });
-        // console.log(tokenTable_)
-        setTokenTable(dataSource)
+        const baseURL = "https://api.ethplorer.io/getAddressInfo/"
+        const apiText = "?apiKey=freekey"
+        const link = baseURL.concat(address).concat(apiText)
+        const response = await axios.get(link)
+
+        //const response = tokenArray3()
+
+        let tokenTable_ = []
+        let loadingTable_ = []
+        let tokenObject = { address: "", name: "", balance: "", symbol: "", totalSupply: "" }
+
+        response.data.tokens.forEach(element => {
+            if (element.tokenInfo.name) {
+                tokenObject = {
+                    address: element.tokenInfo.address,
+                    name: element.tokenInfo.name,
+                    balance: element.balance,
+                    symbol: element.tokenInfo.symbol,
+                    totalSupply: element.tokenInfo.totalSupply
+                }
+                tokenTable_.push(tokenObject)
+            }
+        });
+
+        let tokenTableTrimmed = []
+        tokenTable_.forEach(element => {
+            if (element.balance > (10**14)) {
+                tokenObject = {
+                    address: element.address,
+                    name: element.name,
+                    balance: element.balance,
+                    symbol: element.symbol,
+                    totalSupply: element.totalSupply
+                }
+                tokenTableTrimmed.push(tokenObject)
+                loadingTable_.push(true)
+            }
+        });
+        setTokenTable(tokenTableTrimmed)
+        setLoadingTable(tokenTableTrimmed)
+
+        //setTokenTable(dataSource)
+    }
+
+    const checkLoaded = (record) => {
+        const index = tokenTable.findIndex(item => record.address === item.address);
+        return loadingTable[index]
+    }
+
+    const setLoadedTable = (record) => {
+        const newData = [...loadingTable];
+        const index = tokenTable.findIndex(item => record.address === item.address);
+        newData.splice(index, 1, false);
+        setLoadingTable(newData)
+        console.log(newData)
     }
 
     const checkToken = async (record) => {
+        tableUpdate(record, true, false, '-', true)
         console.log("checked", record.checked)
-        if (record.checked === false) {
-            const newData = [...tokenTable];
-            const index = newData.findIndex(item => record.address === item.address);
-            const tokenObject = {
-                address: record.address,
-                name: record.name,
-                balance: record.balance,
-                symbol: record.symbol,
-                totalSupply: record.totalSupply,
-                checked: true,
-                approved: record.approved
-            }
-            newData.splice(index, 1, tokenObject);
-            setTokenTable(newData)
-            console.log(newData)
-        }
-        const approved = await checkApproval(record)
-        console.log('approved', approved)
-        if (approved) {
-            tableUpdateApproved(record)
+        const checked = true
+        var approved 
+        const contractApproval = await checkContractApproval(record)
+        console.log('contractApproval', contractApproval)
+        if(contractApproval === false ){
+            console.log("removed")
         } else {
-            //unlockToken(record)
-        }
+            approved = await checkApproval(record, contractApproval)
+            console.log('approved', approved)
+            const value = await checkValue(record)
+            setLoadedTable(record)
+            tableUpdate(record, checked, approved, value, false)
+        } 
     }
 
-    const checkApproval = async (record) => {
+    const checkContractApproval = async (record) => {
         const tokenContract = new window.web3.eth.Contract(vetherAbi(), record.address)
         const fromAcc = account.address
         const spender = vetherAddr()
-        const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
+        var approval
+        try{
+            approval = await tokenContract.methods.allowance(fromAcc, spender).call()
+            return approval
+        } catch(err){
+            removeToken(record.address)
+        return false
+        } 
+    }
+
+    const removeToken = async (token) => {
+        let tokenTableTrimmed = []
+            tokenTable.forEach(element => {
+            if (element.address !== token) {
+                const tokenObject = {
+                    address: element.address,
+                    name: element.name,
+                    balance: element.balance,
+                    symbol: element.symbol,
+                    totalSupply: element.totalSupply
+                }
+                tokenTableTrimmed.push(tokenObject)
+            }
+        });
+        console.log(tokenTableTrimmed)
+        setTokenTable(tokenTableTrimmed)
+    }
+
+    const checkApproval = async (record, approval) => {
         //const vethBalance = await tokenContract.methods.balanceOf(address).call()
-        // setApprovalAmount(approval)
-        console.log(approval, record.balance)
-        if (+approval >= +record.balance && +record.balance > 0) {
-            return true
-            //setApproved(true)
+            // setApprovalAmount(approval)
+            console.log(approval, record.balance)
+            if (+approval >= +record.balance && +record.balance > 0) {
+                return true
+                //setApproved(true)
+            } else {
+                return false
+            }
+    }
+
+    const checkValue = async (record) => {
+        const exchange = await getExchangeAddr(record.address)
+        var value = 0.00;
+        if (exchange === "0x0000000000000000000000000000000000000000") {
+            const tokenValue = await getGasPrice()
+            const valueInVeth = await getShare(tokenValue)
+            console.log('value', tokenValue, valueInVeth)
+            if (valueInVeth > 0) {
+                value = valueInVeth.toFixed(2)
+            }
         } else {
-            return false
+            const tokenValue = await getUniswapTokenPriceEth(record.address)
+            const valueInVeth = await getShare(tokenValue * convertFromWei(record.balance))
+            console.log('value', tokenValue, valueInVeth)
+            if (valueInVeth > 0) {
+                value = valueInVeth.toFixed(2)
+            }
         }
+        return value
     }
 
-    const tableUpdateApproved = async (record) => {
+    const tableUpdate = (record, checked, approved, value, loading) => {
         const newData = [...tokenTable];
         const index = newData.findIndex(item => record.address === item.address);
         const tokenObject = {
@@ -129,33 +208,59 @@ export const TokenTable = () => {
             balance: record.balance,
             symbol: record.symbol,
             totalSupply: record.totalSupply,
-            checked: true,
-            approved: true
-        }
-        newData.splice(index, 1, tokenObject);
-        setTokenTable(newData)
-        console.log(newData)
-    }
-
-    const tableUpdateAmount = async (record, amount) => {
-        const newData = [...tokenTable];
-        const index = newData.findIndex(item => record.address === item.address);
-        const tokenObject = {
-            address: record.address,
-            name: record.name,
-            balance: record.balance,
-            symbol: record.symbol,
-            totalSupply: record.totalSupply,
-            checked: true,
-            approved: true,
-            amount: amount
+            checked: checked,
+            value: value,
+            approved: approved,
+            amount: record.amount,
+            txHash: record.txHash,
+            loading: loading
         }
         newData.splice(index, 1, tokenObject);
         setTokenTable(newData)
         console.log(newData)
     }
 
-    const tableUpdateTx = async (record, txHash) => {
+    // const tableUpdateChecked = (record) => {
+    //     const newData = [...tokenTable];
+    //     const index = newData.findIndex(item => record.address === item.address);
+    //     const tokenObject = {
+    //         address: record.address,
+    //         name: record.name,
+    //         balance: record.balance,
+    //         symbol: record.symbol,
+    //         totalSupply: record.totalSupply,
+    //         checked: true,
+    //         value: record.value,
+    //         approved: record.approved,
+    //         amount: record.amount,
+    //         txHash: record.txHash
+    //     }
+    //     newData.splice(index, 1, tokenObject);
+    //     setTokenTable(newData)
+    //     console.log(newData)
+    // }
+
+    // const tableUpdateValue = (record, value) => {
+    //     const newData = [...tokenTable];
+    //     const index = newData.findIndex(item => record.address === item.address);
+    //     const tokenObject = {
+    //         address: record.address,
+    //         name: record.name,
+    //         balance: record.balance,
+    //         symbol: record.symbol,
+    //         totalSupply: record.totalSupply,
+    //         checked: true,
+    //         value: value,
+    //         approved: record.approved,
+    //         amount: record.amount,
+    //         txHash: record.txHash
+    //     }
+    //     newData.splice(index, 1, tokenObject);
+    //     setTokenTable(newData)
+    //     console.log(newData)
+    // }
+
+    const tableUpdateApproved = (record) => {
         const newData = [...tokenTable];
         const index = newData.findIndex(item => record.address === item.address);
         const tokenObject = {
@@ -165,19 +270,60 @@ export const TokenTable = () => {
             symbol: record.symbol,
             totalSupply: record.totalSupply,
             checked: true,
+            value: record.value,
             approved: true,
             amount: record.amount,
-            txHash: txHash
+            txHash: record.txHash
         }
         newData.splice(index, 1, tokenObject);
         setTokenTable(newData)
+        console.log(newData)
     }
+
+    // const tableUpdateAmount = (record, amount) => {
+    //     const newData = [...tokenTable];
+    //     const index = newData.findIndex(item => record.address === item.address);
+    //     const tokenObject = {
+    //         address: record.address,
+    //         name: record.name,
+    //         balance: record.balance,
+    //         symbol: record.symbol,
+    //         totalSupply: record.totalSupply,
+    //         checked: true,
+    //         value: record.value,
+    //         approved: record.approved,
+    //         amount: amount,
+    //         txHash: record.txHash
+    //     }
+    //     newData.splice(index, 1, tokenObject);
+    //     setTokenTable(newData)
+    //     console.log(newData)
+    // }
+
+    // const tableUpdateTx = (record, txHash) => {
+    //     const newData = [...tokenTable];
+    //     const index = newData.findIndex(item => record.address === item.address);
+    //     const tokenObject = {
+    //         address: record.address,
+    //         name: record.name,
+    //         balance: record.balance,
+    //         symbol: record.symbol,
+    //         totalSupply: record.totalSupply,
+    //         checked: true,
+    //         value: record.value,
+    //         approved: record.approved,
+    //         amount: record.amount,
+    //         txHash: txHash
+    //     }
+    //     newData.splice(index, 1, tokenObject);
+    //     setTokenTable(newData)
+    // }
 
     const unlockToken = async (record) => {
         const tokenContract_ = new window.web3.eth.Contract(vetherAbi(), record.address)
         const fromAcc_ = account.address
         const spender_ = vetherAddr()
-        const val_ = convertToWei(record.balance)
+        const val_ = (record.balance).toString()
         console.log(spender_, val_)
         await tokenContract_.methods.approve(spender_, val_).send({ from: fromAcc_ })
         console.log(fromAcc_, spender_)
@@ -186,57 +332,47 @@ export const TokenTable = () => {
         tableUpdateApproved(record)
     }
 
-    const onAmountChange = (record) => e => {
-        // console.log(record, e)
-        tableUpdateAmount(record, convertToWei(e.target.value))
+    const burnToken = async (record) => {
+        const amount = (record.balance).toString()
+        console.log(record.address, amount, account.address)
+        const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+        await contract.methods.burnTokens(record.address, amount).send({ from: account.address })
+        removeToken(record.address)
+        //tableUpdateTx(record, tx.transactionHash)
     }
 
-    const burnToken = async (record) => {
-		const amount = (record.amount).toString()
-		console.log(record.address, amount, account.address)
-		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		const tx = await contract.methods.burnTokens(record.address, amount).send({ from: account.address })
-        tableUpdateTx(record, tx.transactionHash)
-        // tableUpdateTx(record, "linkToEtherScan")
-		// setLoaded2(true)
-    }
-    
     const getLink = (record) => {
         return getEtherscanURL().concat('tx/').concat(record.txHash)
     }
 
+    // function convertToWei(number) {
+    //     var num = number * (10 ** 18)
+    //     return new BigNumber(num).toFixed(0)
+    // }
+
     function convertFromWei(number) {
-        var num = number / 1000000000000000000
+        var num = (number / (10 ** 18))
         return num.toFixed(2)
     }
 
-    function convertToWei(number) {
-        var num = number * 1000000000000000000
-        return new BigNumber(num).toFixed(0)
-    }
-
-    function prettify(amount) {
-        const number = Number(amount)
-        var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
-    }
-
-    const dataSource = [{ address: "0x31bb711de2e457066c6281f231fb473fc5c2afd3", name: "Vether", balance: 9676430882499553000, symbol: "VETH", totalSupply: "1000000000000000000000000", checked: false },
-    { address: "0x3a9fff453d50d4ac52a6890647b823379ba36b9e", name: "Shuffle.Monster V3", balance: 4783930832695759000, symbol: "SHUF", totalSupply: "966560691061295711142359", checked: false },
-    { address: "0x519734ec8854b749ba48be4073dfd71e110ceadb", name: "Value2", balance: 5.018066108938801e+21, symbol: "valt2", totalSupply: "1000000000000000000000000", checked: false },
-    { address: "0x6b175474e89094c44da98b954eedeac495271d0f", name: "Multi-Collateral DAI", balance: 3576382508375810000, symbol: "DAI", totalSupply: "95883410210926619021526051", checked: false },
-    { address: "0x767f7dadaa0398ae75646a5fa48ce5ae95fdebef", name: "VALUE2", balance: 821046826216961100000, symbol: "VAL2", totalSupply: "1000000000000000000000000", checked: false },
-    { address: "0xdac17f958d2ee523a2206206994597c13d831ec7", name: "Tether USD", balance: 1000000, symbol: "USDT", totalSupply: "5737970410922098", checked: false },
-    { address: "0xe160f2895068a6030c389ed8ffc408d182a9033d", name: "Token", balance: 9.999959e+23, symbol: "TKN", totalSupply: "1000000000000000000000000", checked: false },
-    { address: "0xe6b7068b4893be8980961b7a722fc92813931b56", name: "valuetest", balance: 1.9344389272421537e+21, symbol: "valt", totalSupply: "1000000000000000000000000", checked: false }];
-
+    // function prettify(amount) {
+    //     const number = Number(amount)
+    //     var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
+    //     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //     return parts.join(".");
+    // }
 
     const columns = [
         {
             title: 'Name',
-            dataIndex: 'name',
             key: 'name',
+            render: (record) => {
+                return (
+                    <div>
+                        <Text size={14} bold={true}>{record.name}</Text>
+                    </div>
+                )
+            }
         },
         {
             title: 'Symbol',
@@ -250,16 +386,28 @@ export const TokenTable = () => {
         // },
         {
             title: 'Balance',
-            dataIndex: 'balance',
             key: 'balance',
+            render: (record) => {
+                return(
+                    <div>
+                        <Text>{convertFromWei(record.balance)}</Text>
+                    </div>
+                )
+            }
         },
         {
-            title: 'Check',
+            title: 'Potential Value',
             key: 'check',
             render: (record) => {
+                const loading = checkLoaded(record)
                 return record.checked ? (
                     <div>
-                        {/* <Button onClick={() => checkToken(record)}>CHECK >></Button> */}
+                        {loading &&
+                            <LoadingOutlined />
+                        }
+                        {!loading &&
+                            <Text size={14} bold={true}>{record.value} VETH</Text>
+                        }
                     </div>
                 ) : (
                         <div>
@@ -274,8 +422,12 @@ export const TokenTable = () => {
             render: (record) => {
                 const approved = record.approved
                 const checked = record.checked
+                var burnable = false
+                if (record.value > 0) {
+                    burnable = true
+                }
                 var burnt = false
-                if(record.txHash){
+                if (record.txHash) {
                     burnt = true
                 }
                 return (
@@ -283,13 +435,13 @@ export const TokenTable = () => {
                         {/* {!checked &&
                             <Button onClick={() => checkToken(record)}>CHECK >></Button>
                         } */}
-                        {(approved && checked && !burnt) &&
+                        {(approved && checked && !burnt && burnable) &&
                             <div>
-                                <Input size={'default'} style={{ width: 80, marginRight:10 }} allowClear onChange={onAmountChange(record)} placeholder={prettify(record.balance)} />
+                                {/* <Input size={'default'} style={{ width: 80, marginRight:10 }} allowClear onChange={onAmountChange(record)} placeholder={prettify(record.balance)} /> */}
                                 <Button style={{ marginLeft: 10 }} onClick={() => burnToken(record)}>BURN >></Button>
                             </div>
                         }
-                        {(!approved && checked && !burnt) &&
+                        {(!approved && checked && !burnt && burnable) &&
                             <Button onClick={() => unlockToken(record)}>UNLOCK >></Button>
                         }
                         {burnt &&

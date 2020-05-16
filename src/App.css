@@ -50,7 +50,7 @@ body {
   background: #D09800;
 }
 .ant-table-thead > tr > th{
-  color: #97948E;
+  color: #fff;
   font-weight: 800;
   font-size: 20;
   border-bottom: 1px solid #97948E;
