@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button as AntButton } from "antd"
-import { HomeOutlined, FileTextOutlined, RightSquareOutlined, LoginOutlined, LineChartOutlined, CheckSquareOutlined } from '@ant-design/icons';
+import { HomeOutlined, FileTextOutlined, RightSquareOutlined, LoginOutlined, LineChartOutlined, PieChartOutlined, CheckSquareOutlined } from '@ant-design/icons';
 
 export const Colour = () => {
   const colour = {
@@ -279,6 +279,14 @@ export const Icon = (props) => {
       </LineChartOutlined>
     )
   }
+  if(props.icon === "stats"){
+    return (
+      <PieChartOutlined style={styles}>
+        {props.children}
+      </PieChartOutlined >
+    )
+  }
+  
   
   if(props.icon === "whitepaper"){
     return (

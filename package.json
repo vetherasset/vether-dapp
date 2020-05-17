@@ -8,9 +8,9 @@
     "axios": "^0.19.2",
     "bignumber": "^1.1.0",
     "bignumber.js": "^9.0.0",
+    "chart.js": "^2.9.3",
     "dotenv": "^8.2.0",
     "ethers": "^4.0.47",
-    "fs": "^0.0.1-security",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "react": "^16.11.0",
@@ -22,7 +22,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@babel/helper-create-regexp-features-plugin": "^7.8.8"
+    "@babel/helper-create-regexp-features-plugin": "^7.8.8",
+    "fs": "^0.0.1-security"
   },
   "scripts": {
     "start": "PORT=3006 react-scripts start",
