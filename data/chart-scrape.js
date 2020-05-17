@@ -19,6 +19,7 @@ const main = async () => {
     var dayArray = []
     var burntArray = []
     var unclaimedArray = []
+    var emissionArray = []
     for (var i = 1; i <= currentEra; i++) {
         for (var j = 1; j < currentDay; j++) {
             const burntForDay = BN2Int(await contract.mapEraDay_Units(i, j))
@@ -29,12 +30,14 @@ const main = async () => {
             dayArray.push(j)
             burntArray.push(burntForDay)
             unclaimedArray.push(unclaimedEmission)
+            emissionArray.push(emission)
         }
     }
     const claimObject = {
         days: dayArray,
         burns: burntArray,
-        unclaims: unclaimedArray
+        unclaims: unclaimedArray,
+        emission: emissionArray
     }
     await fs.writeFileSync('./src/data/claimArray.json', JSON.stringify(claimObject, null,4), 'utf8')
     console.log(claimObject)

@@ -3,7 +3,7 @@ import React from 'react';
 import '../../App.css';
 import { Row, Col } from 'antd'
 import { H2, Text, Gap } from '../components'
-import { ChartEther, ChartClaim } from './chart'
+import { ChartEther, ChartClaim, ChartEmission } from './chart'
 
 const Stats = () => {
 
@@ -19,6 +19,11 @@ const Stats = () => {
                 </Col>
                 <Col xs={24} xl={12}>
                     <ChartClaim />
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <ChartEmission />
                 </Col>
             </Row>
         </div>

@@ -2,6 +2,10 @@ import React from 'react'
 import { Button as AntButton } from "antd"
 import { HomeOutlined, FileTextOutlined, RightSquareOutlined, LoginOutlined, LineChartOutlined, PieChartOutlined, CheckSquareOutlined } from '@ant-design/icons';
 
+export const Font = () => {
+  return "Courier"
+}
+
 export const Colour = () => {
   const colour = {
     "black":"#110D01", 
@@ -295,5 +299,13 @@ export const Icon = (props) => {
       </FileTextOutlined>
     )
   }
+}
+
+export const chartStyles = {
+  marginLeft:0,
+  marginRight:50,
+  marginTop:50,
+  backgroundColor:'#110D01',
+  height:500
 }
 
