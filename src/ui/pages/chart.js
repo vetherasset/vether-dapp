@@ -24,7 +24,8 @@ const chartConfigEther = {
                 scaleLabel: {
                     display: true,
                     labelString: "Ether Burnt",
-                    fontFamily: "Courier"
+                    fontFamily: "Courier",
+                    fontSize:16
                 },
                 gridLines: {
                     display: true ,
@@ -38,7 +39,8 @@ const chartConfigEther = {
                 scaleLabel: {
                     display: true,
                     labelString: "Day",
-                    fontFamily: "Courier"
+                    fontFamily: "Courier",
+                    fontSize:16
                 },
                 gridLines: {
                     display: false ,
@@ -50,10 +52,11 @@ const chartConfigEther = {
             display: true,
             text: 'Ether Burnt Daily',
             fontFamily: "Courier",
-            padding:20
+            padding:20,
+            fontSize:20
         },
         legend: {
-            display: true,
+            display: false,
             position: "bottom",
             labels:{
                 fontFamily: "Courier",
@@ -67,7 +70,9 @@ const chartConfigEther = {
                 top: 10,
                 bottom: 10
             }
-        }
+        },
+        responsive: true,
+        maintainAspectRatio: false
     }
 }
 
@@ -88,6 +93,7 @@ export const ChartEther = () => {
         marginRight:50,
         marginTop:50,
         backgroundColor:'#110D01',
+        height:500
     }
 
     return(
@@ -119,7 +125,8 @@ const chartConfigClaim = {
                 scaleLabel: {
                     display: true,
                     labelString: "Vether Unclaimed",
-                    fontFamily: "Courier"
+                    fontFamily: "Courier",
+                    fontSize:16
                 },
                 gridLines: {
                     display: true ,
@@ -133,7 +140,8 @@ const chartConfigClaim = {
                 scaleLabel: {
                     display: true,
                     labelString: "Day",
-                    fontFamily: "Courier"
+                    fontFamily: "Courier",
+                    fontSize:16
                 },
                 gridLines: {
                     display: false ,
@@ -145,10 +153,11 @@ const chartConfigClaim = {
             display: true,
             text: 'Unclaimed Vether',
             fontFamily: "Courier",
-            padding:20
+            padding:20,
+            fontSize:20
         },
         legend: {
-            display: true,
+            display: false,
             position: "bottom",
             labels:{
                 fontFamily: "Courier",
@@ -162,7 +171,9 @@ const chartConfigClaim = {
                 top: 10,
                 bottom: 10
             }
-        }
+        },
+        responsive: true,
+        maintainAspectRatio: false
     }
 }
 
@@ -183,6 +194,7 @@ export const ChartClaim = () => {
         marginRight:50,
         marginTop:50,
         backgroundColor:'#110D01',
+        height:500
     }
 
     return(
