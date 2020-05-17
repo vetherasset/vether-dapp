@@ -29,7 +29,8 @@ const chartConfigEther = {
                 },
                 gridLines: {
                     display: true ,
-                    color: "#2B2515"
+                    color: "#2B2515",
+                    zeroLineColor: '#2B2515'
                   },
             }],
             xAxes: [{
@@ -44,7 +45,8 @@ const chartConfigEther = {
                 },
                 gridLines: {
                     display: false ,
-                    color: "#2B2515"
+                    color: "#2B2515",
+                    zeroLineColor: '#2B2515'
                   },
             }]
         },
@@ -130,7 +132,8 @@ const chartConfigClaim = {
                 },
                 gridLines: {
                     display: true ,
-                    color: "#2B2515"
+                    color: "#2B2515",
+                    zeroLineColor: '#2B2515'
                   },
             }],
             xAxes: [{
@@ -145,7 +148,8 @@ const chartConfigClaim = {
                 },
                 gridLines: {
                     display: false ,
-                    color: "#2B2515"
+                    color: "#2B2515",
+                    zeroLineColor: '#2B2515'
                   },
             }]
         },
