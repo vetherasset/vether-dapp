@@ -5,7 +5,7 @@ import axios from 'axios'
 import emissionArray from '../../data/emissionArray.json';
 import {chartStyles, Colour, Font} from '../components'
 
-const chartConfig = () => {
+const getChartConfig = () => {
     return {
     type: 'bar',
     data: {
@@ -85,39 +85,40 @@ const chartConfig = () => {
     }
 }}
 
+const rightAxisConfig = () => {
+    return {
+    id: "R",
+    type: "linear",
+    position: "right",
+    ticks: {
+        beginAtZero: true,
+    },
+    scaleLabel: {
+        display: true,
+        labelString: "Total Ether",
+        fontFamily: Font(),
+        fontSize:16
+    },
+    gridLines: {
+        display: false
+      }
+}}
+
 export const ChartEther = () => {  
 
     const chartContainer = useRef(null)
-    const [setChartInstance] = useState(null)
+    const [chartInstance, setChartInstance] = useState(null)
 
-    var chartConfigEther = chartConfig()
-    chartConfigEther.data.datasets[0].label = 'Ether Burnt'
-    chartConfigEther.options.scales.yAxes[0].scaleLabel.labelString = 'Ether Burnt'
-    chartConfigEther.options.scales.xAxes[0].scaleLabel.labelString = 'Day'
-    chartConfigEther.options.title.text = 'Ether Burnt Daily'
-
-    const rightAxis = {
-            id: "R",
-            type: "linear",
-            position: "right",
-            ticks: {
-                beginAtZero: true,
-            },
-            scaleLabel: {
-                display: true,
-                labelString: "Total Ether",
-                fontFamily: Font(),
-                fontSize:16
-            },
-            gridLines: {
-                display: false
-              }
-    }
+    var chartConfig = getChartConfig()
+    chartConfig.data.datasets[0].label = 'Ether Burnt'
+    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Ether Burnt'
+    chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Day'
+    chartConfig.options.title.text = 'Ether Burnt Daily'
 
     useEffect(() => {
   
         if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfigEther)
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
             setChartInstance(newChartInstance)
             getData(newChartInstance)
         }
@@ -127,9 +128,8 @@ export const ChartEther = () => {
     const getData = async (newChartInstance) => {
         const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
         let claimArray = response.data
-        chartConfigEther.data.labels = claimArray.days
-        chartConfigEther.data.datasets[0].data = claimArray.burns
-        // let totals = claimArray.burns.reduce((a, total) => +a + +total, 0)
+        chartConfig.data.labels = claimArray.days
+        chartConfig.data.datasets[0].data = claimArray.burns
         console.log(claimArray)
         const dataset2 = {
             type: "line",
@@ -140,8 +140,9 @@ export const ChartEther = () => {
             borderWidth: 1,
             yAxisID: "R"
         }
-        chartConfigEther.data.datasets.push(dataset2)
-        chartConfigEther.options.scales.yAxes.push(rightAxis)
+        chartConfig.data.datasets.push(dataset2)
+        chartConfig.options.scales.yAxes.push(rightAxisConfig())
+        chartConfig.options.scales.yAxes[1].scaleLabel.labelString = 'Ether Burnt'
         newChartInstance.update()
     }
 
@@ -154,20 +155,20 @@ export const ChartEther = () => {
 
 export const ChartClaim = () => {
 
-    var chartConfigClaim = chartConfig()
-    chartConfigClaim.options.title.text = 'Vether Emitted Daily'
-    chartConfigClaim.data.datasets[0].label = 'Vether Unclaimed'
-    chartConfigClaim.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
-    chartConfigClaim.options.scales.xAxes[0].scaleLabel.labelString = 'Day'
-    chartConfigClaim.options.scales.xAxes[0].stacked = true
-    chartConfigClaim.options.scales.yAxes[0].stacked = false
+    var chartConfig = getChartConfig()
+    chartConfig.options.title.text = 'Vether Emitted Daily'
+    chartConfig.data.datasets[0].label = 'Vether Unclaimed'
+    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
+    chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Day'
+    chartConfig.options.scales.xAxes[0].stacked = true
+    chartConfig.options.scales.yAxes[0].stacked = false
 
     const chartContainer = useRef(null)
-    const [setChartInstance] = useState(null)
+    const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
         if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfigClaim)
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
             setChartInstance(newChartInstance)
             getData(newChartInstance)
         }
@@ -177,8 +178,8 @@ export const ChartClaim = () => {
     const getData = async (newChartInstance) => {
         const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
         let claimArray = response.data
-        chartConfigClaim.data.labels = claimArray.days
-        chartConfigClaim.data.datasets[0].data = claimArray.unclaims
+        chartConfig.data.labels = claimArray.days
+        chartConfig.data.datasets[0].data = claimArray.unclaims
         const dataset2 = {
             label: "Emission",
             data:claimArray.emission,
@@ -186,7 +187,19 @@ export const ChartClaim = () => {
             borderColor: 'rgba(255, 206, 86, 1)',
             borderWidth: 1
         }
-        chartConfigClaim.data.datasets.push(dataset2)
+        chartConfig.data.datasets.push(dataset2)
+        const dataset3 = {
+            type: "line",
+            label: "Vether Total",
+            data:claimArray.vether,
+            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            borderWidth: 1,
+            yAxisID: "R"
+        }
+        chartConfig.data.datasets.push(dataset3)
+        chartConfig.options.scales.yAxes.push(rightAxisConfig())
+        chartConfig.options.scales.yAxes[1].scaleLabel.labelString = 'Vether'
         newChartInstance.update()
     }
 
@@ -199,14 +212,14 @@ export const ChartClaim = () => {
 
 export const ChartEmission = () => {
 
-    var chartConfigEmission = chartConfig()
-    chartConfigEmission.type = "line"
-    chartConfigEmission.data.labels = emissionArray.eras
-    chartConfigEmission.data.datasets[0].label = 'Total Supply'
-    chartConfigEmission.data.datasets[0].data = emissionArray.total
-    chartConfigEmission.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
-    chartConfigEmission.options.scales.xAxes[0].scaleLabel.labelString = 'Era'
-    chartConfigEmission.options.title.text = 'Vether Emission'
+    var chartConfig = getChartConfig()
+    chartConfig.type = "line"
+    chartConfig.data.labels = emissionArray.eras
+    chartConfig.data.datasets[0].label = 'Total Supply'
+    chartConfig.data.datasets[0].data = emissionArray.total
+    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
+    chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Era'
+    chartConfig.options.title.text = 'Vether Emission'
 
     const dataset2 = {
         type: "bar",
@@ -216,14 +229,14 @@ export const ChartEmission = () => {
         borderColor: 'rgba(255, 206, 86, 1)',
         borderWidth: 1
     }
-    chartConfigEmission.data.datasets.push(dataset2)
+    chartConfig.data.datasets.push(dataset2)
 
     const chartContainer = useRef(null)
-    const [setChartInstance] = useState(null)
+    const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
         if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfigEmission)
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
             setChartInstance(newChartInstance)
         }
         // eslint-disable-next-line
@@ -238,20 +251,20 @@ export const ChartEmission = () => {
 
 export const ChartDistro = () => {
 
-    var chartConfigDistro = chartConfig()
-    chartConfigDistro.type = "bar"
-    chartConfigDistro.options.title.text = 'Vether Distribution'
-    chartConfigDistro.data.datasets[0].label = 'Vether Distribution'
-    chartConfigDistro.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
-    chartConfigDistro.options.scales.xAxes[0].scaleLabel.labelString = 'Member'
+    var chartConfig = getChartConfig()
+    chartConfig.type = "bar"
+    chartConfig.options.title.text = 'Vether Distribution'
+    chartConfig.data.datasets[0].label = 'Vether Distribution'
+    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
+    chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Member'
 
     const chartContainer = useRef(null)
-    // const [chartInstance, setChartInstance] = useState(null)
+    const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
         if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfigDistro)
-            // setChartInstance(newChartInstance)
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
+            setChartInstance(newChartInstance)
             getData(newChartInstance)
         }
         // eslint-disable-next-line
@@ -268,8 +281,8 @@ export const ChartDistro = () => {
         let holderShip = holders
         .filter(item => convertFromWei(item.balance) < 10000)
         .map(item => convertFromWei(item.balance))
-        chartConfigDistro.data.labels = labels
-        chartConfigDistro.data.datasets[0].data = holderShip
+        chartConfig.data.labels = labels
+        chartConfig.data.datasets[0].data = holderShip
         newChartInstance.update()
     }
 
@@ -287,27 +300,27 @@ export const ChartDistro = () => {
 export const ChartPie = () => {
     
 
-    var chartConfigPie = chartConfig()
-    chartConfigPie.type = "pie"
-    chartConfigPie.options.title.text = 'Vether Distribution'
-    chartConfigPie.data.datasets[0].label = 'Vether Distribution'
-    chartConfigPie.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
-    chartConfigPie.options.scales.xAxes[0].scaleLabel.labelString = 'Member'
+    var chartConfig = getChartConfig()
+    chartConfig.type = "pie"
+    chartConfig.options.title.text = 'Vether Distribution'
+    chartConfig.data.datasets[0].label = 'Vether Distribution'
+    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
+    chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Member'
 
-    chartConfigPie.options.scales.yAxes[0].scaleLabel.display = false
-    chartConfigPie.options.scales.yAxes[0].gridLines.display = false
-    chartConfigPie.options.scales.xAxes[0].scaleLabel.display = false
-    chartConfigPie.options.scales.xAxes[0].gridLines.display = false
-    chartConfigPie.options.scales.yAxes[0].ticks.display = false
-    chartConfigPie.options.scales.xAxes[0].ticks.display = false
+    chartConfig.options.scales.yAxes[0].scaleLabel.display = false
+    chartConfig.options.scales.yAxes[0].gridLines.display = false
+    chartConfig.options.scales.xAxes[0].scaleLabel.display = false
+    chartConfig.options.scales.xAxes[0].gridLines.display = false
+    chartConfig.options.scales.yAxes[0].ticks.display = false
+    chartConfig.options.scales.xAxes[0].ticks.display = false
 
     const chartContainer = useRef(null)
-    // const [chartInstance, setChartInstance] = useState(null)
+    const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
         if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfigPie)
-            // setChartInstance(newChartInstance)
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
+            setChartInstance(newChartInstance)
             getData(newChartInstance)
         }
         // eslint-disable-next-line
@@ -324,8 +337,8 @@ export const ChartPie = () => {
         let holderShip = holders
         .filter(item => convertFromWei(item.balance) < 10000)
         .map(item => convertFromWei(item.balance))
-        chartConfigPie.data.labels = labels
-        chartConfigPie.data.datasets[0].data = holderShip
+        chartConfig.data.labels = labels
+        chartConfig.data.datasets[0].data = holderShip
         newChartInstance.update()
     }
 
