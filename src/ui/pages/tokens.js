@@ -1,9 +1,7 @@
+
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Web3 from 'web3';
-// import BigNumber from 'bignumber.js'
-
-// import { tokenArray3 } from './tokenArray'
 
 import { Row, Col, Table } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -11,6 +9,7 @@ import { vetherAddr, vetherAbi, getUniswapTokenPriceEth, getExchangeAddr, getEth
 import { getGasPrice, getShare } from '../../client/market.js'
 import { Text, Click, Button } from '../components'
 
+require('dotenv').config({path:"../../../.env"})
 
 export const TokenTable = () => {
 
@@ -26,7 +25,6 @@ export const TokenTable = () => {
     }, [])
 
     const connect = async () => {
-        // setWalletFlag('TRUE')
         ethEnabled()
         if(!loaded){
             await loadBlockchainData()
@@ -34,8 +32,6 @@ export const TokenTable = () => {
         setLoaded(true)
         if (!ethEnabled()) {
             alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
-        } else {
-            // setEthAmount(account.ethBalance - 0.1)
         }
     }
 
@@ -51,20 +47,15 @@ export const TokenTable = () => {
     const loadBlockchainData = async () => {
         var accounts = await window.web3.eth.getAccounts()
         const account_ = await accounts[0]
-        // const contract_ = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-        // refreshAccount(contract_, account_)
-        //setContract(contract_)
         setAccount({ address: account_ })
         await getTokens(account_)
     }
 
     const getTokens = async (address) => {
         const baseURL = "https://api.ethplorer.io/getAddressInfo/"
-        const apiText = "?apiKey=freekey"
+        const apiText = "?apiKey=" + process.env.REACT_APP_ETHPLORER_API
         const link = baseURL.concat(address).concat(apiText)
         const response = await axios.get(link)
-
-        //const response = tokenArray3()
 
         let tokenTable_ = []
         let tokenTableTrimmed = []
@@ -72,7 +63,6 @@ export const TokenTable = () => {
         let tokenObject = { address: "", name: "", balance: "", symbol: "", totalSupply: "" }
 
         if (response.data.tokens){
-
         response.data.tokens.forEach(element => {
             if (element.tokenInfo.name) {
                 tokenObject = {
@@ -86,7 +76,6 @@ export const TokenTable = () => {
             }
         });
 
-        
         tokenTable_.forEach(element => {
             if (element.balance > (10**14)) {
                 tokenObject = {
@@ -104,8 +93,6 @@ export const TokenTable = () => {
 
         setTokenTable(tokenTableTrimmed)
         setLoadingTable(tokenTableTrimmed)
-
-        //setTokenTable(dataSource)
     }
 
     const checkLoaded = (record) => {
@@ -172,12 +159,9 @@ export const TokenTable = () => {
     }
 
     const checkApproval = async (record, approval) => {
-        //const vethBalance = await tokenContract.methods.balanceOf(address).call()
-            // setApprovalAmount(approval)
             console.log(approval, record.balance)
             if (+approval >= +record.balance && +record.balance > 0) {
                 return true
-                //setApproved(true)
             } else {
                 return false
             }
@@ -225,46 +209,6 @@ export const TokenTable = () => {
         console.log(newData)
     }
 
-    // const tableUpdateChecked = (record) => {
-    //     const newData = [...tokenTable];
-    //     const index = newData.findIndex(item => record.address === item.address);
-    //     const tokenObject = {
-    //         address: record.address,
-    //         name: record.name,
-    //         balance: record.balance,
-    //         symbol: record.symbol,
-    //         totalSupply: record.totalSupply,
-    //         checked: true,
-    //         value: record.value,
-    //         approved: record.approved,
-    //         amount: record.amount,
-    //         txHash: record.txHash
-    //     }
-    //     newData.splice(index, 1, tokenObject);
-    //     setTokenTable(newData)
-    //     console.log(newData)
-    // }
-
-    // const tableUpdateValue = (record, value) => {
-    //     const newData = [...tokenTable];
-    //     const index = newData.findIndex(item => record.address === item.address);
-    //     const tokenObject = {
-    //         address: record.address,
-    //         name: record.name,
-    //         balance: record.balance,
-    //         symbol: record.symbol,
-    //         totalSupply: record.totalSupply,
-    //         checked: true,
-    //         value: value,
-    //         approved: record.approved,
-    //         amount: record.amount,
-    //         txHash: record.txHash
-    //     }
-    //     newData.splice(index, 1, tokenObject);
-    //     setTokenTable(newData)
-    //     console.log(newData)
-    // }
-
     const tableUpdateApproved = (record) => {
         const newData = [...tokenTable];
         const index = newData.findIndex(item => record.address === item.address);
@@ -285,45 +229,6 @@ export const TokenTable = () => {
         console.log(newData)
     }
 
-    // const tableUpdateAmount = (record, amount) => {
-    //     const newData = [...tokenTable];
-    //     const index = newData.findIndex(item => record.address === item.address);
-    //     const tokenObject = {
-    //         address: record.address,
-    //         name: record.name,
-    //         balance: record.balance,
-    //         symbol: record.symbol,
-    //         totalSupply: record.totalSupply,
-    //         checked: true,
-    //         value: record.value,
-    //         approved: record.approved,
-    //         amount: amount,
-    //         txHash: record.txHash
-    //     }
-    //     newData.splice(index, 1, tokenObject);
-    //     setTokenTable(newData)
-    //     console.log(newData)
-    // }
-
-    // const tableUpdateTx = (record, txHash) => {
-    //     const newData = [...tokenTable];
-    //     const index = newData.findIndex(item => record.address === item.address);
-    //     const tokenObject = {
-    //         address: record.address,
-    //         name: record.name,
-    //         balance: record.balance,
-    //         symbol: record.symbol,
-    //         totalSupply: record.totalSupply,
-    //         checked: true,
-    //         value: record.value,
-    //         approved: record.approved,
-    //         amount: record.amount,
-    //         txHash: txHash
-    //     }
-    //     newData.splice(index, 1, tokenObject);
-    //     setTokenTable(newData)
-    // }
-
     const unlockToken = async (record) => {
         const tokenContract_ = new window.web3.eth.Contract(vetherAbi(), record.address)
         const fromAcc_ = account.address
@@ -343,29 +248,16 @@ export const TokenTable = () => {
         const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
         await contract.methods.burnTokens(record.address, amount).send({ from: account.address })
         removeToken(record.address)
-        //tableUpdateTx(record, tx.transactionHash)
     }
 
     const getLink = (record) => {
         return getEtherscanURL().concat('tx/').concat(record.txHash)
     }
 
-    // function convertToWei(number) {
-    //     var num = number * (10 ** 18)
-    //     return new BigNumber(num).toFixed(0)
-    // }
-
     function convertFromWei(number) {
         var num = (number / (10 ** 18))
         return num.toFixed(2)
     }
-
-    // function prettify(amount) {
-    //     const number = Number(amount)
-    //     var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
-    //     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //     return parts.join(".");
-    // }
 
     const columns = [
         {
@@ -384,11 +276,6 @@ export const TokenTable = () => {
             dataIndex: 'symbol',
             key: 'age',
         },
-        // {
-        //     title: 'Address',
-        //     dataIndex: 'address',
-        //     key: 'address',
-        // },
         {
             title: 'Balance',
             key: 'balance',
@@ -437,12 +324,8 @@ export const TokenTable = () => {
                 }
                 return (
                     <div>
-                        {/* {!checked &&
-                            <Button onClick={() => checkToken(record)}>CHECK >></Button>
-                        } */}
                         {(approved && checked && !burnt && burnable) &&
                             <div>
-                                {/* <Input size={'default'} style={{ width: 80, marginRight:10 }} allowClear onChange={onAmountChange(record)} placeholder={prettify(record.balance)} /> */}
                                 <Button style={{ marginLeft: 10 }} onClick={() => burnToken(record)}>BURN >></Button>
                             </div>
                         }
@@ -453,50 +336,14 @@ export const TokenTable = () => {
                             <Click><a href={getLink(record)} rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>VIEW -></a></Click>
                         }
                     </div>)
-                // ) : (
-                //         <div>
-                //             {/* {approved && 
-                //         <Button onClick={() => checkToken(record)}>BURN >></Button>
-                //         }
-                //         {!approved && 
-                //             <Button onClick={() => checkToken(record)}>UNLOCK >></Button>
-                //         } */}
-                //         </div>
-                //     )
             }
         },
-        // {
-        //     title: 'Checked',
-        //     dataIndex: 'checked',
-        //     key: 'checked',
-        // },
-        // {
-        //     title: 'Approved',
-        //     dataIndex: 'approved',
-        //     key: 'approved',
-        // },
-        // {
-        //     title: '',
-        //     key: 'link',
-        //     render: (record) => {
-        //         return record.txHash ? (
-        //             <div>
-        //                 <Click><a href='https://github.com/vetherasset/vether-miner' rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>VIEW -></a></Click>
-        //             </div>
-        //         ) : (
-        //                 <div>
-        //                     {/* <Button onClick={() => checkToken(record)}>CHECK >></Button> */}
-        //                 </div>
-        //             )
-        //     }
-        // },
     ];
 
     return (
         <div>
             <Row>
                 <Col xs={24} style={{ paddingRight: 50 }}>
-                    {/* <Text>{account.address}</Text> */}
                     <Table dataSource={tokenTable} columns={columns} pagination={false} rowKey="address"></Table>
                 </Col>
             </Row>

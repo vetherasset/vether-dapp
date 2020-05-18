@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Chartjs from 'chart.js'
 import axios from 'axios'
 
-import claimArray from '../../data/claimArray.json';
 import emissionArray from '../../data/emissionArray.json';
-import holderArray from '../../data/holderArray.json';
 import {chartStyles, Colour, Font} from '../components'
 
 const chartConfig = () => {
@@ -90,7 +88,7 @@ const chartConfig = () => {
 export const ChartEther = () => {  
 
     const chartContainer = useRef(null)
-    const [chartInstance, setChartInstance] = useState(null)
+    const [setChartInstance] = useState(null)
 
     var chartConfigEther = chartConfig()
     chartConfigEther.data.datasets[0].label = 'Ether Burnt'
@@ -123,7 +121,7 @@ export const ChartEther = () => {
             setChartInstance(newChartInstance)
             getData(newChartInstance)
         }
-        
+        // eslint-disable-next-line
     }, [chartContainer])
 
     const getData = async (newChartInstance) => {
@@ -165,7 +163,7 @@ export const ChartClaim = () => {
     chartConfigClaim.options.scales.yAxes[0].stacked = false
 
     const chartContainer = useRef(null)
-    const [chartInstance, setChartInstance] = useState(null)
+    const [setChartInstance] = useState(null)
 
     useEffect(() => {
         if(chartContainer && chartContainer.current){
@@ -173,6 +171,7 @@ export const ChartClaim = () => {
             setChartInstance(newChartInstance)
             getData(newChartInstance)
         }
+        // eslint-disable-next-line
     }, [chartContainer])
 
     const getData = async (newChartInstance) => {
@@ -220,13 +219,14 @@ export const ChartEmission = () => {
     chartConfigEmission.data.datasets.push(dataset2)
 
     const chartContainer = useRef(null)
-    const [chartInstance, setChartInstance] = useState(null)
+    const [setChartInstance] = useState(null)
 
     useEffect(() => {
         if(chartContainer && chartContainer.current){
             const newChartInstance = new Chartjs(chartContainer.current, chartConfigEmission)
             setChartInstance(newChartInstance)
         }
+        // eslint-disable-next-line
     }, [chartContainer])
 
     return(
@@ -246,15 +246,15 @@ export const ChartDistro = () => {
     chartConfigDistro.options.scales.xAxes[0].scaleLabel.labelString = 'Member'
 
     const chartContainer = useRef(null)
-    const [chartInstance, setChartInstance] = useState(null)
+    // const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
         if(chartContainer && chartContainer.current){
             const newChartInstance = new Chartjs(chartContainer.current, chartConfigDistro)
-            setChartInstance(newChartInstance)
+            // setChartInstance(newChartInstance)
             getData(newChartInstance)
         }
-        
+        // eslint-disable-next-line
     }, [chartContainer])
 
     const getData = async (newChartInstance) => {
@@ -302,15 +302,15 @@ export const ChartPie = () => {
     chartConfigPie.options.scales.xAxes[0].ticks.display = false
 
     const chartContainer = useRef(null)
-    const [chartInstance, setChartInstance] = useState(null)
+    // const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
         if(chartContainer && chartContainer.current){
             const newChartInstance = new Chartjs(chartContainer.current, chartConfigPie)
-            setChartInstance(newChartInstance)
+            // setChartInstance(newChartInstance)
             getData(newChartInstance)
         }
-        
+        // eslint-disable-next-line
     }, [chartContainer])
 
     const getData = async (newChartInstance) => {

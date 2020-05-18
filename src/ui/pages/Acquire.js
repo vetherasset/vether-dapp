@@ -38,7 +38,6 @@ const Acquire = () => {
 			{!safari &&
 				<div>
 					<AcquireTable></AcquireTable>
-					<Gap />
 					<HR />
 					<Gap />
 					<H2>BURN TOKENS</H2><br />

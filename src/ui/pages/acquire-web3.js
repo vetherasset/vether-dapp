@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
 
-import { Modal, Row, Col, Input } from 'antd'
-import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Text, LabelGrey, Label, Click, Button, Sublabel, Gap, Colour } from '../components'
+import { Row, Col, Input } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons';
+import { LabelGrey, Label, Click, Button, Sublabel, Gap, Colour } from '../components'
 
 export const AcquireTable = () => {
 
@@ -15,21 +14,16 @@ export const AcquireTable = () => {
 	const [contract, setContract] = useState(null)
 
 	const [loaded, setLoaded] = useState(null)
-	const [loaded2, setLoaded2] = useState(null)
 	const [burnEthFlag, setBurnEthFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
-	const [approveFlag, setApproveFlag] = useState(null)
-	const [approved, setApproved] = useState(null)
-	const [burnTknFlag, setBurnTknFlag] = useState(null)
-	const [tknTx, setTknTx] = useState(null)
 
-	const [customToken, setCustomToken] = useState(null)
-	const [customAmount, setCustomAmount] = useState(null)
+	// const [customToken, setCustomToken] = useState(null)
+	// const [customAmount, setCustomAmount] = useState(null)
 
 	const [walletFlag, setWalletFlag] = useState(null)
 	//const [ethPlaceholder, setEthPlaceholder] = useState(null)
 	const [ethAmount, setEthAmount] = useState(null)
-	const [approvalAmount, setApprovalAmount] = useState(null)
+	// const [approvalAmount, setApprovalAmount] = useState(null)
 
 	useEffect(() => {
 		connect()
@@ -85,12 +79,10 @@ export const AcquireTable = () => {
 
 	const burnEther = async () => {
 		const fromAcc_ = account.address
-		const toAcc_ = vetherAddr() //getAccounts(1)
+		const toAcc_ = vetherAddr()
 		const amount_ = ethAmount * 1000000000000000000
-		//console.log(fromAcc_, toAcc_, amount_)
 		setBurnEthFlag('TRUE')
 		const tx = await window.web3.eth.sendTransaction({ from: fromAcc_, to: toAcc_, value: amount_ })
-		//console.log(tx.transactionHash)
 		setEthTx(tx.transactionHash)
 		setLoaded(true)
 		refreshAccount(contract, fromAcc_)
@@ -101,87 +93,70 @@ export const AcquireTable = () => {
 		return getEtherscanURL().concat('tx/').concat(tx)
 	}
 
-	const onTokenChange = e => {
-		setCustomToken(e.target.value)
-		console.log('custom token:', e.target.value)
-	}
+	// const unlockToken = async () => {
+	// 	if (!customToken){
+	// 		handleShowModal("token")
+	// 	} else if (!customAmount) {
+	// 		handleShowModal("amount")
+	// 	} else {
+	// 		setApproveFlag(true)
+	// 	const tokenContract_ = new window.web3.eth.Contract(vetherAbi(), customToken)
+	// 	const fromAcc_ = account.address
+	// 	const spender_ = vetherAddr()
+	// 	const val_ = convertToWei(customAmount)
+	// 	//console.log(spender_, val_)
+	// 	await tokenContract_.methods.approve(spender_, val_).send({ from: fromAcc_ })
+	// 	//console.log(fromAcc_, spender_)
+	// 	const approval_ = await tokenContract_.methods.allowance(fromAcc_, spender_).call()
+	// 	//console.log(approval_)
+	// 	setApprovalAmount(approval_)
+	// 	setApproved(true)
+	// 	}	
+	// }
 
-	const onAmountChange = e => {
-		setCustomAmount(e.target.value)
-		setApprovalAmount(convertToWei(e.target.value))
-		console.log('custom amount', e.target.value)
-	}
+	// const { confirm } = Modal
 
-	const unlockToken = async () => {
-		if (!customToken){
-			handleShowModal("token")
-		} else if (!customAmount) {
-			handleShowModal("amount")
-		} else {
-			setApproveFlag(true)
-		const tokenContract_ = new window.web3.eth.Contract(vetherAbi(), customToken)
-		const fromAcc_ = account.address
-		const spender_ = vetherAddr()
-		const val_ = convertToWei(customAmount)
-		//console.log(spender_, val_)
-		await tokenContract_.methods.approve(spender_, val_).send({ from: fromAcc_ })
-		//console.log(fromAcc_, spender_)
-		const approval_ = await tokenContract_.methods.allowance(fromAcc_, spender_).call()
-		//console.log(approval_)
-		setApprovalAmount(approval_)
-		setApproved(true)
-		}	
-	}
-
-	const { confirm } = Modal
-
-	const handleShowModal = (type) => {
-		if(type === "token"){
-			confirm({
-				title: 'Please enter a token address',
-				icon: <ExclamationCircleOutlined />,
-				content: <p>Please input the desired token to burn. You can find this address on Etherscan.</p>,
-				onOk() {},
-				onCancel() {},
-			  });
-		} else if (type === "amount") {
-			confirm({
-				title: 'Please enter an amount',
-				icon: <ExclamationCircleOutlined />,
-				content: <p>Please input your balance of the token you wish to burn.</p>,
-				onOk() {},
-				onCancel() {},
-			  });
-		} else if (type === "caution") {
-			confirm({
-				title: 'Some tokens are not compatible with Vether',
-				icon: <ExclamationCircleOutlined />,
-				content: <p>If there are any errors in your MetaMask, do not proceed.</p>,
-				onOk() {burnToken()},
-				onCancel() {},
-			  });
-		}
-		
-	}
+	// const handleShowModal = (type) => {
+	// 	if(type === "token"){
+	// 		confirm({
+	// 			title: 'Please enter a token address',
+	// 			icon: <ExclamationCircleOutlined />,
+	// 			content: <p>Please input the desired token to burn. You can find this address on Etherscan.</p>,
+	// 			onOk() {},
+	// 			onCancel() {},
+	// 		  });
+	// 	} else if (type === "amount") {
+	// 		confirm({
+	// 			title: 'Please enter an amount',
+	// 			icon: <ExclamationCircleOutlined />,
+	// 			content: <p>Please input your balance of the token you wish to burn.</p>,
+	// 			onOk() {},
+	// 			onCancel() {},
+	// 		  });
+	// 	} else if (type === "caution") {
+	// 		confirm({
+	// 			title: 'Some tokens are not compatible with Vether',
+	// 			icon: <ExclamationCircleOutlined />,
+	// 			content: <p>If there are any errors in your MetaMask, do not proceed.</p>,
+	// 			onOk() {burnToken()},
+	// 			onCancel() {},
+	// 		  });
+	// 	}
+	// }
 
 
-	const burnToken = async () => {
-		setBurnTknFlag(true)
-		console.log(customToken, customAmount, account.address)
-		const contract_ = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		const tx = await contract_.methods.burnTokens(customToken, approvalAmount).send({ from: account.address })
-		setTknTx(tx.transactionHash)
-		setLoaded2(true)
-	}
+	// const burnToken = async () => {
+	// 	setBurnTknFlag(true)
+	// 	console.log(customToken, customAmount, account.address)
+	// 	const contract_ = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+	// 	const tx = await contract_.methods.burnTokens(customToken, approvalAmount).send({ from: account.address })
+	// 	setTknTx(tx.transactionHash)
+	// 	setLoaded2(true)
+	// }
 
 	function convertFromWei(number) {
 		var num = number / 1000000000000000000
 		return num.toFixed(2)
-	}
-
-	function convertToWei(number) {
-		var num = number * 1000000000000000000
-		return new BigNumber(num).toFixed(0)
 	}
 
 	return (
@@ -192,7 +167,6 @@ export const AcquireTable = () => {
 					<Gap />
 				</div>
 			}
-
 
 			{walletFlag &&
 				<div>
