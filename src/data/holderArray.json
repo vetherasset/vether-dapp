@@ -2,8 +2,8 @@
     "holders": [
         {
             "address": "0x31bb711de2e457066c6281f231fb473fc5c2afd3",
-            "balance": 9.883599200694782e+23,
-            "share": 98.84
+            "balance": 9.881905992783977e+23,
+            "share": 98.82
         },
         {
             "address": "0xe9c2eea0cc009abc4ec3d8e48e878ebf5730755d",
@@ -17,7 +17,7 @@
         },
         {
             "address": "0x506d07722744e4a390cd7506a2ba1a8157e63745",
-            "balance": 1.4367472034271184e+21,
+            "balance": 1.4276984560640613e+21,
             "share": 0.14
         },
         {
@@ -61,13 +61,13 @@
             "share": 0.01
         },
         {
-            "address": "0x2a2c1102cc6f3ef7e3d469e47c70ad8181c1faed",
-            "balance": 126233019580237530000,
+            "address": "0x9ae071c43da9cec4d178884a9f4d0bc6df1f3f31",
+            "balance": 136658817221190040000,
             "share": 0.01
         },
         {
-            "address": "0x9ae071c43da9cec4d178884a9f4d0bc6df1f3f31",
-            "balance": 117212665378752200000,
+            "address": "0x2a2c1102cc6f3ef7e3d469e47c70ad8181c1faed",
+            "balance": 126233019580237530000,
             "share": 0.01
         },
         {
@@ -83,6 +83,11 @@
         {
             "address": "0xb00e81207bcda63c9e290e0b748252418818c869",
             "balance": 103928010790814600000,
+            "share": 0.01
+        },
+        {
+            "address": "0x7dee5dd185107c1fbe84202888330be03897989a",
+            "balance": 103084822255158590000,
             "share": 0.01
         },
         {
@@ -106,6 +111,11 @@
             "share": 0.01
         },
         {
+            "address": "0x6acb074c978002df57ef23cfd8fe3ea14f48631f",
+            "balance": 70761907565512140000,
+            "share": 0.01
+        },
+        {
             "address": "0x7fbd935c9972b6a4c0b6f7c6f650996677bf6e0a",
             "balance": 61612412486125940000,
             "share": 0.01
@@ -113,11 +123,6 @@
         {
             "address": "0xf62618f729223204c3e454964245e3820e05300c",
             "balance": 60018854051893084000,
-            "share": 0.01
-        },
-        {
-            "address": "0x6acb074c978002df57ef23cfd8fe3ea14f48631f",
-            "balance": 56057244546810540000,
             "share": 0.01
         },
         {
@@ -138,6 +143,11 @@
         {
             "address": "0xec9b6aa1f9fb2be9eff77d271e2b6a37a386a662",
             "balance": 47712560424804884000,
+            "share": 0
+        },
+        {
+            "address": "0xffc02940b6f297bb3aaca6d790f65c1d28e891f7",
+            "balance": 44631136404246890000,
             "share": 0
         },
         {
@@ -163,11 +173,6 @@
         {
             "address": "0x30edbbe335100db1484ebbc7191fe75a465963c9",
             "balance": 35725508364222075000,
-            "share": 0
-        },
-        {
-            "address": "0xffc02940b6f297bb3aaca6d790f65c1d28e891f7",
-            "balance": 34347653393984106000,
             "share": 0
         },
         {
@@ -228,6 +233,11 @@
         {
             "address": "0xbb9066f6cbef2415b3a6dcfe0956c5665ff7a4a2",
             "balance": 21203242309695020000,
+            "share": 0
+        },
+        {
+            "address": "0x415313d949570f626ee15574d535e77bb6f2da0f",
+            "balance": 20566966020525564000,
             "share": 0
         },
         {
@@ -298,6 +308,11 @@
         {
             "address": "0xdee7523da507b7e09b60fbffeaf9aabc1d17fce4",
             "balance": 10300435638304584000,
+            "share": 0
+        },
+        {
+            "address": "0xb705e79779e85d9de11094af7e17ec1dc925eb19",
+            "balance": 10283483010262782000,
             "share": 0
         },
         {
@@ -388,11 +403,6 @@
         {
             "address": "0x250f48c2eb50f418de576f3c8eae8a18053c2522",
             "balance": 67104077313850,
-            "share": 0
-        },
-        {
-            "address": "0x7dee5dd185107c1fbe84202888330be03897989a",
-            "balance": 30713840846175,
             "share": 0
         },
         {

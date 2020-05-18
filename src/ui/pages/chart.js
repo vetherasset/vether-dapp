@@ -274,7 +274,7 @@ export const ChartDistro = () => {
 
     const dataset3 = {
         type: "line",
-        label: "Planned Total",
+        label: "Ownership",
         data: '',
         fill: false,
         backgroundColor: 'rgba(255, 206, 86, 0.2)',
