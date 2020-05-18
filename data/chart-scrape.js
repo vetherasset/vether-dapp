@@ -20,6 +20,8 @@ const main = async () => {
     var burntArray = []
     var unclaimedArray = []
     var emissionArray = []
+    var totals = 0
+    var totalsArray = []
     for (var i = 1; i <= currentEra; i++) {
         for (var j = 1; j < currentDay; j++) {
             const burntForDay = BN2Int(await contract.mapEraDay_Units(i, j))
@@ -27,17 +29,20 @@ const main = async () => {
             //const emissionForDay = BN2Int(await contract.mapEraDay_Emission(i, j))
             const unclaimedEmission = BN2Int(await contract.mapEraDay_EmissionRemaining(i, j))
             // const claimRate = (((burntForDay - unclaimedUnits) / burntForDay)*100).toFixed(2)
+            totals += +burntForDay
             dayArray.push(j)
             burntArray.push(burntForDay)
             unclaimedArray.push(unclaimedEmission)
             emissionArray.push(emission)
+            totalsArray.push(totals)
         }
     }
     const claimObject = {
         days: dayArray,
         burns: burntArray,
         unclaims: unclaimedArray,
-        emission: emissionArray
+        emission: emissionArray,
+        totals: totalsArray
     }
     await fs.writeFileSync('./src/data/claimArray.json', JSON.stringify(claimObject, null,4), 'utf8')
     console.log(claimObject)
