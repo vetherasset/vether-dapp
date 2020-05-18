@@ -268,8 +268,24 @@ export const ChartDistro = () => {
     chartConfig.type = "bar"
     chartConfig.options.title.text = 'Vether Distribution'
     chartConfig.data.datasets[0].label = 'Member Ownership'
-    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
+    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether (linear)'
     chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Member'
+    
+
+    const dataset3 = {
+        type: "line",
+        label: "Planned Total",
+        data: '',
+        fill: false,
+        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+        borderColor: 'rgba(255, 206, 86, 1)',
+        borderWidth: 1,
+        yAxisID: "R"
+    }
+    chartConfig.data.datasets.push(dataset3)
+    chartConfig.options.scales.yAxes.push(rightAxisConfig())
+    chartConfig.options.scales.yAxes[1].type = "logarithmic"
+    chartConfig.options.scales.yAxes[1].scaleLabel.labelString = 'Vether (logarithmic)'
 
     const chartContainer = useRef(null)
     const [chartInstance, setChartInstance] = useState(null)
@@ -287,15 +303,18 @@ export const ChartDistro = () => {
         const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/holderArray.json')
         let holderArray = response.data
         const holders = holderArray.holders
-        let labels = []
-        for(var i=1; i<=holders.length; i++){
-            labels.push(i)
-        }
+        
         let holderShip = holders
         .filter(item => convertFromWei(item.balance) < 10000)
+        .filter(item => convertFromWei(item.balance) > 1)
         .map(item => convertFromWei(item.balance))
+        let labels = []
+        for(var i=1; i<=holderShip.length; i++){
+            labels.push(i)
+        }
         chartConfig.data.labels = labels
         chartConfig.data.datasets[0].data = holderShip
+        chartConfig.data.datasets[1].data = holderShip
         newChartInstance.update()
     }
 
