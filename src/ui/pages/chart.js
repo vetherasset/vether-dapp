@@ -109,12 +109,12 @@ export const ChartEther = () => {
         let claimArray = response.data
         chartConfigEther.data.labels = claimArray.days
         chartConfigEther.data.datasets[0].data = claimArray.burns
-        let totals = claimArray.burns.reduce((a, total) => +a + +total, 0)
-        console.log(totals, claimArray.burns)
+        // let totals = claimArray.burns.reduce((a, total) => +a + +total, 0)
+        console.log(claimArray)
         const dataset2 = {
             type: "line",
             label: "Totals",
-            data:totals,
+            data:claimArray.totals,
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
             borderWidth: 1
@@ -234,8 +234,8 @@ export const ChartDistro = () => {
     }, [chartContainer])
 
     const getData = async (newChartInstance) => {
-        // const dataDistro = await axios.get('https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey=freekey&limit=1000')
-        // const holders = dataDistro.data.holders
+        const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/holderArray.json')
+        let holderArray = response.data
         const holders = holderArray.holders
         let labels = []
         for(var i=1; i<=holders.length; i++){
@@ -290,8 +290,8 @@ export const ChartPie = () => {
     }, [chartContainer])
 
     const getData = async (newChartInstance) => {
-        // const dataDistro = await axios.get('https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey=freekey&limit=1000')
-        // const holders = dataDistro.data.holders
+        const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/holderArray.json')
+        let holderArray = response.data
         const holders = holderArray.holders
         let labels = []
         for(var i=1; i<=holders.length; i++){
