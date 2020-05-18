@@ -17,12 +17,16 @@ const chartConfig = () => {
             data: '',
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
-            borderWidth: 1
+            borderWidth: 1,
+            yAxisID: "L"
         }]
     },
     options: {
         scales: {
             yAxes: [{
+                id: "L",
+                type: "linear",
+                position: "left",
                 ticks: {
                     beginAtZero: true,
                 },
@@ -94,6 +98,24 @@ export const ChartEther = () => {
     chartConfigEther.options.scales.xAxes[0].scaleLabel.labelString = 'Day'
     chartConfigEther.options.title.text = 'Ether Burnt Daily'
 
+    const rightAxis = {
+            id: "R",
+            type: "linear",
+            position: "right",
+            ticks: {
+                beginAtZero: true,
+            },
+            scaleLabel: {
+                display: true,
+                labelString: "Total Ether",
+                fontFamily: Font(),
+                fontSize:16
+            },
+            gridLines: {
+                display: false
+              }
+    }
+
     useEffect(() => {
   
         if(chartContainer && chartContainer.current){
@@ -117,9 +139,11 @@ export const ChartEther = () => {
             data:claimArray.totals,
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
-            borderWidth: 1
+            borderWidth: 1,
+            yAxisID: "R"
         }
         chartConfigEther.data.datasets.push(dataset2)
+        chartConfigEther.options.scales.yAxes.push(rightAxis)
         newChartInstance.update()
     }
 
