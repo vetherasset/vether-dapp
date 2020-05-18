@@ -237,7 +237,6 @@ export const AddLiquidityTable = () => {
 		const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
 		const vethBalance = await tokenContract.methods.balanceOf(address).call()
 		setApprovalAmount(approval)
-		// console.log(approval, vethBalance)
 		if (+approval >= +vethBalance && +vethBalance > 0) {
 			setApproved(true)
 		}
