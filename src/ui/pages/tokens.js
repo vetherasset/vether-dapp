@@ -67,8 +67,11 @@ export const TokenTable = () => {
         //const response = tokenArray3()
 
         let tokenTable_ = []
+        let tokenTableTrimmed = []
         let loadingTable_ = []
         let tokenObject = { address: "", name: "", balance: "", symbol: "", totalSupply: "" }
+
+        if (response.data.tokens){
 
         response.data.tokens.forEach(element => {
             if (element.tokenInfo.name) {
@@ -83,7 +86,7 @@ export const TokenTable = () => {
             }
         });
 
-        let tokenTableTrimmed = []
+        
         tokenTable_.forEach(element => {
             if (element.balance > (10**14)) {
                 tokenObject = {
@@ -97,6 +100,8 @@ export const TokenTable = () => {
                 loadingTable_.push(true)
             }
         });
+        }
+
         setTokenTable(tokenTableTrimmed)
         setLoadingTable(tokenTableTrimmed)
 

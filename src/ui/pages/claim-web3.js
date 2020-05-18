@@ -123,10 +123,9 @@ export const ClaimTable = () => {
 		setClaimAmt(convertFromWei(share_))
 		setCheckFlag(true)
 		const currentTime = Math.round((new Date()) / 1000)
-		console.log(currentDay, userData.day, currentTime, +nextDay)
-		if (convertFromWei(share_) > 0 && currentDay > userData.day) {
+		if (share_ > 0 && currentDay > userData.day) {
 			setZeroFlag(false)
-		} else if (convertFromWei(share_) > 0 && currentTime > +nextDay) {
+		} else if (share_ > 0 && currentTime > +nextDay) {
 			setZeroFlag(false)
 		} else {
 			setZeroFlag(true)
