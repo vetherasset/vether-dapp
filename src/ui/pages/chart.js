@@ -133,7 +133,7 @@ export const ChartEther = () => {
         console.log(claimArray)
         const dataset2 = {
             type: "line",
-            label: "Totals",
+            label: "Total Burnt",
             data:claimArray.totals,
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
@@ -188,9 +188,10 @@ export const ChartClaim = () => {
             borderWidth: 1
         }
         chartConfig.data.datasets.push(dataset2)
+
         const dataset3 = {
             type: "line",
-            label: "Vether Total",
+            label: "Planned Total",
             data:claimArray.vether,
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
@@ -198,8 +199,20 @@ export const ChartClaim = () => {
             yAxisID: "R"
         }
         chartConfig.data.datasets.push(dataset3)
+
+        const dataset4 = {
+            type: "line",
+            label: "Actual Total",
+            data:claimArray.claims,
+            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            borderWidth: 1,
+            yAxisID: "R"
+        }
+        chartConfig.data.datasets.push(dataset4)
+
         chartConfig.options.scales.yAxes.push(rightAxisConfig())
-        chartConfig.options.scales.yAxes[1].scaleLabel.labelString = 'Vether'
+        chartConfig.options.scales.yAxes[1].scaleLabel.labelString = 'Vether Supply'
         newChartInstance.update()
     }
 
@@ -254,7 +267,7 @@ export const ChartDistro = () => {
     var chartConfig = getChartConfig()
     chartConfig.type = "bar"
     chartConfig.options.title.text = 'Vether Distribution'
-    chartConfig.data.datasets[0].label = 'Vether Distribution'
+    chartConfig.data.datasets[0].label = 'Member Ownership'
     chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
     chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Member'
 
@@ -302,8 +315,8 @@ export const ChartPie = () => {
 
     var chartConfig = getChartConfig()
     chartConfig.type = "pie"
-    chartConfig.options.title.text = 'Vether Distribution'
-    chartConfig.data.datasets[0].label = 'Vether Distribution'
+    chartConfig.options.title.text = 'Vether Ownership'
+    chartConfig.data.datasets[0].label = 'Member Ownership'
     chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
     chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Member'
 
