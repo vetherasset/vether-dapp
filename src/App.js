@@ -14,6 +14,8 @@ import Stats from './ui/pages/Stats'
 import Whitepaper from './ui/pages/Whitepaper'
 import { Colour } from './ui/components'
 
+import { ContextProvider } from './context'
+
 import { BreakpointProvider } from 'react-socks';
 
 const { Content } = Layout;
@@ -23,6 +25,7 @@ const App = () => {
 	return (
 		<Router>
 			<div>
+				<ContextProvider>
 				<BreakpointProvider>
 					<Layout style={{height:"100vh"}}>
 						<Sidebar />
@@ -41,6 +44,7 @@ const App = () => {
 						</Content>
 					</Layout>
 				</BreakpointProvider>
+				</ContextProvider>
 			</div>
 		</Router>
 	);

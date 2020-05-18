@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { Context } from '../../context'
 import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getUniswapPriceEth, getUniswapBalances, getEtherscanURL } from '../../client/web3.js'
-import { getETHPrice } from '../../client/market.js'
+import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -11,24 +12,53 @@ import { H2, Text, LabelGrey, Label, Click, Button, Sublabel, Colour, Center } f
 
 export const PoolTable = () => {
 
+	const context = useContext(Context)
+
 	const [marketData, setMarketData] = useState(
 		{ priceUSD: '', priceETH: '', ethPrice: '' })
-	const [uniswapBalance, setUniswapBalance] = useState(
+	const [uniswapData, setUniswapData] = useState(
 		{ "eth": "", "veth": '' })
 
 	useEffect(() => {
-		loadBlockchainData()
+		context.uniswapData ? getUniswapData() : loadUniswapData()
+		context.marketData ? getMarketData() : loadMarketData()
 		// eslint-disable-next-line
 	}, [])
 
-	const loadBlockchainData = async () => {
-		const priceVetherEth = await getUniswapPriceEth()
-		const priceEtherUSD = await getETHPrice()
-		const priceVetherUSD = priceEtherUSD * priceVetherEth
-		setMarketData({ priceUSD: priceVetherUSD, priceETH: priceVetherEth, ethPrice: priceEtherUSD })
+	const getUniswapData = () => {
+        setUniswapData(context.uniswapData)
+    }
+
+	const loadUniswapData = async () => {
 		const uniswapBal = await getUniswapBalances()
-		setUniswapBalance(uniswapBal)
+		setUniswapData(uniswapBal)
+		context.setContext({
+			"uniswapData" : uniswapBal
+		})
 	}
+
+	const getMarketData = () => {
+        setMarketData(context.marketData)
+    }
+
+    const loadMarketData = async () => {
+        const priceEtherUSD = await getETHPrice()
+        const priceVetherEth = await getVETHPriceInEth()
+        const priceVetherUSD = priceEtherUSD * priceVetherEth
+
+        setMarketData({
+            priceUSD: priceVetherUSD,
+            priceETH: priceVetherEth,
+            ethPrice: priceEtherUSD
+        })
+        context.setContext({
+            "marketData": {
+                'priceUSD': priceVetherUSD,
+                'priceETH': priceVetherEth,
+                "ethPrice": priceEtherUSD
+            }
+        })
+    }
 
 	function prettify(amount) {
 		const number = Number(amount)
@@ -44,7 +74,7 @@ export const PoolTable = () => {
 		borderColor: Colour().grey,
 		paddingLeft: 5,
 		paddingRight: 5,
-        backgroundColor: Colour().black
+        backgroundColor: '#5C4F2C'
 	}
 	const lineStyle = {
 		borderLeft: '1px dashed',
@@ -63,13 +93,13 @@ export const PoolTable = () => {
 					<Row>
 						<Col xs={12}>
 							<Text size={12} bold={true} color={Colour().white}>ETHER</Text>
-							<Center><Text size={30} color={Colour().white} margin={"5px 0px"}>{prettify(uniswapBalance.eth)}</Text></Center>
-							<Center><Text margin={"5px 0px"}>${prettify(marketData.ethPrice * uniswapBalance.eth)}</Text></Center>
+							<Center><Text size={30} color={Colour().white} margin={"5px 0px"}>{prettify(uniswapData.eth)}</Text></Center>
+							<Center><Text margin={"5px 0px"}>${prettify(marketData.ethPrice * uniswapData.eth)}</Text></Center>
 						</Col>
 						<Col xs={12} style={lineStyle}>
 							<Text size={12} bold={true} color={Colour().white}>VETHER</Text>
-							<Center><Text size={30} color={Colour().white} margin={"5px 0px"}>{prettify(uniswapBalance.veth)}</Text></Center>
-							<Center><Text margin={"5px 0px 20px"}>${prettify(marketData.ethPrice * uniswapBalance.eth)}</Text></Center>
+							<Center><Text size={30} color={Colour().white} margin={"5px 0px"}>{prettify(uniswapData.veth)}</Text></Center>
+							<Center><Text margin={"5px 0px 20px"}>${prettify(marketData.ethPrice * uniswapData.eth)}</Text></Center>
 						</Col>
 					</Row>
 				</Col>
@@ -82,14 +112,19 @@ export const PoolTable = () => {
 
 export const AddLiquidityTable = () => {
 
+	const context = useContext(Context)
+
 	const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
 
 	const [account, setAccount] = useState(
 		{ address: '', vethBalance: '', ethBalance: '', uniBalance:'' })
+	const [uniswapData, setUniswapData] = useState(
+		{ "eth": "", "veth": '' })
+
 	const [addEthFlag, setAddUniswapFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
 	const [ethAmount, setEthAmount] = useState(null)
-	const [uniAmount, setUniAmount] = useState(null)
+	const [uniSupply, setUniSupply] = useState(null)
 	const [vetherPrice, setVetherPrice] = useState(null)
 	const [contract, setContract] = useState(null)
 	const [loaded, setLoaded] = useState(null)
@@ -98,8 +133,7 @@ export const AddLiquidityTable = () => {
 	const [approveFlag, setApproveFlag] = useState(null)
 	const [customAmount, setCustomAmount] = useState(null)
 	const [approvalAmount, setApprovalAmount] = useState(null)
-	const [uniswapBalance, setUniswapBalance] = useState(
-		{ "eth": "", "veth": '' })
+
 
 	useEffect(() => {
 		connect()
@@ -109,11 +143,12 @@ export const AddLiquidityTable = () => {
 	const connect = () => {
 		// setWalletFlag('TRUE')
 		ethEnabled()
-		loadBlockchainData()
 		if (!ethEnabled()) {
 			alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
 		} else {
-			setEthAmount(account.ethBalance - 0.1)
+			context.accountData ? getAccountData() : loadAccountData()
+			context.uniswapData ? getUniswapData() : loadUniswapData()
+			loadBlockchainData()
 		}
 	}
 
@@ -128,31 +163,71 @@ export const AddLiquidityTable = () => {
 
 	const loadBlockchainData = async () => {
 		var accounts = await window.web3.eth.getAccounts()
-		const account_ = await accounts[0]
-		const contract_ = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		await refreshAccount(contract_, account_)
-		setContract(contract_)
+		const account = await accounts[0]
+		const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+		setContract(contract)
 		setVetherPrice(await getUniswapPriceEth())
-		const uniswapBal = await getUniswapBalances()
-		setUniswapBalance(uniswapBal)
+		checkApproval(account)
 	}
 
-	const refreshAccount = async (contract_, account_) => {
-		const ethBalance_ = convertFromWei(await window.web3.eth.getBalance(account_))
-		const vethBalance_ = convertFromWei(await contract_.methods.balanceOf(account_).call())
+	const getAccountData = () => {
+		setAccount(context.accountData)
+		setCustomAmount(+context.accountData.vethBalance)
+		setEthAmount(+context.accountData.ethBalance - 0.01)
+    }
+
+	const loadAccountData = async () => {
+		var accounts = await window.web3.eth.getAccounts()
+		const account = await accounts[0]
+		const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+		const ethBalance = convertFromWei(await window.web3.eth.getBalance(account))
+		const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
 		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-		const uniBalance_ = await exchangeContract.methods.balanceOf(account_).call()
+		const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(account).call())
+		const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
 		setAccount({
-			address: account_,
-			vethBalance: vethBalance_,
-			ethBalance: ethBalance_,
-			uniBalance: uniBalance_,
+			address: account,
+			vethBalance: vethBalance,
+			ethBalance: ethBalance,
+			uniBalance: uniBalance,
+			uniSupply:uniSupply
 		})
-		setCustomAmount(vethBalance_)
-		setEthAmount(ethBalance_)
-		checkApproval(account_)
-		const uniAmount_ = await exchangeContract.methods.totalSupply().call()
-		setUniAmount(uniAmount_)
+		context.setContext({
+			"accountData": {
+				"address": account,
+				'vethBalance': vethBalance,
+				'ethBalance': ethBalance,
+				'uniBalance': uniBalance,
+				'uniSupply':uniSupply
+			}})
+		setCustomAmount(vethBalance)
+		setEthAmount(ethBalance - 0.01)
+	}
+
+	const refreshAccount = async (contract, account) => {
+		const ethBalance = convertFromWei(await window.web3.eth.getBalance(account))
+		const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
+		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+		const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(account).call())
+		const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
+		setAccount({
+			address: account,
+			vethBalance: vethBalance,
+			ethBalance: ethBalance,
+			uniBalance: uniBalance,
+			uniSupply:uniSupply
+		})
+		context.setContext({
+			"accountData": {
+				"address": account,
+				'vethBalance': vethBalance,
+				'ethBalance': ethBalance,
+				'uniBalance': uniBalance,
+				'uniSupply':uniSupply
+			}})
+		setCustomAmount(vethBalance)
+		setEthAmount(ethBalance)
+		checkApproval(account)
 	}
 
 	const checkApproval = async (address) => {
@@ -162,10 +237,21 @@ export const AddLiquidityTable = () => {
 		const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
 		const vethBalance = await tokenContract.methods.balanceOf(address).call()
 		setApprovalAmount(approval)
-		// console.log(approval, vethBalance)
 		if (+approval >= +vethBalance && +vethBalance > 0) {
 			setApproved(true)
 		}
+	}
+
+	const getUniswapData = () => {
+        setUniswapData(context.uniswapData)
+    }
+
+	const loadUniswapData = async () => {
+		const uniswapBal = await getUniswapBalances()
+		setUniswapData(uniswapBal)
+		context.setContext({
+			"uniswapData" : uniswapBal
+		})
 	}
 
 	const unlockToken = async () => {
@@ -193,7 +279,8 @@ export const AddLiquidityTable = () => {
 	}
 
 	const getUniShare = () => {
-		const share = account.uniBalance / uniAmount
+		const share = +account.uniBalance / +account.uniSupply
+		console.log(account.uniBalance, account.uniSupply, share )
 		return share
 	}
 
@@ -226,7 +313,7 @@ export const AddLiquidityTable = () => {
 	}
 
 	function convertFromWei(number) {
-		var num = (number / (1*10**18))
+		var num = (number / (10**18))
 		return num.toFixed(2)
 	}
 
@@ -325,12 +412,12 @@ export const AddLiquidityTable = () => {
 					<br></br>
 					<Row style={{ marginTop: 10}}>
 						<Col xs={4}>
-							<Label>{prettify( uniswapBalance.eth * getUniShare())}</Label>
+							<Label>{prettify(+uniswapData.eth * getUniShare())}</Label>
 							<br></br>
 							<LabelGrey>ETH</LabelGrey>
 						</Col>
 						<Col xs={20}>
-							<Label>{prettify(uniswapBalance.veth * getUniShare())}</Label>
+							<Label>{prettify(+uniswapData.veth * getUniShare())}</Label>
 							<br></br>
 							<LabelGrey>VETH</LabelGrey>
 						</Col>
@@ -380,14 +467,14 @@ export const RemoveLiquidityTable = () => {
 		setCustomAmount(e.target.value)
 	}
 
-	const getUniAmount = (part) => {
+	const getuniSupply = (part) => {
 		return ((account.uniBalance * part) / 100)
 	}
 
 	const removeLiquidity = async () => {
 		setBurnTknFlag(true)
 		console.log(account.uniBalance, customAmount)
-		const amount = (getUniAmount(customAmount)).toString()
+		const amount = (getuniSupply(customAmount)).toString()
 		const min_eth = (1).toString()
 		const min_tokens = (1).toString()
 		const deadline = (Math.round(((new Date())/1000) + 1000)).toString()
