@@ -75,3 +75,9 @@ body {
   background: #2B2515;
 }
 
+.ant-input{
+  background: #110D01;
+  color:#D09800;
+  border: 1px solid #D09800;
+}
+
