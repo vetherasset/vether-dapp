@@ -1,21 +1,19 @@
-require('dotenv').config({path: '../.env' })
+require('dotenv').config()
 const ethers = require('ethers');
 const vether = require('./vether.js')
 const BigNumber = require('bignumber.js')
 const fs = require('fs')
+const axios = require('axios')
 
 function BN2Int(BN){return(((new BigNumber(BN)).toFixed()/10**18).toFixed(2))}
 
-const main = async () => {
+const claimArray = async () => {
 
     const provider = ethers.getDefaultProvider();
     const contract = new ethers.Contract(vether.addr(), vether.abi(), provider)
-    
-    //const currentEra = await contract.currentEra()
     const currentEra = 1
     const emission = 2048
     const currentDay = await contract.currentDay()
-    //const daysPerEra = await contract.daysPerEra()
     var dayArray = []
     var burntArray = []
     var unclaimedArray = []
@@ -46,6 +44,18 @@ const main = async () => {
     }
     await fs.writeFileSync('./src/data/claimArray.json', JSON.stringify(claimObject, null,4), 'utf8')
     console.log(claimObject)
+}
+
+const holderArray = async () => {
+    const apiKey = process.env.ETHPLORER_API
+    const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
+    const response = await axios.get(baseURL+apiKey+'&limit=1000')
+    await fs.writeFileSync('./src/data/holderArray.json', JSON.stringify(response.data, null,4), 'utf8')
+}
+
+const main = async () => {
+    claimArray()
+    holderArray()
 }
 
 main()
