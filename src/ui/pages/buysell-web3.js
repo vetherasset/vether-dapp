@@ -186,7 +186,7 @@ export const PoolTable = () => {
         borderColor: Colour().grey,
         paddingLeft: 5,
         paddingRight: 5,
-        backgroundColor: Colour().black
+        backgroundColor: '#5C4F2C'
     }
     const lineStyle = {
         borderLeft: '1px dashed',

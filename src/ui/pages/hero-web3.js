@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
+import { Context } from '../../context'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL } from '../../client/web3.js'
@@ -9,6 +10,9 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { LabelGrey, Label, Click, Colour } from '../components'
 
 export const VetherTable = () => {
+
+    const context = useContext(Context)
+
     const [loaded, setLoaded] = useState(null)
     const [tokenData, setTokenData] = useState(
         { name: '', symbol: '', totalSupply: '', decimals: '', genesis: '' })
@@ -19,47 +23,93 @@ export const VetherTable = () => {
 
     useEffect(() => {
 
-        const loadBlockchainData = async () => {
-
-            const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-            const contract_ = new web3_.eth.Contract(vetherAbi(), vetherAddr())
-            const name_ = await contract_.methods.name().call()
-            const symbol_ = await contract_.methods.symbol().call()
-            const totalSupply_ = await contract_.methods.totalSupply().call()
-            const decimals_ = await contract_.methods.decimals().call()
-            const genesis_ = await contract_.methods.genesis().call()
-
-            setTokenData({
-                name: name_,
-                symbol: symbol_,
-                totalSupply: convertFromWei(totalSupply_),
-                decimals: decimals_,
-                genesis: convertToDate(genesis_)
-            })
-
-            const balance_ = await contract_.methods.balanceOf(vetherAddr()).call()
-            const totalBurnt_ = await contract_.methods.totalBurnt().call()
-            const totalFees_ = await contract_.methods.totalFees().call()
-            const totalEmitted_ = +totalSupply_ - +balance_ + +totalFees_
-
-            setEmissionData({
-                balance: convertFromWei(balance_),
-                totalBurnt: convertFromWei(totalBurnt_),
-                totalEmitted: convertFromWei(totalEmitted_),
-                totalFees: convertFromWei(totalFees_)
-            })
-
-            const priceEtherUSD = await getETHPrice()
-		    const priceVetherEth = await getVETHPriceInEth()
-		    const priceVetherUSD = priceEtherUSD*priceVetherEth
-		    setMarketData({ priceUSD: priceVetherUSD, priceETH: priceVetherEth, ethPrice: priceEtherUSD })
-
-            setLoaded(true)
-        }
-
-        loadBlockchainData()
+        context.eraData ? getTokenData() : loadTokenData()
+        context.emissionData ? getEmissionData() : loadEmissionData()
+        context.marketData ? getMarketData() : loadMarketData()
+        setLoaded(true)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    const getTokenData = () => {
+        setTokenData(context.tokenData)
+    }
+    const getEmissionData = () => {
+        setEmissionData(context.emissionData)
+    }
+    const getMarketData = () => {
+        setMarketData(context.marketData)
+    }
+
+    const loadTokenData = async () => {
+
+        const name = "Vether"
+        const symbol = "VETH"
+        const totalSupply = 1000000
+        const decimals = 18
+        const genesis = convertToDate(1589271741)
+
+        setTokenData({
+            name: name,
+            symbol: symbol,
+            totalSupply: totalSupply,
+            decimals: decimals,
+            genesis: genesis
+        })
+        context.setContext({
+            "tokenData": {
+                'name': name,
+                'symbol': symbol,
+                "totalSupply": totalSupply,
+                'decimals': decimals,
+                "genesis": genesis,
+            }
+        })
+    }
+    const loadEmissionData = async () => {
+
+        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+
+        const totalSupply = 1000000
+        const balance = convertFromWei(await contract.methods.balanceOf(vetherAddr()).call())
+        const totalBurnt = convertFromWei(await contract.methods.totalBurnt().call())
+        const totalFees = convertFromWei(await contract.methods.totalFees().call())
+        const totalEmitted = +totalSupply - +balance + +totalFees
+
+        setEmissionData({
+            balance: balance,
+            totalBurnt: totalBurnt,
+            totalEmitted: totalEmitted,
+            totalFees: totalFees
+        })
+        context.setContext({
+            "emissionData": {
+                'balance': balance,
+                'totalBurnt': totalBurnt,
+                "totalEmitted": totalEmitted,
+                'totalFees': totalFees,
+            }
+        })
+    }
+
+    const loadMarketData = async () => {
+        const priceEtherUSD = await getETHPrice()
+        const priceVetherEth = await getVETHPriceInEth()
+        const priceVetherUSD = priceEtherUSD * priceVetherEth
+
+        setMarketData({
+            priceUSD: priceVetherUSD,
+            priceETH: priceVetherEth,
+            ethPrice: priceEtherUSD
+        })
+        context.setContext({
+            "marketData": {
+                'priceUSD': priceVetherUSD,
+                'priceETH': priceVetherEth,
+                "ethPrice": priceEtherUSD
+            }
+        })
+    }
 
     function convertFromWei(number) {
         return number / 1000000000000000000
@@ -107,31 +157,31 @@ export const VetherTable = () => {
                         <Col xs={21} sm={11} lg={11}>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
-                                    <LabelGrey>NAME: </LabelGrey><br/>
+                                    <LabelGrey>NAME: </LabelGrey><br />
                                     <Label>{tokenData.name}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
-                                    <LabelGrey>SYMBOL: </LabelGrey><br/>
+                                    <LabelGrey>SYMBOL: </LabelGrey><br />
                                     <Label>{tokenData.symbol}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
-                                    <LabelGrey>TOTAL SUPPLY: </LabelGrey><br/>
+                                    <LabelGrey>TOTAL SUPPLY: </LabelGrey><br />
                                     <Label>{prettify(tokenData.totalSupply)}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
-                                    <LabelGrey>DECIMALS: </LabelGrey><br/>
+                                    <LabelGrey>DECIMALS: </LabelGrey><br />
                                     <Label>{tokenData.decimals}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10, marginBottom: 20 }}>
                                 <Col xs={24}>
-                                    <LabelGrey>GENESIS: </LabelGrey><br/>
+                                    <LabelGrey>GENESIS: </LabelGrey><br />
                                     <Label>{(tokenData.genesis)}</Label>
                                 </Col>
                             </Row>
@@ -140,32 +190,32 @@ export const VetherTable = () => {
                         <Col xs={21} sm={13} lg={13}>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
-                                    <LabelGrey>TOTAL EMITTED: </LabelGrey><br/>
+                                    <LabelGrey>TOTAL EMITTED: </LabelGrey><br />
                                     <Label>{prettify(emissionData.totalEmitted)} VETH | ${prettify(convertToUSD(emissionData.totalEmitted))}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
-                                    <LabelGrey>TOTAL REMAINING: </LabelGrey><br/>
+                                    <LabelGrey>TOTAL REMAINING: </LabelGrey><br />
                                     <Label>{prettify(tokenData.totalSupply - emissionData.totalEmitted)} VETH | ${prettify(convertToUSD(tokenData.totalSupply - emissionData.totalEmitted))}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
-                                    <LabelGrey>TOTAL BURNT: </LabelGrey><br/>
-                                    <Label>{(emissionData.totalBurnt).toFixed(3)} ETH | ${prettify(convertEthtoUSD(emissionData.totalBurnt))}</Label>
+                                    <LabelGrey>TOTAL BURNT: </LabelGrey><br />
+                                    <Label>{prettify(emissionData.totalBurnt)} ETH | ${prettify(convertEthtoUSD(emissionData.totalBurnt))}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
-                                    <LabelGrey>TOTAL MARKET CAP: </LabelGrey><br/>
+                                    <LabelGrey>TOTAL MARKET CAP: </LabelGrey><br />
                                     <Label>{prettify(convertToETH(tokenData.totalSupply))} ETH | ${prettify(convertEthtoUSD(convertToETH(tokenData.totalSupply)))}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
-                                    <LabelGrey>VETH VALUE: </LabelGrey><br/>
-                                    <Label> {(marketData.priceETH).toFixed(6)} ETH | ${(marketData.priceUSD).toFixed(5)}</Label>
+                                    <LabelGrey>VETH VALUE: </LabelGrey><br />
+                                    <Label> {prettify(marketData.priceETH)} ETH | ${prettify(marketData.priceUSD)}</Label>
                                 </Col>
                             </Row>
                         </Col>
