@@ -127,9 +127,9 @@ export const ChartClaim = () => {
     var chartConfigClaim = chartConfig()
     chartConfigClaim.options.title.text = 'Vether Emitted Daily'
     chartConfigClaim.data.labels = claimArray.days
-    chartConfigClaim.data.datasets[0].label = 'Vether Emitted Daily'
+    chartConfigClaim.data.datasets[0].label = 'Vether Unclaimed'
     chartConfigClaim.data.datasets[0].data = claimArray.unclaims
-    chartConfigClaim.options.scales.yAxes[0].scaleLabel.labelString = 'Vether Unclaimed'
+    chartConfigClaim.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
     chartConfigClaim.options.scales.xAxes[0].scaleLabel.labelString = 'Day'
     chartConfigClaim.options.scales.xAxes[0].stacked = true
     chartConfigClaim.options.scales.yAxes[0].stacked = false

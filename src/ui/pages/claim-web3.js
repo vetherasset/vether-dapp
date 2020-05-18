@@ -16,7 +16,8 @@ export const ClaimTable = () => {
 		{ address: '', tokenBalance: '', ethBalance: '' })
 	const [contract, setContract] = useState(null)
 	const [currentDay, setCurrentDay] = useState(null)
-	const [arrayDays, setArrayDays] = useState(['-'])
+	const [nextDay, setNextDay] = useState(null)
+	const [arrayDays, setArrayDays] = useState(null)
 	const [claimAmt, setClaimAmt] = useState(null)
 	const [txHash, setTxHash] = useState(null)
 	const [userData, setUserData] = useState(
@@ -56,6 +57,7 @@ export const ClaimTable = () => {
 		const contract_ = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		const accounts = await window.web3.eth.getAccounts()
 		setCurrentDay(await contract_.methods.currentDay().call())
+		setNextDay(await contract_.methods.nextDayTime().call())
 		setContract(contract_)
 		refreshAccount(contract_, accounts[0])
 		getDays(contract_, accounts[0])
@@ -86,7 +88,10 @@ export const ClaimTable = () => {
 		for (var j = 0; j < daysContributed; j++) {
 			let day = await contract_.methods.mapMemberEra_Days(acc, era, j).call()
 			if (era < currentEra || (era >= currentEra && day <= currentDay)) {
-				arrayDays.push(day)
+				const share_ = (new BigNumber(await contract_.methods.getEmissionShare(era, day, account_).call())).toFixed()
+				if (share_ > 0) {
+					arrayDays.push(day)
+				}
 			}
 		}
 		setArrayDays(arrayDays)
@@ -117,13 +122,15 @@ export const ClaimTable = () => {
 		const share_ = (new BigNumber(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())).toFixed()
 		setClaimAmt(convertFromWei(share_))
 		setCheckFlag(true)
-		console.log(currentDay, userData.day)
+		const currentTime = Math.round((new Date()) / 1000)
+		console.log(currentDay, userData.day, currentTime, +nextDay)
 		if (convertFromWei(share_) > 0 && currentDay > userData.day) {
+			setZeroFlag(false)
+		} else if (convertFromWei(share_) > 0 && currentTime > +nextDay) {
 			setZeroFlag(false)
 		} else {
 			setZeroFlag(true)
 		}
-
 	}
 
 	const claimShare = async () => {
@@ -184,7 +191,12 @@ export const ClaimTable = () => {
 						<Col style={{ marginBottom: 20 }}>
 							<LabelGrey>CLAIMS FOUND IN THESE DAYS: </LabelGrey>
 							<br></br>
-							<DayItems />
+							{!arrayDays &&
+								<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+							}
+							{arrayDays &&
+								<DayItems />
+							}
 							<br></br>
 							<Sublabel>(ERA 1)</Sublabel>
 							<br></br>

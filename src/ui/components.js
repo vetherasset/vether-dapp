@@ -304,8 +304,9 @@ export const Icon = (props) => {
 export const chartStyles = {
   marginLeft:0,
   marginRight:50,
-  marginTop:50,
+  marginTop:25,
+  marginBottom:25,
   backgroundColor:'#110D01',
-  height:500
+  height:400
 }
 
