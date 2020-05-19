@@ -124,7 +124,7 @@ export const AddLiquidityTable = () => {
 	const [addEthFlag, setAddUniswapFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
 	const [ethAmount, setEthAmount] = useState(null)
-	const [uniSupply, setUniSupply] = useState(null)
+	// const [uniSupply, setUniSupply] = useState(null)
 	const [vetherPrice, setVetherPrice] = useState(null)
 	const [contract, setContract] = useState(null)
 	const [loaded, setLoaded] = useState(null)

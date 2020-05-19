@@ -22,16 +22,16 @@ const Stats = () => {
                 </Col>
             </Row>
             <Row>
-                <Col>
-                    <ChartEmission />
-                </Col>
-            </Row>
-            <Row>
                 <Col xs={24} lg={16}>
                     <ChartDistro />
                 </Col>
                 <Col xs={24} lg={8}>
                     <ChartPie />
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <ChartEmission />
                 </Col>
             </Row>
             <Click><a href='https://github.com/EverexIO/Ethplorer/wiki/Ethplorer-API' rel="noopener noreferrer" title="ETHPlorer link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> DATA FROM ETHPLORER -> </a></Click><br/>

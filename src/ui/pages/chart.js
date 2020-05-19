@@ -300,13 +300,19 @@ export const ChartDistro = () => {
     }, [chartContainer])
 
     const getData = async (newChartInstance) => {
-        const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/holderArray.json')
+        const apiKey = process.env.REACT_APP_ETHPLORER_API
+        const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
+        console.log(baseURL+apiKey+'&limit=1000')
+        const response = await axios.get(baseURL+apiKey+'&limit=1000')
+
+        // const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/holderArray.json')
+        
         let holderArray = response.data
         const holders = holderArray.holders
         
         let holderShip = holders
         .filter(item => convertFromWei(item.balance) < 10000)
-        .filter(item => convertFromWei(item.balance) > 1)
+        .filter(item => convertFromWei(item.balance) > 0.1)
         .map(item => convertFromWei(item.balance))
         let labels = []
         for(var i=1; i<=holderShip.length; i++){
