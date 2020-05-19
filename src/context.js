@@ -8,12 +8,6 @@ export class ContextProvider extends React.Component {
     children: PropTypes.any,
   };
 
-  state = {
-    emission: null,
-    market: null,
-    token: null
-  };
-
   // reimplementation of setState, but specifically for context state.
   setContext = (state, fn) => {
     this.setState(state, () => {

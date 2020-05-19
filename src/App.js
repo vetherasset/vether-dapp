@@ -26,24 +26,24 @@ const App = () => {
 		<Router>
 			<div>
 				<ContextProvider>
-				<BreakpointProvider>
-					<Layout style={{height:"100vh"}}>
-						<Sidebar />
-						<Header />
-						<Content style={{ background: Colour().dgrey, color: Colour().white , paddingLeft:50, paddingTop:50}}>
-							<Switch>
-								<Route path="/" exact component={Hero} />
-								<Route path="/overview" exact component={Hero} />
-								<Route path="/acquire" exact component={Acquire} />
-								<Route path="/claim" exact component={Claim} />
-								<Route path="/stake" exact component={Stake} />
-								<Route path="/trade" exact component={Trade} />
-								<Route path="/stats" exact component={Stats} />
-								<Route path="/whitepaper" exact component={Whitepaper} />
-							</Switch>
-						</Content>
-					</Layout>
-				</BreakpointProvider>
+					<BreakpointProvider>
+						<Layout style={{ height: "100vh" }}>
+							<Sidebar />
+							<Header />
+							<Content style={{ background: Colour().dgrey, color: Colour().white, paddingLeft: 50, paddingTop: 50 }}>
+								<Switch>
+									<Route path="/" exact component={Hero} />
+									<Route path="/overview" exact component={Hero} />
+									<Route path="/acquire" exact component={Acquire} />
+									<Route path="/claim" exact component={Claim} />
+									<Route path="/stake" exact component={Stake} />
+									<Route path="/trade" exact component={Trade} />
+									<Route path="/stats" exact component={Stats} />
+									<Route path="/whitepaper" exact component={Whitepaper} />
+								</Switch>
+							</Content>
+						</Layout>
+					</BreakpointProvider>
 				</ContextProvider>
 			</div>
 		</Router>

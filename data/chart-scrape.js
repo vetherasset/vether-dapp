@@ -65,7 +65,7 @@ const holderArray = async () => {
 }
 
 const main = async () => {
-    // claimArray()
+    claimArray()
     holderArray()
 }
 
