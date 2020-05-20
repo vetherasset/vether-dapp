@@ -36,7 +36,7 @@ const Footer = (props) => {
           </Row>
           <Row>
             <Col>
-            <Click><a rel="noopener noreferrer" href="https://discord.gg/kvGgZ3" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[DISCORD]</a></Click>
+            <Click><a rel="noopener noreferrer" href="https://discord.gg/c5aBC7Q" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[DISCORD]</a></Click>
             </Col>
           </Row>
       </div>
