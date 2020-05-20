@@ -4,6 +4,7 @@ import { Context } from '../../context'
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
+import {convertFromWei, convertToDate, prettify} from '../utils'
 
 import { Row, Col } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -104,21 +105,6 @@ export const VetherTable = () => {
                 "ethPrice": priceEtherUSD
             }
         })
-    }
-
-    function convertFromWei(number) {
-        return number / 1000000000000000000
-    }
-
-    function convertToDate(date) {
-        return new Date(1000 * date).toLocaleDateString("en-GB", { year: 'numeric', month: 'short', day: 'numeric' })
-    }
-
-    function prettify(amount) {
-        const number = Number(amount)
-        var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
     }
 
     function convertToETH(vether) {

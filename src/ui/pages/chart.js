@@ -1,11 +1,5 @@
-import React, { useEffect, useRef, useState, useContext } from 'react';
-import { Context } from '../../context'
-import axios from 'axios'
+import React, { useEffect, useRef, useState } from 'react';
 import Chartjs from 'chart.js'
-
-import emissionArray from '../../data/emissionArray.json';
-// import claimArray from '../../data/claimArray.json';
-import holderArray from '../../data/holderArray.json';
 
 import {chartStyles, Colour, Font} from '../components'
 

@@ -3,6 +3,7 @@ import { Context } from '../../context'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
+import {convertFromWei} from '../utils'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -139,12 +140,6 @@ export const AcquireTable = () => {
 	// 	setApproved(true)
 	// 	}	
 	// }
-
-
-	function convertFromWei(number) {
-		var num = number / 1000000000000000000
-		return num.toFixed(2)
-	}
 
 	return (
 		<div>

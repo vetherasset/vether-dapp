@@ -9,6 +9,7 @@ import { Label, LabelGrey, Sublabel, Button, Click, Center, Text, Colour } from 
 
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL, infuraAPI, getUniswapBalances } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
+import {convertFromWei, prettify} from '../utils'
 
 export const PoolTable = () => {
 
@@ -200,11 +201,6 @@ export const PoolTable = () => {
         return getEtherscanURL().concat('tx/').concat(tx)
     }
 
-    function convertFromWei(number) {
-        var num = (number / (1 * 10 ** 18))
-        return num.toFixed(2)
-    }
-
     const poolStyles = {
         borderWidth: '1px',
         borderStyle: 'dashed',
@@ -218,13 +214,6 @@ export const PoolTable = () => {
         borderLeft: '1px dashed',
         borderColor: Colour().grey,
         paddingLeft: 5
-    }
-
-    function prettify(amount) {
-        const number = Number(amount)
-        var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
     }
 
     return (

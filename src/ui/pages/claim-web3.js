@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import { Context } from '../../context'
-import BigNumber from 'bignumber.js'
+
 
 import Web3 from 'web3'
 import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL } from '../../client/web3.js'
+import {convertFromWei, getSecondsToGo, getBN, prettify} from '../utils'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -89,13 +90,13 @@ export const ClaimTable = () => {
     }
 
     const loadEraData = async (contract_) => {
-        const emission = convertToNumber(await contract_.methods.emission().call())
+        const emission = convertFromWei(await contract_.methods.emission().call())
         const day = await contract_.methods.currentDay().call()
         const era = await contract_.methods.currentEra().call()
         const nextDay = await contract_.methods.nextDayTime().call()
         const nextEra = await contract_.methods.nextEraTime().call()
-        const nextEmission = convertToNumber(await contract_.methods.getNextEraEmission().call())
-        const currentBurn = convertToNumber(await contract_.methods.mapEraDay_UnitsRemaining(era, day).call())
+        const nextEmission = convertFromWei(await contract_.methods.getNextEraEmission().call())
+        const currentBurn = convertFromWei(await contract_.methods.mapEraDay_UnitsRemaining(era, day).call())
         const secondsToGo = getSecondsToGo(nextDay)
 
         setEraData({
@@ -116,16 +117,6 @@ export const ClaimTable = () => {
         })
     }
 
-	function convertToNumber(number) {
-        return number / 1000000000000000000
-    }
-
-    function getSecondsToGo(date) {
-        const time = (Date.now() / 1000).toFixed()
-        const seconds = (date - time)
-        return seconds
-    }
-
 	const getDays = async (contract_, account) => {
 		let era = 1
 		let arrayDays = []
@@ -133,25 +124,13 @@ export const ClaimTable = () => {
 		for (var j = 0; j < daysContributed; j++) {
 			let day = await contract_.methods.mapMemberEra_Days(account, era, j).call()
 			if (era < eraData.era || (era >= eraData.era && day <= eraData.day)) {
-				const share = (new BigNumber(await contract_.methods.getEmissionShare(era, day, account).call())).toFixed()
+				const share = getBN(await contract_.methods.getEmissionShare(era, day, account).call())
 				if (share > 0) {
 					arrayDays.push(day)
 				}
 			}
 		}
 		setArrayDays(arrayDays)
-	}
-
-	function convertFromWei(number) {
-		var num = number / 1000000000000000000
-		return num.toFixed(2)
-	}
-
-	function prettify(amount) {
-		const number = Number(amount)
-		var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
-		parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		return parts.join(".");
 	}
 
 	const onEraChange = e => {
@@ -164,7 +143,7 @@ export const ClaimTable = () => {
 	}
 
 	const checkShare = async () => {
-		const share = (new BigNumber(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())).toFixed()
+		const share = getBN(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())
 		setClaimAmt(convertFromWei(share))
 		setCheckFlag(true)
 		const currentTime = Math.round((new Date()) / 1000)
