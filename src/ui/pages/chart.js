@@ -107,6 +107,7 @@ const rightAxisConfig = () => {
 export const ChartEther = () => {  
 
     const chartContainer = useRef(null)
+    // eslint-disable-next-line
     const [chartInstance, setChartInstance] = useState(null)
 
     var chartConfig = getChartConfig()
@@ -164,6 +165,7 @@ export const ChartClaim = () => {
     chartConfig.options.scales.yAxes[0].stacked = false
 
     const chartContainer = useRef(null)
+    // eslint-disable-next-line
     const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
@@ -245,6 +247,7 @@ export const ChartEmission = () => {
     chartConfig.data.datasets.push(dataset2)
 
     const chartContainer = useRef(null)
+    // eslint-disable-next-line
     const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
@@ -288,6 +291,7 @@ export const ChartDistro = () => {
     chartConfig.options.scales.yAxes[1].scaleLabel.labelString = 'Vether (logarithmic)'
 
     const chartContainer = useRef(null)
+    // eslint-disable-next-line
     const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
@@ -353,6 +357,7 @@ export const ChartPie = () => {
     chartConfig.options.scales.xAxes[0].ticks.display = false
 
     const chartContainer = useRef(null)
+    // eslint-disable-next-line
     const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {

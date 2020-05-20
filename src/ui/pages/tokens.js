@@ -1,5 +1,6 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import { Context } from '../../context'
 import axios from 'axios'
 import Web3 from 'web3';
 
@@ -9,9 +10,12 @@ import { vetherAddr, vetherAbi, getUniswapTokenPriceEth, getExchangeAddr, getEth
 import { getGasPrice, getShare } from '../../client/market.js'
 import { Text, Click, Button } from '../components'
 
-require('dotenv').config({path:"../../../.env"})
+const BigNumber = require('bignumber.js')
+require('dotenv').config({ path: "../../../.env" })
 
 export const TokenTable = () => {
+
+    const context = useContext(Context)
 
     const [account, setAccount] = useState(
         { address: '', vethBalance: '', ethBalance: '' })
@@ -26,8 +30,12 @@ export const TokenTable = () => {
 
     const connect = async () => {
         ethEnabled()
-        if(!loaded){
-            await loadBlockchainData()
+        if (!loaded) {
+            var accounts = await window.web3.eth.getAccounts()
+            const address = await accounts[0]
+            context.accountData ? getAccountData() : loadAccountData(address)
+            context.tokenData ? getTokenData() : loadTokenData(address)
+            // await loadBlockchainData()
         }
         setLoaded(true)
         if (!ethEnabled()) {
@@ -44,14 +52,34 @@ export const TokenTable = () => {
         return false;
     }
 
-    const loadBlockchainData = async () => {
-        var accounts = await window.web3.eth.getAccounts()
-        const account_ = await accounts[0]
-        setAccount({ address: account_ })
-        await getTokens(account_)
+    const getAccountData = async () => {
+        setAccount(context.accountData)
     }
 
-    const getTokens = async (address) => {
+    const getTokenData = () => {
+        setTokenTable(context.tokenData)
+        setLoadingTable(context.tokenData)
+    }
+
+    const loadAccountData = async (address) => {
+        var ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
+        const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+        const vethBalance = await contract.methods.balanceOf(address).call()
+        setAccount({
+            address: address,
+            vethBalance: vethBalance,
+            ethBalance: ethBalance
+        })
+        context.setContext({
+            "accountData": {
+                'address': address,
+                'vethBalance': vethBalance,
+                'ethBalance': ethBalance
+            }
+        })
+    }
+
+    const loadTokenData = async (address) => {
         const baseURL = "https://api.ethplorer.io/getAddressInfo/"
         const apiText = "?apiKey=" + process.env.REACT_APP_ETHPLORER_API
         const link = baseURL.concat(address).concat(apiText)
@@ -62,37 +90,41 @@ export const TokenTable = () => {
         let loadingTable_ = []
         let tokenObject = { address: "", name: "", balance: "", symbol: "", totalSupply: "" }
 
-        if (response.data.tokens){
-        response.data.tokens.forEach(element => {
-            if (element.tokenInfo.name) {
-                tokenObject = {
-                    address: element.tokenInfo.address,
-                    name: element.tokenInfo.name,
-                    balance: element.balance,
-                    symbol: element.tokenInfo.symbol,
-                    totalSupply: element.tokenInfo.totalSupply
+        if (response.data.tokens) {
+            response.data.tokens.forEach(element => {
+                if (element.tokenInfo.name) {
+                    tokenObject = {
+                        address: element.tokenInfo.address,
+                        name: element.tokenInfo.name,
+                        balance: element.balance,
+                        symbol: element.tokenInfo.symbol,
+                        totalSupply: element.tokenInfo.totalSupply
+                    }
+                    tokenTable_.push(tokenObject)
                 }
-                tokenTable_.push(tokenObject)
-            }
-        });
+            });
 
-        tokenTable_.forEach(element => {
-            if (element.balance > (10**14)) {
-                tokenObject = {
-                    address: element.address,
-                    name: element.name,
-                    balance: element.balance,
-                    symbol: element.symbol,
-                    totalSupply: element.totalSupply
+            tokenTable_.forEach(element => {
+                if (element.balance > (10 ** 14)) {
+                    tokenObject = {
+                        address: element.address,
+                        name: element.name,
+                        balance: element.balance,
+                        symbol: element.symbol,
+                        totalSupply: element.totalSupply
+                    }
+                    tokenTableTrimmed.push(tokenObject)
+                    loadingTable_.push(true)
                 }
-                tokenTableTrimmed.push(tokenObject)
-                loadingTable_.push(true)
-            }
-        });
+            });
         }
 
         setTokenTable(tokenTableTrimmed)
         setLoadingTable(tokenTableTrimmed)
+
+        context.setContext({
+            'tokenData' : tokenTableTrimmed
+        })
     }
 
     const checkLoaded = (record) => {
@@ -105,17 +137,20 @@ export const TokenTable = () => {
         const index = tokenTable.findIndex(item => record.address === item.address);
         newData.splice(index, 1, false);
         setLoadingTable(newData)
-        console.log(newData)
+        context.setContext({
+            'tokenData' : newData
+        })
+        // console.log(newData)
     }
 
     const checkToken = async (record) => {
         tableUpdate(record, true, false, '-', true)
         console.log("checked", record.checked)
         const checked = true
-        var approved 
+        var approved
         const contractApproval = await checkContractApproval(record)
         console.log('contractApproval', contractApproval)
-        if(contractApproval === false ){
+        if (contractApproval === false) {
             console.log("removed")
         } else {
             approved = await checkApproval(record, contractApproval)
@@ -123,7 +158,7 @@ export const TokenTable = () => {
             const value = await checkValue(record)
             setLoadedTable(record)
             tableUpdate(record, checked, approved, value, false)
-        } 
+        }
     }
 
     const checkContractApproval = async (record) => {
@@ -131,18 +166,18 @@ export const TokenTable = () => {
         const fromAcc = account.address
         const spender = vetherAddr()
         var approval
-        try{
+        try {
             approval = await tokenContract.methods.allowance(fromAcc, spender).call()
             return approval
-        } catch(err){
+        } catch (err) {
             removeToken(record.address)
-        return false
-        } 
+            return false
+        }
     }
 
     const removeToken = async (token) => {
         let tokenTableTrimmed = []
-            tokenTable.forEach(element => {
+        tokenTable.forEach(element => {
             if (element.address !== token) {
                 const tokenObject = {
                     address: element.address,
@@ -154,17 +189,20 @@ export const TokenTable = () => {
                 tokenTableTrimmed.push(tokenObject)
             }
         });
-        console.log(tokenTableTrimmed)
+        // console.log(tokenTableTrimmed)
         setTokenTable(tokenTableTrimmed)
+        context.setContext({
+            'tokenData' : tokenTableTrimmed
+        })
     }
 
     const checkApproval = async (record, approval) => {
-            console.log(approval, record.balance)
-            if (+approval >= +record.balance && +record.balance > 0) {
-                return true
-            } else {
-                return false
-            }
+        console.log(approval, record.balance)
+        if (+approval >= +record.balance && +record.balance > 0) {
+            return true
+        } else {
+            return false
+        }
     }
 
     const checkValue = async (record) => {
@@ -206,6 +244,9 @@ export const TokenTable = () => {
         }
         newData.splice(index, 1, tokenObject);
         setTokenTable(newData)
+        context.setContext({
+            'tokenData' : newData
+        })
         console.log(newData)
     }
 
@@ -226,27 +267,37 @@ export const TokenTable = () => {
         }
         newData.splice(index, 1, tokenObject);
         setTokenTable(newData)
+        context.setContext({
+            'tokenData' : newData
+        })
         console.log(newData)
     }
 
     const unlockToken = async (record) => {
-        const tokenContract_ = new window.web3.eth.Contract(vetherAbi(), record.address)
-        const fromAcc_ = account.address
-        const spender_ = vetherAddr()
-        const val_ = (record.balance).toString()
-        console.log(spender_, val_)
-        await tokenContract_.methods.approve(spender_, val_).send({ from: fromAcc_ })
-        console.log(fromAcc_, spender_)
-        const approval_ = await tokenContract_.methods.allowance(fromAcc_, spender_).call()
-        console.log(approval_)
+        const tokenContract = new window.web3.eth.Contract(vetherAbi(), record.address)
+        const fromAcc = account.address
+        const spender = vetherAddr()
+        const val = await tokenContract.methods.balanceOf(fromAcc).call()
+        console.log(spender, val)
+        await tokenContract.methods.approve(spender, val).send({ from: fromAcc })
+        console.log(fromAcc, spender)
+        const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
+        console.log(approval)
         tableUpdateApproved(record)
     }
 
-    const burnToken = async (record) => {
-        const amount = (record.balance).toString()
-        console.log(record.address, amount, account.address)
+    const burn25 = async (record) => {burnToken(record, 25)}
+    const burn50 = async (record) => {burnToken(record, 50)}
+    const burn75 = async (record) => {burnToken(record, 75)}
+    const burn100 = async (record) => {burnToken(record, 100)}
+
+    const burnToken = async (record, rate) => {
+        const tokenContract = new window.web3.eth.Contract(vetherAbi(), record.address)
+        const amount = new BigNumber(await tokenContract.methods.balanceOf(account.address).call())
+        const burnAmount = (((amount.times(rate)).div(100))).toString()
+        console.log(record.address, amount, burnAmount, account.address)
         const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-        await contract.methods.burnTokens(record.address, amount).send({ from: account.address })
+        await contract.methods.burnTokens(record.address, burnAmount).send({ from: account.address })
         removeToken(record.address)
     }
 
@@ -280,7 +331,7 @@ export const TokenTable = () => {
             title: 'Balance',
             key: 'balance',
             render: (record) => {
-                return(
+                return (
                     <div>
                         <Text>{convertFromWei(record.balance)}</Text>
                     </div>
@@ -326,7 +377,11 @@ export const TokenTable = () => {
                     <div>
                         {(approved && checked && !burnt && burnable) &&
                             <div>
-                                <Button style={{ marginLeft: 10 }} onClick={() => burnToken(record)}>BURN >></Button>
+                                <Text bold={true}>BURN: </Text>&nbsp;
+                                <Button style={{ marginLeft: 10 }} onClick={() => burn25(record)}>25%</Button>&nbsp;
+                                <Button style={{ marginLeft: 10 }} onClick={() => burn50(record)}>50%</Button>&nbsp;
+                                <Button style={{ marginLeft: 10 }} onClick={() => burn75(record)}>75%</Button>&nbsp;
+                                <Button style={{ marginLeft: 10 }} onClick={() => burn100(record)}>100%</Button>&nbsp;
                             </div>
                         }
                         {(!approved && checked && !burnt && burnable) &&
