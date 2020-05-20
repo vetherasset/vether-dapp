@@ -1,8 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Chartjs from 'chart.js'
+import React, { useEffect, useRef, useState, useContext } from 'react';
+import { Context } from '../../context'
 import axios from 'axios'
+import Chartjs from 'chart.js'
 
 import emissionArray from '../../data/emissionArray.json';
+// import claimArray from '../../data/claimArray.json';
+import holderArray from '../../data/holderArray.json';
+
 import {chartStyles, Colour, Font} from '../components'
 
 const getChartConfig = () => {
@@ -104,7 +108,7 @@ const rightAxisConfig = () => {
       }
 }}
 
-export const ChartEther = () => {  
+export const ChartEther = (props) => {  
 
     const chartContainer = useRef(null)
     // eslint-disable-next-line
@@ -117,21 +121,22 @@ export const ChartEther = () => {
     chartConfig.options.title.text = 'Ether Burnt Daily'
 
     useEffect(() => {
-  
-        if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
-            setChartInstance(newChartInstance)
-            getData(newChartInstance)
-        }
+        setUp()
         // eslint-disable-next-line
     }, [chartContainer])
 
-    const getData = async (newChartInstance) => {
-        const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
-        let claimArray = response.data
+    const setUp = async () => {
+        if(chartContainer && chartContainer.current){
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
+            setChartInstance(newChartInstance)
+            setChart(props.claimArray, newChartInstance)
+        }
+    }
+
+    const setChart = (claimArray, newChartInstance) => {
+        
         chartConfig.data.labels = claimArray.days
         chartConfig.data.datasets[0].data = claimArray.burns
-        console.log(claimArray)
         const dataset2 = {
             type: "line",
             label: "Total Burnt",
@@ -154,7 +159,7 @@ export const ChartEther = () => {
     )
 }
 
-export const ChartClaim = () => {
+export const ChartClaim = (props) => {
 
     var chartConfig = getChartConfig()
     chartConfig.options.title.text = 'Vether Emitted Daily'
@@ -169,17 +174,22 @@ export const ChartClaim = () => {
     const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
-        if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
-            setChartInstance(newChartInstance)
-            getData(newChartInstance)
-        }
+        setUp()
         // eslint-disable-next-line
     }, [chartContainer])
 
-    const getData = async (newChartInstance) => {
-        const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
-        let claimArray = response.data
+    const setUp = async () => {
+        const timeDelay = 250;
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        await delay(timeDelay)
+        if(chartContainer && chartContainer.current){
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
+            setChartInstance(newChartInstance)
+            setChart(props.claimArray, newChartInstance)
+        }
+    }
+
+    const setChart = async (claimArray, newChartInstance) => {
         chartConfig.data.labels = claimArray.days
         chartConfig.data.datasets[0].data = claimArray.unclaims
         const dataset2 = {
@@ -225,47 +235,7 @@ export const ChartClaim = () => {
     )
 }
 
-export const ChartEmission = () => {
-
-    var chartConfig = getChartConfig()
-    chartConfig.type = "line"
-    chartConfig.data.labels = emissionArray.eras
-    chartConfig.data.datasets[0].label = 'Total Supply'
-    chartConfig.data.datasets[0].data = emissionArray.total
-    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
-    chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Era'
-    chartConfig.options.title.text = 'Vether Emission'
-
-    const dataset2 = {
-        type: "bar",
-        label: "Era Emission",
-        data:emissionArray.supply,
-        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-        borderColor: 'rgba(255, 206, 86, 1)',
-        borderWidth: 1
-    }
-    chartConfig.data.datasets.push(dataset2)
-
-    const chartContainer = useRef(null)
-    // eslint-disable-next-line
-    const [chartInstance, setChartInstance] = useState(null)
-
-    useEffect(() => {
-        if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
-            setChartInstance(newChartInstance)
-        }
-        // eslint-disable-next-line
-    }, [chartContainer])
-
-    return(
-        <div style={chartStyles}>
-            <canvas ref={chartContainer} />
-        </div>
-    )
-}
-
-export const ChartDistro = () => {
+export const ChartDistro = (props) => {
 
     var chartConfig = getChartConfig()
     chartConfig.type = "bar"
@@ -274,7 +244,6 @@ export const ChartDistro = () => {
     chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether (linear)'
     chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Member'
     
-
     const dataset3 = {
         type: "line",
         label: "Ownership",
@@ -295,26 +264,24 @@ export const ChartDistro = () => {
     const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
-        if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
-            setChartInstance(newChartInstance)
-            getData(newChartInstance)
-        }
+        setUp()
         // eslint-disable-next-line
     }, [chartContainer])
 
-    const getData = async (newChartInstance) => {
-        const apiKey = process.env.REACT_APP_ETHPLORER_API
-        const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
-        console.log(baseURL+apiKey+'&limit=1000')
-        const response = await axios.get(baseURL+apiKey+'&limit=1000')
+    const setUp = async () => {
+        const timeDelay = 500;
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        await delay(timeDelay)
+        if(chartContainer && chartContainer.current){
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
+            setChartInstance(newChartInstance)
+            setChart(props.holderArray, newChartInstance)
+        }
+    }
 
-        // const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/holderArray.json')
-        
-        let holderArray = response.data
-        const holders = holderArray.holders
-        
-        let holderShip = holders
+    const setChart = async (holderArray, newChartInstance) => {
+        if(holderArray.length){
+            let holderShip = holderArray
         .filter(item => convertFromWei(item.balance) < 10000)
         .filter(item => convertFromWei(item.balance) > 0.1)
         .map(item => convertFromWei(item.balance))
@@ -326,6 +293,7 @@ export const ChartDistro = () => {
         chartConfig.data.datasets[0].data = holderShip
         chartConfig.data.datasets[1].data = holderShip
         newChartInstance.update()
+        }  
     }
 
     function convertFromWei(number) {
@@ -339,9 +307,8 @@ export const ChartDistro = () => {
     )
 }
 
-export const ChartPie = () => {
+export const ChartPie = (props) => {
     
-
     var chartConfig = getChartConfig()
     chartConfig.type = "pie"
     chartConfig.options.title.text = 'Vether Ownership'
@@ -361,33 +328,78 @@ export const ChartPie = () => {
     const [chartInstance, setChartInstance] = useState(null)
 
     useEffect(() => {
-        if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
-            setChartInstance(newChartInstance)
-            getData(newChartInstance)
-        }
+        setUp()
         // eslint-disable-next-line
     }, [chartContainer])
 
-    const getData = async (newChartInstance) => {
-        const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/holderArray.json')
-        let holderArray = response.data
-        const holders = holderArray.holders
-        let labels = []
-        for(var i=1; i<=holders.length; i++){
-            labels.push(i)
+    const setUp = async () => {
+        const timeDelay = 1000;
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        await delay(timeDelay)
+        // const data =  await getHolderArray()
+        if(chartContainer && chartContainer.current){
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
+            setChartInstance(newChartInstance)
+            setChart(props.holderArray, newChartInstance)
         }
-        let holderShip = holders
+    }
+
+    const setChart = async (holderArray, newChartInstance) => {
+        let labels = []
+        for(var i=1; i<=holderArray.length; i++){
+        labels.push(i)
+        let holderShip = holderArray
         .filter(item => convertFromWei(item.balance) < 10000)
         .map(item => convertFromWei(item.balance))
         chartConfig.data.labels = labels
         chartConfig.data.datasets[0].data = holderShip
         newChartInstance.update()
+        }  
     }
 
     function convertFromWei(number) {
         return number / 1000000000000000000
     }
+
+    return(
+        <div style={chartStyles}>
+            <canvas ref={chartContainer} />
+        </div>
+    )
+}
+
+export const ChartEmission = (props) => {
+
+    var chartConfig = getChartConfig()
+    chartConfig.type = "line"
+    chartConfig.data.labels = props.emissionArray.eras
+    chartConfig.data.datasets[0].label = 'Total Supply'
+    chartConfig.data.datasets[0].data = props.emissionArray.total
+    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether'
+    chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Era'
+    chartConfig.options.title.text = 'Vether Emission'
+
+    const dataset2 = {
+        type: "bar",
+        label: "Era Emission",
+        data:props.emissionArray.supply,
+        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+        borderColor: 'rgba(255, 206, 86, 1)',
+        borderWidth: 1
+    }
+    chartConfig.data.datasets.push(dataset2)
+
+    const chartContainer = useRef(null)
+    // eslint-disable-next-line
+    const [chartInstance, setChartInstance] = useState(null)
+
+    useEffect(() => {
+        if(chartContainer && chartContainer.current){
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
+            setChartInstance(newChartInstance)
+        }
+        // eslint-disable-next-line
+    }, [chartContainer])
 
     return(
         <div style={chartStyles}>

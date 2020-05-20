@@ -36,10 +36,6 @@ export const EraTable = () => {
         setCounter(context.eraData.secondsToGo)
     }
 
-    const getMarketData = async () => {
-        setMarketData(context.marketData)
-    }
-
     const loadEraData = async () => {
         const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
@@ -50,10 +46,8 @@ export const EraTable = () => {
         const nextEra = await contract.methods.nextEraTime().call()
         const nextEmission = convertToNumber(await contract.methods.getNextEraEmission().call())
         const currentBurn = convertToNumber(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
-
         const secondsToGo = getSecondsToGo(nextDay)
         setCounter(secondsToGo)
-
         setEraData({
             era: era, day: day,
             nextEra: nextEra, nextDay: nextDay, 
@@ -72,6 +66,9 @@ export const EraTable = () => {
         })
     }
 
+    const getMarketData = async () => {
+        setMarketData(context.marketData)
+    }
     const loadMarketData = async () => {
         const priceEtherUSD = await getETHPrice()
         const priceVetherEth = await getVETHPriceInEth()

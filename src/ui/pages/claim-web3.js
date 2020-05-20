@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
+import { Context } from '../../context'
 import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL } from '../../client/web3.js'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -10,13 +11,14 @@ import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey, Colour } from '..
 
 export const ClaimTable = () => {
 
-	//const  window.web3 = new Web3(Web3.givenProvider)
+	const context = useContext(Context)
 
 	const [account, setAccount] = useState(
-		{ address: '', tokenBalance: '', ethBalance: '' })
+		{ address: '', vethBalance: '', ethBalance: '' })
+	const [eraData, setEraData] = useState(
+		{ era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
+	
 	const [contract, setContract] = useState(null)
-	const [currentDay, setCurrentDay] = useState(null)
-	const [nextDay, setNextDay] = useState(null)
 	const [arrayDays, setArrayDays] = useState(null)
 	const [claimAmt, setClaimAmt] = useState(null)
 	const [txHash, setTxHash] = useState(null)
@@ -35,11 +37,20 @@ export const ClaimTable = () => {
 		// eslint-disable-next-line
 	}, [])
 
-	const connect = () => {
-		setWalletFlag(true)
+	const connect = async () => {
 		ethEnabled()
 		if (!ethEnabled()) {
 			alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+		} else {
+			setWalletFlag(true)
+			const accounts = await window.web3.eth.getAccounts()
+			const address = accounts[0]
+			const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+			const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+			context.accountData ? getAccountData() : loadAccountData(contract, address)
+			context.eraData ? getEraData() : loadEraData(contract)
+			getDays(contract, address)
+			setContract(contract)
 		}
 	}
 
@@ -47,49 +58,83 @@ export const ClaimTable = () => {
 		if (window.ethereum) {
 			window.web3 = new Web3(window.ethereum);
 			window.ethereum.enable();
-			loadBlockchainData()
 			return true;
 		}
 		return false;
 	}
 
-	const loadBlockchainData = async () => {
-		const contract_ = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		const accounts = await window.web3.eth.getAccounts()
-		setCurrentDay(await contract_.methods.currentDay().call())
-		setNextDay(await contract_.methods.nextDayTime().call())
-		setContract(contract_)
-		refreshAccount(contract_, accounts[0])
-		getDays(contract_, accounts[0])
-		//console.log("accounts", accounts[0])
+	const getAccountData = async () => {
+        setAccount(context.accountData)
+    }
+
+    const loadAccountData = async (contract_, address) => {
+        var ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
+        const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
+        setAccount({
+            address: address,
+            vethBalance: vethBalance,
+            ethBalance: ethBalance
+        })
+        context.setContext({
+            "accountData": {
+                'address': address,
+                'vethBalance': vethBalance,
+                'ethBalance': ethBalance
+            }
+        })
 	}
+	
+	const getEraData = async () => {
+        setEraData(context.eraData)
+    }
 
+    const loadEraData = async (contract_) => {
+        const emission = convertToNumber(await contract_.methods.emission().call())
+        const day = await contract_.methods.currentDay().call()
+        const era = await contract_.methods.currentEra().call()
+        const nextDay = await contract_.methods.nextDayTime().call()
+        const nextEra = await contract_.methods.nextEraTime().call()
+        const nextEmission = convertToNumber(await contract_.methods.getNextEraEmission().call())
+        const currentBurn = convertToNumber(await contract_.methods.mapEraDay_UnitsRemaining(era, day).call())
+        const secondsToGo = getSecondsToGo(nextDay)
 
-	const refreshAccount = async (contract_, account_) => {
-		var ethbalance_ = convertFromWei(await window.web3.eth.getBalance(account_))
-		const vethBalance_ = convertFromWei(await contract_.methods.balanceOf(account_).call())
+        setEraData({
+            era: era, day: day,
+            nextEra: nextEra, nextDay: nextDay, 
+            emission: emission, nextEmission: nextEmission,
+            currentBurn: currentBurn,
+            secondsToGo:secondsToGo
+        })
+        context.setContext({
+            "eraData": {
+                'era': era, 'day':day,
+                'nextEra':nextEra, 'nextDay':nextDay, 
+                'emission': emission, 'nextEmission':nextEmission,
+                "currentBurn": currentBurn,  
+                'secondsToGo':secondsToGo
+            }
+        })
+    }
 
-		setAccount({
-			address: account_,
-			tokenBalance: vethBalance_,
-			ethBalance: ethbalance_
-		})
-	}
+	function convertToNumber(number) {
+        return number / 1000000000000000000
+    }
 
-	const getDays = async (contract_, account_) => {
+    function getSecondsToGo(date) {
+        const time = (Date.now() / 1000).toFixed()
+        const seconds = (date - time)
+        return seconds
+    }
+
+	const getDays = async (contract_, account) => {
 		let era = 1
-		let acc = account_
 		let arrayDays = []
-		let daysContributed = await contract_.methods.getDaysContributedForEra(acc, era).call()
-		let currentDay = await contract_.methods.currentDay().call()
-		let currentEra = await contract_.methods.currentEra().call()
-		//console.log("Acc:%s - daysContributed:%s - era:%s", acc, daysContributed, era)
-
+		let daysContributed = await contract_.methods.getDaysContributedForEra(account, era).call()
 		for (var j = 0; j < daysContributed; j++) {
-			let day = await contract_.methods.mapMemberEra_Days(acc, era, j).call()
-			if (era < currentEra || (era >= currentEra && day <= currentDay)) {
-				const share_ = (new BigNumber(await contract_.methods.getEmissionShare(era, day, account_).call())).toFixed()
-				if (share_ > 0) {
+			let day = await contract_.methods.mapMemberEra_Days(account, era, j).call()
+			if (era < eraData.era || (era >= eraData.era && day <= eraData.day)) {
+				const share = (new BigNumber(await contract_.methods.getEmissionShare(era, day, account).call())).toFixed()
+				if (share > 0) {
 					arrayDays.push(day)
 				}
 			}
@@ -119,13 +164,13 @@ export const ClaimTable = () => {
 	}
 
 	const checkShare = async () => {
-		const share_ = (new BigNumber(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())).toFixed()
-		setClaimAmt(convertFromWei(share_))
+		const share = (new BigNumber(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())).toFixed()
+		setClaimAmt(convertFromWei(share))
 		setCheckFlag(true)
 		const currentTime = Math.round((new Date()) / 1000)
-		if (share_ > 0 && currentDay > userData.day) {
+		if (share > 0 && eraData.day > userData.day) {
 			setZeroFlag(false)
-		} else if (share_ > 0 && currentTime > +nextDay) {
+		} else if (share > 0 && currentTime > +eraData.nextDay) {
 			setZeroFlag(false)
 		} else {
 			setZeroFlag(true)
@@ -181,7 +226,7 @@ export const ClaimTable = () => {
 					<br></br>
 					<LabelGrey>ACCOUNT</LabelGrey>
 					<br></br><br></br>
-					<Label margin={"20px 0px 0px"}>{prettify(account.tokenBalance)} VETH</Label>
+					<Label margin={"20px 0px 0px"}>{prettify(account.vethBalance)} VETH</Label>
 					<br></br>
 					<LabelGrey>VETH Balance</LabelGrey>
 					<br></br>
