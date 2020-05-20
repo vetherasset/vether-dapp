@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { Context } from '../../context'
 import Web3 from 'web3';
 
 import { Row, Col } from 'antd'
@@ -8,7 +9,10 @@ import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../clie
 import { getETHPrice } from '../../client/market.js'
 
 export const TradeTable = () => {
-    const [marketData, setMarketData] = useState({
+
+    const context = useContext(Context)
+
+    const [priceData, setPriceData] = useState({
         priceToday: "",
         priceHistorical: "",
         priceUniswap: "",
@@ -16,10 +20,15 @@ export const TradeTable = () => {
     })
 
     useEffect(() => {
-        loadBlockchainData()
+        context.priceData ? getPriceData() : loadPriceData()
+        // loadBlockchainData()
     }, [])
 
-    const loadBlockchainData = async () => {
+    const getPriceData = () => {
+        setPriceData(context.priceData)
+    }
+
+    const loadPriceData = async () => {
         const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
         const contract_ = new web3_.eth.Contract(vetherAbi(), vetherAddr())
         const day_ = await contract_.methods.currentDay().call()
@@ -40,11 +49,20 @@ export const TradeTable = () => {
 
         //console.log(currentPrice, historicalPrice, priceVetherEth, priceEtherUSD)
 
-        setMarketData({
+        setPriceData({
             priceToday: (currentPrice).toFixed(4),
             priceHistorical: (historicalPrice).toFixed(3),
             priceUniswap: (priceVetherEth).toFixed(3),
             ethPrice: (priceEtherUSD).toFixed(2)
+        })
+
+        context.setContext({
+            "priceData": {
+                'priceToday': (currentPrice).toFixed(4),
+                'priceHistorical': (historicalPrice).toFixed(3),
+                'priceUniswap': (priceVetherEth).toFixed(3),
+                'ethPrice': (priceEtherUSD).toFixed(2)
+            }
         })
     }
 
@@ -58,23 +76,23 @@ export const TradeTable = () => {
     return (
         <div>
             <Row style={{paddingRight:50}}>
-                <Col xs={8}>
+                <Col xs={2}>
 
                 </Col>
-                <Col xs={8}>
-                    {/* <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(marketData.priceToday)} ETH | ${prettify(marketData.priceToday * marketData.ethPrice)}</Text></Center>
+                <Col xs={20}>
+                    {/* <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(priceData.priceToday)} ETH | ${prettify(priceData.priceToday * priceData.ethPrice)}</Text></Center>
                     <Center><LabelGrey margin={"0px 0px 0px"}>IMPLIED PRICE TODAY</LabelGrey></Center>
                     <Center><Text margin={"0px 0px"}>Based on today's burnt Ether</Text></Center> */}
 
-                    <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(marketData.priceHistorical)} ETH | ${prettify(marketData.priceHistorical * marketData.ethPrice)}</Text></Center>
+                    <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(priceData.priceHistorical)} ETH | ${prettify(priceData.priceHistorical * priceData.ethPrice)}</Text></Center>
                     <Center><LabelGrey margin={"0px 0px 0px"}>HISTORICAL PRICE</LabelGrey></Center>
                     <Center><Text margin={"0px 0px"}>Based on all time burnt Ether</Text></Center>
 
-                    <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(marketData.priceUniswap)} ETH | ${prettify(marketData.priceUniswap * marketData.ethPrice)}</Text></Center>
+                    <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(priceData.priceUniswap)} ETH | ${prettify(priceData.priceUniswap * priceData.ethPrice)}</Text></Center>
                     <Center><LabelGrey margin={"0px 0px 0px"}>PRICE ON UNISWAP</LabelGrey></Center>
                     <Center><Text margin={"0px 0px"}>Based on Uniswap liquidity</Text></Center>
                 </Col>
-                <Col xs={8}>
+                <Col xs={2}>
 
                 </Col>
             </Row>

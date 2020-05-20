@@ -126,7 +126,7 @@ export const AddLiquidityTable = () => {
 	const [ethAmount, setEthAmount] = useState(null)
 	// const [uniSupply, setUniSupply] = useState(null)
 	const [vetherPrice, setVetherPrice] = useState(null)
-	const [contract, setContract] = useState(null)
+	// const [contract, setContract] = useState(null)
 	const [loaded, setLoaded] = useState(null)
 	// const [walletFlag, setWalletFlag] = useState(null)
 	const [approved, setApproved] = useState(null)
@@ -140,15 +140,18 @@ export const AddLiquidityTable = () => {
 		// eslint-disable-next-line
 	}, [])
 
-	const connect = () => {
+	const connect = async () => {
 		// setWalletFlag('TRUE')
 		ethEnabled()
 		if (!ethEnabled()) {
 			alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
 		} else {
-			context.accountData ? getAccountData() : loadAccountData()
+			var accounts = await window.web3.eth.getAccounts()
+			const account = await accounts[0]
+			context.accountData ? getAccountData() : loadAccountData(account)
 			context.uniswapData ? getUniswapData() : loadUniswapData()
-			loadBlockchainData()
+			setVetherPrice(await getUniswapPriceEth())
+			checkApproval(account)
 		}
 	}
 
@@ -161,14 +164,13 @@ export const AddLiquidityTable = () => {
 		return false;
 	}
 
-	const loadBlockchainData = async () => {
-		var accounts = await window.web3.eth.getAccounts()
-		const account = await accounts[0]
-		const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		setContract(contract)
-		setVetherPrice(await getUniswapPriceEth())
-		checkApproval(account)
-	}
+	// const loadBlockchainData = async () => {
+	// 	// var accounts = await window.web3.eth.getAccounts()
+	// 	// const account = await accounts[0]
+	// 	const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+	// 	setContract(contract)
+		
+	// }
 
 	const getAccountData = () => {
 		setAccount(context.accountData)
@@ -176,9 +178,7 @@ export const AddLiquidityTable = () => {
 		setEthAmount(+context.accountData.ethBalance - 0.01)
     }
 
-	const loadAccountData = async () => {
-		var accounts = await window.web3.eth.getAccounts()
-		const account = await accounts[0]
+	const loadAccountData = async (account) => {
 		const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		const ethBalance = convertFromWei(await window.web3.eth.getBalance(account))
 		const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
@@ -204,30 +204,42 @@ export const AddLiquidityTable = () => {
 		setEthAmount(ethBalance - 0.01)
 	}
 
-	const refreshAccount = async (contract, account) => {
-		const ethBalance = convertFromWei(await window.web3.eth.getBalance(account))
-		const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
-		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-		const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(account).call())
-		const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
-		setAccount({
-			address: account,
-			vethBalance: vethBalance,
-			ethBalance: ethBalance,
-			uniBalance: uniBalance,
-			uniSupply:uniSupply
-		})
+	// const refreshAccount = async (contract, account) => {
+	// 	const ethBalance = convertFromWei(await window.web3.eth.getBalance(account))
+	// 	const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
+	// 	const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+	// 	const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(account).call())
+	// 	const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
+	// 	setAccount({
+	// 		address: account,
+	// 		vethBalance: vethBalance,
+	// 		ethBalance: ethBalance,
+	// 		uniBalance: uniBalance,
+	// 		uniSupply:uniSupply
+	// 	})
+	// 	context.setContext({
+	// 		"accountData": {
+	// 			"address": account,
+	// 			'vethBalance': vethBalance,
+	// 			'ethBalance': ethBalance,
+	// 			'uniBalance': uniBalance,
+	// 			'uniSupply':uniSupply
+	// 		}})
+	// 	setCustomAmount(vethBalance)
+	// 	setEthAmount(ethBalance)
+	// 	checkApproval(account)
+	// }
+
+	const getUniswapData = () => {
+        setUniswapData(context.uniswapData)
+    }
+
+	const loadUniswapData = async () => {
+		const uniswapBal = await getUniswapBalances()
+		setUniswapData(uniswapBal)
 		context.setContext({
-			"accountData": {
-				"address": account,
-				'vethBalance': vethBalance,
-				'ethBalance': ethBalance,
-				'uniBalance': uniBalance,
-				'uniSupply':uniSupply
-			}})
-		setCustomAmount(vethBalance)
-		setEthAmount(ethBalance)
-		checkApproval(account)
+			"uniswapData" : uniswapBal
+		})
 	}
 
 	const checkApproval = async (address) => {
@@ -240,18 +252,6 @@ export const AddLiquidityTable = () => {
 		if (+approval >= +vethBalance && +vethBalance > 0) {
 			setApproved(true)
 		}
-	}
-
-	const getUniswapData = () => {
-        setUniswapData(context.uniswapData)
-    }
-
-	const loadUniswapData = async () => {
-		const uniswapBal = await getUniswapBalances()
-		setUniswapData(uniswapBal)
-		context.setContext({
-			"uniswapData" : uniswapBal
-		})
 	}
 
 	const unlockToken = async () => {
@@ -275,13 +275,17 @@ export const AddLiquidityTable = () => {
 		const tx = await exchangeContract.methods.addLiquidity(min_liquidity, amountVeth, deadline).send({ value: amountEth, from: fromAcc })
 		setEthTx(tx.transactionHash)
 		setLoaded(true)
-		refreshAccount(contract, fromAcc)
+		loadAccountData(fromAcc)
 	}
 
 	const getUniShare = () => {
 		const share = +account.uniBalance / +account.uniSupply
-		console.log(account.uniBalance, account.uniSupply, share )
-		return share
+		// console.log(account.uniBalance, account.uniSupply, share )
+		if(share > 0){
+			return share
+		} else{
+			return 0
+		}
 	}
 
 	// const maxEther = () => {
@@ -322,28 +326,6 @@ export const AddLiquidityTable = () => {
 		var final = num.multipliedBy(10**18)
 		return (final).toString()
 	}
-
-	// const { confirm } = Modal
-
-	// const handleShowModal = (type) => {
-	// 	if (type === "token") {
-	// 		confirm({
-	// 			title: 'Please enter a token address',
-	// 			icon: <ExclamationCircleOutlined />,
-	// 			content: <p>Please input the desired token to burn. You can find this address on Etherscan.</p>,
-	// 			onOk() { },
-	// 			onCancel() { },
-	// 		});
-	// 	} else if (type === "amount") {
-	// 		confirm({
-	// 			title: 'Please enter an amount',
-	// 			icon: <ExclamationCircleOutlined />,
-	// 			content: <p>Please input your balance of the token you wish to burn.</p>,
-	// 			onOk() { },
-	// 			onCancel() { },
-	// 		});
-	// 	}
-	// }
 
 	return (
 		<div>
@@ -432,6 +414,8 @@ export const AddLiquidityTable = () => {
 
 export const RemoveLiquidityTable = () => {
 
+	const context = useContext(Context)
+
 	const [account, setAccount] = useState(
 		{ address: '', vethBalance: '', uniBalance: '' })
 	const [burnTknFlag, setBurnTknFlag] = useState(null)
@@ -440,23 +424,28 @@ export const RemoveLiquidityTable = () => {
 	const [customAmount, setCustomAmount] = useState(100)
 
 	useEffect(() => {
-		loadBlockchainData()
+		context.accountData ? getAccountData() : loadAccountData()
 		// eslint-disable-next-line
 	}, [])
 
-	const loadBlockchainData = async () => {
-		var accounts = await window.web3.eth.getAccounts()
-		const account_ = await accounts[0]
-		refreshAccount(account_)
-	}
+	const getAccountData = () => {
+		setAccount(context.accountData)
+    }
 
-	const refreshAccount = async (account_) => {
+	const loadAccountData = async () => {
+		var accounts = await window.web3.eth.getAccounts()
+		const account = await accounts[0]
 		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-		var uniBalance_ = await exchangeContract.methods.balanceOf(account_).call()
+		const uniBalance = await exchangeContract.methods.balanceOf(account).call()
 		setAccount({
-			address: account_,
-			uniBalance: uniBalance_,
+			address: account,
+			uniBalance: uniBalance,
 		})
+		context.setContext({
+			"accountData": {
+				"address": account,
+				'uniBalance': uniBalance,
+			}})
 	}
 
 	const getLink = (tx) => {
@@ -467,17 +456,18 @@ export const RemoveLiquidityTable = () => {
 		setCustomAmount(e.target.value)
 	}
 
-	const getuniSupply = (part) => {
+	const getUniSupply = (part) => {
 		return ((account.uniBalance * part) / 100)
 	}
 
 	const removeLiquidity = async () => {
 		setBurnTknFlag(true)
 		console.log(account.uniBalance, customAmount)
-		const amount = (getuniSupply(customAmount)).toString()
+		const amount = (getUniSupply(customAmount)).toString()
 		const min_eth = (1).toString()
 		const min_tokens = (1).toString()
 		const deadline = (Math.round(((new Date())/1000) + 1000)).toString()
+		// console.log(amount, min_eth, min_tokens, deadline)
 		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
 		const tx = await exchangeContract.methods.removeLiquidity(amount, min_eth, min_tokens, deadline).send({ from: account.address })
 		setTknTx(tx.transactionHash)

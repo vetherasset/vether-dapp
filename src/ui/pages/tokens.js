@@ -4,8 +4,8 @@ import { Context } from '../../context'
 import axios from 'axios'
 import Web3 from 'web3';
 
-import { Row, Col, Table } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons';
+import { Modal, Row, Col, Table } from 'antd'
+import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { vetherAddr, vetherAbi, getUniswapTokenPriceEth, getExchangeAddr, getEtherscanURL } from '../../client/web3.js'
 import { getGasPrice, getShare } from '../../client/market.js'
 import { Text, Click, Button } from '../components'
@@ -33,6 +33,7 @@ export const TokenTable = () => {
         if (!loaded) {
             var accounts = await window.web3.eth.getAccounts()
             const address = await accounts[0]
+            await getAccountData()
             context.accountData ? getAccountData() : loadAccountData(address)
             context.tokenData ? getTokenData() : loadTokenData(address)
             // await loadBlockchainData()
@@ -56,11 +57,6 @@ export const TokenTable = () => {
         setAccount(context.accountData)
     }
 
-    const getTokenData = () => {
-        setTokenTable(context.tokenData)
-        setLoadingTable(context.tokenData)
-    }
-
     const loadAccountData = async (address) => {
         var ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
         const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
@@ -77,6 +73,11 @@ export const TokenTable = () => {
                 'ethBalance': ethBalance
             }
         })
+    }
+
+    const getTokenData = () => {
+        setTokenTable(context.tokenData)
+        setLoadingTable(context.tokenData)
     }
 
     const loadTokenData = async (address) => {
@@ -123,7 +124,7 @@ export const TokenTable = () => {
         setLoadingTable(tokenTableTrimmed)
 
         context.setContext({
-            'tokenData' : tokenTableTrimmed
+            'tokenData': tokenTableTrimmed
         })
     }
 
@@ -138,7 +139,7 @@ export const TokenTable = () => {
         newData.splice(index, 1, false);
         setLoadingTable(newData)
         context.setContext({
-            'tokenData' : newData
+            'tokenData': newData
         })
         // console.log(newData)
     }
@@ -156,8 +157,13 @@ export const TokenTable = () => {
             approved = await checkApproval(record, contractApproval)
             console.log('approved', approved)
             const value = await checkValue(record)
-            setLoadedTable(record)
-            tableUpdate(record, checked, approved, value, false)
+            if (value === 0) {
+                await removeToken(record.address)
+                handleShowModal()
+            } else {
+                setLoadedTable(record)
+                tableUpdate(record, checked, approved, value, false)
+            }
         }
     }
 
@@ -171,6 +177,7 @@ export const TokenTable = () => {
             return approval
         } catch (err) {
             removeToken(record.address)
+            handleShowModal()
             return false
         }
     }
@@ -189,10 +196,10 @@ export const TokenTable = () => {
                 tokenTableTrimmed.push(tokenObject)
             }
         });
-        // console.log(tokenTableTrimmed)
+        console.log(tokenTableTrimmed)
         setTokenTable(tokenTableTrimmed)
         context.setContext({
-            'tokenData' : tokenTableTrimmed
+            'tokenData': tokenTableTrimmed
         })
     }
 
@@ -245,7 +252,7 @@ export const TokenTable = () => {
         newData.splice(index, 1, tokenObject);
         setTokenTable(newData)
         context.setContext({
-            'tokenData' : newData
+            'tokenData': newData
         })
         console.log(newData)
     }
@@ -268,7 +275,7 @@ export const TokenTable = () => {
         newData.splice(index, 1, tokenObject);
         setTokenTable(newData)
         context.setContext({
-            'tokenData' : newData
+            'tokenData': newData
         })
         console.log(newData)
     }
@@ -286,10 +293,10 @@ export const TokenTable = () => {
         tableUpdateApproved(record)
     }
 
-    const burn25 = async (record) => {burnToken(record, 25)}
-    const burn50 = async (record) => {burnToken(record, 50)}
-    const burn75 = async (record) => {burnToken(record, 75)}
-    const burn100 = async (record) => {burnToken(record, 100)}
+    const burn25 = async (record) => { burnToken(record, 25) }
+    const burn50 = async (record) => { burnToken(record, 50) }
+    const burn75 = async (record) => { burnToken(record, 75) }
+    const burn100 = async (record) => { burnToken(record, 100) }
 
     const burnToken = async (record, rate) => {
         const tokenContract = new window.web3.eth.Contract(vetherAbi(), record.address)
@@ -308,6 +315,18 @@ export const TokenTable = () => {
     function convertFromWei(number) {
         var num = (number / (10 ** 18))
         return num.toFixed(2)
+    }
+
+    const { confirm } = Modal
+
+    const handleShowModal = () => {
+        confirm({
+            title: 'Caution',
+            icon: <ExclamationCircleOutlined />,
+            content: <p>This token is not compatible with Vether.</p>,
+            onOk() { },
+            onCancel() { },
+        });
     }
 
     const columns = [

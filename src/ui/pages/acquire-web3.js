@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { Context } from '../../context'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
@@ -9,9 +10,11 @@ import { LabelGrey, Label, Click, Button, Sublabel, Gap, Colour } from '../compo
 
 export const AcquireTable = () => {
 
+	const context = useContext(Context)
+
 	const [account, setAccount] = useState(
 		{ address: '', vethBalance: '', ethBalance: '' })
-	const [contract, setContract] = useState(null)
+	// const [contract, setContract] = useState(null)
 
 	const [loaded, setLoaded] = useState(null)
 	const [burnEthFlag, setBurnEthFlag] = useState(null)
@@ -30,10 +33,13 @@ export const AcquireTable = () => {
 		// eslint-disable-next-line
 	}, [])
 
-	const connect = () => {
+	const connect = async () => {
 		setWalletFlag('TRUE')
 		ethEnabled()
-		loadBlockchainData()
+		var accounts = await window.web3.eth.getAccounts()
+		const address = accounts[0]
+		context.accountData ? getAccountData() : loadAccountData(address)
+		// loadBlockchainData()
 		if (!ethEnabled()) {
 			alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
 		  } else {
@@ -50,23 +56,45 @@ export const AcquireTable = () => {
 		return false;
 	  }
 
-	  const loadBlockchainData = async () => {
-		var accounts = await window.web3.eth.getAccounts()
-		const account_ = await accounts[0]
-		const contract_ = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		refreshAccount(contract_, account_)
-		setContract(contract_)
+	  const getAccountData = async () => {
+        setAccount(context.accountData)
 	}
+	
+	const loadAccountData = async (address) => {
+        var ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
+        const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+        const vethBalance = await contract.methods.balanceOf(address).call()
+        setAccount({
+            address: address,
+            vethBalance: vethBalance,
+            ethBalance: ethBalance
+        })
+        context.setContext({
+            "accountData": {
+                'address': address,
+                'vethBalance': vethBalance,
+                'ethBalance': ethBalance
+            }
+        })
+    }
 
-	const refreshAccount = async (contract_, account_) => {
-		var ethBalance_ = convertFromWei(await window.web3.eth.getBalance(account_))
-		const vethBalance_ = await contract_.methods.balanceOf(account_).call()
-		setAccount({
-			address: account_,
-			vethBalance: vethBalance_,
-			ethBalance: ethBalance_
-		})
-	}
+	//   const loadBlockchainData = async () => {
+	// 	var accounts = await window.web3.eth.getAccounts()
+	// 	const account_ = await accounts[0]
+	// 	const contract_ = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+	// 	refreshAccount(contract_, account_)
+	// 	setContract(contract_)
+	// }
+
+	// const refreshAccount = async (contract_, account_) => {
+	// 	var ethBalance_ = convertFromWei(await window.web3.eth.getBalance(account_))
+	// 	const vethBalance_ = await contract_.methods.balanceOf(account_).call()
+	// 	setAccount({
+	// 		address: account_,
+	// 		vethBalance: vethBalance_,
+	// 		ethBalance: ethBalance_
+	// 	})
+	// }
 
 	const maxEther = async () => {
 		setEthAmount(account.ethBalance - 0.1)
@@ -78,14 +106,12 @@ export const AcquireTable = () => {
 	}
 
 	const burnEther = async () => {
-		const fromAcc_ = account.address
-		const toAcc_ = vetherAddr()
-		const amount_ = ethAmount * 1000000000000000000
+		const amount = ethAmount * 1000000000000000000
 		setBurnEthFlag('TRUE')
-		const tx = await window.web3.eth.sendTransaction({ from: fromAcc_, to: toAcc_, value: amount_ })
+		const tx = await window.web3.eth.sendTransaction({ from: account.address, to: vetherAddr(), value: amount })
 		setEthTx(tx.transactionHash)
 		setLoaded(true)
-		refreshAccount(contract, fromAcc_)
+		loadAccountData(account.address)
 	}
 
 	const getLink = (tx) => {
@@ -114,45 +140,6 @@ export const AcquireTable = () => {
 	// 	}	
 	// }
 
-	// const { confirm } = Modal
-
-	// const handleShowModal = (type) => {
-	// 	if(type === "token"){
-	// 		confirm({
-	// 			title: 'Please enter a token address',
-	// 			icon: <ExclamationCircleOutlined />,
-	// 			content: <p>Please input the desired token to burn. You can find this address on Etherscan.</p>,
-	// 			onOk() {},
-	// 			onCancel() {},
-	// 		  });
-	// 	} else if (type === "amount") {
-	// 		confirm({
-	// 			title: 'Please enter an amount',
-	// 			icon: <ExclamationCircleOutlined />,
-	// 			content: <p>Please input your balance of the token you wish to burn.</p>,
-	// 			onOk() {},
-	// 			onCancel() {},
-	// 		  });
-	// 	} else if (type === "caution") {
-	// 		confirm({
-	// 			title: 'Some tokens are not compatible with Vether',
-	// 			icon: <ExclamationCircleOutlined />,
-	// 			content: <p>If there are any errors in your MetaMask, do not proceed.</p>,
-	// 			onOk() {burnToken()},
-	// 			onCancel() {},
-	// 		  });
-	// 	}
-	// }
-
-
-	// const burnToken = async () => {
-	// 	setBurnTknFlag(true)
-	// 	console.log(customToken, customAmount, account.address)
-	// 	const contract_ = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-	// 	const tx = await contract_.methods.burnTokens(customToken, approvalAmount).send({ from: account.address })
-	// 	setTknTx(tx.transactionHash)
-	// 	setLoaded2(true)
-	// }
 
 	function convertFromWei(number) {
 		var num = number / 1000000000000000000

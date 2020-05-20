@@ -14,7 +14,7 @@ export const VetherTable = () => {
     const context = useContext(Context)
 
     const [loaded, setLoaded] = useState(null)
-    const [tokenData, setTokenData] = useState(
+    const [vetherData, setVetherData] = useState(
         { name: '', symbol: '', totalSupply: '', decimals: '', genesis: '' })
     const [emissionData, setEmissionData] = useState(
         { balance: '', totalBurnt: '', totalEmitted: '', totalFees: '' })
@@ -23,32 +23,24 @@ export const VetherTable = () => {
 
     useEffect(() => {
 
-        context.eraData ? getTokenData() : loadTokenData()
+        context.vetherData ? getVetherData() : loadVetherData()
         context.emissionData ? getEmissionData() : loadEmissionData()
         context.marketData ? getMarketData() : loadMarketData()
         setLoaded(true)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const getTokenData = () => {
-        setTokenData(context.tokenData)
-    }
-    const getEmissionData = () => {
-        setEmissionData(context.emissionData)
-    }
-    const getMarketData = () => {
-        setMarketData(context.marketData)
+    const getVetherData = () => {
+        setVetherData(context.vetherData)
     }
 
-    const loadTokenData = async () => {
-
+    const loadVetherData = async () => {
         const name = "Vether"
         const symbol = "VETH"
         const totalSupply = 1000000
         const decimals = 18
         const genesis = convertToDate(1589271741)
-
-        setTokenData({
+        setVetherData({
             name: name,
             symbol: symbol,
             totalSupply: totalSupply,
@@ -56,7 +48,7 @@ export const VetherTable = () => {
             genesis: genesis
         })
         context.setContext({
-            "tokenData": {
+            "vetherData": {
                 'name': name,
                 'symbol': symbol,
                 "totalSupply": totalSupply,
@@ -65,17 +57,18 @@ export const VetherTable = () => {
             }
         })
     }
-    const loadEmissionData = async () => {
 
+    const getEmissionData = () => {
+        setEmissionData(context.emissionData)
+    }
+    const loadEmissionData = async () => {
         const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-
         const totalSupply = 1000000
         const balance = convertFromWei(await contract.methods.balanceOf(vetherAddr()).call())
         const totalBurnt = convertFromWei(await contract.methods.totalBurnt().call())
         const totalFees = convertFromWei(await contract.methods.totalFees().call())
         const totalEmitted = +totalSupply - +balance + +totalFees
-
         setEmissionData({
             balance: balance,
             totalBurnt: totalBurnt,
@@ -92,11 +85,13 @@ export const VetherTable = () => {
         })
     }
 
+    const getMarketData = () => {
+        setMarketData(context.marketData)
+    }
     const loadMarketData = async () => {
         const priceEtherUSD = await getETHPrice()
         const priceVetherEth = await getVETHPriceInEth()
         const priceVetherUSD = priceEtherUSD * priceVetherEth
-
         setMarketData({
             priceUSD: priceVetherUSD,
             priceETH: priceVetherEth,
@@ -158,31 +153,31 @@ export const VetherTable = () => {
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
                                     <LabelGrey>NAME: </LabelGrey><br />
-                                    <Label>{tokenData.name}</Label>
+                                    <Label>{vetherData.name}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
                                     <LabelGrey>SYMBOL: </LabelGrey><br />
-                                    <Label>{tokenData.symbol}</Label>
+                                    <Label>{vetherData.symbol}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
                                     <LabelGrey>TOTAL SUPPLY: </LabelGrey><br />
-                                    <Label>{prettify(tokenData.totalSupply)}</Label>
+                                    <Label>{prettify(vetherData.totalSupply)}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
                                     <LabelGrey>DECIMALS: </LabelGrey><br />
-                                    <Label>{tokenData.decimals}</Label>
+                                    <Label>{vetherData.decimals}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10, marginBottom: 20 }}>
                                 <Col xs={24}>
                                     <LabelGrey>GENESIS: </LabelGrey><br />
-                                    <Label>{(tokenData.genesis)}</Label>
+                                    <Label>{(vetherData.genesis)}</Label>
                                 </Col>
                             </Row>
                         </Col>
@@ -197,7 +192,7 @@ export const VetherTable = () => {
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
                                     <LabelGrey>TOTAL REMAINING: </LabelGrey><br />
-                                    <Label>{prettify(tokenData.totalSupply - emissionData.totalEmitted)} VETH | ${prettify(convertToUSD(tokenData.totalSupply - emissionData.totalEmitted))}</Label>
+                                    <Label>{prettify(vetherData.totalSupply - emissionData.totalEmitted)} VETH | ${prettify(convertToUSD(vetherData.totalSupply - emissionData.totalEmitted))}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
@@ -209,7 +204,7 @@ export const VetherTable = () => {
                             <Row style={{ marginTop: 10 }}>
                                 <Col xs={24}>
                                     <LabelGrey>TOTAL MARKET CAP: </LabelGrey><br />
-                                    <Label>{prettify(convertToETH(tokenData.totalSupply))} ETH | ${prettify(convertEthtoUSD(convertToETH(tokenData.totalSupply)))}</Label>
+                                    <Label>{prettify(convertToETH(vetherData.totalSupply))} ETH | ${prettify(convertEthtoUSD(convertToETH(vetherData.totalSupply)))}</Label>
                                 </Col>
                             </Row>
                             <Row style={{ marginTop: 10 }}>
