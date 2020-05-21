@@ -208,6 +208,7 @@ export const PoolTable = () => {
         borderColor: Colour().grey,
         paddingLeft: 5,
         paddingRight: 5,
+        marginBottom: 30,
         backgroundColor: '#5C4F2C'
     }
     const lineStyle = {
@@ -219,7 +220,7 @@ export const PoolTable = () => {
     return (
         <div>
             <Row style={{ marginTop: 40, marginBottom: 50 }}>
-                <Col xs={5} style={{ marginLeft: 50 }}>
+                <Col xs={24} sm={24} xl={5} style={{ marginLeft: 25, marginRight:25, marginBottom:30 }}>
                     <Label>{prettify(account.ethBalance)}</Label>
                     <br></br>
                     <LabelGrey>Spendable ETH Balance</LabelGrey>
@@ -241,7 +242,7 @@ export const PoolTable = () => {
                         </div>
                     }
                 </Col>
-                <Col xs={12} style={poolStyles}>
+                <Col xs={24} sm={24} xl={12} style={poolStyles}>
                     <Row>
                         <Col xs={12}>
                             <Text size={12} bold={true} color={Colour().white}>ETHER</Text>
@@ -255,7 +256,7 @@ export const PoolTable = () => {
                         </Col>
                     </Row>
                 </Col>
-                <Col xs={5} style={{ marginLeft: 50 }}>
+                <Col xs={24} sm={24} xl={5} style={{ marginLeft: 25, marginRight:25 }}>
 
                     {!approved &&
                         <Row>

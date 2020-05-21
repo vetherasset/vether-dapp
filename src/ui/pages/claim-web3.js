@@ -55,6 +55,7 @@ export const ClaimTable = () => {
 			// console.log(arrayDays, context.arrayDays)
 			// getDays(eraDay_, contract, address)
 			setContract(contract)
+			console.log(account.vethBalance)
 		}
 	}
 
@@ -166,9 +167,9 @@ export const ClaimTable = () => {
 		} else {
 			setZeroFlag(true)
 		}
-		console.log(share, +eraData_.day, +userData.day, currentTime, +eraData_.nextDay)
-		console.log(eraData.eraData)
-		console.log(context.eraData)
+		// console.log(share, +eraData_.day, +userData.day, currentTime, +eraData_.nextDay)
+		// console.log(eraData.eraData)
+		// console.log(context.eraData)
 	}
 
 	const claimShare = async () => {
@@ -222,7 +223,7 @@ export const ClaimTable = () => {
 					<br></br>
 					<LabelGrey>ACCOUNT</LabelGrey>
 					<br></br><br></br>
-					<Label margin={"20px 0px 0px"}>{prettify(account.vethBalance)} VETH</Label>
+					<Label margin={"20px 0px 0px"}>{prettify((+account.vethBalance))} VETH</Label>
 					<br></br>
 					<LabelGrey>VETH Balance</LabelGrey>
 					<br></br>

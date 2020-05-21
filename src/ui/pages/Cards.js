@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom"
 
 import { Row, Col } from 'antd'
-import { H2, Subtitle, HR, Gap, Colour, Text, Click } from '../components'
+import { H2, Subtitle, Gap, Colour, Text, Click } from '../components'
 
 const Cards = () => {
 
@@ -65,8 +65,6 @@ const Cards = () => {
                     link={cardContent()[3].link} />
                 </Col>
             </Row>
-
-            <HR />
         </div>
     )
 }
