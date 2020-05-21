@@ -241,7 +241,7 @@ export const PoolTable = () => {
                         </div>
                     }
                 </Col>
-                <Col xs={11} style={poolStyles}>
+                <Col xs={12} style={poolStyles}>
                     <Row>
                         <Col xs={12}>
                             <Text size={12} bold={true} color={Colour().white}>ETHER</Text>

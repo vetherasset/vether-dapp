@@ -99,6 +99,9 @@ export const LabelGrey = (props) => {
     if (props.margin) {
     styles.margin = props.margin
   }
+  if (props.size) {
+    styles.fontSize = props.size
+  }
 
   return (
     <span style={styles}>
@@ -176,6 +179,9 @@ export const Click = (props) => {
   styles.marginTop = 30
   styles.marginBottom = 30
   styles.margin = "20px 0px"
+  if (props.size) {
+    styles.fontSize = props.size
+  }
   return (
     <span style={styles}>
       {props.children}

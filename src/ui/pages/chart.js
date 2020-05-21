@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Chartjs from 'chart.js'
 
-import {chartStyles, Colour, Font} from '../components'
+import { Row, Col } from 'antd'
+import {chartStyles, Colour, Font, Text, Center, LabelGrey} from '../components'
+import {convertToDate, prettify} from '../utils'
+
 
 const getChartConfig = () => {
     return {
@@ -398,6 +401,83 @@ export const ChartEmission = (props) => {
     return(
         <div style={chartStyles}>
             <canvas ref={chartContainer} />
+        </div>
+    )
+}
+
+export const ChartData = (props) =>{
+
+    const eraData = props.eraData
+    const emissionData = props.emissionData
+    const genesis = convertToDate(1589271741)
+    const halving = convertToDate(eraData.nextEra)
+    const end = convertToDate(1589271741 + 315360000)
+
+    const paneStyles = {
+        paddingLeft:40,
+        paddingRight:40,
+        paddingTop:10
+    }
+    const rowStyles = {
+        paddingBottom:20
+    }
+
+    return(
+        <div style={chartStyles}>
+            <div style={paneStyles}>
+                <Center><LabelGrey size={18}>Vether Overview</LabelGrey></Center>
+
+                <Row style={rowStyles}>
+                    <Col xs={12}>
+                        <LabelGrey size={14}>Total Holders</LabelGrey><br />
+                        <Text size={18}>{props.holders} holders</Text>
+                    </Col>
+                    <Col xs={12}>
+                        {/* <LabelGrey size={14}>Total Fees</LabelGrey><br />
+                        <Text size={18}>5 VETH</Text> */}
+                    </Col>
+                </Row>
+
+                <Row style={rowStyles}>
+                    <Col xs={8}>
+                        <LabelGrey size={14}>Total Burnt</LabelGrey><br />
+                        <Text size={18}>{prettify((+emissionData.totalBurnt).toFixed(2))} ETH</Text>
+                    </Col>
+                    <Col xs={8}>
+                        <LabelGrey size={14}>Total Fees</LabelGrey><br />
+                        <Text size={18}>{prettify((+emissionData.totalFees).toFixed(2))} VETH</Text>
+                    </Col>
+                    <Col xs={8}>
+                    </Col>
+                </Row>
+
+                <Row style={rowStyles}>
+                    <Col xs={8}>
+                        <LabelGrey size={14}>Curent Emission</LabelGrey><br />
+                        <Text size={18}>{eraData.emission} ETH</Text>
+                    </Col>
+                    <Col xs={8}>
+                        <LabelGrey size={14}>Next Emission</LabelGrey><br />
+                        <Text size={18}>{eraData.emission / 2} VETH</Text>
+                    </Col>
+                    <Col xs={8}>
+                    </Col>
+                </Row>
+                <Row style={rowStyles}>
+                    <Col xs={8}>
+                        <LabelGrey size={14}>Vether Genesis Date</LabelGrey><br />
+                        <Text size={18}>{genesis}</Text>
+                    </Col>
+                    <Col xs={8}>
+                        <LabelGrey size={14}>Next Halving Date</LabelGrey><br />
+                        <Text size={18}>{halving}</Text>
+                    </Col>
+                    <Col xs={8}>
+                        <LabelGrey size={14}>Fully Emitted Date</LabelGrey><br />
+                        <Text size={18}>{end}</Text>
+                    </Col>
+                </Row>
+            </div>
         </div>
     )
 }

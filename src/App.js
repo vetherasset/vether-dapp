@@ -30,7 +30,7 @@ const App = () => {
 						<Layout style={{ height: "100vh" }}>
 							<Sidebar />
 							<Header />
-							<Content style={{ background: Colour().dgrey, color: Colour().white, paddingLeft: 50, paddingTop: 50 }}>
+							<Content style={{ background: Colour().dgrey, color: Colour().white, paddingLeft: 50, paddingTop: 50, paddingRight:50 }}>
 								<Switch>
 									<Route path="/" exact component={Hero} />
 									<Route path="/overview" exact component={Hero} />
