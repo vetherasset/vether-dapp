@@ -53,20 +53,20 @@ const claimArray = async () => {
         vether: vetherArray
     }
     await fs.writeFileSync('./src/data/claimArray.json', JSON.stringify(claimObject, null,4), 'utf8')
-    console.log(claimObject)
+    // console.log(claimObject)
 }
 
-const holderArray = async () => {
-    const apiKey = process.env.REACT_APP_ETHPLORER_API
-    const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
-    console.log(baseURL+apiKey+'&limit=1000')
-    const response = await axios.get(baseURL+apiKey+'&limit=1000')
-    await fs.writeFileSync('./src/data/holderArray.json', JSON.stringify(response.data, null,4), 'utf8')
-}
+// const holderArray = async () => {
+//     const apiKey = process.env.REACT_APP_ETHPLORER_API
+//     const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
+//     console.log(baseURL+apiKey+'&limit=1000')
+//     const response = await axios.get(baseURL+apiKey+'&limit=1000')
+//     await fs.writeFileSync('./src/data/holderArray.json', JSON.stringify(response.data, null,4), 'utf8')
+// }
 
 const main = async () => {
     claimArray()
-    holderArray()
+    // holderArray()
 }
 
 main()
