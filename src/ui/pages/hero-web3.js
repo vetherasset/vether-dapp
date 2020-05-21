@@ -3,7 +3,7 @@ import { Context } from '../../context'
 import { Link } from "react-router-dom"
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL, getUniswapPriceEth } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
 import { convertFromWei, convertToDate, prettify } from '../utils'
 
@@ -22,6 +22,7 @@ export const VetherTable = () => {
         { balance: '', totalBurnt: '', totalEmitted: '', totalFees: '' })
     const [marketData, setMarketData] = useState(
         { priceUSD: '', priceETH: '', ethPrice: '' })
+    const [vethPrice, setVethPrice] = useState(null)
 
     useEffect(() => {
 
@@ -87,8 +88,9 @@ export const VetherTable = () => {
         })
     }
 
-    const getMarketData = () => {
+    const getMarketData = async () => {
         setMarketData(context.marketData)
+        setVethPrice(await getUniswapPriceEth())
     }
     const loadMarketData = async () => {
         const priceEtherUSD = await getETHPrice()
@@ -106,10 +108,11 @@ export const VetherTable = () => {
                 "ethPrice": priceEtherUSD
             }
         })
+        setVethPrice(await getUniswapPriceEth())
     }
 
     function convertToETH(vether) {
-        return (vether * marketData.priceETH).toFixed(3)
+        return (vether * vethPrice).toFixed(3)
     }
 
     // function convertToUSD(vether) {
@@ -145,7 +148,7 @@ export const VetherTable = () => {
             <Row style={poolStyles}>
                 <Col xs={6} style={{marginTop:20}}>
                     <Center><Logo></Logo></Center><br />
-                    <Center><Text size={32}>${prettify((+marketData.priceUSD).toFixed(2))}</Text></Center>
+                    <Center><Text size={32}>${((+marketData.ethPrice * vethPrice).toFixed(2))}</Text></Center>
                 </Col>
                 <Col xs={18}>
                     <Row>
