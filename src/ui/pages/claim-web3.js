@@ -17,8 +17,6 @@ export const ClaimTable = () => {
 		{ address: '', vethBalance: '', ethBalance: '' })
 	const [eraData, setEraData] = useState(
 		{ era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
-	// const [claimData, setClaimData] = useState(
-	// 	{ arrayDays: ''})
 	const [arrayDays, setArrayDays] = useState(null)
 	const [userData, setUserData] = useState(
 		{ era: '1', day: '1' })
