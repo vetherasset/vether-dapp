@@ -92,7 +92,7 @@ const Sidebar = (props) => {
   return (
 
     <Layout.Sider style={sidebarStyles} width={"150"} trigger={null} collapsible breakpoint="md"
-    collapsedWidth="80">
+    collapsedWidth="0">
 
   <Breakpoint small down>
       <Menu onClick={handleClick} mode="inline" selectedKeys={[page]}>

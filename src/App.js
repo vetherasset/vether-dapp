@@ -5,6 +5,7 @@ import 'antd/dist/antd.css'
 
 import Header from './ui/layout/Header'
 import Sidebar from './ui/layout/Sidebar'
+import FooterMobile from './ui/layout/FooterMobile'
 import Hero from './ui/pages/Hero'
 import Acquire from './ui/pages/Acquire'
 import Claim from './ui/pages/Claim'
@@ -28,11 +29,9 @@ const App = () => {
 				<ContextProvider>
 					<BreakpointProvider>
 						<Layout style={{ height: "100vh" }}>
-							<Breakpoint medium up>
-								<Sidebar />
-							</Breakpoint>
+							<Sidebar />
 							<Header />
-							<Content style={{ background: Colour().dgrey, color: Colour().white, paddingLeft: 30, paddingTop: 50, paddingRight:30 }}>
+							<Content style={{ background: Colour().dgrey, color: Colour().white, paddingLeft: 30, paddingTop: 50, paddingRight:30, paddingBottom:20 }}>
 								<Switch>
 									<Route path="/" exact component={Hero} />
 									<Route path="/overview" exact component={Hero} />
@@ -43,7 +42,13 @@ const App = () => {
 									<Route path="/stats" exact component={Stats} />
 									<Route path="/whitepaper" exact component={Whitepaper} />
 								</Switch>
+								<Breakpoint small down>
+									<FooterMobile />
+								</Breakpoint>
 							</Content>
+							{/* <Breakpoint small down>
+									<FooterMobile />
+								</Breakpoint> */}
 						</Layout>
 					</BreakpointProvider>
 				</ContextProvider>

@@ -163,6 +163,9 @@ export const P = (props) => {
   styles.alignItems = "center"
   styles.justifyContent = "center"
   // styles.marginLeft = -80
+  if (props.size) {
+    styles.fontSize = props.size
+  }
   return (
     <span style={styles}>
       {props.children}
