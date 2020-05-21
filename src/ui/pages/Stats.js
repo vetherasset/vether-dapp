@@ -2,9 +2,11 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Context } from '../../context'
 import axios from 'axios'
 
+import Breakpoint from 'react-socks';
+
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
-import {convertFromWei, getSecondsToGo } from '../utils'
+import { convertFromWei, getSecondsToGo } from '../utils'
 
 import emissionArray from '../../data/emissionArray.json';
 // import claimArray from '../../data/claimArray.json';
@@ -27,7 +29,7 @@ const Stats = () => {
         { balance: '', totalBurnt: '', totalEmitted: '', totalFees: '' })
 
     useEffect(() => {
-        if (loaded==='false') {
+        if (loaded === 'false') {
             context.chartData ? getChartData() : loadChartData()
             context.eraData ? getEraData() : loadEraData()
             context.emissionData ? getEmissionData() : loadEmissionData()
@@ -46,7 +48,7 @@ const Stats = () => {
         const apiKey = process.env.REACT_APP_ETHPLORER_API
         const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
         // console.log(baseURL + apiKey + '&limit=1000')
-        const response2 = await axios.get(baseURL+apiKey+'&limit=1000')
+        const response2 = await axios.get(baseURL + apiKey + '&limit=1000')
         let holderArray = response2.data
         // console.log(holderArray)
         // console.log(claimArray)
@@ -84,18 +86,18 @@ const Stats = () => {
         // setCounter(secondsToGo)
         setEraData({
             era: era, day: day,
-            nextEra: nextEra, nextDay: nextDay, 
+            nextEra: nextEra, nextDay: nextDay,
             emission: emission, nextEmission: nextEmission,
             currentBurn: currentBurn,
-            secondsToGo:secondsToGo
+            secondsToGo: secondsToGo
         })
         context.setContext({
             "eraData": {
-                'era': era, 'day':day,
-                'nextEra':nextEra, 'nextDay':nextDay, 
-                'emission': emission, 'nextEmission':nextEmission,
-                "currentBurn": currentBurn,  
-                'secondsToGo':secondsToGo
+                'era': era, 'day': day,
+                'nextEra': nextEra, 'nextDay': nextDay,
+                'emission': emission, 'nextEmission': nextEmission,
+                "currentBurn": currentBurn,
+                'secondsToGo': secondsToGo
             }
         })
     }
@@ -129,18 +131,27 @@ const Stats = () => {
 
 
     return (
-        <div>
+        <div style={{ marginRight: -50 }}>
             <Gap />
             <H2>STATS</H2>
             <br></br>
             <Text size={16} bold={'TRUE'}>Stats for the Vether Economy</Text><br></br>
-            {(loaded==='true') &&
+            {(loaded === "true") &&
                 <div>
-                     <Row>
+                    <Row>
                         <Col xs={24} lg={8}>
-                            <ChartData eraData={eraData} 
-                            emissionData={emissionData}
-                            holders={chartData.holderArray.length-1}/>
+                            <Breakpoint small down>
+                                <ChartData eraData={eraData}
+                                    emissionData={emissionData}
+                                    holders={chartData.holderArray.length - 1}
+                                    size={12} />
+                            </Breakpoint>
+                            <Breakpoint medium up>
+                                <ChartData eraData={eraData}
+                                    emissionData={emissionData}
+                                    holders={chartData.holderArray.length - 1}
+                                    size={14} />
+                            </Breakpoint>
                         </Col>
                         <Col xs={24} lg={16}>
                             <ChartEmission emissionArray={emissionArray} />

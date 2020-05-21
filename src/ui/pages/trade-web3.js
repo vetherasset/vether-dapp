@@ -67,19 +67,18 @@ export const TradeTable = () => {
 
     return (
         <div>
-            <Row style={{paddingRight:50}}>
+            <Row style={{marginTop:20, marginBottom:20}}>
                 <Col xs={2}>
 
                 </Col>
                 <Col xs={20}>
+                        <Center><Text size={30} margin={"0px 0px 0px"}>${prettify(priceData.priceHistorical * priceData.ethPrice)}</Text></Center>
+                        <Center><LabelGrey margin={"0px 0px 0px"}>HISTORICAL PRICE</LabelGrey></Center>
+                        <Center><Text margin={"0px 0px 20px"}>Based on all time burnt Ether</Text></Center>
 
-                    <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(priceData.priceHistorical)} ETH | ${prettify(priceData.priceHistorical * priceData.ethPrice)}</Text></Center>
-                    <Center><LabelGrey margin={"0px 0px 0px"}>HISTORICAL PRICE</LabelGrey></Center>
-                    <Center><Text margin={"0px 0px"}>Based on all time burnt Ether</Text></Center>
-
-                    <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(priceData.priceUniswap)} ETH | ${prettify(priceData.priceUniswap * priceData.ethPrice)}</Text></Center>
-                    <Center><LabelGrey margin={"0px 0px 0px"}>PRICE ON UNISWAP</LabelGrey></Center>
-                    <Center><Text margin={"0px 0px"}>Based on Uniswap liquidity</Text></Center>
+                        <Center><Text size={30} margin={"0px 0px 0px"}>${prettify(priceData.priceUniswap * priceData.ethPrice)}</Text></Center>
+                        <Center><LabelGrey margin={"0px 0px 0px"}>PRICE ON UNISWAP</LabelGrey></Center>
+                        <Center><Text margin={"0px 0px"}>Based on Uniswap liquidity</Text></Center>
                 </Col>
                 <Col xs={2}>
 

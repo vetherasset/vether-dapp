@@ -78,12 +78,12 @@ export const PoolTable = () => {
 
 	return (
 		<div>
-			<Center><Text size={30} margin={"20px 0px 0px"}>{prettify(marketData.priceETH)} ETH | ${prettify(marketData.priceUSD)}</Text></Center>
+			<Center><Text size={30} margin={"20px 0px 0px"}>${prettify(marketData.priceUSD)}</Text></Center>
 			<Center><LabelGrey margin={"0px 0px 20px"}>VALUE OF 1 VETH</LabelGrey></Center>
 			<Row style={{ marginBottom: 50 }}>
-				<Col xs={3}>
+				<Col xs={24}>
 				</Col>
-				<Col xs={18} style={poolStyles}>
+				<Col xs={24} style={poolStyles}>
 					<Row>
 						<Col xs={12}>
 							<Text size={12} bold={true} color={Colour().white}>ETHER</Text>
@@ -97,7 +97,7 @@ export const PoolTable = () => {
 						</Col>
 					</Row>
 				</Col>
-				<Col xs={3}>
+				<Col xs={24}>
 				</Col>
 			</Row>
 		</div>

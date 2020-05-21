@@ -155,7 +155,7 @@ export const Text = (props) => {
 
 export const P = (props) => {
   let styles = {...props.style || {}}
-  styles.fontSize = "12px"
+  styles.fontSize = "10px"
   styles.color = Colour().grey
   styles.display = "block"
   styles.fontWeight = "bold"

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
+import Breakpoint from 'react-socks';
+
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
-import {convertFromWei, getSecondsToGo, prettify} from '../utils'
+import { convertFromWei, getSecondsToGo, prettify } from '../utils'
 
 import { Row, Col, Button } from 'antd'
 import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -52,18 +54,18 @@ export const EraTable = () => {
         setCounter(secondsToGo)
         setEraData({
             era: era, day: day,
-            nextEra: nextEra, nextDay: nextDay, 
+            nextEra: nextEra, nextDay: nextDay,
             emission: emission, nextEmission: nextEmission,
             currentBurn: currentBurn,
-            secondsToGo:secondsToGo
+            secondsToGo: secondsToGo
         })
         context.setContext({
             "eraData": {
-                'era': era, 'day':day,
-                'nextEra':nextEra, 'nextDay':nextDay, 
-                'emission': emission, 'nextEmission':nextEmission,
-                "currentBurn": currentBurn,  
-                'secondsToGo':secondsToGo
+                'era': era, 'day': day,
+                'nextEra': nextEra, 'nextDay': nextDay,
+                'emission': emission, 'nextEmission': nextEmission,
+                "currentBurn": currentBurn,
+                'secondsToGo': secondsToGo
             }
         })
     }
@@ -116,14 +118,14 @@ export const EraTable = () => {
     }
 
     const poolStyles = {
-		borderWidth: '1px',
-		// borderStyle: 'dashed',
-		borderRadius: 5,
-		borderColor: Colour().grey,
-		paddingLeft: 50,
-		paddingRight: 50,
+        borderWidth: '1px',
+        // borderStyle: 'dashed',
+        borderRadius: 5,
+        borderColor: Colour().grey,
+        paddingLeft: 50,
+        paddingRight: 50,
         backgroundColor: '#5C4F2C'
-	}
+    }
 
     return (
         <div>
@@ -138,42 +140,65 @@ export const EraTable = () => {
                 <div>
                     <Row>
                         <Col>
-                            <Button onClick={loadEraData} style={{backgroundColor: Colour().dgrey, borderColor: Colour().dgrey}}>
-                                <ReloadOutlined style={{fontSize:"20px", color:Colour().gold, margin:"0px 0px 0px 0px"}}/> <Click>REFRESH</Click>
+                            <Button onClick={loadEraData} style={{ backgroundColor: Colour().dgrey, borderColor: Colour().dgrey }}>
+                                <ReloadOutlined style={{ fontSize: "20px", color: Colour().gold, margin: "0px 0px 0px 0px" }} /> <Click>REFRESH</Click>
                             </Button>
-                        <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
-                    <Center><LabelGrey margin={"0px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
+                            <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
+                            <Center><LabelGrey margin={"0px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={6}>
+                        <Col xs={24} sm={6}>
                         </Col>
-                        <Col xs={12} style={poolStyles}>
-                            <Center><Text size={48} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                        <Col xs={24} sm={12} style={poolStyles}>
+                            <Breakpoint medium up>
+                                <Center><Text size={48} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                            </Breakpoint>
+                            <Breakpoint small down>
+                                <Center><Text size={32} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                            </Breakpoint>
                             <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
                         </Col>
-                        <Col xs={6}>
+                        <Col xs={24} sm={6}>
                         </Col>
                     </Row>
-                    <Row style={{marginTop:20}}>
-                        <Col xs={8}>
-                            
-                        </Col>
-                        <Col xs={8}>
-                        
-                            <Center><Text size={32}margin={"0px 0px"}>{prettify((+eraData.currentBurn).toFixed(2))} ETH | ${prettify(convertEthtoUSD(eraData.currentBurn))}</Text></Center>
-                            <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
-                            <br></br>
+                    <Row style={{ marginTop: 20 }}>
+                        <Col xs={24} sm={8}>
 
-                            <Center><Text size={24} margin={"0px 0px"}>{prettify((eraData.currentBurn / eraData.emission).toFixed(5))} ETH | ${prettify(convertEthtoUSD(eraData.currentBurn / eraData.emission))}</Text></Center>
-                            <Center><LabelGrey margin={"0px 0px 20px"}>IMPLIED VALUE OF VETHER TODAY</LabelGrey></Center>
-                            <br></br>
                         </Col>
-                        <Col xs={8}>
-                            
+                        <Col xs={24} sm={8}>
+                            <Row>
+                                <Col xs={24} sm={12}>
+                                        <Center><Text size={32} margin={"0px 0px"}>{prettify((+eraData.currentBurn).toFixed(2))} ETH</Text></Center>
+                                </Col>
+                                <Col xs={24} sm={12}>
+                                    <Center><Text size={32} margin={"0px 0px"}>${prettify(convertEthtoUSD(eraData.currentBurn))}</Text></Center>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <br></br>
+                                <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
+                                <br></br>
+                            </Row>
+                            <Row>
+                                <Col xs={24} sm={12}>
+                                    <Center><Text size={24} margin={"0px 0px"}>{prettify((eraData.currentBurn / eraData.emission).toFixed(5))} ETH</Text></Center>
+                                </Col>
+                                <Col xs={24} sm={12}>
+                                    <Center><Text size={24} margin={"0px 0px"}>${prettify(convertEthtoUSD(eraData.currentBurn / eraData.emission))}</Text></Center>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <br></br>
+                                <Center><LabelGrey margin={"0px 0px 20px"}>IMPLIED VALUE OF VETHER TODAY</LabelGrey></Center>
+                                <br></br>
+                            </Row>
+                        </Col>
+                        <Col xs={24} sm={8}>
+
                         </Col>
                     </Row>
-                    
+
 
                     {/* <Row>
                         <Col xs={21} sm={11}>

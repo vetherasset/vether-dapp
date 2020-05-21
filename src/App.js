@@ -16,7 +16,7 @@ import { Colour } from './ui/components'
 
 import { ContextProvider } from './context'
 
-import { BreakpointProvider } from 'react-socks';
+import Breakpoint, { BreakpointProvider } from 'react-socks';
 
 const { Content } = Layout;
 
@@ -28,9 +28,11 @@ const App = () => {
 				<ContextProvider>
 					<BreakpointProvider>
 						<Layout style={{ height: "100vh" }}>
-							<Sidebar />
+							<Breakpoint medium up>
+								<Sidebar />
+							</Breakpoint>
 							<Header />
-							<Content style={{ background: Colour().dgrey, color: Colour().white, paddingLeft: 50, paddingTop: 50, paddingRight:50 }}>
+							<Content style={{ background: Colour().dgrey, color: Colour().white, paddingLeft: 30, paddingTop: 50, paddingRight:30 }}>
 								<Switch>
 									<Route path="/" exact component={Hero} />
 									<Route path="/overview" exact component={Hero} />
