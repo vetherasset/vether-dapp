@@ -46,8 +46,8 @@ export const ClaimTable = () => {
 			setWalletFlag(true)
 			const accounts = await window.web3.eth.getAccounts()
 			const address = accounts[0]
-			const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-			const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+			// const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 			context.accountData ? getAccountData() : loadAccountData(contract, address)
 			const eraDay_ = await context.eraData ? await getEraData() : await loadEraData(contract)
 			console.log(eraDay_)
@@ -171,6 +171,8 @@ export const ClaimTable = () => {
 
 	const claimShare = async () => {
 		setClaimFlag(true)
+		console.log(contract)
+		console.log(userData.era, userData.day, account.address)
 		const tx = await contract.methods.withdrawShare(userData.era, userData.day).send({ from: account.address })
 		//console.log(tx.transactionHash)
 		setLoaded(true)
