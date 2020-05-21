@@ -306,6 +306,7 @@ export const TokenTable = () => {
         const tokenContract = new window.web3.eth.Contract(vetherAbi(), record.address)
         const amount = new BigNumber(await tokenContract.methods.balanceOf(account.address).call())
         const burnAmount = (((amount.times(rate)).div(100).integerValue(1))).toString()
+        console.log(record.address, amount, burnAmount, account.address)
         const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
         await contract.methods.burnTokens(record.address, burnAmount).send({ from: account.address })
         removeToken(record.address)
