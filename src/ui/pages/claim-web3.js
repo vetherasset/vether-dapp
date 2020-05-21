@@ -50,9 +50,9 @@ export const ClaimTable = () => {
 			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 			context.accountData ? getAccountData() : loadAccountData(contract, address)
 			const eraDay_ = await context.eraData ? await getEraData() : await loadEraData(contract)
-			console.log(eraDay_)
+			// console.log(eraDay_)
 			await context.arrayDays ? getDays() : await loadDays(eraDay_, contract, address)
-			console.log(arrayDays)
+			// console.log(arrayDays, context.arrayDays)
 			// getDays(eraDay_, contract, address)
 			setContract(contract)
 		}
@@ -118,28 +118,30 @@ export const ClaimTable = () => {
 	}
 	
 	const getDays = ()  => {
+		// console.log('getting')
 		setArrayDays(context.arrayDays)
 		setUserData({era:1, day:context.arrayDays[context.arrayDays.length-1]})
 	}
 
-	const loadDays = async (eraData, contract_, account) => {
-
+	const loadDays = async (eraData_, contract_, account_) => {
 		let era = 1
-		let arrayDays = []
-		let daysContributed = await contract_.methods.getDaysContributedForEra(account, era).call()
+		let arrayDays_ = []
+		let daysContributed = await contract_.methods.getDaysContributedForEra(account_, era).call()
 		for (var j = 0; j < daysContributed; j++) {
-			let day = await contract_.methods.mapMemberEra_Days(account, era, j).call()
-			console.log({era}, {eraData}, {day}, {daysContributed})
-			if (era < eraData.era || (era >= eraData.era && day <= eraData.day)) {
-				const share = getBN(await contract_.methods.getEmissionShare(era, day, account).call())
+			let day = +(await contract_.methods.mapMemberEra_Days(account_, era, j).call())
+			// console.log({era}, {day}, {daysContributed}, {eraData_})
+			if (era < +eraData_.era || (era >= +eraData_.era && day <= +eraData_.day)) {
+				const share = getBN(await contract_.methods.getEmissionShare(era, day, account_).call())
+				// console.log(share, era, day, account_)
 				if (share > 0) {
-					arrayDays.push(day)
+					arrayDays_.push(day)
 				}
 			}
 		}
-		context.setContext({arrayDays:arrayDays})
-		setArrayDays(arrayDays)
-		setUserData({era:1, day:arrayDays[arrayDays.length-1]})
+		context.setContext({arrayDays:arrayDays_})
+		setArrayDays(arrayDays_)
+		setUserData({era:1, day:arrayDays_[arrayDays_.length-1]})
+		// console.log(arrayDays_)
 	}
 
 	const onEraChange = e => {
