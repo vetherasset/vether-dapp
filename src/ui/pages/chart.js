@@ -428,11 +428,13 @@ export const ChartData = (props) =>{
                 <Center><LabelGrey size={18}>Vether Overview</LabelGrey></Center>
 
                 <Row style={rowStyles}>
-                    <Col xs={12}>
+                    <Col xs={8}>
                         <LabelGrey size={props.size}>Total Holders</LabelGrey><br />
                         <Text size={1.25*props.size}>{props.holders} holders</Text>
                     </Col>
-                    <Col xs={12}>
+                    <Col xs={8}>
+                        <LabelGrey size={props.size}>Total Transfers</LabelGrey><br />
+                        <Text size={1.25*props.size}>{props.transfers} holders</Text>
                     </Col>
                 </Row>
 
