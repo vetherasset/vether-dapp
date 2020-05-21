@@ -37,14 +37,13 @@ export const AcquireTable = () => {
 	const connect = async () => {
 		setWalletFlag('TRUE')
 		ethEnabled()
-		var accounts = await window.web3.eth.getAccounts()
-		const address = accounts[0]
-		context.accountData ? getAccountData() : loadAccountData(address)
 		// loadBlockchainData()
 		if (!ethEnabled()) {
 			alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
 		  } else {
-			setEthAmount(account.ethBalance - 0.1)
+			var accounts = await window.web3.eth.getAccounts()
+			const address = accounts[0]
+			context.accountData ? getAccountData() : loadAccountData(address)
 		  }
 	}
 
@@ -58,7 +57,8 @@ export const AcquireTable = () => {
 	  }
 
 	  const getAccountData = async () => {
-        setAccount(context.accountData)
+		setAccount(context.accountData)
+		setEthAmount(context.accountData.ethBalance - 0.1)
 	}
 	
 	const loadAccountData = async (address) => {
@@ -76,26 +76,9 @@ export const AcquireTable = () => {
                 'vethBalance': vethBalance,
                 'ethBalance': ethBalance
             }
-        })
+		})
+		setEthAmount(ethBalance - 0.1)
     }
-
-	//   const loadBlockchainData = async () => {
-	// 	var accounts = await window.web3.eth.getAccounts()
-	// 	const account_ = await accounts[0]
-	// 	const contract_ = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-	// 	refreshAccount(contract_, account_)
-	// 	setContract(contract_)
-	// }
-
-	// const refreshAccount = async (contract_, account_) => {
-	// 	var ethBalance_ = convertFromWei(await window.web3.eth.getBalance(account_))
-	// 	const vethBalance_ = await contract_.methods.balanceOf(account_).call()
-	// 	setAccount({
-	// 		address: account_,
-	// 		vethBalance: vethBalance_,
-	// 		ethBalance: ethBalance_
-	// 	})
-	// }
 
 	const maxEther = async () => {
 		setEthAmount(account.ethBalance - 0.1)
