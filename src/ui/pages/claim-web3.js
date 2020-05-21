@@ -113,9 +113,7 @@ export const ClaimTable = () => {
         setEraData({
 			eraData
         })
-        context.setContext({
-			eraData: eraData
-		})
+        context.setContext(eraData)
 		return eraData
 	}
 	
@@ -154,17 +152,21 @@ export const ClaimTable = () => {
 	}
 
 	const checkShare = async () => {
+		const eraData_ = eraData.eraData
 		const share = getBN(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())
 		setClaimAmt(convertFromWei(share))
 		setCheckFlag(true)
 		const currentTime = Math.round((new Date()) / 1000)
-		if (share > 0 && eraData.day > userData.day) {
+		if (share > 0 && eraData_.day > userData.day) {
 			setZeroFlag(false)
-		} else if (share > 0 && currentTime > +eraData.nextDay) {
+		} else if (share > 0 && currentTime > +eraData_.nextDay) {
 			setZeroFlag(false)
 		} else {
 			setZeroFlag(true)
 		}
+		console.log(share, eraData_.day, userData.day, currentTime, eraData_.nextDay)
+		console.log(eraData.eraData)
+		console.log(context.eraData)
 	}
 
 	const claimShare = async () => {
