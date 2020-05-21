@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { Context } from '../../context'
 import { Link } from "react-router-dom"
 
+import Breakpoint from 'react-socks';
+
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL, getUniswapPriceEth } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
@@ -146,11 +148,11 @@ export const VetherTable = () => {
         <div>
 
             <Row style={poolStyles}>
-                <Col xs={6} style={{marginTop:20}}>
+                <Col xs={24} sm={6}style={{marginTop:20}}>
                     <Center><Logo></Logo></Center><br />
                     <Center><Text size={32}>${((+marketData.ethPrice * vethPrice).toFixed(2))}</Text></Center>
                 </Col>
-                <Col xs={18}>
+                <Col xs={24} sm={18}>
                     <Row>
                         <Col xs={12}>
                             <Text size={32}>{vetherData.name}&nbsp;({vetherData.symbol})</Text>
@@ -162,27 +164,30 @@ export const VetherTable = () => {
                         </Col>
                     </Row>
                     <Row style={{marginTop:20}}>
-                        <Col xs={12}>
+                        <Col xs={24} sm={12}>
                             <LabelGrey size={14}>TOTAL SUPPLY: </LabelGrey><br />
                             <Text size={24}>{prettify(vetherData.totalSupply)}</Text>
                         </Col>
-                        <Col xs={12}>
+                        <Col xs={24} sm={12}>
                             <LabelGrey size={14}>TOTAL CAP: </LabelGrey><br />
                             <Text size={24}>${prettify(convertEthtoUSD(convertToETH(vetherData.totalSupply)))}</Text>
                         </Col>
                     </Row>
                     <Row style={{marginTop:20}}>
-                        <Col xs={12}>
+                        <Col xs={24} sm={12}>
                             <LabelGrey size={14}>EMITTED: </LabelGrey><br />
                             <Text size={24}>{prettify((+emissionData.totalEmitted).toFixed(0))} VETH</Text>
                         </Col>
-                        <Col xs={12}>
+                        <Col xs={24} sm={12}>
                             <LabelGrey size={14}>CIRCULATING CAP: </LabelGrey><br />
                             <Text size={24}>${prettify(convertEthtoUSD(convertToETH(emissionData.totalEmitted)))}</Text>
                         </Col>
                     </Row>
+                    
+                    <Breakpoint medium up>
                     <br></br>
                     <LabelGrey>{vetherAddr()}</LabelGrey>
+                    </Breakpoint>
                     <br></br>
                     <Click><a href={getLink()} rel="noopener noreferrer" title="Vether Contract Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW CONTRACT -> </a></Click>
                 

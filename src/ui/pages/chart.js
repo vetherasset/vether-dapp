@@ -62,7 +62,7 @@ const getChartConfig = () => {
             display: true,
             text: '',
             fontFamily: Font(),
-            padding:20,
+            padding:10,
             fontSize:20
         },
         legend: {
@@ -414,8 +414,8 @@ export const ChartData = (props) =>{
     const end = convertToDate(1589271741 + 315360000)
 
     const paneStyles = {
-        paddingLeft:40,
-        paddingRight:40,
+        paddingLeft:10,
+        paddingRight:10,
         paddingTop:10
     }
     const rowStyles = {
@@ -429,23 +429,21 @@ export const ChartData = (props) =>{
 
                 <Row style={rowStyles}>
                     <Col xs={12}>
-                        <LabelGrey size={14}>Total Holders</LabelGrey><br />
-                        <Text size={18}>{props.holders} holders</Text>
+                        <LabelGrey size={props.size}>Total Holders</LabelGrey><br />
+                        <Text size={1.25*props.size}>{props.holders} holders</Text>
                     </Col>
                     <Col xs={12}>
-                        {/* <LabelGrey size={14}>Total Fees</LabelGrey><br />
-                        <Text size={18}>5 VETH</Text> */}
                     </Col>
                 </Row>
 
                 <Row style={rowStyles}>
                     <Col xs={8}>
-                        <LabelGrey size={14}>Total Burnt</LabelGrey><br />
-                        <Text size={18}>{prettify((+emissionData.totalBurnt).toFixed(2))} ETH</Text>
+                        <LabelGrey size={props.size}>Total Burnt</LabelGrey><br />
+                        <Text size={1.25*props.size}>{prettify((+emissionData.totalBurnt).toFixed(2))} ETH</Text>
                     </Col>
                     <Col xs={8}>
-                        <LabelGrey size={14}>Total Fees</LabelGrey><br />
-                        <Text size={18}>{prettify((+emissionData.totalFees).toFixed(2))} VETH</Text>
+                        <LabelGrey size={props.size}>Total Fees</LabelGrey><br />
+                        <Text size={1.25*props.size}>{prettify((+emissionData.totalFees).toFixed(2))} VETH</Text>
                     </Col>
                     <Col xs={8}>
                     </Col>
@@ -453,28 +451,28 @@ export const ChartData = (props) =>{
 
                 <Row style={rowStyles}>
                     <Col xs={8}>
-                        <LabelGrey size={14}>Curent Emission</LabelGrey><br />
-                        <Text size={18}>{eraData.emission} ETH</Text>
+                        <LabelGrey size={props.size}>Curent Emission</LabelGrey><br />
+                        <Text size={1.25*props.size}>{eraData.emission} ETH</Text>
                     </Col>
                     <Col xs={8}>
-                        <LabelGrey size={14}>Next Emission</LabelGrey><br />
-                        <Text size={18}>{eraData.emission / 2} VETH</Text>
+                        <LabelGrey size={props.size}>Next Emission</LabelGrey><br />
+                        <Text size={1.25*props.size}>{eraData.emission / 2} VETH</Text>
                     </Col>
                     <Col xs={8}>
                     </Col>
                 </Row>
                 <Row style={rowStyles}>
                     <Col xs={8}>
-                        <LabelGrey size={14}>Vether Genesis Date</LabelGrey><br />
-                        <Text size={18}>{genesis}</Text>
+                        <LabelGrey size={props.size}>Vether Genesis Date</LabelGrey><br />
+                        <Text size={1.25*props.size}>{genesis}</Text>
                     </Col>
                     <Col xs={8}>
-                        <LabelGrey size={14}>Next Halving Date</LabelGrey><br />
-                        <Text size={18}>{halving}</Text>
+                        <LabelGrey size={props.size}>Next Halving Date</LabelGrey><br />
+                        <Text size={1.25*props.size}>{halving}</Text>
                     </Col>
                     <Col xs={8}>
-                        <LabelGrey size={14}>Fully Emitted Date</LabelGrey><br />
-                        <Text size={18}>{end}</Text>
+                        <LabelGrey size={props.size}>Fully Emitted Date</LabelGrey><br />
+                        <Text size={1.25*props.size}>{end}</Text>
                     </Col>
                 </Row>
             </div>

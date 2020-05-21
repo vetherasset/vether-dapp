@@ -49,6 +49,19 @@ body {
   border-color: #D09800;
   background: #D09800;
 }
+
+::selection {
+  color: #fff;
+  background: #D09800;
+}
+
+a:hover {
+  color: #D09800;
+}
+/* a:active {
+  color: #D09800;
+} */
+
 .ant-table-thead > tr > th{
   color: #fff;
   font-weight: 800;

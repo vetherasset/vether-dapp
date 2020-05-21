@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { Menu, Layout } from 'antd';
-import { Text, Icon } from '../components'
+import { Text, Icon, Colour } from '../components'
 
 import Footer from './Footer'
 
@@ -10,7 +10,7 @@ import Breakpoint from 'react-socks';
 const Sidebar = (props) => {
 
   const menu_items = [
-      "overview",
+    "overview",
     "acquire",
     "claim",
     "stake",
@@ -51,7 +51,7 @@ const Sidebar = (props) => {
     //width: 150,
     cursor: 'pointer',
     paddingTop:60,
-    backgroundColor: "#110D01",
+    backgroundColor: Colour().black,
     textTransform: "uppercase",
     zIndex: 1,
     position: "relative",
@@ -59,8 +59,8 @@ const Sidebar = (props) => {
   }
 
   const selected_styles = {
-    backgroundColor: "#2B2515",
-    color: "#97948E",
+    backgroundColor: Colour().dgrey,
+    color: Colour().grey,
   }
 
   const getStyles = (key) => {
@@ -73,7 +73,7 @@ const Sidebar = (props) => {
 
   const icon_styles = {
     fontSize: "14px",
-    color: "#97948E",
+    color: Colour().grey,
   }
 
   const icon_selected_styles = {

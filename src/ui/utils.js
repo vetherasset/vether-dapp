@@ -19,8 +19,8 @@ export function convertToDate(date) {
 }
 
 export function prettify(amount) {
-    const number = Number(amount)
-    var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
+    const number = ((+amount).toFixed(2)).toString()
+    var parts = number.replace(/\.?0+$/, '').split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }
