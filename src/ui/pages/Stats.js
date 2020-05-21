@@ -47,24 +47,27 @@ const Stats = () => {
 
         const apiKey = process.env.REACT_APP_ETHPLORER_API
         const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
-        // console.log(baseURL + apiKey + '&limit=1000')
         const response2 = await axios.get(baseURL + apiKey + '&limit=1000')
         let holderArray = response2.data
-        // console.log(holderArray)
-        // console.log(claimArray)
+        const baseURL2 = 'https://api.ethplorer.io/getTokenInfo/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
+        const response3 = await axios.get(baseURL2 + apiKey)
+        let transfers_ = response3.data.transfersCount
+
 
         setChartData({
             claimArray: claimArray,
             holderArray: holderArray.holders,
+            transfers:transfers_
         })
         context.setContext({
             'chartData': {
                 'claimArray': claimArray,
                 'holderArray': holderArray.holders,
+                'transfers':transfers_
             }
         })
         setLoaded('true')
-        // console.log(loaded)
+        console.log(transfers_)
     }
 
     const getEraData = async () => {
@@ -144,12 +147,14 @@ const Stats = () => {
                                 <ChartData eraData={eraData}
                                     emissionData={emissionData}
                                     holders={chartData.holderArray.length - 1}
+                                    transfers={chartData.transfers}
                                     size={12} />
                             </Breakpoint>
                             <Breakpoint medium up>
                                 <ChartData eraData={eraData}
                                     emissionData={emissionData}
                                     holders={chartData.holderArray.length - 1}
+                                    transfers={chartData.transfers}
                                     size={14} />
                             </Breakpoint>
                         </Col>
