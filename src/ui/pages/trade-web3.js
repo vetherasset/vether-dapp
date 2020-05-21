@@ -7,6 +7,7 @@ import { LabelGrey, Center, Text } from '../components'
 
 import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
+import {prettify} from '../utils'
 
 export const TradeTable = () => {
 
@@ -21,7 +22,7 @@ export const TradeTable = () => {
 
     useEffect(() => {
         context.priceData ? getPriceData() : loadPriceData()
-        // loadBlockchainData()
+        //eslint-disable-next-line
     }, [])
 
     const getPriceData = () => {
@@ -47,8 +48,6 @@ export const TradeTable = () => {
         const priceVetherEth = await getUniswapPriceEth()
         const priceEtherUSD = await getETHPrice()
 
-        //console.log(currentPrice, historicalPrice, priceVetherEth, priceEtherUSD)
-
         setPriceData({
             priceToday: (currentPrice).toFixed(4),
             priceHistorical: (historicalPrice).toFixed(3),
@@ -66,13 +65,6 @@ export const TradeTable = () => {
         })
     }
 
-    function prettify(amount) {
-        const number = Number(amount)
-        var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
-    }
-
     return (
         <div>
             <Row style={{paddingRight:50}}>
@@ -80,9 +72,6 @@ export const TradeTable = () => {
 
                 </Col>
                 <Col xs={20}>
-                    {/* <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(priceData.priceToday)} ETH | ${prettify(priceData.priceToday * priceData.ethPrice)}</Text></Center>
-                    <Center><LabelGrey margin={"0px 0px 0px"}>IMPLIED PRICE TODAY</LabelGrey></Center>
-                    <Center><Text margin={"0px 0px"}>Based on today's burnt Ether</Text></Center> */}
 
                     <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(priceData.priceHistorical)} ETH | ${prettify(priceData.priceHistorical * priceData.ethPrice)}</Text></Center>
                     <Center><LabelGrey margin={"0px 0px 0px"}>HISTORICAL PRICE</LabelGrey></Center>

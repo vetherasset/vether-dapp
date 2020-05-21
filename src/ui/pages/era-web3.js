@@ -4,6 +4,7 @@ import { Context } from '../../context'
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
+import {convertFromWei, convertToTime, convertToMonth, getSecondsToGo, prettify} from '../utils'
 
 import { Row, Col } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -39,13 +40,13 @@ export const EraTable = () => {
     const loadEraData = async () => {
         const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-        const emission = convertToNumber(await contract.methods.emission().call())
+        const emission = convertFromWei(await contract.methods.emission().call())
         const day = await contract.methods.currentDay().call()
         const era = await contract.methods.currentEra().call()
         const nextDay = await contract.methods.nextDayTime().call()
         const nextEra = await contract.methods.nextEraTime().call()
-        const nextEmission = convertToNumber(await contract.methods.getNextEraEmission().call())
-        const currentBurn = convertToNumber(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
+        const nextEmission = convertFromWei(await contract.methods.getNextEraEmission().call())
+        const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
         const secondsToGo = getSecondsToGo(nextDay)
         setCounter(secondsToGo)
         setEraData({
@@ -88,27 +89,6 @@ export const EraTable = () => {
         })
     }
 
-    function convertToNumber(number) {
-        return number / 1000000000000000000
-    }
-
-    function convertToTime(date) {
-        return new Date(1000 * date).toLocaleTimeString("en-gb")
-    }
-
-    function convertToMonth(date_) {
-        const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-        const date = new Date(1000 * date_)
-        let formatted_date = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear()
-        return formatted_date
-    }
-
-    function getSecondsToGo(date) {
-        const time = (Date.now() / 1000).toFixed()
-        const seconds = (date - time)
-        return seconds
-    }
-
     const dayFinish = () => {
         if (counter === 0) {
             return "WAITING TO CHANGE DAYS"
@@ -117,7 +97,7 @@ export const EraTable = () => {
         }
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         counter >= 0 && setTimeout(() => updateTimer(), 1000);
         // eslint-disable-next-line
     }, [counter]);
@@ -128,13 +108,6 @@ export const EraTable = () => {
         var MHSTime = measuredTime.toISOString().substr(11, 8);
         setCounter(counter - 1)
         setTimer(MHSTime)
-    }
-
-    function prettify(amount) {
-        const number = Number(amount)
-        var parts = number.toPrecision(8).replace(/\.?0+$/, '').split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
     }
 
     function convertEthtoUSD(ether) {

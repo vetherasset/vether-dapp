@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js'
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getUniswapPriceEth, getUniswapBalances, getEtherscanURL } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
+import {convertFromWei, convertToWei, prettify} from '../utils'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -60,13 +61,6 @@ export const PoolTable = () => {
         })
     }
 
-	function prettify(amount) {
-		const number = Number(amount)
-		var parts = number.toPrecision(4).replace(/\.?0+$/, '').split(".");
-		parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		return parts.join(".");
-	}
-
 	const poolStyles = {
 		borderWidth: '1px',
 		borderStyle: 'dashed',
@@ -113,7 +107,6 @@ export const PoolTable = () => {
 export const AddLiquidityTable = () => {
 
 	const context = useContext(Context)
-
 	const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
 
 	const [account, setAccount] = useState(
@@ -164,14 +157,6 @@ export const AddLiquidityTable = () => {
 		return false;
 	}
 
-	// const loadBlockchainData = async () => {
-	// 	// var accounts = await window.web3.eth.getAccounts()
-	// 	// const account = await accounts[0]
-	// 	const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-	// 	setContract(contract)
-		
-	// }
-
 	const getAccountData = () => {
 		setAccount(context.accountData)
 		setCustomAmount(+context.accountData.vethBalance)
@@ -203,32 +188,6 @@ export const AddLiquidityTable = () => {
 		setCustomAmount(vethBalance)
 		setEthAmount(ethBalance - 0.01)
 	}
-
-	// const refreshAccount = async (contract, account) => {
-	// 	const ethBalance = convertFromWei(await window.web3.eth.getBalance(account))
-	// 	const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
-	// 	const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-	// 	const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(account).call())
-	// 	const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
-	// 	setAccount({
-	// 		address: account,
-	// 		vethBalance: vethBalance,
-	// 		ethBalance: ethBalance,
-	// 		uniBalance: uniBalance,
-	// 		uniSupply:uniSupply
-	// 	})
-	// 	context.setContext({
-	// 		"accountData": {
-	// 			"address": account,
-	// 			'vethBalance': vethBalance,
-	// 			'ethBalance': ethBalance,
-	// 			'uniBalance': uniBalance,
-	// 			'uniSupply':uniSupply
-	// 		}})
-	// 	setCustomAmount(vethBalance)
-	// 	setEthAmount(ethBalance)
-	// 	checkApproval(account)
-	// }
 
 	const getUniswapData = () => {
         setUniswapData(context.uniswapData)
@@ -288,43 +247,13 @@ export const AddLiquidityTable = () => {
 		}
 	}
 
-	// const maxEther = () => {
-	// 	setEthAmount(account.ethBalance - 0.1)
-	// }
-	// const maxVether = () => {
-	// 	setVethAmount(account.vethBalance)
-	// }
-
 	const onEthAmountChange = e => {
 		setEthAmount(e.target.value)
 		setCustomAmount(e.target.value * (1/vetherPrice))
 	}
 
-	// const onAmountChange = e => {
-	// 	setCustomAmount(e.target.value)
-	// 	setApprovalAmount(convertToWei(e.target.value))
-	// }
-
 	const getLink = (tx) => {
 		return getEtherscanURL().concat('tx/').concat(tx)
-	}
-
-	function prettify(amount) {
-		const number = Number(amount)
-		var parts = number.toPrecision(4).replace(/\.?0+$/, '').split(".");
-		parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		return parts.join(".");
-	}
-
-	function convertFromWei(number) {
-		var num = (number / (10**18))
-		return num.toFixed(2)
-	}
-
-	function convertToWei(number) {
-		var num = new BigNumber(number)
-		var final = num.multipliedBy(10**18)
-		return (final).toString()
 	}
 
 	return (

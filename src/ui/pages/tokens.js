@@ -6,9 +6,13 @@ import Web3 from 'web3';
 
 import { Modal, Row, Col, Table } from 'antd'
 import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Text, Click, Button } from '../components'
+
 import { vetherAddr, vetherAbi, getUniswapTokenPriceEth, getExchangeAddr, getEtherscanURL } from '../../client/web3.js'
 import { getGasPrice, getShare } from '../../client/market.js'
-import { Text, Click, Button } from '../components'
+import {convertFromWei} from '../utils'
+
+
 
 const BigNumber = require('bignumber.js')
 require('dotenv').config({ path: "../../../.env" })
@@ -310,11 +314,6 @@ export const TokenTable = () => {
 
     const getLink = (record) => {
         return getEtherscanURL().concat('tx/').concat(record.txHash)
-    }
-
-    function convertFromWei(number) {
-        var num = (number / (10 ** 18))
-        return num.toFixed(2)
     }
 
     const { confirm } = Modal
