@@ -107,7 +107,6 @@ export const PoolTable = () => {
 export const AddLiquidityTable = () => {
 
 	const context = useContext(Context)
-
 	const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
 
 	const [account, setAccount] = useState(
