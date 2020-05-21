@@ -17,13 +17,13 @@ export const ClaimTable = () => {
 		{ address: '', vethBalance: '', ethBalance: '' })
 	const [eraData, setEraData] = useState(
 		{ era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
-	
-	const [contract, setContract] = useState(null)
 	const [arrayDays, setArrayDays] = useState(null)
-	const [claimAmt, setClaimAmt] = useState(null)
-	const [txHash, setTxHash] = useState(null)
 	const [userData, setUserData] = useState(
 		{ era: '1', day: '1' })
+
+	const [contract, setContract] = useState(null)
+	const [claimAmt, setClaimAmt] = useState(null)
+	const [txHash, setTxHash] = useState(null)
 
 	const [loaded, setLoaded] = useState(null)
 	const [walletFlag, setWalletFlag] = useState(true)
@@ -48,8 +48,11 @@ export const ClaimTable = () => {
 			const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
 			const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
 			context.accountData ? getAccountData() : loadAccountData(contract, address)
-			context.eraData ? getEraData() : loadEraData(contract)
-			getDays(contract, address)
+			const eraDay_ = await context.eraData ? await getEraData() : await loadEraData(contract)
+			console.log(eraDay_)
+			await context.arrayDays ? getDays() : await loadDays(eraDay_, contract, address)
+			console.log(arrayDays)
+			// getDays(eraDay_, contract, address)
 			setContract(contract)
 		}
 	}
@@ -85,7 +88,8 @@ export const ClaimTable = () => {
 	}
 	
 	const getEraData = async () => {
-        setEraData(context.eraData)
+		setEraData(context.eraData)
+		return context.eraData
     }
 
     const loadEraData = async (contract_) => {
@@ -98,23 +102,46 @@ export const ClaimTable = () => {
         const currentBurn = convertToNumber(await contract_.methods.mapEraDay_UnitsRemaining(era, day).call())
         const secondsToGo = getSecondsToGo(nextDay)
 
+		const eraData = {
+			'era': era, 'day':day,
+			'nextEra':nextEra, 'nextDay':nextDay, 
+			'emission': emission, 'nextEmission':nextEmission,
+			"currentBurn": currentBurn,  
+			'secondsToGo':secondsToGo
+		}
         setEraData({
-            era: era, day: day,
-            nextEra: nextEra, nextDay: nextDay, 
-            emission: emission, nextEmission: nextEmission,
-            currentBurn: currentBurn,
-            secondsToGo:secondsToGo
+			eraData
         })
         context.setContext({
-            "eraData": {
-                'era': era, 'day':day,
-                'nextEra':nextEra, 'nextDay':nextDay, 
-                'emission': emission, 'nextEmission':nextEmission,
-                "currentBurn": currentBurn,  
-                'secondsToGo':secondsToGo
-            }
-        })
-    }
+			eraData: eraData
+		})
+		return eraData
+	}
+	
+	const getDays = ()  => {
+		setArrayDays(context.arrayDays)
+		setUserData({era:1, day:context.arrayDays[context.arrayDays.length-1]})
+	}
+
+	const loadDays = async (eraData, contract_, account) => {
+		let era = 1
+		let arrayDays = []
+		let daysContributed = await contract_.methods.getDaysContributedForEra(account, era).call()
+		for (var j = 0; j < daysContributed; j++) {
+			let day = await contract_.methods.mapMemberEra_Days(account, era, j).call()
+			console.log({era}, {eraData}, {day}, {daysContributed})
+			if (era < eraData.era || (era >= eraData.era && day <= eraData.day)) {
+				const share = (new BigNumber(await contract_.methods.getEmissionShare(era, day, account).call())).toFixed()
+				console.log(era, eraData.era, day, eraData.day, share)
+				if (share > 0) {
+					arrayDays.push(day)
+				}
+			}
+		}
+		context.setContext({arrayDays:arrayDays})
+		setArrayDays(arrayDays)
+		setUserData({era:1, day:arrayDays[arrayDays.length-1]})
+	}
 
 	function convertToNumber(number) {
         return number / 1000000000000000000
@@ -125,22 +152,6 @@ export const ClaimTable = () => {
         const seconds = (date - time)
         return seconds
     }
-
-	const getDays = async (contract_, account) => {
-		let era = 1
-		let arrayDays = []
-		let daysContributed = await contract_.methods.getDaysContributedForEra(account, era).call()
-		for (var j = 0; j < daysContributed; j++) {
-			let day = await contract_.methods.mapMemberEra_Days(account, era, j).call()
-			if (era < eraData.era || (era >= eraData.era && day <= eraData.day)) {
-				const share = (new BigNumber(await contract_.methods.getEmissionShare(era, day, account).call())).toFixed()
-				if (share > 0) {
-					arrayDays.push(day)
-				}
-			}
-		}
-		setArrayDays(arrayDays)
-	}
 
 	function convertFromWei(number) {
 		var num = number / 1000000000000000000
