@@ -2,6 +2,10 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Context } from '../../context'
 import axios from 'axios'
 
+import Web3 from 'web3';
+import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
+import {convertFromWei, getSecondsToGo } from '../utils'
+
 import emissionArray from '../../data/emissionArray.json';
 // import claimArray from '../../data/claimArray.json';
 // import holderArray from '../../data/holderArray.json';
@@ -9,7 +13,7 @@ import emissionArray from '../../data/emissionArray.json';
 import '../../App.css';
 import { Row, Col } from 'antd'
 import { H2, Text, Gap, Click, Colour } from '../components'
-import { ChartEther, ChartClaim, ChartEmission, ChartDistro, ChartPie } from './chart'
+import { ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie } from './chart'
 
 const Stats = () => {
 
@@ -17,10 +21,16 @@ const Stats = () => {
     // eslint-disable-next-line
     const [loaded, setLoaded] = useState('false')
     const [chartData, setChartData] = useState({ claimArray: [], holderArray: [] })
+    const [eraData, setEraData] = useState(
+        { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
+    const [emissionData, setEmissionData] = useState(
+        { balance: '', totalBurnt: '', totalEmitted: '', totalFees: '' })
 
     useEffect(() => {
         if (loaded==='false') {
             context.chartData ? getChartData() : loadChartData()
+            context.eraData ? getEraData() : loadEraData()
+            context.emissionData ? getEmissionData() : loadEmissionData()
         }
         // eslint-disable-next-line
     }, [loaded, chartData, context.chartData])
@@ -54,6 +64,70 @@ const Stats = () => {
         setLoaded('true')
         // console.log(loaded)
     }
+
+    const getEraData = async () => {
+        setEraData(context.eraData)
+        // setCounter(context.eraData.secondsToGo)
+    }
+
+    const loadEraData = async () => {
+        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+        const emission = convertFromWei(await contract.methods.emission().call())
+        const day = await contract.methods.currentDay().call()
+        const era = await contract.methods.currentEra().call()
+        const nextDay = await contract.methods.nextDayTime().call()
+        const nextEra = await contract.methods.nextEraTime().call()
+        const nextEmission = convertFromWei(await contract.methods.getNextEraEmission().call())
+        const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
+        const secondsToGo = getSecondsToGo(nextDay)
+        // setCounter(secondsToGo)
+        setEraData({
+            era: era, day: day,
+            nextEra: nextEra, nextDay: nextDay, 
+            emission: emission, nextEmission: nextEmission,
+            currentBurn: currentBurn,
+            secondsToGo:secondsToGo
+        })
+        context.setContext({
+            "eraData": {
+                'era': era, 'day':day,
+                'nextEra':nextEra, 'nextDay':nextDay, 
+                'emission': emission, 'nextEmission':nextEmission,
+                "currentBurn": currentBurn,  
+                'secondsToGo':secondsToGo
+            }
+        })
+    }
+
+    const getEmissionData = () => {
+        setEmissionData(context.emissionData)
+    }
+    const loadEmissionData = async () => {
+        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+        const totalSupply = 1000000
+        const balance = convertFromWei(await contract.methods.balanceOf(vetherAddr()).call())
+        const totalBurnt = convertFromWei(await contract.methods.totalBurnt().call())
+        const totalFees = convertFromWei(await contract.methods.totalFees().call())
+        const totalEmitted = +totalSupply - +balance + +totalFees
+        setEmissionData({
+            balance: balance,
+            totalBurnt: totalBurnt,
+            totalEmitted: totalEmitted,
+            totalFees: totalFees
+        })
+        context.setContext({
+            "emissionData": {
+                'balance': balance,
+                'totalBurnt': totalBurnt,
+                "totalEmitted": totalEmitted,
+                'totalFees': totalFees,
+            }
+        })
+    }
+
+
     return (
         <div>
             <Gap />
@@ -62,6 +136,16 @@ const Stats = () => {
             <Text size={16} bold={'TRUE'}>Stats for the Vether Economy</Text><br></br>
             {(loaded==='true') &&
                 <div>
+                     <Row>
+                        <Col xs={24} lg={8}>
+                            <ChartData eraData={eraData} 
+                            emissionData={emissionData}
+                            holders={chartData.holderArray.length-1}/>
+                        </Col>
+                        <Col xs={24} lg={16}>
+                            <ChartEmission emissionArray={emissionArray} />
+                        </Col>
+                    </Row>
                     <Row>
                         <Col xs={24} xl={12}>
                             <ChartEther claimArray={chartData.claimArray} />
@@ -76,11 +160,6 @@ const Stats = () => {
                         </Col>
                         <Col xs={24} lg={8}>
                             <ChartPie holderArray={chartData.holderArray} />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <ChartEmission emissionArray={emissionArray} />
                         </Col>
                     </Row>
                 </div>

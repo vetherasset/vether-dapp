@@ -130,7 +130,6 @@ export const VetherTable = () => {
         // borderStyle: 'dashed',
         borderRadius: 5,
         borderColor: Colour().grey,
-        marginRight: 50,
         paddingLeft: 20,
         paddingRight: 20,
         paddingTop:20,

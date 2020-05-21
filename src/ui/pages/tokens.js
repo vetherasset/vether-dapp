@@ -416,7 +416,7 @@ export const TokenTable = () => {
     return (
         <div>
             <Row>
-                <Col xs={24} style={{ paddingRight: 50 }}>
+                <Col xs={24}>
                     <Table dataSource={tokenTable} columns={columns} pagination={false} rowKey="address"></Table>
                 </Col>
             </Row>

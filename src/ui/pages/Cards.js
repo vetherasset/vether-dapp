@@ -32,8 +32,7 @@ const Cards = () => {
 
     const cardStyles = {
         marginTop:10,
-        marginLeft:20,
-        marginRight:20,
+        // marginLeft:20,
         padding: 10,
     }
 
@@ -43,24 +42,24 @@ const Cards = () => {
             <H2>VETHER UTILITY</H2><br />
             <Subtitle>Use the Vether Asset in its ecosystem</Subtitle>
             <Row>
-                <Col style={cardStyles} xs={10}>
+                <Col style={cardStyles} xs={12}>
                     <Card title={cardContent()[0].title} 
                     subtitle={cardContent()[0].subtitle}
                     link={cardContent()[0].link} />
                 </Col>
-                <Col style={cardStyles} xs={10}>
+                <Col style={cardStyles} xs={12}>
                     <Card title={cardContent()[1].title} 
                     subtitle={cardContent()[1].subtitle}
                     link={cardContent()[1].link} />
                 </Col>
             </Row>
             <Row>
-                <Col style={cardStyles} xs={10}>
+                <Col style={cardStyles} xs={12}>
                     <Card title={cardContent()[2].title} 
                     subtitle={cardContent()[2].subtitle}
                     link={cardContent()[2].link} />
                 </Col>
-                <Col style={cardStyles} xs={10}>
+                <Col style={cardStyles} xs={12}>
                     <Card title={cardContent()[3].title} 
                     subtitle={cardContent()[3].subtitle}
                     link={cardContent()[3].link} />

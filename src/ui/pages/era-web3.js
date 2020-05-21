@@ -6,9 +6,9 @@ import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
 import {convertFromWei, getSecondsToGo, prettify} from '../utils'
 
-import { Row, Col } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons';
-import { LabelGrey, Center, Text, Colour } from '../components'
+import { Row, Col, Button } from 'antd'
+import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
+import { LabelGrey, Center, Text, Colour, Click } from '../components'
 
 
 export const EraTable = () => {
@@ -38,6 +38,7 @@ export const EraTable = () => {
     }
 
     const loadEraData = async () => {
+        console.log('clicked')
         const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
         const emission = convertFromWei(await contract.methods.emission().call())
@@ -137,6 +138,9 @@ export const EraTable = () => {
                 <div>
                     <Row>
                         <Col>
+                            <Button onClick={loadEraData} style={{backgroundColor: Colour().dgrey, borderColor: Colour().dgrey}}>
+                                <ReloadOutlined style={{fontSize:"20px", color:Colour().gold, margin:"0px 0px 0px 0px"}}/> <Click>REFRESH</Click>
+                            </Button>
                         <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
                     <Center><LabelGrey margin={"0px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
                         </Col>
@@ -152,7 +156,11 @@ export const EraTable = () => {
                         </Col>
                     </Row>
                     <Row style={{marginTop:20}}>
-                        <Col>
+                        <Col xs={8}>
+                            
+                        </Col>
+                        <Col xs={8}>
+                        
                             <Center><Text size={32}margin={"0px 0px"}>{prettify((+eraData.currentBurn).toFixed(2))} ETH | ${prettify(convertEthtoUSD(eraData.currentBurn))}</Text></Center>
                             <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
                             <br></br>
@@ -160,6 +168,9 @@ export const EraTable = () => {
                             <Center><Text size={24} margin={"0px 0px"}>{prettify((eraData.currentBurn / eraData.emission).toFixed(5))} ETH | ${prettify(convertEthtoUSD(eraData.currentBurn / eraData.emission))}</Text></Center>
                             <Center><LabelGrey margin={"0px 0px 20px"}>IMPLIED VALUE OF VETHER TODAY</LabelGrey></Center>
                             <br></br>
+                        </Col>
+                        <Col xs={8}>
+                            
                         </Col>
                     </Row>
                     

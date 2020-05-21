@@ -14,12 +14,12 @@ const Hero = (props) => {
 	return (
 		<div>
 			<Gap />
-			<Row style={{ marginRight: 50 }}>
+			<Row>
 				<Col xs={24}>
 					<H1>VETHER</H1>
 					<br />
 					<Subtitle>A strictly-scarce Ethereum-based asset.</Subtitle>
-					<Row style={{ marginRight: 0 }}>
+					<Row>
 						<Col xs={24} sm={24} >
 							<Abstract></Abstract>
 						</Col>

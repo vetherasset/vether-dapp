@@ -99,6 +99,9 @@ export const LabelGrey = (props) => {
     if (props.margin) {
     styles.margin = props.margin
   }
+  if (props.size) {
+    styles.fontSize = props.size
+  }
 
   return (
     <span style={styles}>
