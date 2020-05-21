@@ -3,7 +3,7 @@ import { Context } from '../../context'
 
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
 import {convertFromWei, getSecondsToGo, getBN, prettify} from '../utils'
 
 import { Row, Col, Input } from 'antd'
