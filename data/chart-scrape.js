@@ -41,6 +41,7 @@ const claimArray = async () => {
             totalsArray.push(totals)
             vetherArray.push(vetherEmitted)
             claimedArray.push(vetherClaimed)
+            // console.log(claimedArray)
         }
     }
     const claimObject = {
@@ -53,7 +54,7 @@ const claimArray = async () => {
         vether: vetherArray
     }
     await fs.writeFileSync('./src/data/claimArray.json', JSON.stringify(claimObject, null,4), 'utf8')
-    // console.log(claimObject)
+    console.log(claimObject)
 }
 
 // const holderArray = async () => {
