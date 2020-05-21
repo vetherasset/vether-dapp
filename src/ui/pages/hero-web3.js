@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { Context } from '../../context'
+import { Link } from "react-router-dom"
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
-import {convertFromWei, convertToDate, prettify} from '../utils'
+import { convertFromWei, convertToDate, prettify } from '../utils'
 
 import { Row, Col } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Click, Colour } from '../components'
+import { LabelGrey, Click, Colour, Center, Text } from '../components'
+import { Logo } from '../content'
 
 export const VetherTable = () => {
 
     const context = useContext(Context)
 
-    const [loaded, setLoaded] = useState(null)
+    // const [loaded, setLoaded] = useState(null)
     const [vetherData, setVetherData] = useState(
         { name: '', symbol: '', totalSupply: '', decimals: '', genesis: '' })
     const [emissionData, setEmissionData] = useState(
@@ -27,7 +28,7 @@ export const VetherTable = () => {
         context.vetherData ? getVetherData() : loadVetherData()
         context.emissionData ? getEmissionData() : loadEmissionData()
         context.marketData ? getMarketData() : loadMarketData()
-        setLoaded(true)
+        // setLoaded(true)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -111,9 +112,9 @@ export const VetherTable = () => {
         return (vether * marketData.priceETH).toFixed(3)
     }
 
-    function convertToUSD(vether) {
-        return (vether * marketData.priceUSD).toFixed(3)
-    }
+    // function convertToUSD(vether) {
+    //     return (vether * marketData.priceUSD).toFixed(3)
+    // }
 
     function convertEthtoUSD(ether) {
         return (ether * marketData.ethPrice).toFixed(3)
@@ -124,88 +125,67 @@ export const VetherTable = () => {
         return linkFull
     }, [])
 
+    const poolStyles = {
+        borderWidth: '1px',
+        // borderStyle: 'dashed',
+        borderRadius: 5,
+        borderColor: Colour().grey,
+        marginRight: 50,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop:20,
+        paddingBottom:20,
+        backgroundColor: Colour().black,
+    }
+
+
+
     return (
         <div>
 
-            {!loaded &&
-                <Row style={{ paddingTop: 100, paddingBottom: 100 }}>
-                    <LoadingOutlined style={{ marginLeft: 20, fontSize: 30 }} />
-                </Row>
-            }
-            {loaded &&
-                <div>
-                    <Row style={{ marginLeft: 20 }}>
-                        <Col xs={21} sm={11} lg={11}>
-                            <Row style={{ marginTop: 10 }}>
-                                <Col xs={24}>
-                                    <LabelGrey>NAME: </LabelGrey><br />
-                                    <Label>{vetherData.name}</Label>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: 10 }}>
-                                <Col xs={24}>
-                                    <LabelGrey>SYMBOL: </LabelGrey><br />
-                                    <Label>{vetherData.symbol}</Label>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: 10 }}>
-                                <Col xs={24}>
-                                    <LabelGrey>TOTAL SUPPLY: </LabelGrey><br />
-                                    <Label>{prettify(vetherData.totalSupply)}</Label>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: 10 }}>
-                                <Col xs={24}>
-                                    <LabelGrey>DECIMALS: </LabelGrey><br />
-                                    <Label>{vetherData.decimals}</Label>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: 10, marginBottom: 20 }}>
-                                <Col xs={24}>
-                                    <LabelGrey>GENESIS: </LabelGrey><br />
-                                    <Label>{(vetherData.genesis)}</Label>
-                                </Col>
-                            </Row>
+            <Row style={poolStyles}>
+                <Col xs={6} style={{marginTop:20}}>
+                    <Center><Logo></Logo></Center><br />
+                    <Center><Text size={32}>${prettify((+marketData.priceUSD).toFixed(2))}</Text></Center>
+                </Col>
+                <Col xs={18}>
+                    <Row>
+                        <Col xs={12}>
+                            <Text size={32}>{vetherData.name}&nbsp;({vetherData.symbol})</Text>
+                            <br />
+                            <Link to={"/stats"}><Click size={12}> MORE DATA -></Click></Link>
                         </Col>
+                        <Col xs={12}>
 
-                        <Col xs={21} sm={13} lg={13}>
-                            <Row style={{ marginTop: 10 }}>
-                                <Col xs={24}>
-                                    <LabelGrey>TOTAL EMITTED: </LabelGrey><br />
-                                    <Label>{prettify(emissionData.totalEmitted)} VETH | ${prettify(convertToUSD(emissionData.totalEmitted))}</Label>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: 10 }}>
-                                <Col xs={24}>
-                                    <LabelGrey>TOTAL REMAINING: </LabelGrey><br />
-                                    <Label>{prettify(vetherData.totalSupply - emissionData.totalEmitted)} VETH | ${prettify(convertToUSD(vetherData.totalSupply - emissionData.totalEmitted))}</Label>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: 10 }}>
-                                <Col xs={24}>
-                                    <LabelGrey>TOTAL BURNT: </LabelGrey><br />
-                                    <Label>{prettify(emissionData.totalBurnt)} ETH | ${prettify(convertEthtoUSD(emissionData.totalBurnt))}</Label>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: 10 }}>
-                                <Col xs={24}>
-                                    <LabelGrey>TOTAL MARKET CAP: </LabelGrey><br />
-                                    <Label>{prettify(convertToETH(vetherData.totalSupply))} ETH | ${prettify(convertEthtoUSD(convertToETH(vetherData.totalSupply)))}</Label>
-                                </Col>
-                            </Row>
-                            <Row style={{ marginTop: 10 }}>
-                                <Col xs={24}>
-                                    <LabelGrey>VETH VALUE: </LabelGrey><br />
-                                    <Label> {prettify(marketData.priceETH)} ETH | ${prettify(marketData.priceUSD)}</Label>
-                                </Col>
-                            </Row>
                         </Col>
                     </Row>
+                    <Row style={{marginTop:20}}>
+                        <Col xs={12}>
+                            <LabelGrey size={14}>TOTAL SUPPLY: </LabelGrey><br />
+                            <Text size={24}>{prettify(vetherData.totalSupply)}</Text>
+                        </Col>
+                        <Col xs={12}>
+                            <LabelGrey size={14}>TOTAL CAP: </LabelGrey><br />
+                            <Text size={24}>${prettify(convertEthtoUSD(convertToETH(vetherData.totalSupply)))}</Text>
+                        </Col>
+                    </Row>
+                    <Row style={{marginTop:20}}>
+                        <Col xs={12}>
+                            <LabelGrey size={14}>EMITTED: </LabelGrey><br />
+                            <Text size={24}>{prettify((+emissionData.totalEmitted).toFixed(0))} VETH</Text>
+                        </Col>
+                        <Col xs={12}>
+                            <LabelGrey size={14}>CIRCULATING CAP: </LabelGrey><br />
+                            <Text size={24}>${prettify(convertEthtoUSD(convertToETH(emissionData.totalEmitted)))}</Text>
+                        </Col>
+                    </Row>
+                    <br></br>
                     <LabelGrey>{vetherAddr()}</LabelGrey>
                     <br></br>
                     <Click><a href={getLink()} rel="noopener noreferrer" title="Vether Contract Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW CONTRACT -> </a></Click>
-                </div>
-            }
+                
+                </Col>
+            </Row>
         </div>
     )
 }

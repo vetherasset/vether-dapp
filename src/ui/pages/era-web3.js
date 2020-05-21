@@ -4,11 +4,11 @@ import { Context } from '../../context'
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
-import {convertFromWei, convertToTime, convertToMonth, getSecondsToGo, prettify} from '../utils'
+import {convertFromWei, getSecondsToGo, prettify} from '../utils'
 
 import { Row, Col } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Center, Text } from '../components'
+import { LabelGrey, Center, Text, Colour } from '../components'
 
 
 export const EraTable = () => {
@@ -114,6 +114,16 @@ export const EraTable = () => {
         return (ether * marketData.ethPrice).toFixed(3)
     }
 
+    const poolStyles = {
+		borderWidth: '1px',
+		// borderStyle: 'dashed',
+		borderRadius: 5,
+		borderColor: Colour().grey,
+		paddingLeft: 50,
+		paddingRight: 50,
+        backgroundColor: '#5C4F2C'
+	}
+
     return (
         <div>
             {!loaded &&
@@ -125,20 +135,36 @@ export const EraTable = () => {
             }
             {loaded &&
                 <div>
-                    <Center><Text size={30} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
-                    <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
-
-                    <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
-                    <Center><LabelGrey margin={"0px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
-
-                    <Center><Label margin={"0px 0px"}>{prettify(eraData.currentBurn)} ETH | ${prettify(convertEthtoUSD(eraData.currentBurn))}</Label></Center>
-                    <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
-                    <br></br>
-
-                    <Center><Label margin={"0px 0px"}>{prettify((eraData.currentBurn / eraData.emission).toFixed(5))} ETH | ${prettify(convertEthtoUSD(eraData.currentBurn / eraData.emission))}</Label></Center>
-                    <Center><LabelGrey margin={"0px 0px 20px"}>IMPLIED VALUE OF VETHER TODAY</LabelGrey></Center>
-                    <br></br>
                     <Row>
+                        <Col>
+                        <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
+                    <Center><LabelGrey margin={"0px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={6}>
+                        </Col>
+                        <Col xs={12} style={poolStyles}>
+                            <Center><Text size={48} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                            <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
+                        </Col>
+                        <Col xs={6}>
+                        </Col>
+                    </Row>
+                    <Row style={{marginTop:20}}>
+                        <Col>
+                            <Center><Text size={32}margin={"0px 0px"}>{prettify((+eraData.currentBurn).toFixed(2))} ETH | ${prettify(convertEthtoUSD(eraData.currentBurn))}</Text></Center>
+                            <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
+                            <br></br>
+
+                            <Center><Text size={24} margin={"0px 0px"}>{prettify((eraData.currentBurn / eraData.emission).toFixed(5))} ETH | ${prettify(convertEthtoUSD(eraData.currentBurn / eraData.emission))}</Text></Center>
+                            <Center><LabelGrey margin={"0px 0px 20px"}>IMPLIED VALUE OF VETHER TODAY</LabelGrey></Center>
+                            <br></br>
+                        </Col>
+                    </Row>
+                    
+
+                    {/* <Row>
                         <Col xs={21} sm={11}>
                             <Row>
                                 <Col xs={24}>
@@ -179,7 +205,7 @@ export const EraTable = () => {
                                 </Col>
                             </Row>
                         </Col>
-                    </Row>
+                    </Row> */}
                 </div>
             }
         </div>
