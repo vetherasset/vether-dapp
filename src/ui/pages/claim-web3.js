@@ -3,19 +3,20 @@ import { Context } from '../../context'
 
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
 import {convertFromWei, convertToWei, getSecondsToGo, getBN, prettify} from '../utils'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
 import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey, Colour } from '../components'
+import { WalletCard } from '../ui'
 
 export const ClaimTable = () => {
 
 	const context = useContext(Context)
 
 	const [account, setAccount] = useState(
-		{ address: '', vethBalance: '', ethBalance: '' })
+		{ address: '', vethBalance: '', ethBalance: '', uniBalance:'', uniSupply:'' })
 	const [eraData, setEraData] = useState(
 		{ era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
 	const [arrayDays, setArrayDays] = useState(null)
@@ -31,7 +32,7 @@ export const ClaimTable = () => {
 
 	const [checkFlag, setCheckFlag] = useState(null)
 	const [claimFlag, setClaimFlag] = useState(null)
-	const [zeroFlag, setZeroFlag] = useState(true)
+	const [zeroFlag, setZeroFlag] = useState(false)
 
 	useEffect(() => {
 		connect()
@@ -48,14 +49,15 @@ export const ClaimTable = () => {
 			const address = accounts[0]
 			// const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
 			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+			setContract(contract)
 			context.accountData ? getAccountData() : loadAccountData(contract, address)
 			const eraDay_ = await context.eraData ? await getEraData() : await loadEraData(contract)
 			// console.log(eraDay_)
-			await context.arrayDays ? getDays() : await loadDays(eraDay_, contract, address)
+			context.arrayDays ? getDays() : loadDays(eraDay_, contract, address)
 			// console.log(arrayDays, context.arrayDays)
 			// getDays(eraDay_, contract, address)
-			setContract(contract)
 			console.log(account.vethBalance)
+			// console.log(context.accountData)
 		}
 	}
 
@@ -73,20 +75,20 @@ export const ClaimTable = () => {
     }
 
     const loadAccountData = async (contract_, address) => {
-        var ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
-        const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
-        setAccount({
-            address: address,
-            vethBalance: vethBalance,
-            ethBalance: ethBalance
-        })
-        context.setContext({
-            "accountData": {
-                'address': address,
-                'vethBalance': vethBalance,
-                'ethBalance': ethBalance
-            }
-        })
+        const ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
+		const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
+		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+		const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(address).call())
+		const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
+		const accountData = {
+			address: address,
+			vethBalance: vethBalance,
+			ethBalance: ethBalance,
+			uniBalance: uniBalance,
+			uniSupply:uniSupply
+		}
+        setAccount(accountData)
+		context.setContext({'accountData':accountData})
 	}
 	
 	const getEraData = async () => {
@@ -128,7 +130,7 @@ export const ClaimTable = () => {
 		let era = 1
 		let arrayDays_ = []
 		let daysContributed = await contract_.methods.getDaysContributedForEra(account_, era).call()
-		for (var j = 0; j < daysContributed; j++) {
+		for (var j = daysContributed-5; j < daysContributed; j++) {
 			let day = +(await contract_.methods.mapMemberEra_Days(account_, era, j).call())
 			// console.log({era}, {day}, {daysContributed}, {eraData_})
 			if (era < +eraData_.era || (era >= +eraData_.era && day <= +eraData_.day)) {
@@ -165,11 +167,15 @@ export const ClaimTable = () => {
 		} else if (share > 0 && currentTime > +eraData_.nextDay) {
 			setZeroFlag(false)
 		} else {
-			setZeroFlag(true)
+			setZeroFlag(true) //hard-coding to false for now
 		}
 		// console.log(share, +eraData_.day, +userData.day, currentTime, +eraData_.nextDay)
 		// console.log(eraData.eraData)
 		// console.log(context.eraData)
+	}
+
+	const continueAnyway = () => {
+		setZeroFlag(false)
 	}
 
 	const claimShare = async () => {
@@ -219,14 +225,12 @@ export const ClaimTable = () => {
 
 			{walletFlag &&
 				<div>
-					<Label>{account.address}</Label>
-					<br></br>
-					<LabelGrey>ACCOUNT</LabelGrey>
-					<br></br><br></br>
-					<Label margin={"20px 0px 0px"}>{prettify((+account.vethBalance))} VETH</Label>
-					<br></br>
-					<LabelGrey>VETH Balance</LabelGrey>
-					<br></br>
+					<Row>
+						<Col xs={12}>
+							<WalletCard accountData={account}/>
+						</Col>
+					</Row>
+					
 					<Gap />
 					<Row>
 						<Col style={{ marginBottom: 20 }}>
@@ -260,14 +264,11 @@ export const ClaimTable = () => {
 							<Button onClick={checkShare}> CHECK ></Button>
 							<br></br>
 							<Sublabel>Check for claim</Sublabel>
-							<br></br>
 						</Col>
 					</Row>
-					<br></br>
 
 					{checkFlag &&
 						<div>
-							<Gap />
 							<Gap />
 							<Row>
 								<Col xs={12} sm={6} style={{ marginLeft: 0, marginRight: 30 }}>
@@ -275,6 +276,7 @@ export const ClaimTable = () => {
 									<br></br>
 									<Text size={14}>Your unclaimed Vether on this day.</Text><br />
 									<Text size={14}>(Please wait for the day to finish first before claiming) </Text><br />
+									<Button size={12} onClick={continueAnyway}> continue anyway ></Button>
 								</Col>
 
 								{!zeroFlag &&

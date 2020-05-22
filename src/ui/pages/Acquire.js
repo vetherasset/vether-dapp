@@ -21,17 +21,11 @@ const Acquire = () => {
 			<Gap />
 			<H2>ACQUIRE VETHER</H2><br />
 			<Subtitle>Acquire a share of today’s emission by burning assets, such as Ether or ERC-20 tokens.</Subtitle>
-			<br /><br />
-			<Text>The value of burnt assets is measured in Ether.</Text>&nbsp;
-			<Text>There are three asset types that can be burnt:</Text><br />
-			<Text>1) Ether (ETH).</Text><br />
-			<Text>2) ERC-20 Tokens with market prices: Value measured in amount of Ether.</Text><br />
-			<Text>3) ERC-20 Tokens without market prices: Value measured in amount of gas used to destroy it.</Text>
-			<Gap />
 			{safari &&
 				<div>
+					<br/>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
-					<br></br>
+					<br/>
 					<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a></Click>
 				</div>
 			}

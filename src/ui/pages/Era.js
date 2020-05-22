@@ -10,7 +10,7 @@ const Era = () => {
             <Gap />
             <H2>CURRENT ERA</H2><br />
             <Subtitle>Today's emission of Vether.</Subtitle>
-            <EraTable></EraTable>
+            <EraTable />
             <HR />
         </div>
     )

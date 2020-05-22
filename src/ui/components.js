@@ -14,7 +14,8 @@ export const Colour = () => {
     "grey": "#97948E",
     "lgrey": "#F4F4F2",
     "rust": "#795900",
-    "gold":"#D09800"
+    "gold":"#D09800",
+    "yellow":'#5C4F2C'
   }
   return colour
 }
@@ -207,6 +208,10 @@ export const Button = (props) => {
   styles.borderBottom = "1px solid #D09800"
   styles.height = "20px"
   styles.padding = "0px 0px"
+
+  if (props.size) {
+    styles.fontSize = props.size
+  }
 
   return (
     <AntButton

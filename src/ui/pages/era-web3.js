@@ -9,25 +9,26 @@ import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
 import { convertFromWei, getSecondsToGo, prettify } from '../utils'
 
 import { Row, Col, Button, Progress } from 'antd'
-import {  ReloadOutlined } from '@ant-design/icons';
+import { ReloadOutlined } from '@ant-design/icons';
 import { LabelGrey, Center, Text, Colour, Click } from '../components'
+import { BurnCard } from '../ui'
 
-
-export const EraTable = () => {
+export const EraTable = (props) => {
 
     const context = useContext(Context)
+
+    const small = (props.size === 'small') ? true : false
 
     const [loaded, setLoaded] = useState(false)
     const [counter, setCounter] = React.useState(null);
     const [timer, setTimer] = React.useState(null);
     const [eraData, setEraData] = useState(
-        { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '', secondsToGo:82400 })
-
+        { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '', secondsToGo: 82400 })
     const [marketData, setMarketData] = useState(
         { priceUSD: '', priceETH: '', ethPrice: '' })
 
     useEffect(() => {
-        if(!loaded){
+        if (!loaded) {
             loadBlockchainData()
             setLoaded(true)
             // console.log('starting')
@@ -36,7 +37,7 @@ export const EraTable = () => {
         // eslint-disable-next-line
     }, [loaded])
 
-    const loadBlockchainData = async () =>{
+    const loadBlockchainData = async () => {
         context.eraData ? await getEraData() : await loadEraData()
         context.marketData ? await getMarketData() : await loadMarketData()
     }
@@ -59,22 +60,16 @@ export const EraTable = () => {
         const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
         const secondsToGo = getSecondsToGo(nextDay)
         setCounter(secondsToGo)
-        setEraData({
+        const eraData = {
             era: era, day: day,
             nextEra: nextEra, nextDay: nextDay,
             emission: emission, nextEmission: nextEmission,
             currentBurn: currentBurn,
             secondsToGo: secondsToGo
-        })
-        context.setContext({
-            "eraData": {
-                'era': era, 'day': day,
-                'nextEra': nextEra, 'nextDay': nextDay,
-                'emission': emission, 'nextEmission': nextEmission,
-                "currentBurn": currentBurn,
-                'secondsToGo': secondsToGo
-            }
-        })
+        }
+
+        setEraData(eraData)
+        context.setContext({ "eraData": eraData })
     }
 
     const getMarketData = async () => {
@@ -84,19 +79,13 @@ export const EraTable = () => {
         const priceEtherUSD = await getETHPrice()
         const priceVetherEth = await getVETHPriceInEth()
         const priceVetherUSD = priceEtherUSD * priceVetherEth
-
-        setMarketData({
+        const marketData = {
             priceUSD: priceVetherUSD,
             priceETH: priceVetherEth,
             ethPrice: priceEtherUSD
-        })
-        context.setContext({
-            "marketData": {
-                'priceUSD': priceVetherUSD,
-                'priceETH': priceVetherEth,
-                "ethPrice": priceEtherUSD
-            }
-        })
+        }
+        setMarketData(marketData)
+        context.setContext({ "marketData": marketData })
     }
 
     const dayFinish = () => {
@@ -107,7 +96,7 @@ export const EraTable = () => {
         }
     }
 
-    const refresh = async () =>{
+    const refresh = async () => {
         setCounter(0)
         setEraData({
             era: 1, day: eraData.day,
@@ -132,10 +121,6 @@ export const EraTable = () => {
         setTimer(MHSTime)
     }
 
-    function convertEthtoUSD(ether) {
-        return (ether * marketData.ethPrice).toFixed(3)
-    }
-
     const poolStyles = {
         borderWidth: '1px',
         // borderStyle: 'dashed',
@@ -146,11 +131,11 @@ export const EraTable = () => {
         backgroundColor: '#5C4F2C'
     }
 
-    const buttonStyles = { 
-        backgroundColor: Colour().dgrey, 
-        borderColor: Colour().dgrey, 
-        paddingBottom:20, 
-        margin:20 
+    const buttonStyles = {
+        backgroundColor: Colour().dgrey,
+        borderColor: Colour().dgrey,
+        paddingBottom: 20,
+        margin: 20
     }
 
     return (
@@ -167,68 +152,44 @@ export const EraTable = () => {
                     <Row>
                         <Col xs={24} sm={8}>
                             {/* <Center> */}
-                                <Button onClick={refresh} style={buttonStyles}>
-                                    <ReloadOutlined style={{ fontSize: "20px", color: Colour().gold, margin: "0px 0px 20px 0px" }} /> <Click>REFRESH</Click>
-                                </Button>
+                            <Button onClick={refresh} style={buttonStyles}>
+                                <ReloadOutlined style={{ fontSize: "20px", color: Colour().gold, margin: "0px 0px 20px 0px" }} /> <Click>REFRESH</Click>
+                            </Button>
                             {/* </Center> */}
                         </Col>
-                        <Col xs={24} sm={8}>
-                            <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
-                            <Progress percent={(((82400 - eraData.secondsToGo) / 82400)*100).toFixed(0)} strokeColor={Colour().gold} status="active"/>
-                            <Center><LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
-                        </Col>
+                        {!small &&
+                            <Col xs={24} sm={8}>
+                                <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
+                                <Progress percent={(((82400 - eraData.secondsToGo) / 82400) * 100).toFixed(0)} strokeColor={Colour().gold} status="active" />
+                                <Center><LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
+                            </Col>
+                        }
+
                         <Col xs={24} sm={8}>
                         </Col>
                     </Row>
                     <Row>
                         <Col xs={24} sm={6}>
                         </Col>
-                        <Col xs={24} sm={12} style={poolStyles}>
-                            <Breakpoint medium up>
-                                <Center><Text size={48} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
-                            </Breakpoint>
-                            <Breakpoint small down>
-                                <Center><Text size={32} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
-                            </Breakpoint>
-                            <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
-                        </Col>
+                        {!small &&
+                            <Col xs={24} sm={12} style={poolStyles}>
+                                <Breakpoint medium up>
+                                    <Center><Text size={48} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                                </Breakpoint>
+                                <Breakpoint small down>
+                                    <Center><Text size={32} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                                </Breakpoint>
+                                <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
+                            </Col>
+                        }
                         <Col xs={24} sm={6}>
                         </Col>
                     </Row>
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={24} sm={8}>
-
                         </Col>
+                        <BurnCard marketData={marketData} eraData={eraData} />
                         <Col xs={24} sm={8}>
-                            <Row>
-                                <Col xs={24} sm={12}>
-                                        <Center><Text size={32} margin={"0px 0px"}>{prettify(+eraData.currentBurn)} ETH</Text></Center>
-                                </Col>
-                                <Col xs={24} sm={12}>
-                                    <Center><Text size={32} margin={"0px 0px"}>${prettify(convertEthtoUSD(eraData.currentBurn))}</Text></Center>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <br></br>
-                                <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
-                                <br></br>
-                            </Row>
-                            <Row>
-                                <Col xs={24} sm={12}>
-                                    <Center><Text size={24} margin={"0px 0px"}>{(eraData.currentBurn / eraData.emission).toFixed(5)} ETH</Text></Center>
-                                </Col>
-                                <Col xs={24} sm={12}>
-                                    <Center><Text size={24} margin={"0px 0px"}>${prettify(convertEthtoUSD(eraData.currentBurn / eraData.emission))}</Text></Center>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <br></br>
-                                <Center><LabelGrey margin={"0px 0px 20px"}>IMPLIED VALUE OF VETHER TODAY</LabelGrey></Center>
-                                <br></br>
-                            </Row>
-                        </Col>
-                        <Col xs={24} sm={8}>
-
                         </Col>
                     </Row>
 

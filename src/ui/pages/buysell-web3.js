@@ -1,21 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 import Web3 from 'web3';
-import BigNumber from 'bignumber.js'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
-import { Label, LabelGrey, Sublabel, Button, Click, Center, Text, Colour } from '../components'
+import { Label, LabelGrey, Sublabel, Button, Click, Colour } from '../components'
+import { PoolCard } from '../ui'
 
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL, infuraAPI, getUniswapBalances } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
-import {convertFromWei, prettify} from '../utils'
+import {convertFromWei, prettify, totalSupply} from '../utils'
 
 export const PoolTable = () => {
 
     const context = useContext(Context)
-
-    const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
 
     const [marketData, setMarketData] = useState({
         priceToday: "",
@@ -26,10 +24,8 @@ export const PoolTable = () => {
 
     const [account, setAccount] = useState(
         { address: '', vethBalance: '', ethBalance: '' })
-
     const [uniswapData, setUniswapData] = useState(
         { "eth": "", "veth": '' })
-
 
     const [contract, setContract] = useState(null)
     // const [customAmount, setCustomAmount] = useState(null)
@@ -79,7 +75,6 @@ export const PoolTable = () => {
         return false;
     }
 
-
     const getUniswapData = () => {
         setUniswapData(context.uniswapData)
     }
@@ -112,7 +107,6 @@ export const PoolTable = () => {
             }
         })
     }
-
 
 	const getAccountData = async () => {
         setAccount(context.accountData)
@@ -201,22 +195,6 @@ export const PoolTable = () => {
         return getEtherscanURL().concat('tx/').concat(tx)
     }
 
-    const poolStyles = {
-        borderWidth: '1px',
-        borderStyle: 'dashed',
-        borderRadius: 5,
-        borderColor: Colour().grey,
-        paddingLeft: 5,
-        paddingRight: 5,
-        marginBottom: 30,
-        backgroundColor: '#5C4F2C'
-    }
-    const lineStyle = {
-        borderLeft: '1px dashed',
-        borderColor: Colour().grey,
-        paddingLeft: 5
-    }
-
     return (
         <div>
             <Row style={{ marginTop: 40, marginBottom: 50 }}>
@@ -242,22 +220,10 @@ export const PoolTable = () => {
                         </div>
                     }
                 </Col>
-                <Col xs={24} sm={24} xl={12} style={poolStyles}>
-                    <Row>
-                        <Col xs={12}>
-                            <Text size={12} bold={true} color={Colour().white}>ETHER</Text>
-                            <Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(uniswapData.eth)}</Text></Center>
-                            <Center><Text margin={"5px 0px 30px"}>${prettify(marketData.ethPrice * uniswapData.eth)}</Text></Center>
-                        </Col>
-                        <Col xs={12} style={lineStyle}>
-                            <Text size={12} bold={true} color={Colour().white}>VETHER</Text>
-                            <Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(uniswapData.veth)}</Text></Center>
-                            <Center><Text margin={"5px 0px 30px"}>${prettify(marketData.ethPrice * uniswapData.eth)}</Text></Center>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col xs={24} sm={24} xl={5} style={{ marginLeft: 25, marginRight:25 }}>
 
+                <PoolCard uniswapData={uniswapData} marketData={marketData}/>
+
+                <Col xs={24} sm={24} xl={5} style={{ marginLeft: 25, marginRight:25 }}>
                     {!approved &&
                         <Row>
                             <Col xs={24}>

@@ -10,6 +10,7 @@ import {convertFromWei, convertToWei, prettify, getBN, getBig} from '../utils'
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
 import { H2, Text, LabelGrey, Label, Click, Button, Sublabel, Colour, Center } from '../components'
+import { PoolCard } from '../ui'
 
 export const PoolTable = () => {
 
@@ -61,21 +62,6 @@ export const PoolTable = () => {
         })
     }
 
-	const poolStyles = {
-		borderWidth: '1px',
-		borderStyle: 'dashed',
-		borderRadius: 5,
-		borderColor: Colour().grey,
-		paddingLeft: 5,
-		paddingRight: 5,
-        backgroundColor: '#5C4F2C'
-	}
-	const lineStyle = {
-		borderLeft: '1px dashed',
-		borderColor: Colour().grey,
-		paddingLeft: 5
-	}
-
 	return (
 		<div>
 			<Center><Text size={30} margin={"20px 0px 0px"}>${prettify(marketData.priceUSD)}</Text></Center>
@@ -83,20 +69,7 @@ export const PoolTable = () => {
 			<Row style={{ marginBottom: 50 }}>
 				<Col xs={24} sm={6}>
 				</Col>
-				<Col xs={24} sm={12} style={poolStyles}>
-					<Row>
-						<Col xs={12}>
-							<Text size={12} bold={true} color={Colour().white}>ETHER</Text>
-							<Center><Text size={30} color={Colour().white} margin={"5px 0px"}>{prettify(uniswapData.eth)}</Text></Center>
-							<Center><Text margin={"5px 0px"}>${prettify(marketData.ethPrice * uniswapData.eth)}</Text></Center>
-						</Col>
-						<Col xs={12} style={lineStyle}>
-							<Text size={12} bold={true} color={Colour().white}>VETHER</Text>
-							<Center><Text size={30} color={Colour().white} margin={"5px 0px"}>{prettify(uniswapData.veth)}</Text></Center>
-							<Center><Text margin={"5px 0px 20px"}>${prettify(marketData.ethPrice * uniswapData.eth)}</Text></Center>
-						</Col>
-					</Row>
-				</Col>
+				<PoolCard uniswapData={uniswapData} marketData={marketData}/>
 				<Col xs={24} sm={6}>
 				</Col>
 			</Row>

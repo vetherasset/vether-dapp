@@ -8,6 +8,8 @@ export function getBig(BN){
     return new BigNumber(BN)
 }
 
+export const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
+
 export function convertFromWei(number) {
     var num = new BigNumber(number)
     var final = num.div(10**18)

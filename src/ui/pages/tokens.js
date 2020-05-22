@@ -153,12 +153,12 @@ export const TokenTable = () => {
         console.log("checked", record.checked)
         const checked = true
         var approved
-        const contractApproval = await checkContractApproval(record)
-        console.log('contractApproval', contractApproval)
-        if (contractApproval === false) {
+        const [balance, approval] = await checkContract(record)
+        console.log('contractApproval', approval)
+        if (approval === false) {
             console.log("removed")
         } else {
-            approved = await checkApproval(record, contractApproval)
+            approved = await checkApproval(record, approval)
             console.log('approved', approved)
             const value = await checkValue(record)
             if (value === 0) {
@@ -166,23 +166,24 @@ export const TokenTable = () => {
                 handleShowModal()
             } else {
                 setLoadedTable(record)
-                tableUpdate(record, checked, approved, value, false)
+                tableUpdate(record, checked, approved, value, balance, false)
             }
         }
     }
 
-    const checkContractApproval = async (record) => {
+    const checkContract = async (record) => {
         const tokenContract = new window.web3.eth.Contract(vetherAbi(), record.address)
         const fromAcc = account.address
         const spender = vetherAddr()
+        const balance = await tokenContract.methods.balanceOf(account.address).call()
         var approval
         try {
             approval = await tokenContract.methods.allowance(fromAcc, spender).call()
-            return approval
+            return [balance, approval]
         } catch (err) {
             removeToken(record.address)
             handleShowModal()
-            return false
+            return [balance, false]
         }
     }
 
@@ -237,13 +238,13 @@ export const TokenTable = () => {
         return value
     }
 
-    const tableUpdate = (record, checked, approved, value, loading) => {
+    const tableUpdate = (record, checked, approved, value, balance, loading) => {
         const newData = [...tokenTable];
         const index = newData.findIndex(item => record.address === item.address);
         const tokenObject = {
             address: record.address,
             name: record.name,
-            balance: record.balance,
+            balance: balance,
             symbol: record.symbol,
             totalSupply: record.totalSupply,
             checked: checked,
@@ -288,7 +289,7 @@ export const TokenTable = () => {
         const tokenContract = new window.web3.eth.Contract(vetherAbi(), record.address)
         const fromAcc = account.address
         const spender = vetherAddr()
-        const val = await tokenContract.methods.balanceOf(fromAcc).call()
+        const val = await tokenContract.methods.totalSupply().call()
         console.log(spender, val)
         await tokenContract.methods.approve(spender, val).send({ from: fromAcc })
         console.log(fromAcc, spender)
