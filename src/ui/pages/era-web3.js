@@ -9,7 +9,7 @@ import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
 import { convertFromWei, getSecondsToGo, prettify } from '../utils'
 
 import { Row, Col, Button, Progress } from 'antd'
-import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
+import {  ReloadOutlined } from '@ant-design/icons';
 import { LabelGrey, Center, Text, Colour, Click } from '../components'
 
 
@@ -30,9 +30,9 @@ export const EraTable = () => {
         if(!loaded){
             loadBlockchainData()
             setLoaded(true)
-            console.log('starting')
+            // console.log('starting')
         }
-        console.log('rendering again')
+        // console.log('rendering again')
         // eslint-disable-next-line
     }, [loaded])
 
@@ -107,6 +107,18 @@ export const EraTable = () => {
         }
     }
 
+    const refresh = async () =>{
+        setCounter(0)
+        setEraData({
+            era: 1, day: eraData.day,
+            nextEra: eraData.nextEra, nextDay: eraData.nextDay,
+            emission: eraData.emission, nextEmission: eraData.nextEmission,
+            currentBurn: 0,
+            secondsToGo: 0
+        })
+        await loadEraData()
+    }
+
     useEffect(() => {
         counter >= 0 && setTimeout(() => updateTimer(), 1000);
         // eslint-disable-next-line
@@ -134,22 +146,31 @@ export const EraTable = () => {
         backgroundColor: '#5C4F2C'
     }
 
+    const buttonStyles = { 
+        backgroundColor: Colour().dgrey, 
+        borderColor: Colour().dgrey, 
+        paddingBottom:20, 
+        margin:20 
+    }
+
     return (
         <div>
-            {!loaded &&
+            {/* {!loaded &&
                 <div>
                     <Row style={{ paddingTop: 100, paddingBottom: 100 }}>
                         <LoadingOutlined style={{ marginLeft: 20, fontSize: 30 }} />
                     </Row>
                 </div>
-            }
+            } */}
             {loaded &&
                 <div>
                     <Row>
                         <Col xs={24} sm={8}>
-                        <Button onClick={loadEraData} style={{ backgroundColor: Colour().dgrey, borderColor: Colour().dgrey }}>
-                                <ReloadOutlined style={{ fontSize: "20px", color: Colour().gold, margin: "0px 0px 0px 0px" }} /> <Click>REFRESH</Click>
-                            </Button>
+                            {/* <Center> */}
+                                <Button onClick={refresh} style={buttonStyles}>
+                                    <ReloadOutlined style={{ fontSize: "20px", color: Colour().gold, margin: "0px 0px 20px 0px" }} /> <Click>REFRESH</Click>
+                                </Button>
+                            {/* </Center> */}
                         </Col>
                         <Col xs={24} sm={8}>
                             <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
