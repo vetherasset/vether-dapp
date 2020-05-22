@@ -428,56 +428,110 @@ export const ChartData = (props) =>{
                 <Center><LabelGrey size={18}>Vether Overview</LabelGrey></Center>
 
                 <Row style={rowStyles}>
-                    <Col xs={8}>
+                    <Col xs={12}>
                         <LabelGrey size={props.size}>Total Holders</LabelGrey><br />
                         <Text size={1.25*props.size}>{props.holders} holders</Text>
                     </Col>
-                    <Col xs={8}>
+                    <Col xs={12}>
                         <LabelGrey size={props.size}>Total Transfers</LabelGrey><br />
                         <Text size={1.25*props.size}>{props.transfers} transfers</Text>
                     </Col>
                 </Row>
 
                 <Row style={rowStyles}>
-                    <Col xs={8}>
+                    <Col xs={12}>
                         <LabelGrey size={props.size}>Total Burnt</LabelGrey><br />
                         <Text size={1.25*props.size}>{prettify((+emissionData.totalBurnt).toFixed(2))} ETH</Text>
                     </Col>
-                    <Col xs={8}>
+                    <Col xs={12}>
                         <LabelGrey size={props.size}>Total Fees</LabelGrey><br />
                         <Text size={1.25*props.size}>{prettify((+emissionData.totalFees).toFixed(2))} VETH</Text>
                     </Col>
-                    <Col xs={8}>
-                    </Col>
+                    {/* <Col xs={8}>
+                    </Col> */}
                 </Row>
 
                 <Row style={rowStyles}>
-                    <Col xs={8}>
+                    <Col xs={12}>
                         <LabelGrey size={props.size}>Curent Emission</LabelGrey><br />
                         <Text size={1.25*props.size}>{eraData.emission} ETH</Text>
                     </Col>
-                    <Col xs={8}>
+                    <Col xs={12}>
                         <LabelGrey size={props.size}>Next Emission</LabelGrey><br />
                         <Text size={1.25*props.size}>{eraData.emission / 2} VETH</Text>
                     </Col>
-                    <Col xs={8}>
-                    </Col>
+                    {/* <Col xs={8}>
+                    </Col> */}
                 </Row>
                 <Row style={rowStyles}>
                     <Col xs={8}>
-                        <LabelGrey size={props.size}>Vether Genesis Date</LabelGrey><br />
+                        <LabelGrey size={props.size}>Genesis</LabelGrey><br />
                         <Text size={1.25*props.size}>{genesis}</Text>
                     </Col>
                     <Col xs={8}>
-                        <LabelGrey size={props.size}>Next Halving Date</LabelGrey><br />
+                        <LabelGrey size={props.size}>Halving</LabelGrey><br />
                         <Text size={1.25*props.size}>{halving}</Text>
                     </Col>
                     <Col xs={8}>
-                        <LabelGrey size={props.size}>Fully Emitted Date</LabelGrey><br />
+                        <LabelGrey size={props.size}>Fully Emitted</LabelGrey><br />
                         <Text size={1.25*props.size}>{end}</Text>
                     </Col>
                 </Row>
             </div>
+        </div>
+    )
+}
+
+export const ChartPrice = (props) => {  
+    console.log(props.priceData)
+
+    const chartContainer = useRef(null)
+    // eslint-disable-next-line
+    const [chartInstance, setChartInstance] = useState(null)
+
+    var chartConfig = getChartConfig()
+    chartConfig.options.title.text = 'Vether Value'
+    chartConfig.data.datasets[0].label = 'Daily Value'
+    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Value (USD)'
+    chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Day'
+
+    useEffect(() => {
+        setUp()
+        // eslint-disable-next-line
+    }, [chartContainer])
+
+    const setUp = async () => {
+        if(chartContainer && chartContainer.current){
+            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
+            setChartInstance(newChartInstance)
+            setChart(props.priceData, newChartInstance)
+        }
+    }
+
+    const setChart = (priceData, newChartInstance) => {
+        
+        chartConfig.data.labels = props.days
+        chartConfig.data.datasets[0].data = priceData.daily
+        chartConfig.data.datasets[0].type = "line"
+        // chartConfig.data.datasets[0].fill = false
+        const dataset2 = {
+            type: "line",
+            label: "All Time Value",
+            data:priceData.totals,
+            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            borderWidth: 1,
+            // fill: false
+        }
+        chartConfig.data.datasets.push(dataset2)
+        // chartConfig.options.scales.yAxes.push(rightAxisConfig())
+        // chartConfig.options.scales.yAxes[1].scaleLabel.labelString = 'Ether Price'
+        newChartInstance.update()
+    }
+
+    return(
+        <div style={chartStyles}>
+            <canvas ref={chartContainer} />
         </div>
     )
 }

@@ -7,6 +7,7 @@ import Breakpoint from 'react-socks';
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo } from '../utils'
+import { getETHPrice } from '../../client/market.js'
 
 import emissionArray from '../../data/emissionArray.json';
 // import claimArray from '../../data/claimArray.json';
@@ -15,7 +16,7 @@ import emissionArray from '../../data/emissionArray.json';
 import '../../App.css';
 import { Row, Col } from 'antd'
 import { H2, Text, Gap, Click, Colour } from '../components'
-import { ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie } from './chart'
+import { ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie, ChartPrice } from './chart'
 
 const Stats = () => {
 
@@ -42,8 +43,11 @@ const Stats = () => {
         setLoaded('true')
     }
     const loadChartData = async () => {
+        const ethPrice = await getETHPrice()
         const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
         let claimArray = response.data
+        let dailyPriceData = claimArray.burns.map(item => (item * ethPrice)/2048)
+        let totalPriceData = claimArray.totals.map((item, i) => (item * ethPrice)/(claimArray.vether[i]))
 
         const apiKey = process.env.REACT_APP_ETHPLORER_API
         const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
@@ -57,17 +61,25 @@ const Stats = () => {
         setChartData({
             claimArray: claimArray,
             holderArray: holderArray.holders,
-            transfers:transfers_
+            transfers:transfers_,
+            priceData:{
+                daily: dailyPriceData,
+                totals: totalPriceData
+            }
         })
         context.setContext({
             'chartData': {
                 'claimArray': claimArray,
                 'holderArray': holderArray.holders,
-                'transfers':transfers_
+                'transfers':transfers_,
+                'priceData':{
+                    'daily': dailyPriceData,
+                    'totals': totalPriceData
+                }
             }
         })
         setLoaded('true')
-        console.log(transfers_)
+        
     }
 
     const getEraData = async () => {
@@ -176,6 +188,11 @@ const Stats = () => {
                         </Col>
                         <Col xs={24} lg={8}>
                             <ChartPie holderArray={chartData.holderArray} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={24}>
+                            <ChartPrice days={chartData.claimArray.days} priceData={chartData.priceData} />
                         </Col>
                     </Row>
                 </div>
