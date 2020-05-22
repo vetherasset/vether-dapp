@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
-import BigNumber from 'bignumber.js'
+// import BigNumber from 'bignumber.js'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getUniswapPriceEth, getUniswapBalances, getEtherscanURL } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
-import {convertFromWei, convertToWei, prettify} from '../utils'
+import {convertFromWei, convertToWei, prettify, getBN, getBig} from '../utils'
 
 import { Row, Col, Input } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -107,7 +107,7 @@ export const PoolTable = () => {
 export const AddLiquidityTable = () => {
 
 	const context = useContext(Context)
-	const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
+	const totalSupply = getBN(1000000*10**18)
 
 	const [account, setAccount] = useState(
 		{ address: '', vethBalance: '', ethBalance: '', uniBalance:'' })
@@ -386,7 +386,10 @@ export const RemoveLiquidityTable = () => {
 	}
 
 	const getUniSupply = (part) => {
-		return ((account.uniBalance * part) / 100)
+		console.log(getBig(account.uniBalance))
+		const numerator = (getBig(account.uniBalance)).multipliedBy(part)
+		console.log({numerator})
+		return numerator.div(100)
 	}
 
 	const removeLiquidity = async () => {
@@ -396,7 +399,7 @@ export const RemoveLiquidityTable = () => {
 		const min_eth = (1).toString()
 		const min_tokens = (1).toString()
 		const deadline = (Math.round(((new Date())/1000) + 1000)).toString()
-		// console.log(amount, min_eth, min_tokens, deadline)
+		console.log(amount, min_eth, min_tokens, deadline)
 		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
 		const tx = await exchangeContract.methods.removeLiquidity(amount, min_eth, min_tokens, deadline).send({ from: account.address })
 		setTknTx(tx.transactionHash)

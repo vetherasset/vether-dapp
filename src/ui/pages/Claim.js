@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { H2, Text, Subtitle, Click, HR, Gap, LabelGrey } from '../components'
-import { ClaimTable } from './claim-web3'
+import { ClaimTable, SendTable } from './claim-web3'
 
 import '../../App.css';
 
@@ -29,9 +29,15 @@ const Claim = () => {
 				</div>
 			}
 			{!safari &&
-				<ClaimTable></ClaimTable>
+				<div>
+					<ClaimTable></ClaimTable>
+					<HR />
+					<Gap />
+					<H2>SEND VETHER</H2><br />
+					<Subtitle>Send Vether to another address </Subtitle><br />
+					<SendTable></SendTable>
+				</div>
 			}
-			<Gap />
 			<HR />
 			<Gap />
 		</div>

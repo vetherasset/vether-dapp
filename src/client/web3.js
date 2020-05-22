@@ -3,7 +3,7 @@ import VETHER from '../artifacts/DeployedVether.json'
 import UNISWAP from '../artifacts/UniswapExchange.json'
 import REGISTRY from '../artifacts/UniswapRegistry.json'
 
-const TESTNET = false
+const TESTNET = process.env.REACT_APP_TESTNET
 
 export const getEtherscanURL = () => {
     if(TESTNET) {
@@ -26,10 +26,11 @@ export const vetherAbi = () => {
 }
 
 export const infuraAPI = () => {
+    const apiKey = process.env.REACT_APP_INFURA_API
     if(TESTNET) {
-        return 'https://rinkeby.infura.io/v3/9c3ac79a15634ba2be4be91580218365'
+        return ('https://rinkeby.infura.io/v3/' + apiKey)
     } else {
-        return 'https://mainnet.infura.io/v3/9c3ac79a15634ba2be4be91580218365'
+        return ('https://mainnet.infura.io/v3/' + apiKey)
     }
 }
 

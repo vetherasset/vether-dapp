@@ -4,8 +4,14 @@ export function getBN(BN){
     return (new BigNumber(BN)).toFixed()
 }
 
+export function getBig(BN){
+    return new BigNumber(BN)
+}
+
 export function convertFromWei(number) {
-    return number / (10**18)
+    var num = new BigNumber(number)
+    var final = num.div(10**18)
+    return final.toString()
 }
 
 export function convertToWei(number) {
