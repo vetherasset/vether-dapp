@@ -434,7 +434,7 @@ export const ChartData = (props) =>{
                     </Col>
                     <Col xs={8}>
                         <LabelGrey size={props.size}>Total Transfers</LabelGrey><br />
-                        <Text size={1.25*props.size}>{props.transfers} holders</Text>
+                        <Text size={1.25*props.size}>{props.transfers} transfers</Text>
                     </Col>
                 </Row>
 

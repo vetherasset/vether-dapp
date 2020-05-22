@@ -62,6 +62,11 @@ a:hover {
   color: #D09800;
 } */
 
+.ant-progress-text {
+  color: #97948E;
+  font-size: 20;
+}
+
 .ant-table-thead > tr > th{
   color: #fff;
   font-weight: 800;

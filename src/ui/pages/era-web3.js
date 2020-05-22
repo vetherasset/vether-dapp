@@ -8,7 +8,7 @@ import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
 import { convertFromWei, getSecondsToGo, prettify } from '../utils'
 
-import { Row, Col, Button } from 'antd'
+import { Row, Col, Button, Progress } from 'antd'
 import { LoadingOutlined, ReloadOutlined } from '@ant-design/icons';
 import { LabelGrey, Center, Text, Colour, Click } from '../components'
 
@@ -17,22 +17,29 @@ export const EraTable = () => {
 
     const context = useContext(Context)
 
-    const [loaded, setLoaded] = useState(null)
+    const [loaded, setLoaded] = useState(false)
     const [counter, setCounter] = React.useState(null);
     const [timer, setTimer] = React.useState(null);
     const [eraData, setEraData] = useState(
-        { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
+        { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '', secondsToGo:82400 })
 
     const [marketData, setMarketData] = useState(
         { priceUSD: '', priceETH: '', ethPrice: '' })
 
     useEffect(() => {
-
-        context.eraData ? getEraData() : loadEraData()
-        context.marketData ? getMarketData() : loadMarketData()
-        setLoaded(true)
+        if(!loaded){
+            loadBlockchainData()
+            setLoaded(true)
+            console.log('starting')
+        }
+        console.log('rendering again')
         // eslint-disable-next-line
-    }, [])
+    }, [loaded])
+
+    const loadBlockchainData = async () =>{
+        context.eraData ? await getEraData() : await loadEraData()
+        context.marketData ? await getMarketData() : await loadMarketData()
+    }
 
     const getEraData = async () => {
         setEraData(context.eraData)
@@ -40,7 +47,7 @@ export const EraTable = () => {
     }
 
     const loadEraData = async () => {
-        console.log('clicked')
+        // console.log('clicked')
         const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
         const emission = convertFromWei(await contract.methods.emission().call())
@@ -139,12 +146,17 @@ export const EraTable = () => {
             {loaded &&
                 <div>
                     <Row>
-                        <Col>
-                            <Button onClick={loadEraData} style={{ backgroundColor: Colour().dgrey, borderColor: Colour().dgrey }}>
+                        <Col xs={24} sm={8}>
+                        <Button onClick={loadEraData} style={{ backgroundColor: Colour().dgrey, borderColor: Colour().dgrey }}>
                                 <ReloadOutlined style={{ fontSize: "20px", color: Colour().gold, margin: "0px 0px 0px 0px" }} /> <Click>REFRESH</Click>
                             </Button>
+                        </Col>
+                        <Col xs={24} sm={8}>
                             <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
-                            <Center><LabelGrey margin={"0px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
+                            <Progress percent={(((82400 - eraData.secondsToGo) / 82400)*100).toFixed(0)} strokeColor={Colour().gold} status="active"/>
+                            <Center><LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
+                        </Col>
+                        <Col xs={24} sm={8}>
                         </Col>
                     </Row>
                     <Row>
@@ -169,7 +181,7 @@ export const EraTable = () => {
                         <Col xs={24} sm={8}>
                             <Row>
                                 <Col xs={24} sm={12}>
-                                        <Center><Text size={32} margin={"0px 0px"}>{prettify((+eraData.currentBurn).toFixed(2))} ETH</Text></Center>
+                                        <Center><Text size={32} margin={"0px 0px"}>{prettify(+eraData.currentBurn)} ETH</Text></Center>
                                 </Col>
                                 <Col xs={24} sm={12}>
                                     <Center><Text size={32} margin={"0px 0px"}>${prettify(convertEthtoUSD(eraData.currentBurn))}</Text></Center>
@@ -182,7 +194,7 @@ export const EraTable = () => {
                             </Row>
                             <Row>
                                 <Col xs={24} sm={12}>
-                                    <Center><Text size={24} margin={"0px 0px"}>{prettify((eraData.currentBurn / eraData.emission).toFixed(5))} ETH</Text></Center>
+                                    <Center><Text size={24} margin={"0px 0px"}>{(eraData.currentBurn / eraData.emission).toFixed(5)} ETH</Text></Center>
                                 </Col>
                                 <Col xs={24} sm={12}>
                                     <Center><Text size={24} margin={"0px 0px"}>${prettify(convertEthtoUSD(eraData.currentBurn / eraData.emission))}</Text></Center>
