@@ -3,7 +3,7 @@ import VETHER from '../artifacts/DeployedVether.json'
 import UNISWAP from '../artifacts/UniswapExchange.json'
 import REGISTRY from '../artifacts/UniswapRegistry.json'
 
-const TESTNET = process.env.REACT_APP_TESTNET
+const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE') ? true : false
 
 export const getEtherscanURL = () => {
     if(TESTNET) {

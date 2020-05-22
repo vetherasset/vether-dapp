@@ -7,8 +7,11 @@ import Breakpoint from 'react-socks';
 
 const Header = () => {
 
+    const net = (process.env.REACT_APP_TESTNET === 'TRUE') ? "TESTNET" : "MAINNET"
+    const colour = (process.env.REACT_APP_TESTNET === 'TRUE') ? Colour().grey : Colour().gold
+
     const headerStyles = {
-        background: Colour().gold,
+        background: colour,
         textTransform: "uppercase",
         zIndex: 1,
         position: "absolute",
@@ -46,7 +49,7 @@ const Header = () => {
 
                     <Row>
                         <Col>
-                            <Center><H1 margin={"-10px 0px"}>MAINNET</H1></Center>
+                            <Center><H1 margin={"-10px 0px"}>{net}</H1></Center>
                             <Center><Sublabel margin={"-40px 0px"}>DEPLOYED ON 12 MAY 2020</Sublabel></Center>
                         </Col>
                     </Row>
