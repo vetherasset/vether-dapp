@@ -32,7 +32,7 @@ body {
 }
 
 .ant-input{
-  color: #000
+  caret-color: #D09800;
 }
 .ant-input:placeholder-shown{
   color: #000
@@ -43,11 +43,13 @@ body {
   outline: 0;
   -webkit-box-shadow: 0 0 0 2px rgba(87,168,233, .2);
   box-shadow: 0 0 0 2px rgba(87,168,233, .2);
+  caret-color: #D09800;
 }
 
 .ant-input::selection {
   border-color: #D09800;
   background: #D09800;
+  caret-color: #D09800;
 }
 
 ::selection {
