@@ -44,6 +44,11 @@ const Footer = (props) => {
                 <Click><a rel="noopener noreferrer" href="https://discord.gg/c5aBC7Q" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[DISCORD]</a></Click>
               </Col>
             </Row>
+            <Row>
+              <Col>
+                <Click><a rel="noopener noreferrer" href="https://t.me/vetherasset" style={{ color: "#97948E", fontSize: "12px" }} target="_blank">[TELEGRAM]</a></Click>
+              </Col>
+            </Row>
           </div>
         </Breakpoint>
       </div>

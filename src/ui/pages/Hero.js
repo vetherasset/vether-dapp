@@ -5,7 +5,7 @@ import { H1, HR, Gap, Subtitle } from '../components'
 import { Abstract } from '../content'
 import { VetherTable } from './hero-web3'
 import Era from './Era'
-import Cards from './Cards'
+import Cards, {Links} from './Cards'
 
 import '../../App.css';
 
@@ -31,6 +31,8 @@ const Hero = (props) => {
 			<HR />
 			<Era />
 			<Cards />
+			<HR />
+			<Links />
 		</div>
 	)
 }
