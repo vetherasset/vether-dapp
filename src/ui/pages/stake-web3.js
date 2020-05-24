@@ -380,9 +380,7 @@ export const RemoveLiquidityTable = (props) => {
 	}
 
 	const getUniSupply = (part) => {
-		// console.log(getBig(account.uniBalance))
 		const numerator = (getBig(convertToWei(account.uniBalance))).multipliedBy(part)
-		// console.log({ numerator })
 		const final = numerator.div(100)
 		return final.integerValue(1)
 	}
