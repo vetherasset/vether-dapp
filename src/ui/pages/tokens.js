@@ -4,9 +4,9 @@ import { Context } from '../../context'
 import axios from 'axios'
 import Web3 from 'web3';
 
-import { Modal, Row, Col, Table } from 'antd'
-import { LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { Text, Click, Button } from '../components'
+import { Modal, Row, Col, Table, Tooltip } from 'antd'
+import { LoadingOutlined, ExclamationCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Text, Click, Button, Colour } from '../components'
 
 import { vetherAddr, vetherAbi, getUniswapTokenPriceEth, getExchangeAddr, getEtherscanURL } from '../../client/web3.js'
 import { getGasPrice, getShare } from '../../client/market.js'
@@ -374,6 +374,9 @@ export const TokenTable = () => {
                 ) : (
                         <div>
                             <Button onClick={() => checkToken(record)}>CHECK >></Button>
+                            <Tooltip placement="right" title="This will check the token for compatibility with Vether">
+								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
+							</Tooltip>
                         </div>
                     )
             }
@@ -401,10 +404,18 @@ export const TokenTable = () => {
                                 <Button style={{ marginLeft: 10 }} onClick={() => burn50(record)}>50%</Button>&nbsp;
                                 <Button style={{ marginLeft: 10 }} onClick={() => burn75(record)}>75%</Button>&nbsp;
                                 <Button style={{ marginLeft: 10 }} onClick={() => burn100(record)}>100%</Button>&nbsp;
+                                <Tooltip placement="right" title="This will burn the token for Vether">
+								    &nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
+							    </Tooltip>
                             </div>
                         }
                         {(!approved && checked && !burnt && burnable) &&
+                            <div>
                             <Button onClick={() => unlockToken(record)}>UNLOCK >></Button>
+                            <Tooltip placement="right" title="This will unlock the token with Vether">
+								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
+							</Tooltip>
+                            </div>
                         }
                         {burnt &&
                             <Click><a href={getLink(record)} rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>VIEW -></a></Click>

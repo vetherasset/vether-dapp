@@ -172,8 +172,9 @@ export const EraTable = (props) => {
                         </Col>
                         {!small &&
                             <Col xs={24} sm={12} style={poolStyles}>
+                                <Center><LabelGrey margin={"20px 0px 0px"}>ERA 1, DAY {eraData.day}</LabelGrey></Center>
                                 <Breakpoint medium up>
-                                    <Center><Text size={48} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                                    <Center><Text size={48} margin={"0px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
                                 </Breakpoint>
                                 <Breakpoint small down>
                                     <Center><Text size={32} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>

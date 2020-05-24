@@ -21,7 +21,7 @@ const Stake = () => {
 			<H2>VETHER LIQUIDITY POOL</H2><br />
 			<Subtitle>The Uniswap Liquidity Pool provides liquidity for Vether.</Subtitle>
 			<br /><br />
-			<Click><a href='https://uniswap.exchange/swap/0x31Bb711de2e457066c6281f231fb473FC5c2afd3' rel="noopener noreferrer" title="Uniswap Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>VIEW ON UNISWAP -></a></Click>
+			{/* <Click><a href='https://uniswap.exchange/swap/0x31Bb711de2e457066c6281f231fb473FC5c2afd3' rel="noopener noreferrer" title="Uniswap Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>VIEW ON UNISWAP -></a></Click> */}
 			<PoolTable></PoolTable>
 			<HR/>
 			{safari &&
