@@ -6,7 +6,7 @@ import Breakpoint from 'react-socks';
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL, getUniswapPriceEth } from '../../client/web3.js'
-import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
+import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, convertToDate, prettify } from '../utils'
 
 import { Row, Col } from 'antd'
@@ -24,7 +24,6 @@ export const VetherTable = () => {
         { balance: '', totalBurnt: '', totalEmitted: '', totalFees: '' })
     const [marketData, setMarketData] = useState(
         { priceUSD: '', priceETH: '', ethPrice: '' })
-    const [vethPrice, setVethPrice] = useState(null)
 
     useEffect(() => {
 
@@ -92,29 +91,25 @@ export const VetherTable = () => {
 
     const getMarketData = async () => {
         setMarketData(context.marketData)
-        setVethPrice(await getUniswapPriceEth())
     }
     const loadMarketData = async () => {
         const priceEtherUSD = await getETHPrice()
-        const priceVetherEth = await getVETHPriceInEth()
+        const priceVetherEth = await getUniswapPriceEth()
         const priceVetherUSD = priceEtherUSD * priceVetherEth
-        setMarketData({
+
+        const marketData = { 
             priceUSD: priceVetherUSD,
             priceETH: priceVetherEth,
-            ethPrice: priceEtherUSD
-        })
+            ethPrice: priceEtherUSD}
+
+        setMarketData(marketData)
         context.setContext({
-            "marketData": {
-                'priceUSD': priceVetherUSD,
-                'priceETH': priceVetherEth,
-                "ethPrice": priceEtherUSD
-            }
+            "marketData": marketData
         })
-        setVethPrice(await getUniswapPriceEth())
     }
 
     function convertToETH(vether) {
-        return (vether * vethPrice).toFixed(3)
+        return (vether * marketData.priceETH).toFixed(3)
     }
 
     // function convertToUSD(vether) {
@@ -122,7 +117,7 @@ export const VetherTable = () => {
     // }
 
     function convertEthtoUSD(ether) {
-        return (ether * marketData.ethPrice).toFixed(3)
+        return (+ether * marketData.ethPrice).toFixed(2)
     }
 
     const getLink = useCallback(() => {
@@ -150,7 +145,7 @@ export const VetherTable = () => {
             <Row style={poolStyles}>
                 <Col xs={24} sm={6}style={{marginTop:20}}>
                     <Center><Logo></Logo></Center><br />
-                    <Center><Text size={32}>${((+marketData.ethPrice * vethPrice).toFixed(2))}</Text></Center>
+                    <Center><Text size={32}>${(convertEthtoUSD(marketData.priceETH))}</Text></Center>
                 </Col>
                 <Col xs={24} sm={18}>
                     <Row>

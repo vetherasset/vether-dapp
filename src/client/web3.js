@@ -97,13 +97,13 @@ export const getGasValue = async () => {
     
 }
 
-export const getUniswapBalances = async () => {
+export const getUniswapDetails = async () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
     const ethBalance = convertFromWei(await web3.eth.getBalance(uniSwapAddr()))
 	const vethBalance = convertFromWei(await contract.methods.balanceOf(uniSwapAddr()).call())
-    const uniswapBalances = {"eth":ethBalance, "veth":vethBalance}
-    return uniswapBalances
+    const uniswapDetails = {"eth":ethBalance, "veth":vethBalance, address:uniSwapAddr()}
+    return uniswapDetails
 }
 
 function convertFromWei(number) {

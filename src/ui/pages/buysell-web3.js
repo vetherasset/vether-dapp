@@ -7,7 +7,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Label, LabelGrey, Sublabel, Button, Click, Colour } from '../components'
 import { PoolCard } from '../ui'
 
-import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL, infuraAPI, getUniswapBalances } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL, infuraAPI, getUniswapDetails } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
 import {convertFromWei, prettify, totalSupply} from '../utils'
 
@@ -80,7 +80,7 @@ export const PoolTable = () => {
     }
 
 	const loadUniswapData = async () => {
-		const uniswapBal = await getUniswapBalances()
+		const uniswapBal = await getUniswapDetails()
 		setUniswapData(uniswapBal)
 		context.setContext({
 			"uniswapData" : uniswapBal
