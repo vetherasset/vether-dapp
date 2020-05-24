@@ -425,8 +425,8 @@ export const RemoveLiquidityTable = (props) => {
 						<Col xs={12} sm={7} style={{ paddingLeft: 20 }}>
 							<Button onClick={removeLiquidity}> REMOVE >></Button>
 							<Tooltip placement="right" title="This will claim back your assets.">
-									&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
-								</Tooltip>
+								&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+							</Tooltip>
 							<br></br>
 							<Sublabel>Remove liquidity from the pool.</Sublabel>
 							{burnTknFlag &&

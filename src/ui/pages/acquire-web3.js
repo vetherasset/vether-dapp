@@ -124,7 +124,7 @@ export const AcquireTable = () => {
 						</Col>
 						<Col xs={15} sm={16} style={{ marginLeft: 20 }}>
 								<Button onClick={burnEther}> BURN >></Button>
-							<Tooltip placement="right" title="This burns your Ether into the contract">
+							<Tooltip placement="right" title="This burns your Ether into the contract.">
 								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
 							</Tooltip>
 							<br></br>
