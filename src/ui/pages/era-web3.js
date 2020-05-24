@@ -20,8 +20,8 @@ export const EraTable = (props) => {
     const small = (props.size === 'small') ? true : false
 
     const [loaded, setLoaded] = useState(false)
-    const [counter, setCounter] = React.useState(null);
-    const [timer, setTimer] = React.useState(null);
+    const [counter, setCounter] = useState(null);
+    const [timer, setTimer] = useState(null);
     const [eraData, setEraData] = useState(
         { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '', secondsToGo: 82400 })
     const [marketData, setMarketData] = useState(
@@ -97,7 +97,6 @@ export const EraTable = (props) => {
     }
 
     const refresh = async () => {
-        setCounter(0)
         setEraData({
             era: 1, day: eraData.day,
             nextEra: eraData.nextEra, nextDay: eraData.nextDay,
