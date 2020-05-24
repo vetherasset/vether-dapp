@@ -16,13 +16,14 @@ import emissionArray from '../../data/emissionArray.json';
 import '../../App.css';
 import { Row, Col } from 'antd'
 import { H2, Text, Gap, Click, Colour } from '../components'
-import { ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie, ChartPrice } from './chart'
+import { ChartStyles, ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie, ChartPrice } from './chart'
+import { LoadingOutlined } from '@ant-design/icons';
 
 const Stats = () => {
 
     const context = useContext(Context)
     // eslint-disable-next-line
-    const [loaded, setLoaded] = useState('false')
+    const [loaded, setLoaded] = useState(false)
     const [chartData, setChartData] = useState({ claimArray: [], holderArray: [] })
     const [eraData, setEraData] = useState(
         { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
@@ -30,7 +31,7 @@ const Stats = () => {
         { balance: '', totalBurnt: '', totalEmitted: '', totalFees: '' })
 
     useEffect(() => {
-        if (loaded === 'false') {
+        if (!loaded) {
             context.chartData ? getChartData() : loadChartData()
             context.eraData ? getEraData() : loadEraData()
             context.emissionData ? getEmissionData() : loadEmissionData()
@@ -40,14 +41,14 @@ const Stats = () => {
 
     const getChartData = () => {
         setChartData(context.chartData)
-        setLoaded('true')
+        setLoaded(true)
     }
     const loadChartData = async () => {
         const ethPrice = await getETHPrice()
         const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
         let claimArray = response.data
-        let dailyPriceData = claimArray.burns.map(item => (item * ethPrice)/2048)
-        let totalPriceData = claimArray.totals.map((item, i) => (item * ethPrice)/(claimArray.vether[i]))
+        let dailyPriceData = claimArray.burns.map(item => (item * ethPrice) / 2048)
+        let totalPriceData = claimArray.totals.map((item, i) => (item * ethPrice) / (claimArray.vether[i]))
 
         const apiKey = process.env.REACT_APP_ETHPLORER_API
         const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
@@ -61,8 +62,8 @@ const Stats = () => {
         setChartData({
             claimArray: claimArray,
             holderArray: holderArray.holders,
-            transfers:transfers_,
-            priceData:{
+            transfers: transfers_,
+            priceData: {
                 daily: dailyPriceData,
                 totals: totalPriceData
             }
@@ -71,15 +72,15 @@ const Stats = () => {
             'chartData': {
                 'claimArray': claimArray,
                 'holderArray': holderArray.holders,
-                'transfers':transfers_,
-                'priceData':{
+                'transfers': transfers_,
+                'priceData': {
                     'daily': dailyPriceData,
                     'totals': totalPriceData
                 }
             }
         })
-        setLoaded('true')
-        
+        setLoaded(true)
+
     }
 
     const getEraData = async () => {
@@ -144,6 +145,12 @@ const Stats = () => {
         })
     }
 
+    const loadingStyles = {
+        paddingTop: 200,
+        paddingLeft: 150,
+        fontSize:32
+    }
+
 
     return (
         <div style={{ marginRight: -50 }}>
@@ -151,7 +158,41 @@ const Stats = () => {
             <H2>STATS</H2>
             <br></br>
             <Text size={16} bold={'TRUE'}>Stats for the Vether Economy</Text><br></br>
-            {(loaded === "true") &&
+            {!loaded &&
+                <div>
+                    <Row>
+                        <Col xs={24} lg={7} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles}/>
+                        </Col>
+                        <Col xs={24} lg={15} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={24} xl={11} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles}/>
+                        </Col>
+                        <Col xs={24} xl={11} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={24} lg={15} style={ChartStyles}>
+                            <LoadingOutlined  style={loadingStyles}/>
+                        </Col>
+                        <Col xs={24} lg={7} style={ChartStyles}>
+                            <LoadingOutlined  style={loadingStyles}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={24} style={ChartStyles}>
+                            <LoadingOutlined  style={loadingStyles}/>
+                        </Col>
+                    </Row>
+                </div>
+            }
+
+            {loaded &&
                 <div>
                     <Row>
                         <Col xs={24} lg={8}>

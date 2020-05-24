@@ -2,9 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import Chartjs from 'chart.js'
 
 import { Row, Col } from 'antd'
-import {chartStyles, Colour, Font, Text, Center, LabelGrey} from '../components'
+import {Colour, Font, Text, Center, LabelGrey} from '../components'
 import {convertToDate, prettify} from '../utils'
 
+export const ChartStyles = {
+    marginLeft:0,
+    marginRight:50,
+    marginTop:25,
+    marginBottom:25,
+    backgroundColor:Colour().black,
+    height:400
+  }
 
 const getChartConfig = () => {
     return {
@@ -150,7 +158,7 @@ export const ChartEther = (props) => {
     }
 
     return(
-        <div style={chartStyles}>
+        <div style={ChartStyles}>
             <canvas ref={chartContainer} />
         </div>
     )
@@ -226,7 +234,7 @@ export const ChartClaim = (props) => {
     }
 
     return(
-        <div style={chartStyles}>
+        <div style={ChartStyles}>
             <canvas ref={chartContainer} />
         </div>
     )
@@ -298,7 +306,7 @@ export const ChartDistro = (props) => {
     }
 
     return(
-        <div style={chartStyles}>
+        <div style={ChartStyles}>
             <canvas ref={chartContainer} />
         </div>
     )
@@ -359,7 +367,7 @@ export const ChartPie = (props) => {
     }
 
     return(
-        <div style={chartStyles}>
+        <div style={ChartStyles}>
             <canvas ref={chartContainer} />
         </div>
     )
@@ -399,7 +407,7 @@ export const ChartEmission = (props) => {
     }, [chartContainer])
 
     return(
-        <div style={chartStyles}>
+        <div style={ChartStyles}>
             <canvas ref={chartContainer} />
         </div>
     )
@@ -423,7 +431,7 @@ export const ChartData = (props) =>{
     }
 
     return(
-        <div style={chartStyles}>
+        <div style={ChartStyles}>
             <div style={paneStyles}>
                 <Center><LabelGrey size={18}>Vether Overview</LabelGrey></Center>
 
@@ -483,7 +491,6 @@ export const ChartData = (props) =>{
 }
 
 export const ChartPrice = (props) => {  
-    console.log(props.priceData)
 
     const chartContainer = useRef(null)
     // eslint-disable-next-line
@@ -530,7 +537,7 @@ export const ChartPrice = (props) => {
     }
 
     return(
-        <div style={chartStyles}>
+        <div style={ChartStyles}>
             <canvas ref={chartContainer} />
         </div>
     )
