@@ -153,12 +153,12 @@ export const StakeTable = () => {
 		<div>
 			<Gap />
 			<Row>
-				<Col xs={12}>
+				<Col xs={24} sm={12}>
 					{!loading &&
 						<WalletCard accountData={account} />
 					}
 				</Col>
-				<Col xs={12}>
+				<Col xs={24} sm={12}>
 					{!loading &&
 						<UniswapCard accountData={account} uniswapData={uniswapData} />
 					}
