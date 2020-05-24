@@ -10,8 +10,6 @@ import { convertFromWei, getSecondsToGo } from '../utils'
 import { getETHPrice } from '../../client/market.js'
 
 import emissionArray from '../../data/emissionArray.json';
-// import claimArray from '../../data/claimArray.json';
-// import holderArray from '../../data/holderArray.json';
 
 import '../../App.css';
 import { Row, Col } from 'antd'

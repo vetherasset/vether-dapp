@@ -2,14 +2,14 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 import Web3 from 'web3';
 
-import { Row, Col, Input } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons';
+import { Row, Col, Input, Tooltip } from 'antd'
+import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Label, LabelGrey, Sublabel, Button, Click, Colour } from '../components'
 import { PoolCard } from '../ui'
 
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL, infuraAPI, getUniswapDetails } from '../../client/web3.js'
 import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
-import {convertFromWei, prettify, totalSupply} from '../utils'
+import { convertFromWei, prettify, totalSupply } from '../utils'
 
 export const PoolTable = () => {
 
@@ -31,7 +31,7 @@ export const PoolTable = () => {
     // const [customAmount, setCustomAmount] = useState(null)
     const [approvalAmount, setApprovalAmount] = useState(null)
     const [approved, setApproved] = useState(null)
-	const [approveFlag, setApproveFlag] = useState(null)
+    const [approveFlag, setApproveFlag] = useState(null)
     const [ethTx, setEthTx] = useState(null)
     const [ethAmount, setEthAmount] = useState(null)
     const [vethTx, setVethTx] = useState(null)
@@ -56,9 +56,9 @@ export const PoolTable = () => {
             context.uniswapData ? getUniswapData() : loadUniswapData()
             context.marketData ? getMarketData() : loadMarketData()
             const accounts = await window.web3.eth.getAccounts()
-			const address = accounts[0]
-			const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-			const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+            const address = accounts[0]
+            const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+            const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
             context.accountData ? getAccountData() : loadAccountData(contract, address)
             setContract(contract)
             checkApproval(address)
@@ -79,12 +79,12 @@ export const PoolTable = () => {
         setUniswapData(context.uniswapData)
     }
 
-	const loadUniswapData = async () => {
-		const uniswapBal = await getUniswapDetails()
-		setUniswapData(uniswapBal)
-		context.setContext({
-			"uniswapData" : uniswapBal
-		})
+    const loadUniswapData = async () => {
+        const uniswapBal = await getUniswapDetails()
+        setUniswapData(uniswapBal)
+        context.setContext({
+            "uniswapData": uniswapBal
+        })
     }
 
     const getMarketData = () => {
@@ -108,7 +108,7 @@ export const PoolTable = () => {
         })
     }
 
-	const getAccountData = async () => {
+    const getAccountData = async () => {
         setAccount(context.accountData)
     }
 
@@ -127,7 +127,7 @@ export const PoolTable = () => {
                 'ethBalance': ethBalance
             }
         })
-	}
+    }
 
     const checkApproval = async (address) => {
         const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
@@ -198,13 +198,16 @@ export const PoolTable = () => {
     return (
         <div>
             <Row style={{ marginTop: 40, marginBottom: 50 }}>
-                <Col xs={24} sm={24} xl={5} style={{ marginLeft: 25, marginRight:25, marginBottom:30 }}>
+                <Col xs={24} sm={24} xl={5} style={{ marginLeft: 25, marginRight: 25, marginBottom: 30 }}>
                     <Label>{prettify(account.ethBalance)}</Label>
                     <br></br>
                     <LabelGrey>Spendable ETH Balance</LabelGrey>
                     <Input size={'large'} style={{ marginBottom: 10, paddingRight: 50 }} allowClear onChange={onEthAmountChange} placeholder={prettify(account.ethBalance - 0.01)} />
                     <br></br>
                     <Button onClick={buyVether}> BUY VETH >></Button>
+                    <Tooltip placement="right" title="This will buy Vether with your Ether">
+                        &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+                    </Tooltip>
                     <br></br>
                     <Sublabel>BUY VETHER WITH ETH</Sublabel>
                     {buyFlag &&
@@ -221,13 +224,16 @@ export const PoolTable = () => {
                     }
                 </Col>
 
-                <PoolCard uniswapData={uniswapData} marketData={marketData}/>
+                <PoolCard uniswapData={uniswapData} marketData={marketData} />
 
-                <Col xs={24} sm={24} xl={5} style={{ marginLeft: 25, marginRight:25 }}>
+                <Col xs={24} sm={24} xl={5} style={{ marginLeft: 25, marginRight: 25 }}>
                     {!approved &&
                         <Row>
                             <Col xs={24}>
                                 <Button onClick={unlockToken}> UNLOCK ></Button>
+                                <Tooltip placement="right" title="This will unlock your Vether">
+                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+                                </Tooltip>
                                 <br></br>
                                 <Sublabel>Unlock Vether first</Sublabel>
                                 <br></br>
@@ -257,6 +263,9 @@ export const PoolTable = () => {
                                 <Input size={'large'} style={{ marginBottom: 10, paddingRight: 50 }} allowClear onChange={onVethAmountChange} placeholder={prettify(account.vethBalance)} />
                                 <br></br>
                                 <Button onClick={sellVether}>&lt;&lt; SELL VETH</Button>
+                                <Tooltip placement="right" title="This will sell your Vether for Ether">
+                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+                                </Tooltip>
                                 <br></br>
                                 <Sublabel>SELL VETHER FOR ETH</Sublabel>
                                 {sellFlag &&

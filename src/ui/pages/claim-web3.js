@@ -6,8 +6,8 @@ import Web3 from 'web3'
 import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
 import {convertFromWei, convertToWei, getSecondsToGo, getBN, prettify} from '../utils'
 
-import { Row, Col, Input } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons';
+import { Row, Col, Input, Tooltip } from 'antd'
+import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey, Colour } from '../components'
 import { WalletCard } from '../ui'
 
@@ -28,6 +28,7 @@ export const ClaimTable = () => {
 	const [txHash, setTxHash] = useState(null)
 
 	const [loaded, setLoaded] = useState(null)
+	const [scanned, setScanned] = useState(false)
 	const [walletFlag, setWalletFlag] = useState(true)
 
 	const [checkFlag, setCheckFlag] = useState(null)
@@ -51,12 +52,12 @@ export const ClaimTable = () => {
 			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 			setContract(contract)
 			context.accountData ? getAccountData() : loadAccountData(contract, address)
-			const eraDay_ = await context.eraData ? await getEraData() : await loadEraData(contract)
+			const eraData_ = await context.eraData ? await getEraData() : await loadEraData(contract)
 			// console.log(eraDay_)
-			context.arrayDays ? getDays() : loadDays(eraDay_, contract, address)
+			context.arrayDays ? await getDays() : await loadDays(eraData_, contract, address, false)
 			// console.log(arrayDays, context.arrayDays)
 			// getDays(eraDay_, contract, address)
-			console.log(account.vethBalance)
+			// console.log(account.vethBalance)
 			// console.log(context.accountData)
 		}
 	}
@@ -121,30 +122,40 @@ export const ClaimTable = () => {
 	}
 	
 	const getDays = ()  => {
-		// console.log('getting')
+		// console.log(context.arrayDays)
 		setArrayDays(context.arrayDays)
 		setUserData({era:1, day:context.arrayDays[context.arrayDays.length-1]})
+		setScanned(true)
 	}
 
-	const loadDays = async (eraData_, contract_, account_) => {
+	const loadDays = async (eraData_, contract_, account_, older) => {
+		setScanned(false)
 		let era = 1
 		let arrayDays_ = []
 		let daysContributed = await contract_.methods.getDaysContributedForEra(account_, era).call()
-		for (var j = daysContributed-5; j < daysContributed; j++) {
+		let startDay = (daysContributed > 5) ? daysContributed - 5 : 0
+		startDay = older ? 0 : startDay
+		console.log({startDay})
+		for (var j = daysContributed-1; j >= startDay; j--) {
 			let day = +(await contract_.methods.mapMemberEra_Days(account_, era, j).call())
-			// console.log({era}, {day}, {daysContributed}, {eraData_})
+			console.log({era}, {day}, {daysContributed}, {eraData_})
 			if (era < +eraData_.era || (era >= +eraData_.era && day <= +eraData_.day)) {
 				const share = getBN(await contract_.methods.getEmissionShare(era, day, account_).call())
-				// console.log(share, era, day, account_)
+				console.log(share, era, day, account_)
 				if (share > 0) {
 					arrayDays_.push(day)
+					setArrayDays(arrayDays_)
 				}
 			}
 		}
 		context.setContext({arrayDays:arrayDays_})
-		setArrayDays(arrayDays_)
 		setUserData({era:1, day:arrayDays_[arrayDays_.length-1]})
 		// console.log(arrayDays_)
+		setScanned(true)
+	}
+
+	const scanOlder = async () => {
+		loadDays(eraData, contract, account.address, true)
 	}
 
 	const onEraChange = e => {
@@ -216,13 +227,6 @@ export const ClaimTable = () => {
 
 	return (
 		<div>
-			{!walletFlag &&
-				<div>
-					<Button onClick={connect}> > CHECK CLAIMS &lt;</Button>
-					<Gap />
-				</div>
-			}
-
 			{walletFlag &&
 				<div>
 					<Row>
@@ -236,11 +240,17 @@ export const ClaimTable = () => {
 						<Col style={{ marginBottom: 20 }}>
 							<LabelGrey>CLAIMS FOUND IN THESE DAYS: </LabelGrey>
 							<br></br>
-							{!arrayDays &&
+							{!scanned &&
 								<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
 							}
-							{arrayDays &&
+							{(scanned && arrayDays) &&
 								<DayItems />
+							}
+							{(scanned && !arrayDays) &&
+							<div>
+								<Text>No claims found. </Text>
+								<Button size={12} onClick={scanOlder}> SCAN OLDER ></Button>
+							</div>
 							}
 							<br></br>
 							<Sublabel>(ERA 1)</Sublabel>
@@ -262,6 +272,9 @@ export const ClaimTable = () => {
 						</Col>
 						<Col xs={8} sm={6}>
 							<Button onClick={checkShare}> CHECK ></Button>
+							<Tooltip placement="right" title="This will check your share in the Era and Day set">
+								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
+							</Tooltip>
 							<br></br>
 							<Sublabel>Check for claim</Sublabel>
 						</Col>
@@ -282,6 +295,9 @@ export const ClaimTable = () => {
 								{!zeroFlag &&
 									<Col xs={8} sm={6}>
 										<Button onClick={claimShare}> CLAIM >></Button>
+										<Tooltip placement="right" title="This will claim your share in the Era and Day set">
+											&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
+										</Tooltip>
 										<br></br>
 										<Text size={14}>Claim VETHER</Text>
 

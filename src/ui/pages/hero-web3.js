@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
-import { Link } from "react-router-dom"
 
 import Breakpoint from 'react-socks';
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi, infuraAPI, getEtherscanURL, getUniswapPriceEth } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, convertToDate, prettify } from '../utils'
 
 import { Row, Col } from 'antd'
-import { LabelGrey, Click, Colour, Center, Text } from '../components'
+import { LabelGrey, Colour, Center, Text } from '../components'
 import { Logo } from '../content'
 
 export const VetherTable = () => {
@@ -116,14 +115,14 @@ export const VetherTable = () => {
     //     return (vether * marketData.priceUSD).toFixed(3)
     // }
 
-    function convertEthtoUSD(ether) {
-        return (+ether * marketData.ethPrice).toFixed(2)
+    function convertEthtoUSD(ether, sp) {
+        return (+ether * marketData.ethPrice).toFixed(sp)
     }
 
-    const getLink = useCallback(() => {
-        const linkFull = getEtherscanURL().concat('address/').concat(vetherAddr())
-        return linkFull
-    }, [])
+    // const getLink = useCallback(() => {
+    //     const linkFull = getEtherscanURL().concat('address/').concat(vetherAddr())
+    //     return linkFull
+    // }, [])
 
     const poolStyles = {
         borderWidth: '1px',
@@ -145,14 +144,14 @@ export const VetherTable = () => {
             <Row style={poolStyles}>
                 <Col xs={24} sm={6}style={{marginTop:20}}>
                     <Center><Logo></Logo></Center><br />
-                    <Center><Text size={32}>${(convertEthtoUSD(marketData.priceETH))}</Text></Center>
+                    <Center><Text size={32}>${(convertEthtoUSD(marketData.priceETH, 2))}</Text></Center>
                 </Col>
                 <Col xs={24} sm={18}>
                     <Row>
                         <Col xs={12}>
                             <Text size={32}>{vetherData.name}&nbsp;({vetherData.symbol})</Text>
-                            <br />
-                            <Link to={"/stats"}><Click size={12}> MORE DATA -></Click></Link>
+                            {/* <br /> */}
+                            {/* <Link to={"/stats"}><Click size={12}> MORE DATA -></Click></Link> */}
                         </Col>
                         <Col xs={12}>
 
@@ -161,11 +160,11 @@ export const VetherTable = () => {
                     <Row style={{marginTop:20}}>
                         <Col xs={24} sm={12}>
                             <LabelGrey size={14}>TOTAL SUPPLY: </LabelGrey><br />
-                            <Text size={24}>{prettify(vetherData.totalSupply)}</Text>
+                            <Text size={24}>{prettify(vetherData.totalSupply)} VETH</Text>
                         </Col>
                         <Col xs={24} sm={12}>
                             <LabelGrey size={14}>TOTAL CAP: </LabelGrey><br />
-                            <Text size={24}>${prettify(convertEthtoUSD(convertToETH(vetherData.totalSupply)))}</Text>
+                            <Text size={24}>${prettify((convertEthtoUSD(convertToETH(vetherData.totalSupply), 0)))}</Text>
                         </Col>
                     </Row>
                     <Row style={{marginTop:20}}>
@@ -175,7 +174,7 @@ export const VetherTable = () => {
                         </Col>
                         <Col xs={24} sm={12}>
                             <LabelGrey size={14}>CIRCULATING CAP: </LabelGrey><br />
-                            <Text size={24}>${prettify(convertEthtoUSD(convertToETH(emissionData.totalEmitted)))}</Text>
+                            <Text size={24}>${prettify((convertEthtoUSD(convertToETH(emissionData.totalEmitted), 0)))}</Text>
                         </Col>
                     </Row>
                     
@@ -183,8 +182,8 @@ export const VetherTable = () => {
                     <br></br>
                     <LabelGrey>{vetherAddr()}</LabelGrey>
                     </Breakpoint>
-                    <br></br>
-                    <Click><a href={getLink()} rel="noopener noreferrer" title="Vether Contract Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW CONTRACT -> </a></Click>
+                    {/* <br></br> */}
+                    {/* <Click><a href={getLink()} rel="noopener noreferrer" title="Vether Contract Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW CONTRACT -> </a></Click> */}
                 
                 </Col>
             </Row>

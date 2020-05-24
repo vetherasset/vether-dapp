@@ -7,8 +7,8 @@ import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getUniswapPriceEth, get
 import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, convertToWei, prettify, getBN, getBig } from '../utils'
 
-import { Row, Col, Input } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons';
+import { Row, Col, Input, Tooltip } from 'antd'
+import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { H2, Text, LabelGrey, Label, Click, Button, Sublabel, Colour, Center, HR, Gap, Subtitle } from '../components'
 import { WalletCard, PoolCard, UniswapCard } from '../ui'
 
@@ -294,6 +294,9 @@ export const AddLiquidityTable = (props) => {
 						<Row>
 							<Col xs={24}>
 								<Button onClick={unlockToken}> UNLOCK ></Button>
+								<Tooltip placement="right" title="This will unlock your Vether">
+									&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+								</Tooltip>
 								<br></br>
 								<Sublabel>Unlock Vether first</Sublabel>
 								<br></br>
@@ -329,6 +332,9 @@ export const AddLiquidityTable = (props) => {
 										</Col>
 										<Col xs={8} style={{ marginLeft: 20 }}>
 											<Button onClick={addUniswap}> ADD >></Button>
+											<Tooltip placement="right" title="This will add Ether and Vether to the pool. You can claim it back later.">
+												&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+											</Tooltip>
 											<br></br>
 											<Sublabel>ADD LIQUIDITY TO UNISWAP</Sublabel>
 
@@ -418,6 +424,9 @@ export const RemoveLiquidityTable = (props) => {
 						</Col>
 						<Col xs={12} sm={7} style={{ paddingLeft: 20 }}>
 							<Button onClick={removeLiquidity}> REMOVE >></Button>
+							<Tooltip placement="right" title="This will claim back your assets.">
+									&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
+								</Tooltip>
 							<br></br>
 							<Sublabel>Remove liquidity from the pool.</Sublabel>
 							{burnTknFlag &&
