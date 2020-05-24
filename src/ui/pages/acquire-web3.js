@@ -124,7 +124,7 @@ export const AcquireTable = () => {
 					<Label>BURN ETHER</Label>
 					<br />
 					<Row>
-						<Col xs={6} sm={4}>
+						<Col xs={11} sm={4}>
 							<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance - 0.1} />
 							<br></br>
 							<Button onClick={maxEther}>{(account.ethBalance - 0.1).toFixed(4)}</Button>
@@ -134,7 +134,7 @@ export const AcquireTable = () => {
 							<br></br>
 							<LabelGrey>Spendable ETH</LabelGrey>
 						</Col>
-						<Col xs={15} sm={6} style={{ marginLeft: 20 }}>
+						<Col xs={11} sm={6} style={{ marginLeft: 20 }}>
 								<Button onClick={burnEther}> BURN >></Button>
 							<Tooltip placement="right" title="This burns your Ether into the contract.">
 								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
@@ -158,7 +158,7 @@ export const AcquireTable = () => {
 							}
 
 						</Col>
-						<Col xs={6} sm={4}>
+						<Col xs={24} sm={4}>
 							<Text  size={32}>{prettify(getVethValue())}</Text>
 							<Tooltip placement="right" title="The amount of VETH you get is dependent on how much you burn, compared to how much everyone else burns.">
 								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/><br/>

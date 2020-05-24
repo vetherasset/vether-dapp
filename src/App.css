@@ -23,12 +23,40 @@ body {
   border-right: 3px solid #D09800;
 }
 
+.ant-menu-horizontal > .ant-menu-item-selected{
+  border-bottom: 3px solid #D09800;
+}
+
+.ant-menu-horizontal > .ant-menu-item-active{
+  border-bottom: 3px solid #D09800;
+}
+
+.ant-menu-horizontal > .ant-menu-item:hover{
+  border-bottom: 3px solid #D09800;
+}
+
 .ant-menu {
   background: #2B2515;
 }
 
 .ant-menu-root.ant-menu-inline{
   background-color: #2B2515;
+}
+
+.ant-layout-header{
+  padding:0;
+  background: #110D01;
+  height: 47;
+}
+.ant-menu-item{
+  width: 48;
+  padding:5
+}
+
+.ant-input{
+  background: #110D01;
+  color:#D09800;
+  border: 1px solid #D09800;
 }
 
 .ant-input{
@@ -95,9 +123,4 @@ a:hover {
   background: #2B2515;
 }
 
-.ant-input{
-  background: #110D01;
-  color:#D09800;
-  border: 1px solid #D09800;
-}
 

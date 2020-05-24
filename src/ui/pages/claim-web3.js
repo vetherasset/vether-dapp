@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
-
 import Web3 from 'web3'
 import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
 import {convertFromWei, convertToWei, getSecondsToGo, getBN, prettify} from '../utils'
@@ -135,13 +134,13 @@ export const ClaimTable = () => {
 		let daysContributed = await contract_.methods.getDaysContributedForEra(account_, era).call()
 		let startDay = (daysContributed > 5) ? daysContributed - 5 : 0
 		startDay = older ? 0 : startDay
-		console.log({startDay})
+		// console.log({startDay})
 		for (var j = daysContributed-1; j >= startDay; j--) {
 			let day = +(await contract_.methods.mapMemberEra_Days(account_, era, j).call())
-			console.log({era}, {day}, {daysContributed}, {eraData_})
+			// console.log({era}, {day}, {daysContributed}, {eraData_})
 			if (era < +eraData_.era || (era >= +eraData_.era && day <= +eraData_.day)) {
 				const share = getBN(await contract_.methods.getEmissionShare(era, day, account_).call())
-				console.log(share, era, day, account_)
+				// console.log(share, era, day, account_)
 				if (share > 0) {
 					arrayDays_.push(day)
 					setArrayDays(arrayDays_)

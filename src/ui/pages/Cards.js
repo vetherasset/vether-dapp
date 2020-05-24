@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from "react-router-dom"
 
 import { Row, Col } from 'antd'
 import { H2, Subtitle, Gap, Colour, Text, Click } from '../components'
@@ -9,8 +8,8 @@ const Cards = () => {
     const cardContent = () => {
         return [
             {
-                title: 'GET VETHER',
-                subtitle: 'Get Vether by burning value.',
+                title: 'ACQUIRE VETHER',
+                subtitle: 'Acquire Vether by burning value',
                 link: "/acquire"
             },
             {
@@ -86,7 +85,7 @@ const Card = (props) => {
         <div>
             <Row>
                 <Col xs={24} style={cardStyles}>
-                    <Link to={props.link}><Click size={18}>{props.title}&nbsp;>></Click></Link>
+                    <Click size={18}><a href={window.location.origin + props.link} rel="noopener noreferrer" title={props.title} style={{ color: Colour().gold}}>{props.title}&nbsp;>></a></Click>
                     <br />
                     <Text size={16}>{props.subtitle}</Text>
                     <br />

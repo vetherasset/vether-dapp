@@ -32,7 +32,7 @@ const Whitepaper = () => {
 			<Text>
 				When a new monetary asset is created the key problem is a matter of distribution - how to fairly distribute it
 				to a wide number of participants such that anyone can acquire it and all units are distributed at-cost.
-				Bitcoin's entire fixed-supply is being distrbuted fairly and at-cost, however Ethereum and the tokens
+				Bitcoin's entire fixed-supply is being distributed fairly and at-cost, however Ethereum and the tokens
 				created on it have not undergone the same process. As such, the value held by Ethereum and its tokens
 				continually inflate as more are created at various cost with unpredictable distribution.
 				Vether is designed to return scarcity properties to Ethereum, captured in a single fixed-supply asset,
@@ -64,7 +64,7 @@ const Whitepaper = () => {
 				At higher velocities, the fee acts as a deflationary force.
 		</Text><br /><br />
 
-			<Text bold={'TRUE'}>Stock-To-Flow</Text><br />
+			<Text bold={'TRUE'}>Stock-To-Flow [3]</Text><br />
 			<Text>
 				Vether begins with a stock-to-flow of 1 that doubles each Era to be 2670 after 10 years.
 				Since all units are acquired at-cost and emitted continuously, if Vether develops a market the halvings
