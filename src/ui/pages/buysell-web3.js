@@ -7,8 +7,8 @@ import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Label, LabelGrey, Sublabel, Button, Click, Colour } from '../components'
 import { PoolCard } from '../ui'
 
-import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL, infuraAPI, getUniswapDetails } from '../../client/web3.js'
-import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
+import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL, getUniswapPriceEth, infuraAPI, getUniswapDetails } from '../../client/web3.js'
+import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, prettify, totalSupply } from '../utils'
 
 export const PoolTable = () => {
@@ -92,7 +92,7 @@ export const PoolTable = () => {
     }
     const loadMarketData = async () => {
         const priceEtherUSD = await getETHPrice()
-        const priceVetherEth = await getVETHPriceInEth()
+        const priceVetherEth = await getUniswapPriceEth()
         const priceVetherUSD = priceEtherUSD * priceVetherEth
         setMarketData({
             priceUSD: priceVetherUSD,
