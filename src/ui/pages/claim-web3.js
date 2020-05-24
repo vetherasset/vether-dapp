@@ -43,7 +43,7 @@ export const ClaimTable = () => {
 	const connect = async () => {
 		ethEnabled()
 		if (!ethEnabled()) {
-			alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+			// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
 		} else {
 			setWalletFlag(true)
 			const accounts = await window.web3.eth.getAccounts()
@@ -347,7 +347,7 @@ export const SendTable = () => {
 	const connect = async () => {
 		ethEnabled()
 		if (!ethEnabled()) {
-			alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+			// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
 		} else {
 			setWalletFlag(true)
 			const accounts = await window.web3.eth.getAccounts()

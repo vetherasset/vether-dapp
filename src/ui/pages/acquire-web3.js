@@ -3,11 +3,11 @@ import { Context } from '../../context'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL } from '../../client/web3.js'
-import { convertFromWei } from '../utils'
+import { convertFromWei, prettify } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Click, Button, Sublabel, Gap, Colour } from '../components'
+import { LabelGrey, Label, Click, Button, Sublabel, Gap, Colour, Text } from '../components'
 import { EraTable } from './era-web3'
 
 export const AcquireTable = () => {
@@ -19,7 +19,8 @@ export const AcquireTable = () => {
 	const [burnEthFlag, setBurnEthFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
 	const [walletFlag, setWalletFlag] = useState(null)
-	const [ethAmount, setEthAmount] = useState(null)
+	const [ethAmount, setEthAmount] = useState(0)
+	const [currentBurn, setCurrentBurn] = useState(1)
 
 	useEffect(() => {
 		connect()
@@ -30,12 +31,18 @@ export const AcquireTable = () => {
 		setWalletFlag('TRUE')
 		ethEnabled()
 		if (!ethEnabled()) {
-			alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+			// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
 		} else {
 			var accounts = await window.web3.eth.getAccounts()
 			const address = accounts[0]
 			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 			context.accountData ? getAccountData() : loadAccountData(contract, address)
+			const day = await contract.methods.currentDay().call()
+        	const era = 1
+			const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
+			console.log(currentBurn)
+			// setVethPrice(currentBurn / 2048 )
+			setCurrentBurn(currentBurn)
 		}
 	}
 
@@ -80,6 +87,11 @@ export const AcquireTable = () => {
 		setEthAmount(e.target.value)
 	}
 
+	const getVethValue = () => {
+		const value = (+ethAmount / (+ethAmount + +currentBurn)) * 2048
+		return value
+	}
+
 	const burnEther = async () => {
 		const amount = ethAmount * 1000000000000000000
 		setBurnEthFlag('TRUE')
@@ -122,7 +134,7 @@ export const AcquireTable = () => {
 							<br></br>
 							<LabelGrey>Spendable ETH</LabelGrey>
 						</Col>
-						<Col xs={15} sm={16} style={{ marginLeft: 20 }}>
+						<Col xs={15} sm={6} style={{ marginLeft: 20 }}>
 								<Button onClick={burnEther}> BURN >></Button>
 							<Tooltip placement="right" title="This burns your Ether into the contract.">
 								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
@@ -145,6 +157,13 @@ export const AcquireTable = () => {
 								</div>
 							}
 
+						</Col>
+						<Col xs={6} sm={4}>
+							<Text  size={32}>{prettify(getVethValue())}</Text>
+							<Tooltip placement="right" title="The amount of VETH you get is dependent on how much you burn, compared to how much everyone else burns.">
+								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/><br/>
+							</Tooltip>
+							<LabelGrey>Potential VETH Value</LabelGrey>
 						</Col>
 					</Row>
 				</div>

@@ -51,7 +51,7 @@ export const PoolTable = () => {
         //setWalletFlag(true)
         ethEnabled()
         if (!ethEnabled()) {
-            alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+            // alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
         } else {
             context.uniswapData ? getUniswapData() : loadUniswapData()
             context.marketData ? getMarketData() : loadMarketData()

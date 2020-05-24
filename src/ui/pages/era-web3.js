@@ -4,8 +4,8 @@ import { Context } from '../../context'
 import Breakpoint from 'react-socks';
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
-import { getETHPrice, getVETHPriceInEth } from '../../client/market.js'
+import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
+import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, getSecondsToGo, prettify } from '../utils'
 
 import { Row, Col, Button, Progress } from 'antd'
@@ -51,9 +51,9 @@ export const EraTable = (props) => {
         // console.log('clicked')
         const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-        const emission = convertFromWei(await contract.methods.emission().call())
+        const emission = 2048
         const day = await contract.methods.currentDay().call()
-        const era = await contract.methods.currentEra().call()
+        const era = 1
         const nextDay = await contract.methods.nextDayTime().call()
         const nextEra = await contract.methods.nextEraTime().call()
         const nextEmission = convertFromWei(await contract.methods.getNextEraEmission().call())
@@ -77,7 +77,7 @@ export const EraTable = (props) => {
     }
     const loadMarketData = async () => {
         const priceEtherUSD = await getETHPrice()
-        const priceVetherEth = await getVETHPriceInEth()
+        const priceVetherEth = await getUniswapPriceEth()
         const priceVetherUSD = priceEtherUSD * priceVetherEth
         const marketData = {
             priceUSD: priceVetherUSD,

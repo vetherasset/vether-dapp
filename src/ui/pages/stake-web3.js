@@ -95,7 +95,7 @@ export const StakeTable = () => {
 		// setWalletFlag('TRUE')
 		ethEnabled()
 		if (!ethEnabled()) {
-			alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+			// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
 		} else {
 			var accounts = await window.web3.eth.getAccounts()
 			const address = await accounts[0]
@@ -211,7 +211,7 @@ export const AddLiquidityTable = (props) => {
 		// setWalletFlag('TRUE')
 		ethEnabled()
 		if (!ethEnabled()) {
-			alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+			// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
 		} else {
 			const vethPrice = await getUniswapPriceEth()
 			setVetherPrice(vethPrice)
