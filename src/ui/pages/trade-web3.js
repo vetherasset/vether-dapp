@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 import Web3 from 'web3';
+import axios from 'axios'
 
-import { Row, Col } from 'antd'
-import { LabelGrey, Center, Text } from '../components'
+import { Row, Col, Table } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons';
+import { LabelGrey, Center, Text, Label } from '../components'
+import { PoolCard } from '../ui'
 
-import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth, getUniswapDetails } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
 import {prettify} from '../utils'
 
@@ -19,9 +22,13 @@ export const TradeTable = () => {
         priceUniswap: "",
         ethPrice: ""
     })
+    const [uniswapData, setUniswapData] = useState(
+        { "eth": "", "veth": '' })
 
     useEffect(() => {
         context.priceData ? getPriceData() : loadPriceData()
+        context.uniswapData ? getUniswapData() : loadUniswapData()
+        // context.marketData ? getMarketData() : loadMarketData()
         //eslint-disable-next-line
     }, [])
 
@@ -57,11 +64,23 @@ export const TradeTable = () => {
 
         context.setContext({
             "priceData": {
-                'priceToday': (currentPrice).toFixed(4),
+                'priceEth': (currentPrice).toFixed(4),
                 'priceHistorical': (historicalPrice).toFixed(3),
                 'priceUniswap': (priceVetherEth).toFixed(3),
                 'ethPrice': (priceEtherUSD).toFixed(2)
             }
+        })
+    }
+
+    const getUniswapData = () => {
+        setUniswapData(context.uniswapData)
+    }
+
+    const loadUniswapData = async () => {
+        const uniswapBal = await getUniswapDetails()
+        setUniswapData(uniswapBal)
+        context.setContext({
+            "uniswapData": uniswapBal
         })
     }
 
@@ -73,17 +92,92 @@ export const TradeTable = () => {
                 </Col>
                 <Col xs={20}>
                         <Center><Text size={30} margin={"0px 0px 0px"}>${prettify(priceData.priceHistorical * priceData.ethPrice)}</Text></Center>
-                        <Center><LabelGrey margin={"0px 0px 0px"}>HISTORICAL PRICE</LabelGrey></Center>
-                        <Center><Text margin={"0px 0px 20px"}>Based on all time burnt Ether</Text></Center>
+                        <Center><LabelGrey margin={"0px 0px 0px"}>HISTORICAL VALUE</LabelGrey></Center>
 
                         <Center><Text size={30} margin={"0px 0px 0px"}>${prettify(priceData.priceUniswap * priceData.ethPrice)}</Text></Center>
                         <Center><LabelGrey margin={"0px 0px 0px"}>PRICE ON UNISWAP</LabelGrey></Center>
-                        <Center><Text margin={"0px 0px"}>Based on Uniswap liquidity</Text></Center>
                 </Col>
                 <Col xs={2}>
 
                 </Col>
             </Row>
+            <Row>
+				<Col xs={24} sm={6}>
+				</Col>
+				    <PoolCard uniswapData={uniswapData} marketData={priceData}/>
+				<Col xs={24} sm={6}>
+				</Col>
+			</Row>
+        </div>
+    )
+}
+
+export const HistoryTable = () => {
+
+    const [tradeTable, setTradeTable] = useState(null)
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() =>{
+        loadData()
+        console.log()
+    }, [])
+
+    const loadData = async() =>{
+        const baseURL = 'https://api.blocklytics.org/pools/v0/trades/0x506D07722744E4A390CD7506a2Ba1A8157E63745?key='
+        // const data = (new Date())
+        // &fromDate=1590386548
+        const response = await axios.get(baseURL + process.env.REACT_APP_BLOCKLYTICS_API + '&limit=15')
+		let returnData = response.data.results
+		console.log(returnData)
+		// let returns = returnData.reduce((acc, item) => ((+acc + +item.D7_annualized)/2), 0)
+        setTradeTable(returnData)
+        setLoading(true)
+    }
+
+    const columns = [
+        {
+            title: 'TYPE',
+            dataIndex: 'action',
+            key: 'action',
+        },
+        {
+            title: 'Quantity',
+            dataIndex: 'quantity',
+            key: 'quantity',
+        },
+        {
+            title: 'Slippage',
+            key: 'slippage',
+            render: (record) => {
+                return (
+                    <div>
+                        <Text size={14} bold={true}>{(+record.slippage * 100).toFixed(2)} %</Text>
+                    </div>
+                )
+            }
+        },
+        {
+            title: 'Time',
+            dataIndex: 'timestamp',
+            key: 'timestamp',
+        }
+    ]
+
+    const loadingStyles = {
+        paddingTop: 20,
+        paddingLeft: 20,
+        fontSize:32
+    }
+
+    return(
+        <div>
+            <Label>Trade History</Label><br/>
+            {!loading && 
+                <LoadingOutlined  style={loadingStyles}/>
+            }
+            {loading && 
+                <Table dataSource={tradeTable} columns={columns} pagination={false} rowKey="id"></Table>
+            }
         </div>
     )
 }
