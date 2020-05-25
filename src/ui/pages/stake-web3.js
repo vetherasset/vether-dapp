@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
-// import BigNumber from 'bignumber.js'
+import axios from 'axios'
 
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getUniswapPriceEth, getUniswapDetails, getEtherscanURL } from '../../client/web3.js'
@@ -20,6 +20,8 @@ export const PoolTable = () => {
 		{ priceUSD: '', priceETH: '', ethPrice: '' })
 	const [uniswapData, setUniswapData] = useState(
 		{ "eth": "", "veth": '' })
+
+	const [returns, setReturns] = useState(null)
 
 	useEffect(() => {
 		context.uniswapData ? getUniswapData() : loadUniswapData()
@@ -57,16 +59,25 @@ export const PoolTable = () => {
 		context.setContext({
 			"marketData": marketData
 		})
+
+		const baseURL3 = 'https://api.blocklytics.org/uniswap/v1/returns/0x506D07722744E4A390CD7506a2Ba1A8157E63745?key='
+        const response4 = await axios.get(baseURL3 + process.env.REACT_APP_BLOCKLYTICS_API + '&period=14&daysBack=7')
+		let returnData = response4.data
+		// console.log(returnData)
+		let returns = returnData.reduce((acc, item) => ((+acc + +item.D7_annualized)/2), 0)
+		setReturns(returns)
 	}
 
 	return (
 		<div>
-			<Center><Text size={30} margin={"20px 0px 0px"}>${prettify(marketData.priceUSD)}</Text></Center>
-			<Center><LabelGrey margin={"0px 0px 20px"}>VALUE OF 1 VETH</LabelGrey></Center>
+			<Center><Text size={30} margin={"10px 0px 0px"}>${prettify(marketData.priceUSD)}</Text></Center>
+			<Center><LabelGrey margin={"0px 0px 10px"}>VALUE OF 1 VETH</LabelGrey></Center>
+			<Center><Text size={30} margin={"0px 0px 0px"}>{prettify(returns)}%</Text></Center>
+			<Center><LabelGrey margin={"0px 0px 10px"}>CURRENT POOL ROI (ANNUALISED)</LabelGrey></Center>
 			<Row style={{ marginBottom: 50 }}>
 				<Col xs={24} sm={6}>
 				</Col>
-				<PoolCard uniswapData={uniswapData} marketData={marketData} />
+				<PoolCard uniswapData={uniswapData} marketData={marketData}/>
 				<Col xs={24} sm={6}>
 				</Col>
 			</Row>
