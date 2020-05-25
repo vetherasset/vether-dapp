@@ -428,7 +428,7 @@ export const SendTable = () => {
 						<Col xs={12} sm={10} style={{ marginLeft: 10, marginRight: 20 }}>
 							<Input size={'large'} allowClear onChange={onAddressChange} placeholder="Enter Address" />
 							<br></br>
-							<Sublabel>Set Distination Address</Sublabel>
+							<Sublabel>Set Destination Address</Sublabel>
 							<br></br>
 						</Col>
 						<Col xs={24} sm={6}>
