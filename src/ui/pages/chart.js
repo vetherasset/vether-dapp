@@ -149,7 +149,7 @@ export const ChartEther = (props) => {
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
             borderWidth: 1,
-            yAxisID: "R"
+            yAxisID: "L"
         }
         chartConfig.data.datasets.push(dataset2)
         chartConfig.options.scales.yAxes.push(rightAxisConfig())
@@ -511,28 +511,44 @@ export const ChartPrice = (props) => {
         if(chartContainer && chartContainer.current){
             const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
             setChartInstance(newChartInstance)
-            setChart(props.priceData, newChartInstance)
+            setChart(props.priceData, props.uniswapPrices, newChartInstance)
         }
     }
 
-    const setChart = (priceData, newChartInstance) => {
+    const setChart = (priceData, uniswapPrices, newChartInstance) => {
         
         chartConfig.data.labels = props.days
         chartConfig.data.datasets[0].data = priceData.daily
         chartConfig.data.datasets[0].type = "line"
+        chartConfig.options.scales.yAxes[0].position = 'right'
         // chartConfig.data.datasets[0].fill = false
         const dataset2 = {
             type: "line",
             label: "All Time Value",
             data:priceData.totals,
-            backgroundColor: 'rgba(255, 206, 86, 0.2)',
-            borderColor: 'rgba(255, 206, 86, 1)',
+            backgroundColor: Colour('0.2').yellow,
+            borderColor: Colour().yellow,
             borderWidth: 1,
-            // fill: false
+            fill: false,
+            yAxisID: "L"
         }
         chartConfig.data.datasets.push(dataset2)
+
+        const dataset3 = {
+            type: "line",
+            label: "Uniswap Price",
+            data:uniswapPrices,
+            // backgroundColor: Colour('0.2').yellow,
+            borderColor: Colour().white,
+            borderWidth: 1,
+            fill: false,
+            yAxisID: "L"
+        }
+        chartConfig.data.datasets.push(dataset3)
         // chartConfig.options.scales.yAxes.push(rightAxisConfig())
-        // chartConfig.options.scales.yAxes[1].scaleLabel.labelString = 'Ether Price'
+        // chartConfig.options.scales.yAxes[1].scaleLabel.labelString = 'Vether Price (USD)'
+        // chartConfig.options.scales.yAxes[1].ticks.max = chartConfig.options.scales.yAxes[0].ticks.max
+        // console.log(chartConfig.options.scales.yAxes[1])
         newChartInstance.update()
     }
 

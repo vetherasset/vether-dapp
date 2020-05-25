@@ -45,8 +45,8 @@ const Stats = () => {
         const ethPrice = await getETHPrice()
         const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
         let claimArray = response.data
-        let dailyPriceData = claimArray.burns.map(item => (item * ethPrice) / 2048)
-        let totalPriceData = claimArray.totals.map((item, i) => (item * ethPrice) / (claimArray.vether[i]))
+        let dailyPriceData = claimArray.burns.map(item => ((item * ethPrice) / 2048).toFixed(2))
+        let totalPriceData = claimArray.totals.map((item, i) => ((item * ethPrice) / (claimArray.vether[i])).toFixed(2))
 
         const apiKey = process.env.REACT_APP_ETHPLORER_API
         const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
@@ -56,27 +56,24 @@ const Stats = () => {
         const response3 = await axios.get(baseURL2 + apiKey)
         let transfers_ = response3.data.transfersCount
 
+        const baseURL3 = 'https://api.blocklytics.org/pools/v0/liquidity/0x506D07722744E4A390CD7506a2Ba1A8157E63745/history?key='
+        const response4 = await axios.get(baseURL3 + process.env.REACT_APP_BLOCKLYTICS_API)
+        let uniswapData = response4.data
+        let uniswapPrices = uniswapData.map((item) => ((item.eth_ending_balance / item.token_ending_balance)*ethPrice).toFixed(2))
 
-        setChartData({
+        const chartData = {
             claimArray: claimArray,
+            uniswapPrices: uniswapPrices,
             holderArray: holderArray.holders,
             transfers: transfers_,
             priceData: {
                 daily: dailyPriceData,
                 totals: totalPriceData
             }
-        })
-        context.setContext({
-            'chartData': {
-                'claimArray': claimArray,
-                'holderArray': holderArray.holders,
-                'transfers': transfers_,
-                'priceData': {
-                    'daily': dailyPriceData,
-                    'totals': totalPriceData
-                }
-            }
-        })
+        }
+
+        setChartData(chartData)
+        context.setContext({'chartData': chartData})
         setLoaded(true)
 
     }
@@ -231,7 +228,10 @@ const Stats = () => {
                     </Row>
                     <Row>
                         <Col xs={24}>
-                            <ChartPrice days={chartData.claimArray.days} priceData={chartData.priceData} />
+                            <ChartPrice 
+                            days={chartData.claimArray.days} 
+                            priceData={chartData.priceData} 
+                            uniswapPrices={chartData.uniswapPrices}/>
                         </Col>
                     </Row>
                 </div>
