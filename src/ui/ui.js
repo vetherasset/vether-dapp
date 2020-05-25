@@ -15,7 +15,7 @@ export const PoolCard = (props) => {
         paddingLeft: 5,
         paddingRight: 5,
         marginBottom: 30,
-        backgroundColor: Colour().yellow,
+        backgroundColor: Colour('0.2').yellow,
     }
     const lineStyle = {
         borderLeft: '1px dashed',
@@ -48,7 +48,7 @@ export const WalletCard = (props) => {
         borderWidth: '1px',
         borderStyle: 'solid',
         borderRadius: 5,
-        borderColor: Colour().yellow,
+        borderColor: Colour('0.2').yellow,
         padding: 10,
         marginBottom: 30,
         marginRight: 20,
@@ -95,7 +95,7 @@ export const UniswapCard = (props) => {
         borderWidth: '1px',
         borderStyle: 'solid',
         borderRadius: 5,
-        borderColor: Colour().yellow,
+        borderColor: Colour('0.2').yellow,
         padding: 10,
         marginBottom: 30,
         backgroundColor: Colour().dgrey
