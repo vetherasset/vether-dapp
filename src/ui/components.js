@@ -6,17 +6,25 @@ export const Font = () => {
   return "Courier"
 }
 
-export const Colour = () => {
-  const colour = {
-    "black":"#110D01", 
-    "white":"#FFF",
-    "dgrey": "#2B2515",
-    "grey": "#97948E",
-    "lgrey": "#F4F4F2",
-    "rust": "#795900",
-    "gold":"#D09800",
-    "yellow":'#5C4F2C'
+export const Colour = (alpha) => {
+  var colour
+  if(alpha){
+    colour = {
+      "yellow":'rgba(255, 206, 86, ' + alpha + ')'
+    }
+  } else {
+    colour = {
+      "black":"#110D01", 
+      "white":"#FFF",
+      "dgrey": "#2B2515",
+      "grey": "#97948E",
+      "lgrey": "#F4F4F2",
+      "rust": "#795900",
+      "gold":"#D09800",
+      "yellow":'#FFCE56'
+    }
   }
+  
   return colour
 }
 
