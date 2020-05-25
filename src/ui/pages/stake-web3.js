@@ -26,6 +26,7 @@ export const PoolTable = () => {
 	useEffect(() => {
 		context.uniswapData ? getUniswapData() : loadUniswapData()
 		context.marketData ? getMarketData() : loadMarketData()
+		context.returnData ? getReturnData() : loadReturnData()
 		// eslint-disable-next-line
 	}, [])
 
@@ -59,13 +60,21 @@ export const PoolTable = () => {
 		context.setContext({
 			"marketData": marketData
 		})
+	}
 
+	const getReturnData = () => {
+		setReturns(context.returnData)
+	}
+
+	const loadReturnData = async () => {
 		const baseURL3 = 'https://api.blocklytics.org/uniswap/v1/returns/0x506D07722744E4A390CD7506a2Ba1A8157E63745?key='
         const response4 = await axios.get(baseURL3 + process.env.REACT_APP_BLOCKLYTICS_API + '&period=14&daysBack=7')
 		let returnData = response4.data
-		// console.log(returnData)
+		console.log(returnData)
 		let returns = returnData.reduce((acc, item) => ((+acc + +item.D7_annualized)/2), 0)
+		console.log(returnData)
 		setReturns(returns)
+		context.setContext({'returnData':returns})
 	}
 
 	return (
