@@ -5,27 +5,18 @@ import Web3 from 'web3';
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Label, LabelGrey, Sublabel, Button, Click, Colour } from '../components'
-import { PoolCard } from '../ui'
 
-import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL, getUniswapPriceEth, infuraAPI, getUniswapDetails } from '../../client/web3.js'
-import { getETHPrice } from '../../client/market.js'
+import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL, infuraAPI } from '../../client/web3.js'
+// import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, prettify, totalSupply } from '../utils'
 
 export const PoolTable = () => {
 
     const context = useContext(Context)
 
-    const [marketData, setMarketData] = useState({
-        priceToday: "",
-        priceHistorical: "",
-        priceUniswap: "",
-        ethPrice: ""
-    })
-
     const [account, setAccount] = useState(
         { address: '', vethBalance: '', ethBalance: '' })
-    const [uniswapData, setUniswapData] = useState(
-        { "eth": "", "veth": '' })
+
 
     const [contract, setContract] = useState(null)
     // const [customAmount, setCustomAmount] = useState(null)
@@ -53,8 +44,6 @@ export const PoolTable = () => {
         if (!ethEnabled()) {
             // alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
         } else {
-            context.uniswapData ? getUniswapData() : loadUniswapData()
-            context.marketData ? getMarketData() : loadMarketData()
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
             const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
@@ -73,39 +62,6 @@ export const PoolTable = () => {
             return true;
         }
         return false;
-    }
-
-    const getUniswapData = () => {
-        setUniswapData(context.uniswapData)
-    }
-
-    const loadUniswapData = async () => {
-        const uniswapBal = await getUniswapDetails()
-        setUniswapData(uniswapBal)
-        context.setContext({
-            "uniswapData": uniswapBal
-        })
-    }
-
-    const getMarketData = () => {
-        setMarketData(context.marketData)
-    }
-    const loadMarketData = async () => {
-        const priceEtherUSD = await getETHPrice()
-        const priceVetherEth = await getUniswapPriceEth()
-        const priceVetherUSD = priceEtherUSD * priceVetherEth
-        setMarketData({
-            priceUSD: priceVetherUSD,
-            priceETH: priceVetherEth,
-            ethPrice: priceEtherUSD
-        })
-        context.setContext({
-            "marketData": {
-                'priceUSD': priceVetherUSD,
-                'priceETH': priceVetherEth,
-                "ethPrice": priceEtherUSD
-            }
-        })
     }
 
     const getAccountData = async () => {
@@ -170,7 +126,7 @@ export const PoolTable = () => {
         const tx = await window.web3.eth.sendTransaction({ from: fromAcc_, to: toAcc_, value: amount_ })
         setEthTx(tx.transactionHash)
         loadAccountData(contract, fromAcc_)
-        loadUniswapData()
+        // loadUniswapData()
         setLoadedBuy(true)
     }
 
@@ -187,7 +143,7 @@ export const PoolTable = () => {
         const tx = await exchangeContract.methods.tokenToEthSwapInput(tokens_sold, min_eth, deadline).send({ from: fromAcc_ })
         setVethTx(tx.transactionHash)
         loadAccountData(contract, fromAcc_)
-        loadUniswapData()
+        // loadUniswapData()
         setLoadedSell(true)
     }
 
@@ -198,7 +154,9 @@ export const PoolTable = () => {
     return (
         <div>
             <Row style={{ marginTop: 40, marginBottom: 50 }}>
-                <Col xs={24} sm={24} xl={5} style={{ marginLeft: 25, marginRight: 25, marginBottom: 30 }}>
+                <Col xs={24} sm={24} xl={6}>
+                </Col>
+                <Col xs={24} sm={24} xl={6} style={{ marginLeft: 0, marginRight: 0, marginBottom: 30 }}>
                     <Label>{prettify(account.ethBalance)}</Label>
                     <br></br>
                     <LabelGrey>Spendable ETH Balance</LabelGrey>
@@ -224,9 +182,7 @@ export const PoolTable = () => {
                     }
                 </Col>
 
-                <PoolCard uniswapData={uniswapData} marketData={marketData} />
-
-                <Col xs={24} sm={24} xl={5} style={{ marginLeft: 25, marginRight: 25 }}>
+                <Col xs={24} sm={24} xl={6} style={{ marginLeft:0, marginRight: 0, textAlign:"right" }}>
                     {!approved &&
                         <Row>
                             <Col xs={24}>
@@ -260,7 +216,7 @@ export const PoolTable = () => {
                                 <Label>{prettify(account.vethBalance)}</Label>
                                 <br></br>
                                 <LabelGrey>Available VETH Balance</LabelGrey>
-                                <Input size={'large'} style={{ marginBottom: 10, paddingRight: 50 }} allowClear onChange={onVethAmountChange} placeholder={prettify(account.vethBalance)} />
+                                <Input size={'large'} style={{ marginBottom: 10, paddingLeft: 50 }} allowClear onChange={onVethAmountChange} placeholder={prettify(account.vethBalance)} />
                                 <br></br>
                                 <Button onClick={sellVether}>&lt;&lt; SELL VETH</Button>
                                 <Tooltip placement="right" title="This will sell your Vether for Ether">
@@ -283,6 +239,8 @@ export const PoolTable = () => {
                             </Col>
                         </Row>
                     }
+                </Col>
+                <Col xs={24} sm={24} xl={6}>
                 </Col>
             </Row>
         </div>
