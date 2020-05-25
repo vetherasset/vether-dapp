@@ -126,9 +126,10 @@ export const HistoryTable = () => {
         const baseURL = 'https://api.blocklytics.org/pools/v0/trades/0x506D07722744E4A390CD7506a2Ba1A8157E63745?key='
         // const data = (new Date())
         // &fromDate=1590386548
-        const response = await axios.get(baseURL + process.env.REACT_APP_BLOCKLYTICS_API + '&limit=15')
+        const response = await axios.get(baseURL + process.env.REACT_APP_BLOCKLYTICS_API + '&limit=50')
 		let returnData = response.data.results
-		console.log(returnData)
+        console.log(returnData)
+        console.log(new Date())
 		// let returns = returnData.reduce((acc, item) => ((+acc + +item.D7_annualized)/2), 0)
         setTradeTable(returnData)
         setLoading(true)
@@ -137,13 +138,25 @@ export const HistoryTable = () => {
     const columns = [
         {
             title: 'TYPE',
-            dataIndex: 'action',
             key: 'action',
+            render: (record) => {
+                return (
+                    <div>
+                        <Text size={14} bold={true}>{record.action}</Text>
+                    </div>
+                )
+            }
         },
         {
             title: 'Quantity',
-            dataIndex: 'quantity',
             key: 'quantity',
+            render: (record) => {
+                return (
+                    <div>
+                        <Text size={14}>{(+record.quantity).toFixed(2)}</Text>
+                    </div>
+                )
+            }
         },
         {
             title: 'Slippage',
@@ -151,15 +164,21 @@ export const HistoryTable = () => {
             render: (record) => {
                 return (
                     <div>
-                        <Text size={14} bold={true}>{(+record.slippage * 100).toFixed(2)} %</Text>
+                        <Text size={14}>{(+record.slippage * 100).toFixed(2)} %</Text>
                     </div>
                 )
             }
         },
         {
             title: 'Time',
-            dataIndex: 'timestamp',
             key: 'timestamp',
+            render: (record) => {
+                return (
+                    <div>
+                        <Text size={14}>{record.timestamp}</Text>
+                    </div>
+                )
+            }
         }
     ]
 
@@ -171,7 +190,7 @@ export const HistoryTable = () => {
 
     return(
         <div>
-            <Label>Trade History</Label><br/>
+            <Label>Yesterday's Trade History</Label><br/>
             {!loading && 
                 <LoadingOutlined  style={loadingStyles}/>
             }
