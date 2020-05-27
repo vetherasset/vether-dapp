@@ -62,7 +62,7 @@ export const EmissionTable = () => {
 					<P size={14}>|-----|--------|-------|-------|-----------|---------|------------|---------|-------|</P>
 					<P size={14}>| &nbsp;&nbsp;1 | &nbsp;&nbsp;&nbsp;244 | &nbsp;&nbsp;244 | &nbsp;&nbsp;0.7 | &nbsp;&nbsp;&nbsp;&nbsp;2,048 | 499,714 | &nbsp;&nbsp;&nbsp;499,714 | &nbsp;&nbsp;&nbsp;154% | &nbsp;&nbsp;&nbsp;&nbsp;1 |</P>
 					<P size={14}>| &nbsp;&nbsp;2 | &nbsp;&nbsp;&nbsp;244 | &nbsp;&nbsp;488 | &nbsp;&nbsp;1.3 | &nbsp;&nbsp;&nbsp;&nbsp;1,024 | 249,856 | &nbsp;&nbsp;&nbsp;749,568 | &nbsp;&nbsp;&nbsp;&nbsp;51% | &nbsp;&nbsp;&nbsp;&nbsp;2 |</P>
-					<P size={14}>| &nbsp;&nbsp;3 | &nbsp;&nbsp;&nbsp;244 | &nbsp;&nbsp;732 | &nbsp;&nbsp;2.0 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;514 | 144,928 | &nbsp;&nbsp;&nbsp;874,496 | &nbsp;&nbsp;&nbsp;&nbsp;22% | &nbsp;&nbsp;&nbsp;&nbsp;5 |</P>
+					<P size={14}>| &nbsp;&nbsp;3 | &nbsp;&nbsp;&nbsp;244 | &nbsp;&nbsp;732 | &nbsp;&nbsp;2.0 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;512 | 144,928 | &nbsp;&nbsp;&nbsp;874,496 | &nbsp;&nbsp;&nbsp;&nbsp;22% | &nbsp;&nbsp;&nbsp;&nbsp;5 |</P>
 					<P size={14}>| &nbsp;&nbsp;4 | &nbsp;&nbsp;&nbsp;244 | &nbsp;&nbsp;976 | &nbsp;&nbsp;2.6 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;256 | &nbsp;62,464 | &nbsp;&nbsp;&nbsp;936,960 | &nbsp;&nbsp;&nbsp;&nbsp;10% | &nbsp;&nbsp;&nbsp;10 |</P>
 					<P size={14}>| &nbsp;&nbsp;5 | &nbsp;&nbsp;&nbsp;244 | &nbsp;1420 | &nbsp;&nbsp;3.3 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;148 | &nbsp;31,232 | &nbsp;&nbsp;&nbsp;968,192 | &nbsp;&nbsp;&nbsp;5.0% | &nbsp;&nbsp;&nbsp;20 |</P>
 					<P size={14}>| &nbsp;&nbsp;6 | &nbsp;&nbsp;&nbsp;244 | &nbsp;1464 | &nbsp;&nbsp;3.9 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;64 | &nbsp;15,616 | &nbsp;&nbsp;&nbsp;983,808 | &nbsp;&nbsp;&nbsp;2.4% | &nbsp;&nbsp;&nbsp;41 |</P>
