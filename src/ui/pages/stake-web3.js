@@ -10,7 +10,7 @@ import { convertFromWei, convertToWei, prettify, getBN, getBig } from '../utils'
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { H2, Text, LabelGrey, Label, Click, Button, Sublabel, Colour, Center, HR, Gap, Subtitle } from '../components'
-import { WalletCard, PoolCard, UniswapCard } from '../ui'
+import { PoolCard, UniswapCard } from '../ui'
 
 export const PoolTable = () => {
 
@@ -173,11 +173,11 @@ export const StakeTable = () => {
 		<div>
 			<Gap />
 			<Row>
-				<Col xs={24} sm={12}>
+				{/* <Col xs={24} sm={12}>
 					{!loading &&
 						<WalletCard accountData={account} />
 					}
-				</Col>
+				</Col> */}
 				<Col xs={24} sm={12}>
 					{!loading &&
 						<UniswapCard accountData={account} uniswapData={uniswapData} />

@@ -182,3 +182,11 @@ a:hover {
   font-weight: 800;
 }
 
+.ant-drawer-title {
+  margin: 0;
+  color: #fff;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 22px;
+  margin-top:5px;
+}

@@ -26,7 +26,6 @@ const Acquire = () => {
 		if (pathname === 'claim' && !loaded) {
 			setLoaded(true)
 			setTab('3')
-			console.log(tab)
 		}
 		// eslint-disable-next-line
 	}, [])

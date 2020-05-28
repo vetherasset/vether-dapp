@@ -52,7 +52,7 @@ export const ClaimTable = () => {
 			setContract(contract)
 			context.accountData ? getAccountData() : loadAccountData(contract, address)
 			const eraData_ = await context.eraData ? await getEraData() : await loadEraData(contract)
-			console.log(eraData_)
+			// console.log(eraData_)
 			context.arrayDays ? await getDays() : await loadDays(eraData_, contract, address, false)
 			// console.log(arrayDays, context.arrayDays)
 			// getDays(eraDay_, contract, address)
