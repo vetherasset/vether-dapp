@@ -123,4 +123,23 @@ a:hover {
   background: #2B2515;
 }
 
+.ant-tabs-nav .ant-tabs-tab-active{
+  color: #D09800;
+  font-weight:800;
+  border-bottom: 2px solid #D09800;
+}
+
+.ant-tabs {
+  color: #fff;
+  font-weight:500;
+}
+
+.ant-tabs-ink-bar {
+  background-color: #D09800;
+}
+
+.ant-tabs-nav .ant-tabs-tab:hover {
+  color: #D09800;
+}
+
 
