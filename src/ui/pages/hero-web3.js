@@ -163,8 +163,8 @@ export const VetherTable = () => {
                             <Text size={24}>{prettify(vetherData.totalSupply)} VETH</Text>
                         </Col>
                         <Col xs={24} sm={12}>
-                            <LabelGrey size={14}>TOTAL CAP: </LabelGrey><br />
-                            <Text size={24}>${prettify((convertEthtoUSD(convertToETH(vetherData.totalSupply), 0)))}</Text>
+                            {/* <LabelGrey size={14}>TOTAL CAP: </LabelGrey><br />
+                            <Text size={24}>${prettify((convertEthtoUSD(convertToETH(vetherData.totalSupply), 0)))}</Text> */}
                         </Col>
                     </Row>
                     <Row style={{marginTop:20}}>
