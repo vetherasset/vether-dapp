@@ -90,6 +90,9 @@ export const Label = (props) => {
     if (props.margin) {
     styles.margin = props.margin
   }
+  if (props.size) {
+    styles.fontSize = props.size
+  }
 
   return (
     <span style={styles}>
@@ -219,6 +222,10 @@ export const Button = (props) => {
 
   if (props.size) {
     styles.fontSize = props.size
+  }
+  if (props.backgroundColor) {
+    styles.backgroundColor = props.backgroundColor
+    styles.borderColor = props.backgroundColor
   }
 
   return (

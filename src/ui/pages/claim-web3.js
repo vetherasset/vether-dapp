@@ -52,7 +52,7 @@ export const ClaimTable = () => {
 			setContract(contract)
 			context.accountData ? getAccountData() : loadAccountData(contract, address)
 			const eraData_ = await context.eraData ? await getEraData() : await loadEraData(contract)
-			// console.log(eraDay_)
+			// console.log(eraData_)
 			context.arrayDays ? await getDays() : await loadDays(eraData_, contract, address, false)
 			// console.log(arrayDays, context.arrayDays)
 			// getDays(eraDay_, contract, address)
@@ -172,20 +172,17 @@ export const ClaimTable = () => {
 		setClaimAmt(convertFromWei(share))
 		setCheckFlag(true)
 		const currentTime = Math.round((new Date()) / 1000)
-		if (share > 0 && +eraData_.day > +userData.day) {
+		// console.log(currentTime, +eraData_.nextDay, eraData_)
+		if (share > 0 && +userData.day < +eraData_.day) {
+			// Has a share, day requested is less than current day (so yesterday)
 			setZeroFlag(false)
 		} else if (share > 0 && currentTime > +eraData_.nextDay) {
+			// Has a share, current time is greater than next day time (so gone past day)
 			setZeroFlag(false)
 		} else {
-			setZeroFlag(true) //hard-coding to false for now
+			// Don't show
+			setZeroFlag(true)
 		}
-		// console.log(share, +eraData_.day, +userData.day, currentTime, +eraData_.nextDay)
-		// console.log(eraData.eraData)
-		// console.log(context.eraData)
-	}
-
-	const continueAnyway = () => {
-		setZeroFlag(false)
 	}
 
 	const claimShare = async () => {
@@ -193,7 +190,6 @@ export const ClaimTable = () => {
 		console.log(contract)
 		console.log(userData.era, userData.day, account.address)
 		const tx = await contract.methods.withdrawShare(userData.era, userData.day).send({ from: account.address })
-		//console.log(tx.transactionHash)
 		setLoaded(true)
 		setTxHash(tx.transactionHash)
 		setClaimAmt(0)
@@ -211,13 +207,11 @@ export const ClaimTable = () => {
 		const handleDayClick = useCallback((item, i) => {
 			console.log(item, i, userData.era, item)
 			setUserData({ era: userData.era, day: item })
-			//checkShare()
 		}, [])
 
 		return (<>
 			{arrayDays.map((day, i) => (
 				<li style={styles} key={i}>
-					{/* <Label>{day}</Label><Text>,</Text> */}
 					<Button onClick={() => handleDayClick(day, i)}>{day}</Button>
 				</li>
 			))}
@@ -287,7 +281,7 @@ export const ClaimTable = () => {
 									<br></br>
 									<Text size={14}>Your unclaimed Vether on this day.</Text><br />
 									<Text size={14}>(Please wait for the day to finish first before claiming) </Text><br />
-									<Button size={12} onClick={continueAnyway}> continue anyway ></Button>
+									{/* <Button size={12} onClick={continueAnyway}> continue anyway ></Button> */}
 								</Col>
 
 								{!zeroFlag &&

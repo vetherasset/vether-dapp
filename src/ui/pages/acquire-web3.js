@@ -40,7 +40,7 @@ export const AcquireTable = () => {
 			const day = await contract.methods.currentDay().call()
         	const era = 1
 			const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
-			console.log(currentBurn)
+			// console.log(currentBurn)
 			// setVethPrice(currentBurn / 2048 )
 			setCurrentBurn(currentBurn)
 		}
