@@ -190,7 +190,6 @@ export const ClaimTable = () => {
 		console.log(contract)
 		console.log(userData.era, userData.day, account.address)
 		const tx = await contract.methods.withdrawShare(userData.era, userData.day).send({ from: account.address })
-		//console.log(tx.transactionHash)
 		setLoaded(true)
 		setTxHash(tx.transactionHash)
 		setClaimAmt(0)
@@ -208,13 +207,11 @@ export const ClaimTable = () => {
 		const handleDayClick = useCallback((item, i) => {
 			console.log(item, i, userData.era, item)
 			setUserData({ era: userData.era, day: item })
-			//checkShare()
 		}, [])
 
 		return (<>
 			{arrayDays.map((day, i) => (
 				<li style={styles} key={i}>
-					{/* <Label>{day}</Label><Text>,</Text> */}
 					<Button onClick={() => handleDayClick(day, i)}>{day}</Button>
 				</li>
 			))}
