@@ -4,7 +4,11 @@ import { Context } from '../../context'
 import { Link } from "react-router-dom";
 import { Menu, Layout, Row, Col, Drawer } from 'antd';
 import { Colour, Center, H1, H2, Sublabel, Icon, Button, LabelGrey, Text } from '../components'
-import { prettify } from '../utils'
+
+import Web3 from 'web3'
+import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getUniswapPriceEth } from '../../client/web3.js'
+import { getETHPrice } from '../../client/market.js'
+import { prettify, convertFromWei } from '../utils'
 
 import Breakpoint from 'react-socks';
 
@@ -17,6 +21,10 @@ const Header = () => {
 
     const [page, setPage] = useState(null)
     const [visible, setVisible] = useState(false);
+    const [accountData, setAccountData] = useState(
+		{ address: '', vethBalance: '', ethBalance: '', uniBalance:'', uniSupply:'' })
+    const [marketData, setMarketData] = useState(
+		{ priceUSD: '', priceETH: '', ethPrice: '' })
 
     const menu_items = [
         "overview",
@@ -35,8 +43,71 @@ const Header = () => {
         if (menu_items.includes(pathname)) {
             setPage(pathname)
         }
-        // console.log(getUniswapPriceEth(), getETHPrice())
+        connect()
+        // eslint-disable-next-line
     }, [menu_items])
+
+    const connect = async () => {
+		ethEnabled()
+		if (!ethEnabled()) {
+		} else {
+			const accounts = await window.web3.eth.getAccounts()
+            const address = accounts[0]
+            const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+            context.accountData ? getAccountData() : loadAccountData(contract, address)
+            context.marketData ? getMarketData() : loadMarketData()
+		}
+	}
+
+	const ethEnabled = () => {
+		if (window.ethereum) {
+			window.web3 = new Web3(window.ethereum);
+			window.ethereum.enable();
+			return true;
+		}
+		return false;
+	}
+
+    const getAccountData = async () => {
+        setAccountData(context.accountData)
+    }
+
+    const loadAccountData = async (contract_, address) => {
+        const ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
+		const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
+		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+		const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(address).call())
+		const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
+		const accountData = {
+			address: address,
+			vethBalance: vethBalance,
+			ethBalance: ethBalance,
+			uniBalance: uniBalance,
+			uniSupply:uniSupply
+		}
+        setAccountData(accountData)
+		context.setContext({'accountData':accountData})
+	}
+
+    const getMarketData = async () => {
+		setMarketData(context.marketData)
+	}
+	const loadMarketData = async () => {
+		const priceEtherUSD = await getETHPrice()
+		const priceVetherEth = await getUniswapPriceEth()
+		const priceVetherUSD = priceEtherUSD * priceVetherEth
+
+		const marketData = {
+			priceUSD: priceVetherUSD,
+			priceETH: priceVetherEth,
+			ethPrice: priceEtherUSD
+		}
+
+		setMarketData(marketData)
+		context.setContext({
+			"marketData": marketData
+		})
+	}
 
     const headerStyles = {
         background: colour,
@@ -144,13 +215,13 @@ const Header = () => {
                                     headerStyle={headerDrawerStyles}
                                     drawerStyle={drawerStyles}
                                 >
-                                    <Text size={24}>{prettify(+context.accountData?.ethBalance)}</Text>&nbsp;<Text size={20}>ETH</Text><br/>
-                                    <LabelGrey >${prettify(+context.accountData?.ethBalance * +context.marketData?.ethPrice)}</LabelGrey>
+                                    <Text size={24}>{prettify(+accountData?.ethBalance)}</Text>&nbsp;<Text size={20}>ETH</Text><br/>
+                                    <LabelGrey >${prettify(+accountData?.ethBalance * +marketData?.ethPrice)}</LabelGrey>
                                     <br/><br/>
-                                    <Text size={24}>{prettify(+context.accountData?.vethBalance)}</Text>&nbsp;<Text size={20}>VETH</Text><br/>
-                                    <LabelGrey >${prettify(+context.accountData?.vethBalance * +context.marketData?.priceUSD)}</LabelGrey>
+                                    <Text size={24}>{prettify(+accountData?.vethBalance)}</Text>&nbsp;<Text size={20}>VETH</Text><br/>
+                                    <LabelGrey >${prettify(+accountData?.vethBalance * +marketData?.priceUSD)}</LabelGrey>
                                     <br/><br/>
-                                    <Text size={24}>{prettify(+context.accountData?.uniBalance)}</Text>&nbsp;<Text size={20}>UNI-V1</Text><br/>
+                                    <Text size={24}>{prettify(+accountData?.uniBalance)}</Text>&nbsp;<Text size={20}>UNI-V1</Text><br/>
                                     <br/><br/>
 
                                 </Drawer>
