@@ -17,15 +17,23 @@ const Acquire = () => {
 
 	const [safari, setSafari] = useState(null)
 	const [tab, setTab] = useState('1')
+	const [loaded, setLoaded] = useState(false)
 
 	useEffect(() => {
 		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		setSafari(isSafari)
 		let pathname = window.location.pathname.split("/")[1]
-		if (pathname === 'claim') {
+		if (pathname === 'claim' && !loaded) {
+			setLoaded(true)
 			setTab('3')
+			console.log(tab)
 		}
-	}, [tab])
+		// eslint-disable-next-line
+	}, [])
+
+	const onChange = key => {
+		setTab(key)
+	}
 
 	return (
 		<div>
@@ -39,7 +47,7 @@ const Acquire = () => {
 			</Row> */}
 
 
-			<Tabs activeKey={tab} size={'large'} style={{ marginTop: 20 }}>
+			<Tabs defaultActiveKey='1' activeKey={tab} onChange={onChange} size={'large'} style={{ marginTop: 20 }}>
 				<TabPane tab="BURN ETHER" key="1">
 					<Gap />
 					<H2>ACQUIRE VETHER</H2><br />
