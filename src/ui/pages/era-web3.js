@@ -156,13 +156,16 @@ export const EraTable = (props) => {
                             </Button>
                             {/* </Center> */}
                         </Col>
-                        {!small &&
-                            <Col xs={24} sm={8}>
-                                <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
-                                <Progress percent={(((82400 - eraData.secondsToGo) / 82400) * 100).toFixed(0)} strokeColor={Colour().gold} status="active" />
-                                <Center><LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
-                            </Col>
-                        }
+
+                        <Col xs={24} sm={8}>
+                            <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
+                            {!small &&
+                                <div>
+                                    <Progress percent={(((82400 - eraData.secondsToGo) / 82400) * 100).toFixed(0)} strokeColor={Colour().gold} status="active" />
+                                    <Center><LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
+                                </div>
+                            }
+                        </Col>
 
                         <Col xs={24} sm={8}>
                         </Col>
@@ -170,6 +173,11 @@ export const EraTable = (props) => {
                     <Row>
                         <Col xs={24} sm={6}>
                         </Col>
+                        {small &&
+                            <Col xs={24} sm={12}>
+                                <Center><LabelGrey margin={"0px 0px 0px"}>ERA 1, DAY {eraData.day}</LabelGrey></Center>
+                            </Col>
+                        }
                         {!small &&
                             <Col xs={24} sm={12} style={poolStyles}>
                                 <Center><LabelGrey margin={"20px 0px 0px"}>ERA 1, DAY {eraData.day}</LabelGrey></Center>
@@ -177,7 +185,7 @@ export const EraTable = (props) => {
                                     <Center><Text size={48} margin={"0px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
                                 </Breakpoint>
                                 <Breakpoint small down>
-                                    <Center><Text size={32} margin={"20px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                                    <Center><Text size={32} margin={"10px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
                                 </Breakpoint>
                                 <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
                             </Col>

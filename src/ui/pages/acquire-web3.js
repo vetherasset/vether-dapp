@@ -8,7 +8,7 @@ import { convertFromWei, prettify } from '../utils'
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { LabelGrey, Label, Click, Button, Sublabel, Gap, Colour, Text } from '../components'
-import { EraTable } from './era-web3'
+// import { EraTable } from './era-web3'
 
 export const AcquireTable = () => {
 
@@ -117,9 +117,6 @@ export const AcquireTable = () => {
 
 			{walletFlag &&
 				<div>
-					<Row>
-						<EraTable size={'small'} />
-					</Row>
 
 					<Label>BURN ETHER</Label>
 					<br />

@@ -8,7 +8,7 @@ import {convertFromWei, convertToWei, getSecondsToGo, getBN, prettify} from '../
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey, Colour } from '../components'
-import { WalletCard } from '../ui'
+// import { WalletCard } from '../ui'
 
 export const ClaimTable = () => {
 
@@ -228,13 +228,12 @@ export const ClaimTable = () => {
 		<div>
 			{walletFlag &&
 				<div>
-					<Row>
+					{/* <Row>
 						<Col xs={12}>
 							<WalletCard accountData={account}/>
 						</Col>
-					</Row>
-					
-					<Gap />
+					</Row> */}
+
 					<Row>
 						<Col style={{ marginBottom: 20 }}>
 							<LabelGrey>CLAIMS FOUND IN THESE DAYS: </LabelGrey>

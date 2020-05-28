@@ -160,7 +160,7 @@ export const BurnCard = (props) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Center><LabelGrey margin={"0px 0px 20px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
+                    <Center><LabelGrey margin={"0px 0px 10px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
                     <br></br>
                 </Row>
                 <Row>
@@ -172,7 +172,7 @@ export const BurnCard = (props) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Center><LabelGrey margin={"0px 0px 20px"}>IMPLIED VALUE OF VETHER TODAY</LabelGrey></Center>
+                    <Center><LabelGrey margin={"0px 0px 10px"}>IMPLIED VALUE OF VETHER TODAY</LabelGrey></Center>
                     <br></br>
                 </Row>
             </Col>
