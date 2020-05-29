@@ -19,6 +19,7 @@ const Header = () => {
     const net = (process.env.REACT_APP_TESTNET === 'TRUE') ? "TESTNET" : "MAINNET"
     const colour = (process.env.REACT_APP_TESTNET === 'TRUE') ? Colour().grey : Colour().black
 
+    const [connected, setConnected] = useState(false)
     const [page, setPage] = useState(null)
     const [visible, setVisible] = useState(false);
     const [accountData, setAccountData] = useState(
@@ -43,7 +44,9 @@ const Header = () => {
         if (menu_items.includes(pathname)) {
             setPage(pathname)
         }
-        connect()
+        if(!connected){
+            connect()
+        }
         // eslint-disable-next-line
     }, [menu_items])
 
@@ -56,6 +59,7 @@ const Header = () => {
             const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
             context.accountData ? getAccountData() : loadAccountData(contract, address)
             context.marketData ? getMarketData() : loadMarketData()
+            setConnected(true)
 		}
 	}
 
