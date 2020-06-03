@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { Row, Col } from 'antd'
-import { H1, HR, Gap, Subtitle } from '../components'
+import { H1, HR, Gap, Subtitle, Center } from '../components'
 import { Abstract } from '../content'
 import { VetherTable } from './hero-web3'
 import Era from './Era'
-import Cards, {Links} from './Cards'
+import Cards, { Links } from './Cards'
 import thumbnail from '../../assets/video_thumbnail.png';
 
 import '../../App.css';
@@ -35,15 +35,17 @@ const Hero = (props) => {
 			<HR />
 			<Row>
 				<Col xs={4}>
-				<Links />
+					<Links />
 				</Col>
 				<Col xs={20}>
-					<a href="https://streamable.com/2tjbjp" target='_blank'rel="noopener noreferrer">
-						<img src={thumbnail} alt="vether-icon" height={400} style={{ margin: 40}} />
+					<Center>
+						<a href="https://streamable.com/2tjbjp" target='_blank' rel="noopener noreferrer">
+							<img src={thumbnail} alt="vether-icon" height={400} style={{ margin: 40 }} />
 						</a>
+					</Center>
 				</Col>
 			</Row>
-			
+
 		</div>
 	)
 }
