@@ -99,8 +99,8 @@ export const Links = (props) => {
     return (
         <div>
             <Gap />
-            <H2>VETHER LINKS</H2><br />
-            <Subtitle>Useful links for Vether</Subtitle>
+            <H2>LINKS AND RESOURCES</H2><br />
+            <Subtitle>Useful links and resources</Subtitle>
             <Gap />
             <Row>
                 <Col>
