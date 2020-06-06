@@ -1,6 +1,5 @@
 node_modules/
 addresses.md
-firebase.json
 .firebase
 .firebaserc
 build/
