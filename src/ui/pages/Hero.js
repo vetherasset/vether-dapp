@@ -37,15 +37,7 @@ const Hero = (props) => {
 				<Col xs={4}>
 					<Links />
 				</Col>
-				<Col xs={20}>
-					<Center>
-						<a href="https://streamable.com/2tjbjp" target='_blank' rel="noopener noreferrer">
-							<img src={thumbnail} alt="vether-icon" height={400} style={{ margin: 40 }} />
-						</a>
-					</Center>
-				</Col>
 			</Row>
-
 		</div>
 	)
 }
