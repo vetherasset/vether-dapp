@@ -22,7 +22,12 @@ const Stats = () => {
     const context = useContext(Context)
     // eslint-disable-next-line
     const [loaded, setLoaded] = useState(false)
+    const [loadedPrice, setLoadedPrice] = useState(false)
+    const [loadedClaims, setLoadedClaims] = useState(false)
+
     const [chartData, setChartData] = useState({ claimArray: [], holderArray: [] })
+    const [claimData, setClaimData] = useState(null)
+    const [priceData, setPriceData] = useState(null)
     const [eraData, setEraData] = useState(
         { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
     const [emissionData, setEmissionData] = useState(
@@ -30,23 +35,39 @@ const Stats = () => {
 
     useEffect(() => {
         if (!loaded) {
-            context.chartData ? getChartData() : loadChartData()
-            context.eraData ? getEraData() : loadEraData()
-            context.emissionData ? getEmissionData() : loadEmissionData()
+            loadData()
         }
         // eslint-disable-next-line
     }, [loaded, chartData, context.chartData])
+
+    const loadData = async () => {
+        context.eraData ? getEraData() : loadEraData()
+        context.emissionData ? getEmissionData() : loadEmissionData()
+        const claimArray = context.claimData ? getClaimData() : await loadClaimData()
+        context.chartData ? getChartData() : loadChartData()
+        context.priceData ? getPriceData() : loadPriceData(claimArray)
+    }
+
+    const getClaimData = async () => {
+        setClaimData(context.claimData)
+        setLoadedClaims(true)
+        return context.claimData
+    }
+
+    const loadClaimData = async () => {
+        const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
+        let claimData = response.data
+        context.setContext({ 'claimData': claimData })
+        setClaimData(claimData)
+        setLoadedClaims(true)
+        return claimData
+    }
 
     const getChartData = () => {
         setChartData(context.chartData)
         setLoaded(true)
     }
     const loadChartData = async () => {
-        const ethPrice = await getETHPrice()
-        const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
-        let claimArray = response.data
-        let dailyPriceData = claimArray.burns.map(item => ((item * ethPrice) / 2048).toFixed(2))
-        let totalPriceData = claimArray.totals.map((item, i) => ((item * ethPrice) / (claimArray.vether[i])).toFixed(2))
 
         const apiKey = process.env.REACT_APP_ETHPLORER_API
         const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
@@ -54,33 +75,49 @@ const Stats = () => {
         let holderArray = response2.data
         const baseURL2 = 'https://api.ethplorer.io/getTokenInfo/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
         const response3 = await axios.get(baseURL2 + apiKey)
-        let transfers_ = response3.data.transfersCount
+        let transfers = response3.data.transfersCount
+
+        const chartData = {
+            holderArray: holderArray.holders,
+            transfers: transfers,
+        }
+
+        setChartData(chartData)
+        context.setContext({ 'chartData': chartData })
+        setLoaded(true)
+    }
+
+    const getPriceData = async () => {
+        setPriceData(context.priceData)
+        setLoadedPrice(true)
+    }
+
+    const loadPriceData = async (claimArray) => {
+
+        const ethPrice = await getETHPrice()
+
+        let dailyPriceData = claimArray?.burns?.map(item => ((item * ethPrice) / 2048).toFixed(2))
+        let totalPriceData = claimArray?.totals?.map((item, i) => ((item * ethPrice) / (claimArray?.vether[i])).toFixed(2))
 
         const baseURL3 = 'https://api.blocklytics.org/pools/v0/liquidity/0x506D07722744E4A390CD7506a2Ba1A8157E63745/history?key='
         const response4 = await axios.get(baseURL3 + process.env.REACT_APP_BLOCKLYTICS_API)
         let uniswapData = response4.data
-        let uniswapPrices = uniswapData.map((item) => ((item.eth_ending_balance / item.token_ending_balance)*ethPrice).toFixed(2))
+        let uniswapPrices = uniswapData.map((item) => ((item.eth_ending_balance / item.token_ending_balance) * ethPrice).toFixed(2))
 
-        const chartData = {
-            claimArray: claimArray,
+        const priceData = {
             uniswapPrices: uniswapPrices,
-            holderArray: holderArray.holders,
-            transfers: transfers_,
-            priceData: {
-                daily: dailyPriceData,
-                totals: totalPriceData
-            }
+            daily: dailyPriceData,
+            totals: totalPriceData,
+            days: claimArray?.days
         }
 
-        setChartData(chartData)
-        context.setContext({'chartData': chartData})
-        setLoaded(true)
-
+        context.setContext({ 'priceData': priceData })
+        setPriceData(priceData)
+        setLoadedPrice(true)
     }
 
     const getEraData = async () => {
         setEraData(context.eraData)
-        // setCounter(context.eraData.secondsToGo)
     }
 
     const loadEraData = async () => {
@@ -143,7 +180,7 @@ const Stats = () => {
     const loadingStyles = {
         paddingTop: 200,
         paddingLeft: 150,
-        fontSize:32
+        fontSize: 32
     }
 
 
@@ -153,44 +190,15 @@ const Stats = () => {
             <H2>STATS</H2>
             <br></br>
             <Text size={16} bold={'TRUE'}>Stats for the Vether Economy</Text><br></br>
-            {!loaded &&
-                <div>
-                    <Row>
-                        <Col xs={24} lg={7} style={ChartStyles}>
-                            <LoadingOutlined style={loadingStyles}/>
-                        </Col>
-                        <Col xs={24} lg={15} style={ChartStyles}>
-                            <LoadingOutlined style={loadingStyles}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={24} xl={11} style={ChartStyles}>
-                            <LoadingOutlined style={loadingStyles}/>
-                        </Col>
-                        <Col xs={24} xl={11} style={ChartStyles}>
-                            <LoadingOutlined style={loadingStyles}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={24} lg={15} style={ChartStyles}>
-                            <LoadingOutlined  style={loadingStyles}/>
-                        </Col>
-                        <Col xs={24} lg={7} style={ChartStyles}>
-                            <LoadingOutlined  style={loadingStyles}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={24} style={ChartStyles}>
-                            <LoadingOutlined  style={loadingStyles}/>
-                        </Col>
-                    </Row>
-                </div>
-            }
-
-            {loaded &&
-                <div>
-                    <Row>
-                        <Col xs={24} lg={8}>
+            <Row>
+                {!loaded &&
+                    <Col xs={24} lg={9} style={ChartStyles}>
+                        <LoadingOutlined style={loadingStyles} />
+                    </Col>
+                }
+                {loaded &&
+                    <div>
+                        <Col xs={24} lg={9}>
                             <Breakpoint small down>
                                 <ChartData eraData={eraData}
                                     emissionData={emissionData}
@@ -206,36 +214,76 @@ const Stats = () => {
                                     size={14} />
                             </Breakpoint>
                         </Col>
-                        <Col xs={24} lg={16}>
-                            <ChartEmission emissionArray={emissionArray} />
+                    </div>
+                }
+                <Col xs={24} lg={15}>
+                    <ChartEmission emissionArray={emissionArray} />
+                </Col>
+            </Row>
+            <Row>
+                {!loadedClaims &&
+                    <div>
+                        <Col xs={24} xl={11} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles} />
                         </Col>
-                    </Row>
-                    <Row>
+                        <Col xs={24} xl={11} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles} />
+                        </Col>
+                    </div>
+                }
+                {loadedClaims &&
+                    <div>
                         <Col xs={24} xl={12}>
-                            <ChartEther claimArray={chartData.claimArray} />
+                            <ChartEther claimArray={claimData} />
                         </Col>
                         <Col xs={24} xl={12}>
-                            <ChartClaim claimArray={chartData.claimArray} />
+                            <ChartClaim claimArray={claimData} />
                         </Col>
-                    </Row>
-                    <Row>
+                    </div>
+                }
+            </Row>
+            <Row>
+                {!loaded &&
+                    <div>
+                        <Col xs={24} lg={15} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles} />
+                        </Col>
+                        <Col xs={24} lg={7} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles} />
+                        </Col>
+                    </div>
+                }
+                {loaded &&
+                    <div>
                         <Col xs={24} lg={16}>
                             <ChartDistro holderArray={chartData.holderArray} />
                         </Col>
                         <Col xs={24} lg={8}>
                             <ChartPie holderArray={chartData.holderArray} />
                         </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={24}>
-                            <ChartPrice 
-                            days={chartData.claimArray.days} 
-                            priceData={chartData.priceData} 
-                            uniswapPrices={chartData.uniswapPrices}/>
+                    </div>
+                }
+            </Row>
+            <Row>
+                {!loadedPrice &&
+                    <div>
+                        <Col xs={24} lg={23} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles} />
                         </Col>
-                    </Row>
-                </div>
-            }
+                    </div>
+                }
+                {loadedPrice &&
+                    <div>
+                        <Col xs={24}>
+                            <ChartPrice
+                                days={priceData.days}
+                                priceData={priceData}
+                                uniswapPrices={priceData.uniswapPrices} />
+                        </Col>
+                    </div>
+                }
+            </Row>
+
             <Click><a href='https://github.com/EverexIO/Ethplorer/wiki/Ethplorer-API' rel="noopener noreferrer" title="ETHPlorer link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> DATA FROM ETHPLORER -> </a></Click><br />
             <Click><a href='https://www.chartjs.org/' rel="noopener noreferrer" title="Chartjs link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> CHARTS FROM CHARTJS -> </a></Click>
             <Gap />
