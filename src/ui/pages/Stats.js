@@ -191,11 +191,8 @@ const Stats = () => {
             <br></br>
             <Text size={16} bold={'TRUE'}>Stats for the Vether Economy</Text><br></br>
             <Row>
-                <Col xs={24} lg={15}>
-                    <ChartEmission emissionArray={emissionArray} />
-                </Col>
                 {!loaded &&
-                    <Col xs={24} lg={7} style={ChartStyles}>
+                    <Col xs={24} lg={9} style={ChartStyles}>
                         <LoadingOutlined style={loadingStyles} />
                     </Col>
                 }
@@ -219,6 +216,9 @@ const Stats = () => {
                         </Col>
                     </div>
                 }
+                <Col xs={24} lg={15}>
+                    <ChartEmission emissionArray={emissionArray} />
+                </Col>
             </Row>
             <Row>
                 {!loadedClaims &&
