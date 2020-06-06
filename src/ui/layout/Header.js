@@ -4,6 +4,7 @@ import { Context } from '../../context'
 import { Link } from "react-router-dom";
 import { Menu, Layout, Row, Col, Drawer } from 'antd';
 import { Colour, Center, H1, H2, Sublabel, Icon, Button, LabelGrey, Text } from '../components'
+import logotype from '../../assets/logotype.svg';
 
 import Web3 from 'web3'
 import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getUniswapPriceEth } from '../../client/web3.js'
@@ -114,6 +115,8 @@ const Header = () => {
 	}
 
     const headerStyles = {
+        display: "flex",
+        flexDirection: "column",
         background: colour,
         textTransform: "uppercase",
         zIndex: 1,
@@ -121,9 +124,19 @@ const Header = () => {
         left: 0,
         top: 0,
         right: 0,
+        paddingLeft: 9,
+        paddingRight: 9,
         paddingTop: 0,
-        paddingBottom: 50,
-        textAlign: "centre"
+        paddingBottom: 0,
+        textAlign: "center"
+    }
+
+    const logotypeStyles = {
+        width: 148,
+        height: 60,
+        display: "flex",
+        justifyContent: "flex-start",
+        transform: "scale(0.9)"
     }
 
     const headerStylesMobile = {
@@ -200,7 +213,7 @@ const Header = () => {
                     <div>
                         <Row>
                             <Col xs={3}>
-                                &nbsp;&nbsp;<H1>VETHERASSET.ORG</H1>
+                                <img src={logotype} style={logotypeStyles} alt="Vether - A strictly-scarce Ethereum-based asset." />
                             </Col>
                             <Col xs={18}>
                                 <Center><H2 margin={"-10px 0px"}>{net}</H2></Center>
