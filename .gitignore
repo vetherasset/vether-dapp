@@ -5,3 +5,4 @@ addresses.md
 build/
 .env
 firebase-debug.log
+.vercel
