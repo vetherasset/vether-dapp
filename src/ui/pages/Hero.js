@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { Row, Col } from 'antd'
-import { H1, HR, Gap, Subtitle, Center } from '../components'
+import { H1, HR, Gap, Subtitle } from '../components'
 import { Abstract } from '../content'
 import { VetherTable } from './hero-web3'
 import Era from './Era'
 import Cards, { Links } from './Cards'
-import thumbnail from '../../assets/video_thumbnail.png';
+// import thumbnail from '../../assets/video_thumbnail.png';
 
 import '../../App.css';
 

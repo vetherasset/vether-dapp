@@ -40,35 +40,36 @@ export const ClaimTable = () => {
 	}, [])
 
 	const connect = async () => {
-		ethEnabled()
-		if (!ethEnabled()) {
-			// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
-		} else {
-			setWalletFlag(true)
-			const accounts = await window.web3.eth.getAccounts()
-			const address = accounts[0]
-			// const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-			setContract(contract)
-			context.accountData ? getAccountData() : loadAccountData(contract, address)
-			const eraData_ = await context.eraData ? await getEraData() : await loadEraData(contract)
-			// console.log(eraData_)
-			context.arrayDays ? await getDays() : await loadDays(eraData_, contract, address, false)
-			// console.log(arrayDays, context.arrayDays)
-			// getDays(eraDay_, contract, address)
-			// console.log(account.vethBalance)
-			// console.log(context.accountData)
-		}
+		setWalletFlag(true)
+		const accounts = await window.web3.eth.getAccounts()
+		const address = accounts[0]
+		// const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+		setContract(contract)
+		context.accountData ? getAccountData() : loadAccountData(contract, address)
+		const eraData_ = await context.eraData ? await getEraData() : await loadEraData(contract)
+		// console.log(eraData_)
+		context.arrayDays ? await getDays() : await loadDays(eraData_, contract, address, false)
+		// console.log(arrayDays, context.arrayDays)
+		// getDays(eraDay_, contract, address)
+		// console.log(account.vethBalance)
+		// console.log(context.accountData)
+		// ethEnabled()
+		// if (!ethEnabled()) {
+		// 	// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+		// } else {
+			
+		// }
 	}
 
-	const ethEnabled = () => {
-		if (window.ethereum) {
-			window.web3 = new Web3(window.ethereum);
-			window.ethereum.enable();
-			return true;
-		}
-		return false;
-	}
+	// const ethEnabled = () => {
+	// 	if (window.ethereum) {
+	// 		window.web3 = new Web3(window.ethereum);
+	// 		window.ethereum.enable();
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
 
 	const getAccountData = async () => {
         setAccount(context.accountData)
