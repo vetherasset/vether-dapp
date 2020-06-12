@@ -39,30 +39,31 @@ export const PoolTable = () => {
     }, [])
 
     const connect = async () => {
+        const accounts = await window.web3.eth.getAccounts()
+        const address = accounts[0]
+        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+        context.accountData ? getAccountData() : loadAccountData(contract, address)
+        setContract(contract)
+        checkApproval(address)
         //setWalletFlag(true)
-        ethEnabled()
-        if (!ethEnabled()) {
-            // alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
-        } else {
-            const accounts = await window.web3.eth.getAccounts()
-            const address = accounts[0]
-            const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-            const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-            context.accountData ? getAccountData() : loadAccountData(contract, address)
-            setContract(contract)
-            checkApproval(address)
-            // loadBlockchainData()
-        }
+        // ethEnabled()
+        // if (!ethEnabled()) {
+        //     // alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+        // } else {
+            
+        //     // loadBlockchainData()
+        // }
     }
 
-    const ethEnabled = () => {
-        if (window.ethereum) {
-            window.web3 = new Web3(window.ethereum);
-            window.ethereum.enable();
-            return true;
-        }
-        return false;
-    }
+    // const ethEnabled = () => {
+    //     if (window.ethereum) {
+    //         window.web3 = new Web3(window.ethereum);
+    //         window.ethereum.enable();
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     const getAccountData = async () => {
         setAccount(context.accountData)

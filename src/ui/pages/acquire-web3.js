@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
-import Web3 from 'web3';
+// import Web3 from 'web3';
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL } from '../../client/web3.js'
 import { convertFromWei, prettify } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Click, Button, Sublabel, Gap, Colour, Text } from '../components'
+import { LabelGrey, Label, Click, Button, Sublabel, Colour, Text } from '../components'
 // import { EraTable } from './era-web3'
 
 export const AcquireTable = () => {
@@ -18,7 +18,7 @@ export const AcquireTable = () => {
 	const [loaded, setLoaded] = useState(null)
 	const [burnEthFlag, setBurnEthFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
-	const [walletFlag, setWalletFlag] = useState(null)
+	// const [walletFlag, setWalletFlag] = useState(null)
 	const [ethAmount, setEthAmount] = useState(0)
 	const [currentBurn, setCurrentBurn] = useState(1)
 
@@ -28,32 +28,34 @@ export const AcquireTable = () => {
 	}, [])
 
 	const connect = async () => {
-		setWalletFlag('TRUE')
-		ethEnabled()
-		if (!ethEnabled()) {
-			// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
-		} else {
-			var accounts = await window.web3.eth.getAccounts()
-			const address = accounts[0]
-			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-			context.accountData ? getAccountData() : loadAccountData(contract, address)
-			const day = await contract.methods.currentDay().call()
-        	const era = 1
-			const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
-			// console.log(currentBurn)
-			// setVethPrice(currentBurn / 2048 )
-			setCurrentBurn(currentBurn)
-		}
+		var accounts = await window.web3.eth.getAccounts()
+		const address = accounts[0]
+		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+		context.accountData ? getAccountData() : loadAccountData(contract, address)
+		const day = await contract.methods.currentDay().call()
+		const era = 1
+		const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
+		// console.log(currentBurn)
+		// setVethPrice(currentBurn / 2048 )
+		setCurrentBurn(currentBurn)
+
+		// setWalletFlag('TRUE')
+		// ethEnabled()
+		// if (!ethEnabled()) {
+		// 	// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+		// } else {
+
+		// }
 	}
 
-	const ethEnabled = () => {
-		if (window.ethereum) {
-			window.web3 = new Web3(window.ethereum);
-			window.ethereum.enable();
-			return true;
-		}
-		return false;
-	}
+	// const ethEnabled = () => {
+	// 	if (window.ethereum) {
+	// 		window.web3 = new Web3(window.ethereum);
+	// 		window.ethereum.enable();
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
 
 	const getAccountData = async () => {
 		setAccount(context.accountData)
@@ -108,63 +110,54 @@ export const AcquireTable = () => {
 
 	return (
 		<div>
-			{!walletFlag &&
-				<div>
-					<Button onClick={connect}> > GET VETHER NOW  &lt;</Button>
-					<Gap />
-				</div>
-			}
+			<div>
 
-			{walletFlag &&
-				<div>
+				<Label>BURN ETHER</Label>
+				<br />
+				<Row>
+					<Col xs={11} sm={4}>
+						<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance - 0.1} />
+						<br></br>
+						<Button onClick={maxEther}>{(account.ethBalance - 0.1).toFixed(4)}</Button>
+						<Tooltip placement="right" title="Your balance minus 0.1 is spendable to keep Ether later for gas.">
+							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+						</Tooltip>
+						<br></br>
+						<LabelGrey>Spendable ETH</LabelGrey>
+					</Col>
+					<Col xs={11} sm={6} style={{ marginLeft: 20 }}>
+						<Button onClick={burnEther}> BURN >></Button>
+						<Tooltip placement="right" title="This burns your Ether into the contract.">
+							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+						</Tooltip>
+						<br></br>
+						<Sublabel>Burn ETH to acquire VETHER</Sublabel>
 
-					<Label>BURN ETHER</Label>
-					<br />
-					<Row>
-						<Col xs={11} sm={4}>
-							<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance - 0.1} />
-							<br></br>
-							<Button onClick={maxEther}>{(account.ethBalance - 0.1).toFixed(4)}</Button>
-							<Tooltip placement="right" title="Your balance minus 0.1 is spendable to keep Ether later for gas.">
-								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
-							</Tooltip>
-							<br></br>
-							<LabelGrey>Spendable ETH</LabelGrey>
-						</Col>
-						<Col xs={11} sm={6} style={{ marginLeft: 20 }}>
-								<Button onClick={burnEther}> BURN >></Button>
-							<Tooltip placement="right" title="This burns your Ether into the contract.">
-								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
-							</Tooltip>
-							<br></br>
-							<Sublabel>Burn ETH to acquire VETHER</Sublabel>
+						{burnEthFlag &&
+							<div>
+								{!loaded &&
+									<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+								}
+								{loaded &&
+									<div>
+										<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+										<br></br>
+										<Sublabel>Refresh to update</Sublabel>
+									</div>
+								}
+							</div>
+						}
 
-							{burnEthFlag &&
-								<div>
-									{!loaded &&
-										<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
-									}
-									{loaded &&
-										<div>
-											<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-											<br></br>
-											<Sublabel>Refresh to update</Sublabel>
-										</div>
-									}
-								</div>
-							}
-
-						</Col>
-						<Col xs={24} sm={4}>
-							<Text  size={32}>{prettify(getVethValue())}</Text>
-							<Tooltip placement="right" title="The amount of VETH you get is dependent on how much you burn, compared to how much everyone else burns.">
-								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/><br/>
-							</Tooltip>
-							<LabelGrey>Potential VETH Value</LabelGrey>
-						</Col>
-					</Row>
-				</div>
-			}
+					</Col>
+					<Col xs={24} sm={4}>
+						<Text size={32}>{prettify(getVethValue())}</Text>
+						<Tooltip placement="right" title="The amount of VETH you get is dependent on how much you burn, compared to how much everyone else burns.">
+							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} /><br />
+						</Tooltip>
+						<LabelGrey>Potential VETH Value</LabelGrey>
+					</Col>
+				</Row>
+			</div>
 		</div>
 	)
 }

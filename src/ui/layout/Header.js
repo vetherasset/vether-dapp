@@ -3,7 +3,7 @@ import { Context } from '../../context'
 
 import { Link } from "react-router-dom";
 import { Menu, Layout, Row, Col, Drawer } from 'antd';
-import { Colour, Center, H1, H2, Sublabel, Icon, Button, LabelGrey, Text } from '../components'
+import { Colour, Center, H2, Sublabel, Icon, Button, LabelGrey, Text } from '../components'
 import logotype from '../../assets/logotype.svg';
 
 import Web3 from 'web3'
@@ -45,26 +45,31 @@ const Header = () => {
         if (menu_items.includes(pathname)) {
             setPage(pathname)
         }
+        // eslint-disable-next-line
+    }, [menu_items])
+
+    useEffect(() => {
         if(!connected){
             connect()
         }
         // eslint-disable-next-line
-    }, [menu_items])
+    },[])
 
     const connect = async () => {
-		ethEnabled()
-		if (!ethEnabled()) {
+		const eth = await ethEnabled()
+		if (!eth) {
 		} else {
 			const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
             const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-            context.accountData ? getAccountData() : loadAccountData(contract, address)
+            context.accountData ? getAccountData() : await loadAccountData(contract, address)
             context.marketData ? getMarketData() : loadMarketData()
             setConnected(true)
 		}
 	}
 
 	const ethEnabled = () => {
+        console.log('connecting')
 		if (window.ethereum) {
 			window.web3 = new Web3(window.ethereum);
 			window.ethereum.enable();
