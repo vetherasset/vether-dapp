@@ -238,7 +238,6 @@ export const WalletConnectButton = (props) => {
   styles.color = Colour().gold
   styles.display = "inline-block"
   styles.border = "none"
-
   if (props.size) {
     styles.fontSize = props.size
   }
