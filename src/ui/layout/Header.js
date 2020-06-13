@@ -186,7 +186,7 @@ const Header = () => {
 
     const getAddrShort = () => {
         const addr = (context.accountData?.address)? context.accountData.address : '0x000000000'
-        const addrShort = addr.substring(0,5) + '...' + addr?.substring(addr.length-3, addr.length)
+        const addrShort = addr.substring(0,7) + '...' + addr?.substring(addr.length-5, addr.length)
         return addrShort
     }
 

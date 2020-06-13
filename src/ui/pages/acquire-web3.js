@@ -118,7 +118,12 @@ export const AcquireTable = () => {
 					<Col xs={11} sm={4}>
 						<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance - 0.1} />
 						<br></br>
-						<Button onClick={maxEther}>{(account.ethBalance - 0.1).toFixed(4)}</Button>
+						<Button
+							backgroundColor="transparent"
+							onClick={maxEther}
+						>
+							{(account.ethBalance - 0.1).toFixed(4)}
+						</Button>
 						<Tooltip placement="right" title="Your balance minus 0.1 is spendable to keep Ether later for gas.">
 							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
 						</Tooltip>
@@ -126,7 +131,12 @@ export const AcquireTable = () => {
 						<LabelGrey>Spendable ETH</LabelGrey>
 					</Col>
 					<Col xs={11} sm={6} style={{ marginLeft: 20 }}>
-						<Button onClick={burnEther}> BURN >></Button>
+						<Button
+							backgroundColor="transparent"
+							onClick={burnEther}
+						>
+							BURN >>
+						</Button>
 						<Tooltip placement="right" title="This burns your Ether into the contract.">
 							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
 						</Tooltip>
