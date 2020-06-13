@@ -163,7 +163,12 @@ export const PoolTable = () => {
                     <LabelGrey>Spendable ETH Balance</LabelGrey>
                     <Input size={'large'} style={{ marginBottom: 10, paddingRight: 50 }} allowClear onChange={onEthAmountChange} placeholder={prettify(account.ethBalance - 0.01)} />
                     <br></br>
-                    <Button onClick={buyVether}> BUY VETH >></Button>
+                    <Button
+                        backgroundColor="transparent"
+                        onClick={buyVether}
+                    >
+                        BUY VETH >>
+                    </Button>
                     <Tooltip placement="right" title="This will buy Vether with your Ether">
                         &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
                     </Tooltip>
@@ -187,7 +192,12 @@ export const PoolTable = () => {
                     {!approved &&
                         <Row>
                             <Col xs={24}>
-                                <Button onClick={unlockToken}> UNLOCK ></Button>
+                                <Button
+                                    backgroundColor="transparent"
+                                    onClick={unlockToken}
+                                >
+                                    UNLOCK >
+                                </Button>
                                 <Tooltip placement="right" title="This will unlock your Vether">
                                     &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
                                 </Tooltip>
@@ -219,7 +229,12 @@ export const PoolTable = () => {
                                 <LabelGrey>Available VETH Balance</LabelGrey>
                                 <Input size={'large'} style={{ marginBottom: 10, paddingLeft: 50 }} allowClear onChange={onVethAmountChange} placeholder={prettify(account.vethBalance)} />
                                 <br></br>
-                                <Button onClick={sellVether}>&lt;&lt; SELL VETH</Button>
+                                <Button
+                                    backgroundColor="transparent"
+                                    onClick={sellVether}
+                                >
+                                    &lt;&lt;SELL VETH
+                                </Button>
                                 <Tooltip placement="right" title="This will sell your Vether for Ether">
                                     &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
                                 </Tooltip>

@@ -213,7 +213,12 @@ export const ClaimTable = () => {
 		return (<>
 			{arrayDays.map((day, i) => (
 				<li style={styles} key={i}>
-					<Button onClick={() => handleDayClick(day, i)}>{day}</Button>
+					<Button
+						backgroundColor="transparent"
+						onClick={() => handleDayClick(day, i)}
+					>
+						{day}
+					</Button>
 				</li>
 			))}
 		</>)
@@ -242,7 +247,13 @@ export const ClaimTable = () => {
 							{(scanned && !arrayDays) &&
 							<div>
 								<Text>No claims found. </Text>
-								<Button size={12} onClick={scanOlder}> SCAN OLDER ></Button>
+								<Button
+									backgroundColor="transparent"
+									size={12}
+									onClick={scanOlder}
+								>
+									SCAN OLDER >
+								</Button>
 							</div>
 							}
 							<br></br>
@@ -264,7 +275,12 @@ export const ClaimTable = () => {
 							<br></br>
 						</Col>
 						<Col xs={8} sm={6}>
-							<Button onClick={checkShare}> CHECK ></Button>
+							<Button
+								backgroundColor="transparent"
+								onClick={checkShare}
+							>
+								CHECK >
+							</Button>
 							<Tooltip placement="right" title="This will check your share in the Era and Day set">
 								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
 							</Tooltip>

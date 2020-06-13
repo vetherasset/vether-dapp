@@ -375,7 +375,12 @@ export const TokenTable = () => {
                     </div>
                 ) : (
                         <div>
-                            <Button onClick={() => checkToken(record)}>CHECK >></Button>
+                            <Button
+                                backgroundColor="transparent"
+                                onClick={() => checkToken(record)}
+                            >
+                                CHECK >>
+                            </Button>
                             <Tooltip placement="right" title="This will check the token for compatibility with Vether">
 								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
 							</Tooltip>
@@ -402,10 +407,10 @@ export const TokenTable = () => {
                         {(approved && checked && !burnt && burnable) &&
                             <div>
                                 <Text bold={true}>BURN: </Text>&nbsp;
-                                <Button style={{ marginLeft: 10 }} onClick={() => burn25(record)}>25%</Button>&nbsp;
-                                <Button style={{ marginLeft: 10 }} onClick={() => burn50(record)}>50%</Button>&nbsp;
-                                <Button style={{ marginLeft: 10 }} onClick={() => burn75(record)}>75%</Button>&nbsp;
-                                <Button style={{ marginLeft: 10 }} onClick={() => burn100(record)}>100%</Button>&nbsp;
+                                <Button backgroundColor="transparent" style={{ marginLeft: 10 }} onClick={() => burn25(record)}>25%</Button>&nbsp;
+                                <Button backgroundColor="transparent" style={{ marginLeft: 10 }} onClick={() => burn50(record)}>50%</Button>&nbsp;
+                                <Button backgroundColor="transparent" style={{ marginLeft: 10 }} onClick={() => burn75(record)}>75%</Button>&nbsp;
+                                <Button backgroundColor="transparent" style={{ marginLeft: 10 }} onClick={() => burn100(record)}>100%</Button>&nbsp;
                                 <Tooltip placement="right" title="This will burn the token for Vether">
 								    &nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
 							    </Tooltip>
@@ -413,7 +418,12 @@ export const TokenTable = () => {
                         }
                         {(!approved && checked && !burnt && burnable) &&
                             <div>
-                            <Button onClick={() => unlockToken(record)}>UNLOCK >></Button>
+                            <Button
+                                backgroundColor="transparent"
+                                onClick={() => unlockToken(record)}
+                            >
+                                UNLOCK >>
+                            </Button>
                             <Tooltip placement="right" title="This will unlock the token with Vether">
 								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
 							</Tooltip>
