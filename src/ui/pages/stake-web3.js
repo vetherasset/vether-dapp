@@ -9,7 +9,20 @@ import { convertFromWei, convertToWei, prettify, getBN, getBig } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { H2, Text, LabelGrey, Label, Click, Button, Sublabel, Colour, Center, HR, Gap, Subtitle } from '../components'
+import {
+	H2,
+	Text,
+	LabelGrey,
+	Label,
+	Click,
+	Button,
+	Sublabel,
+	Colour,
+	Center,
+	HR,
+	Gap,
+	Subtitle
+} from '../components'
 import { PoolCard, UniswapCard } from '../ui'
 
 export const PoolTable = () => {
@@ -313,7 +326,12 @@ export const AddLiquidityTable = (props) => {
 					{(!approved && (account.vethBalance > 0)) &&
 						<Row>
 							<Col xs={24}>
-								<Button onClick={unlockToken}> UNLOCK ></Button>
+								<Button
+									backgroundColor="transparent"
+									onClick={unlockToken}
+								>
+									UNLOCK >
+								</Button>
 								<Tooltip placement="right" title="This will unlock your Vether">
 									&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
 								</Tooltip>
@@ -351,7 +369,11 @@ export const AddLiquidityTable = (props) => {
 											<LabelGrey>VETH required to stake</LabelGrey>
 										</Col>
 										<Col xs={8} style={{ marginLeft: 20 }}>
-											<Button onClick={addUniswap}> ADD >></Button>
+											<Button
+												backgroundColor="transparent"
+												onClick={addUniswap}
+											> ADD >>
+											</Button>
 											<Tooltip placement="right" title="This will add Ether and Vether to the pool. You can claim it back later.">
 												&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
 											</Tooltip>
@@ -443,7 +465,11 @@ export const RemoveLiquidityTable = (props) => {
 							<Sublabel>Proportion to remove (%)</Sublabel>
 						</Col>
 						<Col xs={12} sm={7} style={{ paddingLeft: 20 }}>
-							<Button onClick={removeLiquidity}> REMOVE >></Button>
+							<Button
+								backgroundColor="transparent"
+								onClick={removeLiquidity}
+							> REMOVE >>
+							</Button>
 							<Tooltip placement="right" title="This will claim back your assets.">
 								&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
 							</Tooltip>

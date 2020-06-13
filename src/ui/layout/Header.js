@@ -186,6 +186,7 @@ const Header = () => {
     const showDrawer = () => {
         setVisible(true);
     };
+
     const onClose = () => {
         setVisible(false);
     };
@@ -196,6 +197,7 @@ const Header = () => {
         height:66,
         fontSize:'20px',
     }
+
     const drawerStyles = {
         backgroundColor: Colour().black,
         color: Colour().white,
@@ -218,15 +220,16 @@ const Header = () => {
                             <Col xs={3}>
                                 <WalletConnectButton
                                     backgroundColor="transparent"
+                                    borderColor="#ce9600"
                                     onClick={connect}>
                                     <WalletStateIndicator
-                                        width="8px"
-                                        height="8px"
-                                        display="inline-flex"
-                                        margin="0 3px 0 0"
+                                        width="10px"
+                                        height="10px"
+                                        display="inline-block"
+                                        margin="0 7px 0 0"
                                         state={connected}
                                     />
-                                    {`${connected? getAddrShort() : 'Connect your wallet'}`}
+                                    {`${connected? getAddrShort() : 'Connect Wallet'}`}
                                 </WalletConnectButton>
                                 <Drawer
                                     title="WALLET"
