@@ -3,7 +3,7 @@ import { Context } from '../../context'
 
 import { Link } from "react-router-dom";
 import { Menu, Layout, Row, Col, Drawer } from 'antd';
-import { Colour, Center, H2, Sublabel, Icon, Button, LabelGrey, Text } from '../components'
+import { Colour, Center, H2, Sublabel, Icon, WalletStateIndicator, WalletConnectButton, LabelGrey, Text } from '../components'
 import logotype from '../../assets/logotype.svg';
 
 import Web3 from 'web3'
@@ -48,24 +48,16 @@ const Header = () => {
         // eslint-disable-next-line
     }, [menu_items])
 
-    useEffect(() => {
-        if(!connected){
-            connect()
-        }
-        // eslint-disable-next-line
-    },[])
-
     const connect = async () => {
 		const eth = await ethEnabled()
-		if (!eth) {
-		} else {
+		if (eth) {
 			const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
             const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
             context.accountData ? getAccountData() : await loadAccountData(contract, address)
             context.marketData ? getMarketData() : loadMarketData()
             setConnected(true)
-		}
+        }
 	}
 
 	const ethEnabled = () => {
@@ -194,6 +186,7 @@ const Header = () => {
     const showDrawer = () => {
         setVisible(true);
     };
+
     const onClose = () => {
         setVisible(false);
     };
@@ -204,12 +197,12 @@ const Header = () => {
         height:66,
         fontSize:'20px',
     }
+
     const drawerStyles = {
         backgroundColor: Colour().black,
         color: Colour().white,
 
     }
-
 
     return (
         <div>
@@ -225,9 +218,19 @@ const Header = () => {
                                 <Center><Sublabel margin={"-40px 0px"}>DEPLOYED ON 12 MAY 2020</Sublabel></Center>
                             </Col>
                             <Col xs={3}>
-                                <Button backgroundColor={Colour().black} onClick={showDrawer}>
-                                    {getAddrShort()}
-                                </Button>
+                                <WalletConnectButton
+                                    backgroundColor="transparent"
+                                    borderColor="#ce9600"
+                                    onClick={connect}>
+                                    <WalletStateIndicator
+                                        width="10px"
+                                        height="10px"
+                                        display="inline-block"
+                                        margin="0 7px 0 0"
+                                        state={connected}
+                                    />
+                                    {`${connected? getAddrShort() : 'Connect Wallet'}`}
+                                </WalletConnectButton>
                                 <Drawer
                                     title="WALLET"
                                     placement="right"
