@@ -22,7 +22,7 @@ const Header = () => {
 
     const [connected, setConnected] = useState(false)
     const [page, setPage] = useState(null)
-    const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = useState(false)
     const [accountData, setAccountData] = useState(
 		{ address: '', vethBalance: '', ethBalance: '', uniBalance:'', uniSupply:'' })
     const [marketData, setMarketData] = useState(
@@ -51,12 +51,19 @@ const Header = () => {
     const connect = async () => {
 		const eth = await ethEnabled()
 		if (eth) {
-			const accounts = await window.web3.eth.getAccounts()
-            const address = accounts[0]
-            const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-            context.accountData ? getAccountData() : await loadAccountData(contract, address)
-            context.marketData ? getMarketData() : loadMarketData()
-            setConnected(true)
+            setInterval(async function() {
+                const accountConnected = (await window.web3.eth.getAccounts())[0];
+                if(accountConnected){
+                    const accounts = await window.web3.eth.getAccounts()
+                    const address = accounts[0]
+                    const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+                    context.accountData ? getAccountData() : await loadAccountData(contract, address)
+                    context.marketData ? getMarketData() : loadMarketData()
+                    setConnected(true)
+                } else {
+                    setConnected(false)
+                }
+            }, 100);
         }
 	}
 
