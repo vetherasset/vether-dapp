@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 import axios from 'axios'
 
-import Web3 from 'web3';
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getUniswapPriceEth, getUniswapDetails, getEtherscanURL } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, convertToWei, prettify, getBN, getBig } from '../utils'
@@ -113,25 +112,11 @@ export const StakeTable = () => {
 
 	const connect = async () => {
 		// setWalletFlag('TRUE')
-		ethEnabled()
-		if (!ethEnabled()) {
-			// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
-		} else {
-			var accounts = await window.web3.eth.getAccounts()
-			const address = await accounts[0]
-			context.accountData ? await getAccountData() : await loadAccountData(address)
-			context.uniswapData ? await getUniswapData() : await loadUniswapData()
-			setLoading(false)
-		}
-	}
-
-	const ethEnabled = () => {
-		if (window.ethereum) {
-			window.web3 = new Web3(window.ethereum);
-			window.ethereum.enable();
-			return true;
-		}
-		return false;
+		var accounts = await window.web3.eth.getAccounts()
+		const address = await accounts[0]
+		context.accountData ? await getAccountData() : await loadAccountData(address)
+		context.uniswapData ? await getUniswapData() : await loadUniswapData()
+		setLoading(false)
 	}
 
 	const getAccountData = () => {
@@ -229,30 +214,15 @@ export const AddLiquidityTable = (props) => {
 
 	const connect = async () => {
 		// setWalletFlag('TRUE')
-		ethEnabled()
-		if (!ethEnabled()) {
-			// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
-		} else {
-			const vethPrice = await getUniswapPriceEth()
-			setVetherPrice(vethPrice)
-			if (account) {
-				setCustomAmount(account.vethBalance)
-				setEthAmount(account.ethBalance - 0.01)
-				setCustomAmount(account.ethBalance * (1 / (vethPrice)))
-				checkApproval(account.address)
-				setLoading(false)
-			}
-
+		const vethPrice = await getUniswapPriceEth()
+		setVetherPrice(vethPrice)
+		if (account) {
+			setCustomAmount(account.vethBalance)
+			setEthAmount(account.ethBalance - 0.01)
+			setCustomAmount(account.ethBalance * (1 / (vethPrice)))
+			checkApproval(account.address)
+			setLoading(false)
 		}
-	}
-
-	const ethEnabled = () => {
-		if (window.ethereum) {
-			window.web3 = new Web3(window.ethereum);
-			window.ethereum.enable();
-			return true;
-		}
-		return false;
 	}
 
 	const checkApproval = async (address) => {
