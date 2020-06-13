@@ -183,9 +183,9 @@ const Header = () => {
         return addrShort
     }
 
-    const showDrawer = () => {
-        setVisible(true);
-    };
+    // const showDrawer = () => {
+    //     setVisible(true);
+    // };
 
     const onClose = () => {
         setVisible(false);
