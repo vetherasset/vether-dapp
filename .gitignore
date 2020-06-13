@@ -6,3 +6,4 @@ build/
 .env
 firebase-debug.log
 .vercel
+.idea
