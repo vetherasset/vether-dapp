@@ -16,6 +16,8 @@ export const Colour = (alpha) => {
     colour = {
       "black":"#110D01", 
       "white":"#FFF",
+      "red":"#a8071a",
+      "green":"#7cb305",
       "dgrey": "#2B2515",
       "grey": "#97948E",
       "lgrey": "#F4F4F2",
@@ -204,21 +206,68 @@ export const Click = (props) => {
   )
 }
 
-export const Button = (props) => {
+export const WalletStateIndicator = (props) => {
   let styles = {...props.style || {}}
-  styles.fontSize = "16px"
-  styles.fontWeight = "bold"
-  styles.color = Colour().gold
-  styles.textDecoration = "underline"
-  styles.marginTop = 30
-  styles.marginBottom = 30
-  styles.margin = "0px 0px"
-  styles.backgroundColor = Colour().dgrey
-  styles.borderColor = Colour().dgrey
-  styles.display= "inline-block"
-  styles.borderBottom = "1px solid #D09800"
+  if(props.width) {
+    styles.width = props.width
+  }
+  if(props.height) {
+    styles.height = props.height
+  }
+  if(props.margin) {
+    styles.margin = props.margin
+  }
+  if(props.display) {
+    styles.display = props.display
+  }
+  if(props.state === true) {
+    styles.backgroundColor = Colour().green
+  } else {
+    styles.backgroundColor = Colour().red
+  }
+  styles.borderRadius = "50%"
+  return (
+      <div style={styles}/>
+  )
+}
+
+export const WalletConnectButton = (props) => {
+  let styles = {...props.style || {}}
   styles.height = "20px"
   styles.padding = "0px 0px"
+  styles.color = Colour().gold
+  styles.display = "inline-block"
+  styles.border = "none"
+
+  if (props.size) {
+    styles.fontSize = props.size
+  }
+  if (props.backgroundColor) {
+    styles.backgroundColor = props.backgroundColor
+    styles.borderColor = props.backgroundColor
+  }
+
+  return (
+      <AntButton
+          disabled={props.disabled}
+          style={styles}
+          onClick={props.onClick}
+          onChange={props.onChange}
+          type={props.type}
+          loading={props.loading}
+      >
+        {props.children}
+      </AntButton>
+  )
+}
+
+export const Button = (props) => {
+  let styles = {...props.style || {}}
+  styles.height = "20px"
+  styles.padding = "0px 0px"
+  styles.color = Colour().gold
+  styles.display = "inline-block"
+  styles.border = "none";
 
   if (props.size) {
     styles.fontSize = props.size
@@ -241,7 +290,6 @@ export const Button = (props) => {
     </AntButton>
   )
 }
-
 
 export const Center = (props) => (
   <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
