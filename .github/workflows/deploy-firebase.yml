@@ -35,6 +35,8 @@ jobs:
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting --project vether-landing
+          args: deploy --only hosting --project vether-landing --update-env-vars
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          REACT_APP_INFURA_API: ${{ secrets.REACT_APP_INFURA_API }}
+          REACT_APP_ETHPLORER_API: ${{ secrets.REACT_APP_ETHPLORER_API }}
