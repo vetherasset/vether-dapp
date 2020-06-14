@@ -42,6 +42,7 @@ export const PoolTable = () => {
     }, [])
 
     const connect = async () => {
+        window.web3 = new Web3(window.ethereum);
         const accounts = await window.web3.eth.getAccounts()
         const address = accounts[0]
         const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
@@ -73,32 +74,38 @@ export const PoolTable = () => {
     }
 
     const loadAccountData = async (contract_, address) => {
-        var ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
-        const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
-        setAccount({
-            address: address,
-            vethBalance: vethBalance,
-            ethBalance: ethBalance
-        })
-        context.setContext({
-            "accountData": {
-                'address': address,
-                'vethBalance': vethBalance,
-                'ethBalance': ethBalance
-            }
-        })
+        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        if(accountConnected) {
+            var ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
+            const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
+            setAccount({
+                address: address,
+                vethBalance: vethBalance,
+                ethBalance: ethBalance
+            })
+            context.setContext({
+                "accountData": {
+                    'address': address,
+                    'vethBalance': vethBalance,
+                    'ethBalance': ethBalance
+                }
+            })
+        }
     }
 
     const checkApproval = async (address) => {
-        const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-        const fromAcc = address
-        const spender = uniSwapAddr()
-        const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
-        const vethBalance = await tokenContract.methods.balanceOf(address).call()
-        setApprovalAmount(approval)
-        console.log(approval, vethBalance)
-        if (+approval >= +vethBalance && +vethBalance > 0) {
-            setApproved(true)
+        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        if(accountConnected){
+            const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+            const fromAcc = address
+            const spender = uniSwapAddr()
+            const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
+            const vethBalance = await tokenContract.methods.balanceOf(address).call()
+            setApprovalAmount(approval)
+            console.log(approval, vethBalance)
+            if (+approval >= +vethBalance && +vethBalance > 0) {
+                setApproved(true)
+            }
         }
     }
 
