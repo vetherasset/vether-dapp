@@ -219,6 +219,8 @@ export const AddLiquidityTable = (props) => {
 	const [customAmount, setCustomAmount] = useState(null)
 	const [approvalAmount, setApprovalAmount] = useState(null)
 
+	const ethBalanceSpendable = (account.ethBalance - 0.1).toFixed(4) < 0 ?
+		0 : (account.ethBalance - 0.1).toFixed(4)
 
 	useEffect(() => {
 		connect()
@@ -332,7 +334,7 @@ export const AddLiquidityTable = (props) => {
 								{(account.vethBalance > 0) &&
 									<div>
 										<Col xs={4}>
-											<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={prettify(account.ethBalance - 0.01)} />
+											<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
 											<br></br>
 											<Label>{prettify(customAmount)}</Label>
 											<br></br>
