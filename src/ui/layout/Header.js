@@ -264,6 +264,19 @@ const Header = () => {
             </Breakpoint>
             <Breakpoint small down>
                 <Layout.Header style={headerStylesMobile}>
+                    <WalletConnectButton
+                        backgroundColor="transparent"
+                        borderColor="#ce9600"
+                        onClick={connect}>
+                        <WalletStateIndicator
+                            width="10px"
+                            height="10px"
+                            display="inline-block"
+                            margin="0 7px 0 0"
+                            state={connected}
+                        />
+                        {`${connected? getAddrShort() : 'Connect Wallet'}`}
+                    </WalletConnectButton>
                     <Menu onClick={handleClick} mode="horizontal" selectedKeys={[page]} style={menuStyles}>
                         {menu_items.map((item) => (
                             <Menu.Item key={item}>
