@@ -33,6 +33,9 @@ export const PoolTable = () => {
     const [sellFlag, setSellFlag] = useState(false)
     const [loadedSell, setLoadedSell] = useState(null)
 
+    const ethBalanceSpendable = (account.ethBalance - 0.1).toFixed(4) < 0 ?
+        0 : (account.ethBalance - 0.1).toFixed(4)
+
     useEffect(() => {
         connect()
         // eslint-disable-next-line
@@ -161,7 +164,7 @@ export const PoolTable = () => {
                     <Label>{prettify(account.ethBalance)}</Label>
                     <br></br>
                     <LabelGrey>Spendable ETH Balance</LabelGrey>
-                    <Input size={'large'} style={{ marginBottom: 10, paddingRight: 50 }} allowClear onChange={onEthAmountChange} placeholder={prettify(account.ethBalance - 0.01)} />
+                    <Input size={'large'} style={{ marginBottom: 10, paddingRight: 50 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
                     <br></br>
                     <Button
                         backgroundColor="transparent"

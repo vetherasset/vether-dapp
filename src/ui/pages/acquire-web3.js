@@ -22,6 +22,9 @@ export const AcquireTable = () => {
 	const [ethAmount, setEthAmount] = useState(0)
 	const [currentBurn, setCurrentBurn] = useState(1)
 
+	const ethBalanceSpendable = (account.ethBalance - 0.1).toFixed(4) < 0 ?
+		0 : (account.ethBalance - 0.1).toFixed(4)
+
 	useEffect(() => {
 		connect()
 		// eslint-disable-next-line
@@ -116,13 +119,13 @@ export const AcquireTable = () => {
 				<br />
 				<Row>
 					<Col xs={11} sm={4}>
-						<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={account.ethBalance - 0.1} />
+						<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={ethBalance} />
 						<br></br>
 						<Button
 							backgroundColor="transparent"
 							onClick={maxEther}
 						>
-							{(account.ethBalance - 0.1).toFixed(4)}
+							{ethBalanceSpendable}
 						</Button>
 						<Tooltip placement="right" title="Your balance minus 0.1 is spendable to keep Ether later for gas.">
 							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
