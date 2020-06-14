@@ -19,6 +19,17 @@ yarn
 yarn start
 ```
 
+## Deployment
+
+All merges to `dev` branch deploy to: 
+* vether-dapp-dev.web.app
+
+*Testing should be done following a new deploy, prior to merging to master.*
+
+All merges to `master` (from dev) deploy to:
+* vetherasset.org (main)
+* vetherasset.app (mirror)
+
 ## Implementation
 
 * React (functional components & hooks)
