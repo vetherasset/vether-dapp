@@ -33,30 +33,16 @@ export const TokenTable = () => {
     }, [])
 
     const connect = async () => {
-        ethEnabled()
-        
-        if (!ethEnabled()) {
-            // alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
-        } else {
-            if (!loaded) {
-                var accounts = await window.web3.eth.getAccounts()
-                const address = await accounts[0]
-                await getAccountData()
-                context.accountData ? getAccountData() : loadAccountData(address)
-                context.tokenData ? getTokenData() : loadTokenData(address)
-                // await loadBlockchainData()
-            }
+        if (!loaded) {
+            window.web3 = new Web3(window.ethereum);
+            var accounts = await window.web3.eth.getAccounts()
+            const address = await accounts[0]
+            await getAccountData()
+            context.accountData ? getAccountData() : loadAccountData(address)
+            context.tokenData ? getTokenData() : loadTokenData(address)
+            // await loadBlockchainData()
             setLoaded(true)
         }
-    }
-
-    const ethEnabled = () => {
-        if (window.ethereum) {
-            window.web3 = new Web3(window.ethereum);
-            window.ethereum.enable();
-            return true;
-        }
-        return false;
     }
 
     const getAccountData = async () => {

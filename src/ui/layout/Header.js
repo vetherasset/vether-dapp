@@ -48,30 +48,42 @@ const Header = () => {
         // eslint-disable-next-line
     }, [menu_items])
 
+    useEffect(() => {
+        connect()
+    })
+
     const connect = async () => {
-		const eth = await ethEnabled()
-		if (eth) {
-            setInterval(async function() {
-                const accountConnected = (await window.web3.eth.getAccounts())[0];
-                if(accountConnected){
-                    const accounts = await window.web3.eth.getAccounts()
-                    const address = accounts[0]
-                    const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-                    context.accountData ? getAccountData() : await loadAccountData(contract, address)
-                    context.marketData ? getMarketData() : loadMarketData()
-                    setConnected(true)
-                } else {
-                    setConnected(false)
-                }
-            }, 100);
+        window.web3 = new Web3(window.ethereum);
+        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        if(accountConnected){
+            const accounts = await window.web3.eth.getAccounts()
+            const address = accounts[0]
+            const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+            context.accountData ? getAccountData() : await loadAccountData(contract, address)
+            context.marketData ? getMarketData() : loadMarketData()
+            setConnected(true)
+        } else {
+            setConnected(false)
         }
-	}
+    }
+
+    const ethConnected = async () => {
+        setInterval(async function() {
+            const accountConnected = (await window.web3.eth.getAccounts())[0];
+            if(accountConnected){
+                setConnected(true)
+            } else {
+                setConnected(false)
+            }
+        }, 100);
+    }
 
 	const ethEnabled = () => {
         console.log('connecting')
 		if (window.ethereum) {
 			window.web3 = new Web3(window.ethereum);
 			window.ethereum.enable();
+			ethConnected()
 			return true;
 		}
 		return false;
@@ -228,7 +240,7 @@ const Header = () => {
                                 <WalletConnectButton
                                     backgroundColor="transparent"
                                     borderColor="#ce9600"
-                                    onClick={connect}>
+                                    onClick={ethEnabled}>
                                     <WalletStateIndicator
                                         width="10px"
                                         height="10px"

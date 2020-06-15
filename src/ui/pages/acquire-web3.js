@@ -8,6 +8,7 @@ import { convertFromWei, prettify } from '../utils'
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { LabelGrey, Label, Click, Button, Sublabel, Colour, Text } from '../components'
+import Web3 from "web3";
 // import { EraTable } from './era-web3'
 
 export const AcquireTable = () => {
@@ -31,16 +32,20 @@ export const AcquireTable = () => {
 	}, [])
 
 	const connect = async () => {
-		var accounts = await window.web3.eth.getAccounts()
-		const address = accounts[0]
-		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		context.accountData ? getAccountData() : loadAccountData(contract, address)
-		const day = await contract.methods.currentDay().call()
-		const era = 1
-		const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
-		// console.log(currentBurn)
-		// setVethPrice(currentBurn / 2048 )
-		setCurrentBurn(currentBurn)
+		window.web3 = new Web3(window.ethereum);
+		const accountConnected = (await window.web3.eth.getAccounts())[0];
+		if(accountConnected){
+			const accounts = await window.web3.eth.getAccounts()
+			const address = accounts[0]
+			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+			context.accountData ? getAccountData() : loadAccountData(contract, address)
+			const day = await contract.methods.currentDay().call()
+			const era = 1
+			const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
+			// console.log(currentBurn)
+			// setVethPrice(currentBurn / 2048 )
+			setCurrentBurn(currentBurn)
+		}
 
 		// setWalletFlag('TRUE')
 		// ethEnabled()

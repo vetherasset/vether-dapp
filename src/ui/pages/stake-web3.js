@@ -23,6 +23,7 @@ import {
 	Subtitle
 } from '../components'
 import { PoolCard, UniswapCard } from '../ui'
+import Web3 from "web3";
 
 export const PoolTable = () => {
 
@@ -125,6 +126,7 @@ export const StakeTable = () => {
 
 	const connect = async () => {
 		// setWalletFlag('TRUE')
+		window.web3 = new Web3(window.ethereum);
 		var accounts = await window.web3.eth.getAccounts()
 		const address = await accounts[0]
 		context.accountData ? await getAccountData() : await loadAccountData(address)
@@ -137,22 +139,25 @@ export const StakeTable = () => {
 	}
 
 	const loadAccountData = async (account) => {
-		const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		const ethBalance = convertFromWei(await window.web3.eth.getBalance(account))
-		const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
-		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-		const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(account).call())
-		const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
+		const accountConnected = (await window.web3.eth.getAccounts())[0];
+		if(accountConnected) {
+			const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+			const ethBalance = convertFromWei(await window.web3.eth.getBalance(account))
+			const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
+			const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+			const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(account).call())
+			const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
 
-		const accountData = {
-			address: account,
-			vethBalance: vethBalance,
-			ethBalance: ethBalance,
-			uniBalance: uniBalance,
-			uniSupply: uniSupply
+			const accountData = {
+				address: account,
+				vethBalance: vethBalance,
+				ethBalance: ethBalance,
+				uniBalance: uniBalance,
+				uniSupply: uniSupply
+			}
+			setAccount(accountData)
+			context.setContext({"accountData": accountData})
 		}
-		setAccount(accountData)
-		context.setContext({ "accountData": accountData })
 	}
 
 	const getUniswapData = () => {
@@ -241,14 +246,17 @@ export const AddLiquidityTable = (props) => {
 	}
 
 	const checkApproval = async (address) => {
-		const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		const fromAcc = address
-		const spender = uniSwapAddr()
-		const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
-		const vethBalance = await tokenContract.methods.balanceOf(address).call()
-		setApprovalAmount(approval)
-		if (+approval >= +vethBalance && +vethBalance > 0) {
-			setApproved(true)
+		const accountConnected = (await window.web3.eth.getAccounts())[0];
+		if(accountConnected){
+			const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+			const fromAcc = address
+			const spender = uniSwapAddr()
+			const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
+			const vethBalance = await tokenContract.methods.balanceOf(address).call()
+			setApprovalAmount(approval)
+			if (+approval >= +vethBalance && +vethBalance > 0) {
+				setApproved(true)
+			}
 		}
 	}
 
