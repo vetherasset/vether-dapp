@@ -51,8 +51,11 @@ export const Logo = () => {
 export const EmissionTable = () => {
 
 	return (
-		<div>
-			<Breakpoint medium up>
+		<>
+			<Breakpoint medium up
+						style={{
+							fontFamily: 'Courier New'
+						}}>
 				<div style={{ marginLeft: "0px" }}>
 
 					<P size={14}>|-----|--------|-------|-------|-----------|---------|------------|---------|-------|</P>
@@ -75,7 +78,10 @@ export const EmissionTable = () => {
 				</div>
 			</Breakpoint>
 
-			<Breakpoint small down>
+			<Breakpoint small down
+						style={{
+							fontFamily: 'Courier New'
+						}}>
 
 				<div style={{ marginLeft: "0px" }}>
 
@@ -117,7 +123,7 @@ export const EmissionTable = () => {
 			</Breakpoint>
 
 			<P>*Stock-To-Flow (the inverse of inflation).</P>
-		</div>
+		</>
 	)
 }
 

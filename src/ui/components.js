@@ -141,6 +141,7 @@ export const P = (props) => {
   styles.display = "flex"
   styles.alignItems = "center"
   styles.justifyContent = "center"
+  styles.marginBottom = "initial"
   // styles.marginLeft = -80
   if (props.size) {
     styles.fontSize = props.size

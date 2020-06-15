@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Row, Col } from 'antd'
-import { H2, Colour, Text, Click } from '../components'
+import { Colour, Text, Click } from '../components'
 
 const Cards = () => {
 
@@ -37,8 +37,8 @@ const Cards = () => {
 
     return (
         <div>
-            <H2>VETHER UTILITY</H2><br />
-            Use the Vether Asset in its ecosystem
+            <h2>VETHER UTILITY</h2>
+            <p>Use the Vether Asset in its ecosystem</p>
             <Row>
                 <Col style={cardStyles} xs={12}>
                     <Card title={cardContent()[0].title}
@@ -96,9 +96,9 @@ const Card = (props) => {
 
 export const Links = (props) => {
     return (
-        <div>
-            <H2>LINKS AND RESOURCES</H2>
-            Useful links and resources
+        <>
+            <h2>LINKS AND RESOURCES</h2>
+            <p>Useful links and resources</p>
             <Row>
                 <Col>
                     <Click><a href='https://etherscan.io/address/0x506d07722744e4a390cd7506a2ba1a8157e63745' rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>UNISWAP CONTRACT -></a></Click>
@@ -129,8 +129,6 @@ export const Links = (props) => {
                     <Click><a href='https://www.coingecko.com/en/coins/vether' rel="noopener noreferrer" title="Coingecko Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VIEW ON COINGECKO -></a></Click>
                 </Col>
             </Row>
-
-
-        </div>
+        </>
     )
 }

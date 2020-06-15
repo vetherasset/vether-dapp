@@ -30,7 +30,7 @@ const Hero = (props) => {
 			<Cards />
 			<hr />
 			<Row>
-				<Col xs={4}>
+				<Col sm={8}>
 					<Links />
 				</Col>
 			</Row>

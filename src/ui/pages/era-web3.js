@@ -124,10 +124,9 @@ export const EraTable = (props) => {
         borderWidth: '1px',
         // borderStyle: 'dashed',
         borderRadius: 5,
-        borderColor: Colour().grey,
         paddingLeft: 50,
         paddingRight: 50,
-        backgroundColor: '#5C4F2C'
+        backgroundColor: '#cc9300'
     }
 
     const buttonStyles = {
@@ -158,12 +157,16 @@ export const EraTable = (props) => {
                         </Col>
 
                         <Col xs={24} sm={8}>
-                            <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
+                            <div id="vetherEraTimer">
+                                <Text size={40} margin={"0px 0px"}>{timer}</Text>
+                            </div>
                             {!small &&
-                                <div>
+                                <>
                                     <Progress percent={(((82400 - eraData.secondsToGo) / 82400) * 100).toFixed(0)} strokeColor={Colour().gold} status="active" />
-                                    <Center><LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
-                                </div>
+                                    <Center i>
+                                        <LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey>
+                                    </Center>
+                                </>
                             }
                         </Col>
 
@@ -175,19 +178,47 @@ export const EraTable = (props) => {
                         </Col>
                         {small &&
                             <Col xs={24} sm={12}>
-                                <Center><LabelGrey margin={"0px 0px 0px"}>ERA 1, DAY {eraData.day}</LabelGrey></Center>
+                                <Center>
+                                    <span style={{
+                                        margin: '0 0 0'
+                                    }}>
+                                        ERA 1, DAY {eraData.day}
+                                    </span>
+                                </Center>
                             </Col>
                         }
                         {!small &&
                             <Col xs={24} sm={12} style={poolStyles}>
-                                <Center><LabelGrey margin={"20px 0px 0px"}>ERA 1, DAY {eraData.day}</LabelGrey></Center>
+                                <Center>
+                                    <span style={{
+                                        margin: '20px 0px 0px',
+                                        color: '#000'
+                                    }}>
+                                        ERA 1, DAY {eraData.day}
+                                    </span>
+                                </Center>
                                 <Breakpoint medium up>
-                                    <Center><Text size={48} margin={"1.3rem 0"}>{prettify(eraData.emission)} VETH</Text></Center>
+                                    <Center>
+                                        <Text
+                                            size={48}
+                                            margin={"1.3rem 0"}
+                                            style={{
+                                                lineHeight: '3rem',
+                                                textAlign: 'center'
+                                            }}
+                                        >
+                                            {prettify(eraData.emission)} VETH
+                                        </Text>
+                                    </Center>
                                 </Breakpoint>
                                 <Breakpoint small down>
-                                    <Center><Text size={32} margin={"10px 0 0"}>{prettify(eraData.emission)} VETH</Text></Center>
+                                    <Center>
+                                        <Text size={32} margin={"10px 0 10px"}>{prettify(eraData.emission)} VETH</Text>
+                                    </Center>
                                 </Breakpoint>
-                                <Center><LabelGrey margin={"0 0 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
+                                <Center>
+                                    <span style={{ margin: '0 0 20px', color: '#000'}}>TO BE EMITTED TODAY</span>
+                                </Center>
                             </Col>
                         }
                         <Col xs={24} sm={6}>

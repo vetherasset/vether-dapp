@@ -13,7 +13,7 @@ import emissionArray from '../../data/emissionArray.json';
 
 import '../../App.less';
 import { Row, Col } from 'antd'
-import { H2, Text, Click, Colour } from '../components'
+import { Text, Click, Colour } from '../components'
 import { ChartStyles, ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie, ChartPrice } from './chart'
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -186,9 +186,8 @@ const Stats = () => {
 
     return (
         <div style={{ marginRight: -50 }}>
-            <H2>STATS</H2>
-            <br></br>
-            <Text size={16} bold={'TRUE'}>Stats for the Vether Economy</Text><br></br>
+            <h1>STATS</h1>
+            <span>Stats for the Vether Economy</span>
             <Row>
                 {!loaded &&
                     <Col xs={24} lg={9} style={ChartStyles}>
