@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { Row } from 'antd'
-import { Text, LabelGrey, Click } from '../components'
+import { Text, LabelGrey } from '../components'
 import { AcquireTable } from './acquire-web3'
 import { TokenTable } from './tokens'
 import { ClaimTable } from './claim-web3'
@@ -46,63 +46,58 @@ const Acquire = () => {
 			</Row> */}
 
 
-			<Tabs defaultActiveKey='1' activeKey={tab} onChange={onChange} size={'large'} style={{ marginTop: 20 }}>
-				<TabPane tab="BURN ETHER" key="1">
+			<Tabs defaultActiveKey='1' activeKey={tab} onChange={onChange} size={'large'} style={{ marginTop: 20, textAlign: "center" }}>
+				<TabPane tab="BURN ETHER" key="1" style={{ textAlign: "left" }}>
 					<h2>ACQUIRE VETHER</h2>
-					Acquire a share of today’s emission by burning assets, such as Ether or ERC-20 tokens.
+					<p>Acquire a share of today’s emission by burning assets, such as Ether or ERC-20 tokens.</p>
 					{safari &&
-						<div>
-							<br />
+						<>
 							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
 							<br />
-							<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a></Click>
-						</div>
+							<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
+						</>
 					}
 					{!safari &&
-						<div>
-							<AcquireTable></AcquireTable>
-						</div>
+						<>
+							<AcquireTable/>
+						</>
 					}
 					<hr />
 					<h2>MINE VETHER</h2>
-					Run the mining client to continuously mine Vether.
-					<Click>
-						<a href='https://github.com/vetherasset/vether-miner' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>GET THE CLIENT -></a>
-					</Click>
+					<p>Run the mining client to continuously mine Vether.</p>
+					<a href='https://github.com/vetherasset/vether-miner' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>GET THE CLIENT -></a>
 				</TabPane>
-				<TabPane tab="BURN TOKENS" key="2">
+				<TabPane tab="BURN TOKENS" key="2" style={{ textAlign: "left" }}>
 					<h2>BURN TOKENS</h2>
-					Burn the tokens on your wallet to get VETHER.
+					<p>Burn the tokens on your wallet to get VETHER.</p>
 					<Text>Note: If there are any errors in your MetaMask, do not proceed, the token is not compatible with Vether.</Text><br /><br />
 					{safari &&
-						<div>
-							<br />
+						<>
 							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
 							<br />
-							<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a></Click>
-						</div>
+							<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
+						</>
 					}
 					{!safari &&
-						<div>
-							<TokenTable></TokenTable>
-						</div>
+						<>
+							<TokenTable/>
+						</>
 					}
 				</TabPane>
-				<TabPane tab="CLAIM SHARE" key="3">
+				<TabPane tab="CLAIM SHARE" key="3" style={{ textAlign: "left" }}>
 					<h2>CLAIM VETHER</h2>
-					Claim your share of a previous day’s emission.
-					<Text>Note: you cannot claim on the same day of contribution. Please wait a day. </Text><br />
+					<p>Claim your share of a previous day’s emission.</p>
+					<Text>Note: you cannot claim on the same day of contribution. Please wait a day. </Text>
 					{safari &&
-						<div>
+						<>
 							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
-							<br></br>
-							<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a></Click>
-						</div>
+							<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
+						</>
 					}
 					{!safari &&
-						<div>
-							<ClaimTable></ClaimTable>
-						</div>
+						<>
+							<ClaimTable/>
+						</>
 					}
 				</TabPane>
 			</Tabs>

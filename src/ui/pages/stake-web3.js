@@ -88,7 +88,7 @@ export const PoolTable = () => {
 	}
 
 	return (
-		<div>
+		<div style={{marginTop: '2rem'}}>
 			<Center><Text size={30} margin={"10px 0px 0px"}>${prettify(marketData.priceUSD)}</Text></Center>
 			<Center><LabelGrey margin={"0px 0px 10px"}>VALUE OF 1 VETH</LabelGrey></Center>
 			<Center><Text size={30} margin={"0px 0px 0px"}>{prettify(returns)}%</Text></Center>
@@ -177,7 +177,7 @@ export const StakeTable = () => {
 						<WalletCard accountData={account} />
 					}
 				</Col> */}
-				<Col xs={24} sm={12}>
+				<Col xs={24} sm={13}>
 					{!loading &&
 						<UniswapCard accountData={account} uniswapData={uniswapData} />
 					}

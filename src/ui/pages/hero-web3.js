@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
-import Breakpoint from 'react-socks';
-
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, convertToDate, prettify } from '../utils'
 
 import { Row, Col } from 'antd'
-import { LabelGrey, Colour, Center, Text } from '../components'
+import { LabelGrey, Colour, Text } from '../components'
 import { Logo } from '../content'
 
 export const VetherTable = () => {

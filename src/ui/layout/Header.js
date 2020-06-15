@@ -3,7 +3,7 @@ import { Context } from '../../context'
 
 import { Link } from "react-router-dom";
 import { Menu, Layout, Row, Col, Drawer } from 'antd';
-import { Colour, Center, H2, Sublabel, Icon, WalletStateIndicator, WalletConnectButton, LabelGrey, Text } from '../components'
+import { Colour, Icon, WalletStateIndicator, WalletConnectButton, LabelGrey, Text } from '../components'
 import logotype from '../../assets/logotype.svg';
 
 import Web3 from 'web3'
@@ -17,8 +17,8 @@ const Header = () => {
 
     const context = useContext(Context)
 
-    const net = (process.env.REACT_APP_TESTNET === 'TRUE') ? "TESTNET" : "MAINNET"
-    const colour = (process.env.REACT_APP_TESTNET === 'TRUE') ? Colour().grey : Colour().black
+    // const net = (process.env.REACT_APP_TESTNET === 'TRUE') ? "TESTNET" : "MAINNET"
+    // const colour = (process.env.REACT_APP_TESTNET === 'TRUE') ? Colour().grey : Colour().black
 
     const [connected, setConnected] = useState(false)
     const [page, setPage] = useState(null)
@@ -130,12 +130,6 @@ const Header = () => {
 		})
 	}
 
-    const headerStyles = {
-        display: "flex",
-        flexDirection: "column",
-        background: colour,
-    }
-
     const logotypeStyles = {
         width: 148,
         height: 60,
@@ -144,23 +138,11 @@ const Header = () => {
         transform: "scale(0.9)"
     }
 
-    const headerStylesMobile = {
-        background: Colour().black,
-        textTransform: "uppercase",
-        zIndex: 1,
-        position: "absolute",
-        left: 0,
-        top: 0,
-        right: 0,
-        paddingTop: 0,
-        paddingBottom: 0,
-        height: 50
-        // textAlign: "centre"
-    }
-
     const menuStyles = {
         width: '100%',
-        padding: 0
+        padding: 0,
+        textAlign: 'center',
+        borderBottom: 'none'
     }
 
     const icon_styles = {
@@ -215,15 +197,14 @@ const Header = () => {
     return (
         <div>
             <Breakpoint medium up>
-                <Layout.Header style={headerStyles}>
+                <Layout.Header>
                     <div>
                         <Row>
                             <Col xs={3}>
                                 <img src={logotype} style={logotypeStyles} alt="Vether - A strictly-scarce Ethereum-based asset." />
                             </Col>
-                            <Col xs={18}>
-                            </Col>
-                            <Col xs={3}>
+                            <Col xs={17}/>
+                            <Col xs={4} style={{ textAlign: 'center'}}>
                                 <WalletConnectButton
                                     backgroundColor="transparent"
                                     borderColor="#ce9600"
@@ -262,7 +243,7 @@ const Header = () => {
                 </Layout.Header>
             </Breakpoint>
             <Breakpoint small down>
-                <Layout.Header style={headerStylesMobile}>
+                <Layout.Header>
                     <Menu onClick={handleClick} mode="horizontal" selectedKeys={[page]} style={menuStyles}>
                         {menu_items.map((item) => (
                             <Menu.Item key={item}>

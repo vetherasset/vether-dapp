@@ -13,7 +13,7 @@ import emissionArray from '../../data/emissionArray.json';
 
 import '../../App.less';
 import { Row, Col } from 'antd'
-import { Text, Click, Colour } from '../components'
+import { Click, Colour } from '../components'
 import { ChartStyles, ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie, ChartPrice } from './chart'
 import { LoadingOutlined } from '@ant-design/icons';
 

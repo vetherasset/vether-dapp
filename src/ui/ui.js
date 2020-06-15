@@ -112,7 +112,7 @@ export const UniswapCard = (props) => {
     }
     
     return (
-        <div>
+        <>
             <Col style={cardStyles}>
                 <Label>YOUR UNISWAP SHARE</Label>
                 <br />
@@ -138,7 +138,7 @@ export const UniswapCard = (props) => {
                     }
                 </Row>
             </Col>
-        </div>
+        </>
     )
 }
 
@@ -149,19 +149,23 @@ export const BurnCard = (props) => {
     }
 
     return (
-        <div>
-            <Col xs={24} sm={8}>
+        <>
+            <Col xs={24} sm={12}>
                 <Row>
                     <Col xs={24} sm={12}>
-                        <Center><Text size={32} margin={"0px 0px"}>{prettify(+props.eraData.currentBurn)} ETH</Text></Center>
+                        <Center>
+                            <Text size={32}>{prettify(+props.eraData.currentBurn)} ETH</Text>
+                        </Center>
                     </Col>
                     <Col xs={24} sm={12}>
-                        <Center><Text size={32} margin={"0px 0px"}>${prettify(convertEthtoUSD(props.eraData.currentBurn))}</Text></Center>
+                        <Center>
+                            <Text size={32}>${prettify(convertEthtoUSD(props.eraData.currentBurn))}</Text>
+                        </Center>
                     </Col>
                 </Row>
                 <Row>
                     <Center><LabelGrey margin={"0px 0px 10px"}>TOTAL VALUE BURNT TODAY</LabelGrey></Center>
-                    <br></br>
+                    <br/>
                 </Row>
                 <Row>
                     <Col xs={24} sm={12}>
@@ -177,6 +181,6 @@ export const BurnCard = (props) => {
                 </Row>
             </Col>
 
-        </div>
+        </>
     )
 }

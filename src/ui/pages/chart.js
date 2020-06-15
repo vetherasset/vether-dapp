@@ -11,7 +11,7 @@ export const ChartStyles = {
     marginTop:25,
     marginBottom:25,
     backgroundColor:Colour().black,
-    height:400
+    minHeight:468
   }
 
 const getChartConfig = () => {

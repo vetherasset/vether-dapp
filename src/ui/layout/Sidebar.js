@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { Menu, Layout } from 'antd';
 import { Text, Icon, Colour } from '../components'
 
-import Footer from './Footer'
-
 import Breakpoint from 'react-socks';
 
 const Sidebar = (props) => {
@@ -111,7 +109,6 @@ const Sidebar = (props) => {
         ))}
       </Menu>
       </Breakpoint>
-      <Footer />
     </Layout.Sider>
   )
 }

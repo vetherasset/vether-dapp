@@ -18,7 +18,7 @@ const Hero = (props) => {
 					<h1>VETHER</h1>
 					<span>A strictly-scarce Ethereum-based asset.</span>
 					<Row>
-						<Col xs={24} sm={24} style={{ marginBottom: '3rem'}}>
+						<Col xs={24} sm={24}>
 							<Abstract/>
 						</Col>
 					</Row>

@@ -9,6 +9,9 @@ header.ant-layout-header {
   position: fixed;
   padding: 0 9px;
   z-index: 1;
+  @media (max-width: 767px) {
+    padding: 0;
+  }
 }
 
 .ant-layout-sider {
@@ -24,14 +27,14 @@ header.ant-layout-header {
 
 main.ant-layout-content {
   > div.ant-wrapper{
-    padding: 128px 20% 128px calc(~'20% + 150px');
+    padding: 128px 20% 0 calc(~'20% + 150px');
     @media (max-width: 767px) {
-      padding: 128px 12%;
+      padding: 128px 12% 0;
     }
     @media (min-width: 1400px) {
       margin: 0 auto;
-      padding: 128px 0;
-      max-width: 960px;
+      padding: 128px 0 0 150px;
+      max-width: 1250px;
     }
   }
 
@@ -64,6 +67,12 @@ main.ant-layout-content {
       margin: 0.5rem 0;
       display: initial;
     }
+    @media (min-width: 375px) {
+      font-size: 0.60rem;
+    }
+    @media (max-width: 374px) {
+      display: none;
+    }
   }
 
   #vetherStatsTableCircCap {
@@ -76,9 +85,22 @@ main.ant-layout-content {
     text-align: center;
     margin-bottom: 1rem;
   }
+
+  @media (max-width: 575px) {
+    #emissionTimerRefreshBtn {
+      display: block;
+      margin: 0 auto 2rem auto;
+    }
+  }
 }
 
-.ant-layout.ant-layout-has-sider > .ant-layout, .ant-layout.ant-layout-has-sider > .ant-layout-content {
+.ant-menu-horizontal {
+  line-height: 64px;
+}
+
+.ant-layout.ant-layout-has-sider > .ant-layout,
+.ant-layout.ant-layout-has-sider > .ant-layout-content {
+  width: 100%;
   overflow: initial;
 }
 
@@ -102,10 +124,6 @@ main.ant-layout-content {
   border-bottom: 3px solid #D09800;
 }
 
-.ant-menu {
-  background: #2B2515;
-}
-
 .ant-menu-root.ant-menu-inline{
   background-color: #2B2515;
 }
@@ -121,14 +139,6 @@ main.ant-layout-content {
 }
 .ant-input:placeholder-shown{
   color: #000
-}
-
-.ant-input:focus {
-  border-color: #D09800;
-  outline: 0;
-  -webkit-box-shadow: 0 0 0 2px rgba(87,168,233, .2);
-  box-shadow: 0 0 0 2px rgba(87,168,233, .2);
-  caret-color: #D09800;
 }
 
 .ant-input::selection {
@@ -148,6 +158,7 @@ a:hover {
 
 .ant-progress-text {
   color: #97948E;
+  vertical-align: baseline;
 }
 
 .ant-table-thead > tr > th{

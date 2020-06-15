@@ -10,7 +10,7 @@ import { convertFromWei, getSecondsToGo, prettify } from '../utils'
 
 import { Row, Col, Button, Progress } from 'antd'
 import { ReloadOutlined } from '@ant-design/icons';
-import { LabelGrey, Center, Text, Colour, Click } from '../components'
+import { LabelGrey, Center, Text, Colour } from '../components'
 import { BurnCard } from '../ui'
 
 export const EraTable = (props) => {
@@ -130,10 +130,9 @@ export const EraTable = (props) => {
     }
 
     const buttonStyles = {
+        color: Colour().gold,
         backgroundColor: Colour().dgrey,
         borderColor: Colour().dgrey,
-        paddingBottom: 20,
-        margin: 20
     }
 
     return (
@@ -150,8 +149,9 @@ export const EraTable = (props) => {
                     <Row>
                         <Col xs={24} sm={8}>
                             {/* <Center> */}
-                            <Button onClick={refresh} style={buttonStyles}>
-                                <ReloadOutlined style={{ fontSize: "20px", color: Colour().gold, margin: "0px 0px 20px 0px" }} /> <Click>REFRESH</Click>
+                            <Button id="emissionTimerRefreshBtn" nClick={refresh} style={buttonStyles}>
+                                <ReloadOutlined style={{ color: Colour().gold}} />
+                                REFRESH
                             </Button>
                             {/* </Center> */}
                         </Col>
@@ -213,24 +213,38 @@ export const EraTable = (props) => {
                                 </Breakpoint>
                                 <Breakpoint small down>
                                     <Center>
-                                        <Text size={32} margin={"10px 0 10px"}>{prettify(eraData.emission)} VETH</Text>
+                                        <p style={{
+                                            fontSize: '32px',
+                                            margin: '10px 0 10px',
+                                            lineHeight: '2.3rem',
+                                            textAlign: 'center',
+                                            fontWeight: 'bold'
+                                        }}>
+                                            {prettify(eraData.emission)} VETH
+                                        </p>
                                     </Center>
                                 </Breakpoint>
                                 <Center>
-                                    <span style={{ margin: '0 0 20px', color: '#000'}}>TO BE EMITTED TODAY</span>
+                                    <span
+                                        style={{
+                                            margin: '0 0 20px',
+                                            color: '#000',
+                                            textAlign: 'center',
+                                            fontWeight: 'bold'
+                                        }}>TO BE EMITTED TODAY</span>
                                 </Center>
                             </Col>
                         }
                         <Col xs={24} sm={6}>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col xs={24} sm={8}>
-                        </Col>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center'
+                    }}>
                         <BurnCard marketData={marketData} eraData={eraData} />
-                        <Col xs={24} sm={8}>
-                        </Col>
-                    </Row>
+                    </div>
 
 
                     {/* <Row>

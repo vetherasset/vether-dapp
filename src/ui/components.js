@@ -94,7 +94,8 @@ export const Sublabel = (props) => {
   styles.fontSize = "14px"
   styles.fontWeight = ""
   styles.color = Colour().white
-  styles.margin = "20px 0px"
+  styles.display = "block"
+  styles.clear = "both"
 
     if (props.margin) {
     styles.margin = props.margin

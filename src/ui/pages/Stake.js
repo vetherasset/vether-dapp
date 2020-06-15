@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { H2, LabelGrey, Click } from '../components'
+import { LabelGrey } from '../components'
 import { PoolTable, StakeTable } from './stake-web3'
 
 import '../../App.less';
@@ -15,26 +15,21 @@ const Stake = () => {
 	}, [])
 
 	return (
-		<div>
-			<H2>VETHER LIQUIDITY POOL</H2><br />
-			The Uniswap Liquidity Pool provides liquidity for Vether.
-			<br /><br />
-			<PoolTable></PoolTable>
+		<>
+			<h1>VETHER LIQUIDITY POOL</h1>
+			<span>The Uniswap Liquidity Pool provides liquidity for Vether.</span>
+			<PoolTable/>
 			<hr/>
 			{safari &&
-				<div>
+				<>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
-					<br></br>
-					<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a></Click>
-				</div>
+					<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
+				</>
 			}
 			{!safari &&
-				<div>
-					<StakeTable></StakeTable>
-				</div>
+					<StakeTable/>
 			}
-			<hr />
-		</div>
+		</>
 	)
 }
 export default Stake

@@ -88,17 +88,15 @@ export const TradeTable = () => {
         <div>
             <Row style={{marginTop:20, marginBottom:20}}>
                 <Col xs={2}>
-
                 </Col>
                 <Col xs={20}>
                         <Center><Text size={30} margin={"0px 0px 0px"}>${prettify(priceData.priceHistorical * priceData.ethPrice)}</Text></Center>
-                        <Center><LabelGrey margin={"0px 0px 0px"}>HISTORICAL VALUE</LabelGrey></Center>
+                        <Center><LabelGrey margin={"0px 0px 0.7rem"}>HISTORICAL VALUE</LabelGrey></Center>
 
                         <Center><Text size={30} margin={"0px 0px 0px"}>${prettify(priceData.priceUniswap * priceData.ethPrice)}</Text></Center>
                         <Center><LabelGrey margin={"0px 0px 0px"}>PRICE ON UNISWAP</LabelGrey></Center>
                 </Col>
                 <Col xs={2}>
-
                 </Col>
             </Row>
             <Row>

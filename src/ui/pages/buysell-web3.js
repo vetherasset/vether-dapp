@@ -180,9 +180,8 @@ export const PoolTable = () => {
                         BUY VETH >>
                     </Button>
                     <Tooltip placement="right" title="This will buy Vether with your Ether">
-                        &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+                        &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey,  margin: 0 }} />
                     </Tooltip>
-                    <br></br>
                     <Sublabel>BUY VETHER WITH ETH</Sublabel>
                     {buyFlag &&
                         <div>
@@ -209,7 +208,7 @@ export const PoolTable = () => {
                                     UNLOCK >
                                 </Button>
                                 <Tooltip placement="right" title="This will unlock your Vether">
-                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
                                 </Tooltip>
                                 <br></br>
                                 <Sublabel>Unlock Vether first</Sublabel>
@@ -246,7 +245,7 @@ export const PoolTable = () => {
                                     &lt;&lt;SELL VETH
                                 </Button>
                                 <Tooltip placement="right" title="This will sell your Vether for Ether">
-                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
                                 </Tooltip>
                                 <br></br>
                                 <Sublabel>SELL VETHER FOR ETH</Sublabel>

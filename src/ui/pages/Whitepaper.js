@@ -3,7 +3,6 @@ import React from 'react';
 import { Breakpoint } from 'react-socks';
 
 import '../../App.less';
-import {H2, Center, Text} from '../components'
 import { Abstract, EmissionTable } from '../content'
 
 const Whitepaper = () => {
@@ -32,11 +31,9 @@ const Whitepaper = () => {
 			</Breakpoint>
 
 			<Breakpoint small down>
-				<div style={{ marginLeft: 20 }}>
-					<span>
-						<p>Abstract.</p>
-						<Abstract abstract={true}/>
-					</span>
+				<div style={{ padding: '0 20px', marginBottom: '2rem' }}>
+					<p>Abstract.</p>
+					<Abstract abstract={true}/>
 				</div>
 			</Breakpoint>
 

@@ -36,7 +36,7 @@ const Cards = () => {
     }
 
     return (
-        <div>
+        <>
             <h2>VETHER UTILITY</h2>
             <p>Use the Vether Asset in its ecosystem</p>
             <Row>
@@ -63,7 +63,7 @@ const Cards = () => {
                         link={cardContent()[3].link} />
                 </Col>
             </Row>
-        </div>
+        </>
     )
 }
 export default Cards
