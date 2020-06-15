@@ -7,8 +7,8 @@
 header.ant-layout-header {
   width: 100%;
   position: fixed;
-  z-index: 1;
   padding: 0 9px;
+  z-index: 1;
 }
 
 .ant-layout-sider {
@@ -16,6 +16,10 @@ header.ant-layout-header {
   position: fixed;
   padding-top: 64px;
   z-index: 0;
+  .ant-menu-inline .ant-menu-item,
+  .ant-menu-inline .ant-menu-submenu-title {
+    text-transform: uppercase;
+  }
 }
 
 main.ant-layout-content {
