@@ -39,7 +39,7 @@ const Cards = () => {
         <>
             <h2>VETHER UTILITY</h2>
             <p>Use the Vether Asset in its ecosystem</p>
-            <Row>
+            <Row id="vetherEcosystemCards0">
                 <Col style={cardStyles} xs={12}>
                     <Card title={cardContent()[0].title}
                         subtitle={cardContent()[0].subtitle}
@@ -51,7 +51,7 @@ const Cards = () => {
                         link={cardContent()[1].link} />
                 </Col>
             </Row>
-            <Row>
+            <Row id="vetherEcosystemCards1">
                 <Col style={cardStyles} xs={12}>
                     <Card title={cardContent()[2].title}
                         subtitle={cardContent()[2].subtitle}
@@ -81,7 +81,7 @@ const Card = (props) => {
     }
 
     return (
-        <div>
+        <>
             <Row>
                 <Col xs={24} style={cardStyles}>
                     <Click size={18}><a href={window.location.origin + props.link} rel="noopener noreferrer" title={props.title} style={{ color: Colour().gold}}>{props.title}&nbsp;>></a></Click>
@@ -90,7 +90,7 @@ const Card = (props) => {
                     <br />
                 </Col>
             </Row>
-        </div>
+        </>
     )
 }
 
