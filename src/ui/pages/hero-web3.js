@@ -125,21 +125,23 @@ export const VetherTable = () => {
     // }, [])
 
     const vetherStatsStyles = {
-        padding: '51px 51px',
+        padding: '49px 21px',
         borderRadius: '9px',
         borderColor: Colour().grey,
         backgroundColor: Colour().black,
     }
 
     return (
-        <div>
-
-            <Row style={vetherStatsStyles}>
-                <Col xs={24} sm={6}>
-                    <Center><Logo></Logo></Center><br />
-                    <Center><Text size={32}>${(convertEthtoUSD(marketData.priceETH, 2))}</Text></Center>
+            <Row id="vetherStatsTable" style={vetherStatsStyles}>
+                <Col id="vetherStatsTableCurrentPrice" xs={24} sm={8}>
+                    <div style={{marginBottom: '2rem', textAlign: 'center'}}>
+                        <Logo/>
+                    </div>
+                    <div style={{textAlign: 'center'}}>
+                        <Text size={32}>${(convertEthtoUSD(marketData.priceETH, 2))}</Text>
+                    </div>
                 </Col>
-                <Col xs={24} sm={18}>
+                <Col xs={24} sm={16}>
                     <Row>
                         <Col xs={12}>
                             <Text size={32}>{vetherData.name}&nbsp;({vetherData.symbol})</Text>
@@ -150,9 +152,11 @@ export const VetherTable = () => {
 
                         </Col>
                     </Row>
+
                     <Row style={{marginTop:20}}>
                         <Col xs={24} sm={12}>
-                            <LabelGrey size={14}>TOTAL SUPPLY: </LabelGrey><br />
+                            <LabelGrey size={14}>TOTAL SUPPLY: </LabelGrey>
+                            <br />
                             <Text size={24}>{prettify(vetherData.totalSupply)} VETH</Text>
                         </Col>
                         <Col xs={24} sm={12}>
@@ -160,26 +164,22 @@ export const VetherTable = () => {
                             <Text size={24}>${prettify((convertEthtoUSD(convertToETH(vetherData.totalSupply), 0)))}</Text> */}
                         </Col>
                     </Row>
+
                     <Row style={{marginTop:20}}>
                         <Col xs={24} sm={12}>
-                            <LabelGrey size={14}>EMITTED: </LabelGrey><br />
+                            <LabelGrey size={14}>EMITTED: </LabelGrey>
+                            <br />
                             <Text size={24}>{prettify((+emissionData.totalEmitted).toFixed(0))} VETH</Text>
                         </Col>
-                        <Col xs={24} sm={12}>
-                            <LabelGrey size={14}>CIRCULATING CAP: </LabelGrey><br />
+                        <Col id="vetherStatsTableCircCap"xs={24} sm={12}>
+                            <LabelGrey size={14}>CIRCULATING CAP: </LabelGrey>
+                            <br />
                             <Text size={24}>${prettify((convertEthtoUSD(convertToETH(emissionData.totalEmitted), 0)))}</Text>
                         </Col>
                     </Row>
-                    
-                    <Breakpoint medium up>
-                    <br></br>
-                    <LabelGrey>{vetherAddr()}</LabelGrey>
-                    </Breakpoint>
-                    {/* <br></br> */}
-                    {/* <Click><a href={getLink()} rel="noopener noreferrer" title="Vether Contract Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW CONTRACT -> </a></Click> */}
-                
+
+                    <p id="vetherStatsTableContractAddress">{vetherAddr()}</p>
                 </Col>
             </Row>
-        </div>
     )
 }
