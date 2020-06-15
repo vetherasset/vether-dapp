@@ -123,7 +123,7 @@ export const EraTable = (props) => {
     const poolStyles = {
         borderWidth: '1px',
         // borderStyle: 'dashed',
-        borderRadius: 5,
+        borderRadius: '100px',
         paddingLeft: 50,
         paddingRight: 50,
         backgroundColor: '#cc9300'
