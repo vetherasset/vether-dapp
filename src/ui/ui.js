@@ -150,7 +150,7 @@ export const BurnCard = (props) => {
 
     return (
         <>
-            <Col xs={24} sm={12}>
+            <Col xs={24} sm={9}>
                 <Row>
                     <Col xs={24} sm={12}>
                         <Center>
