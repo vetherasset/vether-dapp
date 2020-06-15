@@ -17,7 +17,7 @@ header.ant-layout-header {
 .ant-layout-sider {
   height: 100%;
   position: fixed;
-  padding-top: 64px;
+  padding-top: 60px;
   z-index: 0;
   .ant-menu-inline .ant-menu-item,
   .ant-menu-inline .ant-menu-submenu-title {
@@ -102,30 +102,6 @@ main.ant-layout-content {
 .ant-layout.ant-layout-has-sider > .ant-layout-content {
   width: 100%;
   overflow: initial;
-}
-
-.App-link {
-  color: #D09800;
-}
-
-.ant-menu-inline .ant-menu-item::after{
-  border-right: 3px solid #D09800;
-}
-
-.ant-menu-horizontal > .ant-menu-item-selected{
-  border-bottom: 3px solid #D09800;
-}
-
-.ant-menu-horizontal > .ant-menu-item-active{
-  border-bottom: 3px solid #D09800;
-}
-
-.ant-menu-horizontal > .ant-menu-item:hover{
-  border-bottom: 3px solid #D09800;
-}
-
-.ant-menu-root.ant-menu-inline{
-  background-color: #2B2515;
 }
 
 .ant-input{
@@ -240,6 +216,10 @@ a:hover {
 .ant-menu-vertical-right .ant-menu-submenu-title,
 .ant-menu-inline .ant-menu-submenu-title {
   color: #D09800;
+}
+
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+  border: none;
 }
 
 .ant-menu {
