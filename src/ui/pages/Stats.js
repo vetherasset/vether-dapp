@@ -11,9 +11,9 @@ import { getETHPrice } from '../../client/market.js'
 
 import emissionArray from '../../data/emissionArray.json';
 
-import '../../App.css';
+import '../../App.less';
 import { Row, Col } from 'antd'
-import { H2, Text, Gap, Click, Colour } from '../components'
+import { H2, Text, Click, Colour } from '../components'
 import { ChartStyles, ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie, ChartPrice } from './chart'
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -186,7 +186,6 @@ const Stats = () => {
 
     return (
         <div style={{ marginRight: -50 }}>
-            <Gap />
             <H2>STATS</H2>
             <br></br>
             <Text size={16} bold={'TRUE'}>Stats for the Vether Economy</Text><br></br>
@@ -286,7 +285,6 @@ const Stats = () => {
 
             <Click><a href='https://github.com/EverexIO/Ethplorer/wiki/Ethplorer-API' rel="noopener noreferrer" title="ETHPlorer link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> DATA FROM ETHPLORER -> </a></Click><br />
             <Click><a href='https://www.chartjs.org/' rel="noopener noreferrer" title="Chartjs link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> CHARTS FROM CHARTJS -> </a></Click>
-            <Gap />
         </div>
     )
 }

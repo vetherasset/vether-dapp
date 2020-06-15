@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 
-import { H2, Subtitle, HR, Gap, LabelGrey, Click } from '../components'
+import { H2, LabelGrey, Click } from '../components'
 import { PoolTable, StakeTable } from './stake-web3'
 
-import '../../App.css';
+import '../../App.less';
 
 const Stake = () => {
 
@@ -16,12 +16,11 @@ const Stake = () => {
 
 	return (
 		<div>
-			<Gap />
 			<H2>VETHER LIQUIDITY POOL</H2><br />
-			<Subtitle>The Uniswap Liquidity Pool provides liquidity for Vether.</Subtitle>
+			The Uniswap Liquidity Pool provides liquidity for Vether.
 			<br /><br />
 			<PoolTable></PoolTable>
-			<HR/>
+			<hr/>
 			{safari &&
 				<div>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
@@ -34,7 +33,7 @@ const Stake = () => {
 					<StakeTable></StakeTable>
 				</div>
 			}
-			<HR />
+			<hr />
 		</div>
 	)
 }

@@ -1,22 +1,44 @@
-/*.App {
-  text-align: center;
-  margin-left:100;
-}*/
+@import "src/ui/less/fonts.less";
+@import "src/ui/less/typography.less";
 
-body {
-  background-color: #2B2515;
-  color: #ffffff;
-  margin: 0px;
-  font-family: Courier New;
-  text-align: left;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  --antd-wave-shadow-color: #D09800;
+@text-color: red; // major text color
+@text-color-secondary: red; // secondary text color
+
+header.ant-layout-header {
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  padding: 0 9px;
+}
+
+.ant-layout-sider {
+  height: 100%;
+  position: fixed;
+  padding-top: 64px;
+  z-index: 0;
+}
+
+main.ant-layout-content {
+  > div.ant-wrapper{
+    padding: 128px 20% 128px calc(~'20% + 150px');
+    @media (max-width: 767px) {
+      padding: 128px 12%;
+    }
+    @media (min-width: 1400px) {
+      margin: 0 auto;
+      padding: 128px 0;
+      max-width: 960px;
+    }
+  }
+
+}
+
+.ant-layout.ant-layout-has-sider > .ant-layout, .ant-layout.ant-layout-has-sider > .ant-layout-content {
+  overflow: initial;
 }
 
 .App-link {
   color: #D09800;
-  font-size: 14;
 }
 
 .ant-menu-inline .ant-menu-item::after{
@@ -41,16 +63,6 @@ body {
 
 .ant-menu-root.ant-menu-inline{
   background-color: #2B2515;
-}
-
-.ant-layout-header{
-  padding:0;
-  background: #110D01;
-  height: 47;
-}
-.ant-menu-item{
-  width: 48;
-  padding:5
 }
 
 .ant-input{
@@ -91,16 +103,13 @@ a:hover {
 
 .ant-progress-text {
   color: #97948E;
-  font-size: 20;
 }
 
 .ant-table-thead > tr > th{
   color: #fff;
   font-weight: 800;
-  font-size: 20;
   border-bottom: 1px solid #97948E;
   background: #2B2515;
-  margin-bottom:5;
 }
 .ant-table-tbody > tr > td{
   color: #fff;

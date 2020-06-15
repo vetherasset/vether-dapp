@@ -24,8 +24,7 @@ const Footer = (props) => {
   }
 
   return (
-    <Layout.Footer style={{background: "#110D01"}}>
-      <div>
+      <footer>
         <Breakpoint medium up>
           <div style={footerStyles}>
             <Row>
@@ -51,8 +50,7 @@ const Footer = (props) => {
             </Row>
           </div>
         </Breakpoint>
-      </div>
-    </Layout.Footer>
+      </footer>
   )
 }
 

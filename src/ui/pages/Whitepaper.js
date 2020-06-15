@@ -2,15 +2,14 @@ import React from 'react';
 
 import { Breakpoint } from 'react-socks';
 
-import '../../App.css';
-import { H2, Text, Center, Gap } from '../components'
+import '../../App.less';
+import { H2, Text, Center } from '../components'
 import { Abstract, EmissionTable } from '../content'
 
 const Whitepaper = () => {
 
 	return (
 		<div>
-			<Gap />
 			<H2>WHITEPAPER</H2>
 			<br></br>
 			<Center><Text size={16} bold={'TRUE'}>Vether: A strictly-scarce Ethereum-based asset.</Text></Center>
@@ -110,8 +109,6 @@ const Whitepaper = () => {
 		- The contract uses blocktime instead of blockheight since the Ethereum block generation speed can change.<br />
 		- The UpdateEmission() function is called where possible to ensure frequent Emission Schedule updates. <br />
 			</Text>
-			<Gap />
-			<Gap />
 		</div>
 	)
 }

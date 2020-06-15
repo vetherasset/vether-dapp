@@ -170,7 +170,7 @@ export const EraTable = (props) => {
                         <Col xs={24} sm={8}>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row style={{ marginBottom: '3rem' }}>
                         <Col xs={24} sm={6}>
                         </Col>
                         {small &&
@@ -182,18 +182,18 @@ export const EraTable = (props) => {
                             <Col xs={24} sm={12} style={poolStyles}>
                                 <Center><LabelGrey margin={"20px 0px 0px"}>ERA 1, DAY {eraData.day}</LabelGrey></Center>
                                 <Breakpoint medium up>
-                                    <Center><Text size={48} margin={"0px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                                    <Center><Text size={48} margin={"1.3rem 0"}>{prettify(eraData.emission)} VETH</Text></Center>
                                 </Breakpoint>
                                 <Breakpoint small down>
-                                    <Center><Text size={32} margin={"10px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                                    <Center><Text size={32} margin={"10px 0 0"}>{prettify(eraData.emission)} VETH</Text></Center>
                                 </Breakpoint>
-                                <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
+                                <Center><LabelGrey margin={"0 0 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
                             </Col>
                         }
                         <Col xs={24} sm={6}>
                         </Col>
                     </Row>
-                    <Row style={{ marginTop: 20 }}>
+                    <Row>
                         <Col xs={24} sm={8}>
                         </Col>
                         <BurnCard marketData={marketData} eraData={eraData} />
