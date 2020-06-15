@@ -124,25 +124,18 @@ export const VetherTable = () => {
     //     return linkFull
     // }, [])
 
-    const poolStyles = {
-        borderWidth: '1px',
-        // borderStyle: 'dashed',
-        borderRadius: 5,
+    const vetherStatsStyles = {
+        padding: '51px 51px',
+        borderRadius: '9px',
         borderColor: Colour().grey,
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingTop:20,
-        paddingBottom:20,
         backgroundColor: Colour().black,
     }
-
-
 
     return (
         <div>
 
-            <Row style={poolStyles}>
-                <Col xs={24} sm={6}style={{marginTop:20}}>
+            <Row style={vetherStatsStyles}>
+                <Col xs={24} sm={6}>
                     <Center><Logo></Logo></Center><br />
                     <Center><Text size={32}>${(convertEthtoUSD(marketData.priceETH, 2))}</Text></Center>
                 </Col>

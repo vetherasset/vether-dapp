@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { H2, Text, Subtitle, Click, HR, Gap, LabelGrey } from '../components'
 import { ClaimTable, SendTable } from './claim-web3'
 
-import '../../App.css';
+import '../../App.less';
 
 const Claim = () => {
 

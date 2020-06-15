@@ -17,10 +17,7 @@ import {
 	Button,
 	Sublabel,
 	Colour,
-	Center,
-	HR,
-	Gap,
-	Subtitle
+	Center
 } from '../components'
 import { PoolCard, UniswapCard } from '../ui'
 import Web3 from "web3";
@@ -174,7 +171,6 @@ export const StakeTable = () => {
 
 	return (
 		<div>
-			<Gap />
 			<Row>
 				{/* <Col xs={24} sm={12}>
 					{!loading &&
@@ -189,15 +185,14 @@ export const StakeTable = () => {
 			</Row>
 
 			<H2>MANAGE LIQUIDITY</H2><br />
-			<Subtitle>Add liquidity to the pool (ETH and VETH) to earn on trade fees</Subtitle><br />
+			Add liquidity to the pool (ETH and VETH) to earn on trade fees<br />
 			<br />
 			{!loading &&
 				<AddLiquidityTable accountData={account} />
 			}
-			<HR />
-			<Gap />
+			<hr />
 			<H2>REMOVE LIQUIDITY</H2><br />
-			<Subtitle>Remove liquidity from the pool</Subtitle><br />
+			Remove liquidity from the pool<br />
 			<br /><br />
 			{!loading &&
 				<RemoveLiquidityTable accountData={account} />

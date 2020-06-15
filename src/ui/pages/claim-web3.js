@@ -7,7 +7,7 @@ import {convertFromWei, convertToWei, getSecondsToGo, getBN, prettify} from '../
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Sublabel, Click, Button, Text, Label, Gap, LabelGrey, Colour } from '../components'
+import { Sublabel, Click, Button, Text, Label, LabelGrey, Colour } from '../components'
 // import { WalletCard } from '../ui'
 
 export const ClaimTable = () => {
@@ -291,7 +291,6 @@ export const ClaimTable = () => {
 
 					{checkFlag &&
 						<div>
-							<Gap />
 							<Row>
 								<Col xs={12} sm={6} style={{ marginLeft: 0, marginRight: 30 }}>
 									<Label>{prettify(claimAmt)} VETH</Label>
@@ -414,7 +413,6 @@ export const SendTable = () => {
 		<div>
 			{walletFlag &&
 				<div>
-					<Gap />
 					<Row>
 						<Col xs={12} sm={3}>
 							<Input size={'large'} allowClear onChange={onAmountChange} placeholder={account.vethBalance} />

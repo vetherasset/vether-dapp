@@ -30,23 +30,6 @@ export const Colour = (alpha) => {
   return colour
 }
 
-export const H1 = (props) => {
-  let styles = {...props.style || {}}
-  styles.fontSize = "24px"
-  styles.fontWeight = "bold"
-  styles.color = Colour().white
-
-    if (props.margin) {
-    styles.margin = props.margin
-  }
-
-  return (
-    <span style={styles}>
-      {props.children}
-    </span>
-  )
-}
-
 export const H2 = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "20px"
@@ -63,24 +46,6 @@ export const H2 = (props) => {
     </span>
   )
 }
-
-export const Subtitle = (props) => {
-  let styles = {...props.style || {}}
-  styles.fontSize = "14px"
-  styles.fontWeight = "bold"
-  styles.color = Colour().white
-  styles.margin = "20px 0px"
-
-  if (props.margin) {
-    styles.margin = props.margin
-  }
-  return (
-    <span style={styles}>
-      {props.children}
-    </span>
-  )
-}
-
 
 export const Label = (props) => {
   let styles = {...props.style || {}}
@@ -293,18 +258,6 @@ export const Button = (props) => {
 export const Center = (props) => (
   <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
     {props.children}
-  </div>
-)
-
-export const HR = () => (
-  <div>
-    <hr style={{border: "1px dashed #97948E", marginTop:40}}/>
-  </div>
-)
-
-export const Gap = () => (
-  <div>
-    <br></br><br></br>
   </div>
 )
 

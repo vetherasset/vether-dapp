@@ -47,14 +47,7 @@ const Sidebar = (props) => {
   }
 
   const sidebarStyles = {
-    //width: 150,
-    cursor: 'pointer',
-    paddingTop:60,
-    backgroundColor: Colour().black,
-    textTransform: "uppercase",
-    zIndex: 1,
-    position: "relative",
-    boxShadow: "0 2px 16px 0 rgba(0,0,0,0.09)",
+    backgroundColor: Colour().black
   }
 
   const selected_styles = {

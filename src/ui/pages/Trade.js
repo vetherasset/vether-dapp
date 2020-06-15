@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
-import { H2, Subtitle, Gap, LabelGrey, Click } from '../components'
+import { H2, LabelGrey, Click } from '../components'
 import {TradeTable, HistoryTable} from './trade-web3'
 import {PoolTable} from './buysell-web3'
 
-import '../../App.css';
+import '../../App.less';
 // import { Button as ButtonD } from 'antd';
 
 const Trade = () => {
@@ -18,9 +18,8 @@ const Trade = () => {
 
 	return (
 		<div>
-			<Gap />
 			<H2>TRADE VETHER</H2><br />
-			<Subtitle>BUY AND SELL VETHER USING UNISWAP</Subtitle>
+			BUY AND SELL VETHER USING UNISWAP
 			<TradeTable></TradeTable>
 			{safari &&
 				<div>

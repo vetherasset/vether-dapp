@@ -134,17 +134,6 @@ const Header = () => {
         display: "flex",
         flexDirection: "column",
         background: colour,
-        textTransform: "uppercase",
-        zIndex: 1,
-        position: "absolute",
-        left: 0,
-        top: 0,
-        right: 0,
-        paddingLeft: 9,
-        paddingRight: 9,
-        paddingTop: 0,
-        paddingBottom: 0,
-        textAlign: "center"
     }
 
     const logotypeStyles = {
@@ -233,8 +222,6 @@ const Header = () => {
                                 <img src={logotype} style={logotypeStyles} alt="Vether - A strictly-scarce Ethereum-based asset." />
                             </Col>
                             <Col xs={18}>
-                                <Center><H2 margin={"-10px 0px"}>{net}</H2></Center>
-                                <Center><Sublabel margin={"-40px 0px"}>DEPLOYED ON 12 MAY 2020</Sublabel></Center>
                             </Col>
                             <Col xs={3}>
                                 <WalletConnectButton

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Row, Col } from 'antd'
-import { H2, Subtitle, Gap, Colour, Text, Click } from '../components'
+import { H2, Colour, Text, Click } from '../components'
 
 const Cards = () => {
 
@@ -37,9 +37,8 @@ const Cards = () => {
 
     return (
         <div>
-            <Gap />
             <H2>VETHER UTILITY</H2><br />
-            <Subtitle>Use the Vether Asset in its ecosystem</Subtitle>
+            Use the Vether Asset in its ecosystem
             <Row>
                 <Col style={cardStyles} xs={12}>
                     <Card title={cardContent()[0].title}
@@ -98,10 +97,8 @@ const Card = (props) => {
 export const Links = (props) => {
     return (
         <div>
-            <Gap />
-            <H2>LINKS AND RESOURCES</H2><br />
-            <Subtitle>Useful links and resources</Subtitle>
-            <Gap />
+            <H2>LINKS AND RESOURCES</H2>
+            Useful links and resources
             <Row>
                 <Col>
                     <Click><a href='https://etherscan.io/address/0x506d07722744e4a390cd7506a2ba1a8157e63745' rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>UNISWAP CONTRACT -></a></Click>
