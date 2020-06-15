@@ -202,14 +202,22 @@ const Stats = () => {
                                     emissionData={emissionData}
                                     holders={chartData.holderArray.length - 1}
                                     transfers={chartData.transfers}
-                                    size={12} />
+                                    size={12}
+                                    style={{
+                                        padding: '0 1rem'
+                                    }}
+                                />
                             </Breakpoint>
                             <Breakpoint medium up>
                                 <ChartData eraData={eraData}
                                     emissionData={emissionData}
                                     holders={chartData.holderArray.length - 1}
                                     transfers={chartData.transfers}
-                                    size={14} />
+                                    size={14}
+                                    style={{
+                                        padding: '0 1rem'
+                                    }}
+                                />
                             </Breakpoint>
                         </Col>
                     </div>
