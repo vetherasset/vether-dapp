@@ -180,7 +180,8 @@ export const EraTable = (props) => {
                             <Col xs={24} sm={12}>
                                 <Center>
                                     <span style={{
-                                        margin: '0 0 0'
+                                        margin: '0 0 0',
+                                        fontWeight: 'bold'
                                     }}>
                                         ERA 1, DAY {eraData.day}
                                     </span>
@@ -192,7 +193,8 @@ export const EraTable = (props) => {
                                 <Center>
                                     <span style={{
                                         margin: '20px 0px 0px',
-                                        color: '#000'
+                                        color: '#000',
+                                        fontWeight: 'bold'
                                     }}>
                                         ERA 1, DAY {eraData.day}
                                     </span>
