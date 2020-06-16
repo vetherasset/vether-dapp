@@ -11,7 +11,7 @@ export const ChartStyles = {
     marginTop:25,
     marginBottom:25,
     backgroundColor:Colour().black,
-    height:400
+    minHeight:468
   }
 
 const getChartConfig = () => {
@@ -436,22 +436,38 @@ export const ChartData = (props) =>{
                 <Center><LabelGrey size={18}>Vether Overview</LabelGrey></Center>
 
                 <Row style={rowStyles}>
-                    <Col xs={12}>
+                    <Col xs={12}
+                         style={{
+                             padding: '0 1rem'
+                         }}
+                    >
                         <LabelGrey size={props.size}>Total Holders</LabelGrey><br />
                         <Text size={1.25*props.size}>{props.holders} holders</Text>
                     </Col>
-                    <Col xs={12}>
+                    <Col xs={12}
+                         style={{
+                             padding: '0 1rem'
+                         }}
+                    >
                         <LabelGrey size={props.size}>Total Transfers</LabelGrey><br />
                         <Text size={1.25*props.size}>{props.transfers} transfers</Text>
                     </Col>
                 </Row>
 
                 <Row style={rowStyles}>
-                    <Col xs={12}>
+                    <Col xs={12}
+                         style={{
+                             padding: '0 1rem'
+                         }}
+                    >
                         <LabelGrey size={props.size}>Total Burnt</LabelGrey><br />
                         <Text size={1.25*props.size}>{prettify((+emissionData.totalBurnt).toFixed(2))} ETH</Text>
                     </Col>
-                    <Col xs={12}>
+                    <Col xs={12}
+                         style={{
+                             padding: '0 1rem'
+                         }}
+                    >
                         <LabelGrey size={props.size}>Total Fees</LabelGrey><br />
                         <Text size={1.25*props.size}>{prettify((+emissionData.totalFees).toFixed(2))} VETH</Text>
                     </Col>
@@ -460,11 +476,19 @@ export const ChartData = (props) =>{
                 </Row>
 
                 <Row style={rowStyles}>
-                    <Col xs={12}>
+                    <Col xs={12}
+                         style={{
+                             padding: '0 1rem'
+                         }}
+                    >
                         <LabelGrey size={props.size}>Current Emission</LabelGrey><br />
                         <Text size={1.25*props.size}>{eraData.emission} ETH</Text>
                     </Col>
-                    <Col xs={12}>
+                    <Col xs={12}
+                         style={{
+                             padding: '0 1rem'
+                         }}
+                    >
                         <LabelGrey size={props.size}>Next Emission</LabelGrey><br />
                         <Text size={1.25*props.size}>{eraData.emission / 2} VETH</Text>
                     </Col>
@@ -472,7 +496,11 @@ export const ChartData = (props) =>{
                     </Col> */}
                 </Row>
                 <Row style={rowStyles}>
-                    <Col xs={8}>
+                    <Col xs={8}
+                         style={{
+                             padding: '0 1rem'
+                         }}
+                    >
                         <LabelGrey size={props.size}>Genesis</LabelGrey><br />
                         <Text size={1.25*props.size}>{genesis}</Text>
                     </Col>
@@ -480,8 +508,12 @@ export const ChartData = (props) =>{
                         <LabelGrey size={props.size}>Halving</LabelGrey><br />
                         <Text size={1.25*props.size}>{halving}</Text>
                     </Col>
-                    <Col xs={8}>
-                        <LabelGrey size={props.size}>Fully Emitted</LabelGrey><br />
+                    <Col xs={8}
+                         style={{
+                             padding: '0 1rem'
+                         }}
+                    >
+                        <LabelGrey size={props.size}>Emitted</LabelGrey><br />
                         <Text size={1.25*props.size}>{end}</Text>
                     </Col>
                 </Row>

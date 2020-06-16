@@ -10,7 +10,7 @@ import { convertFromWei, getSecondsToGo, prettify } from '../utils'
 
 import { Row, Col, Button, Progress } from 'antd'
 import { ReloadOutlined } from '@ant-design/icons';
-import { LabelGrey, Center, Text, Colour, Click } from '../components'
+import { LabelGrey, Center, Text, Colour } from '../components'
 import { BurnCard } from '../ui'
 
 export const EraTable = (props) => {
@@ -123,18 +123,16 @@ export const EraTable = (props) => {
     const poolStyles = {
         borderWidth: '1px',
         // borderStyle: 'dashed',
-        borderRadius: 5,
-        borderColor: Colour().grey,
+        borderRadius: '100px',
         paddingLeft: 50,
         paddingRight: 50,
-        backgroundColor: '#5C4F2C'
+        backgroundColor: '#cc9300'
     }
 
     const buttonStyles = {
+        color: Colour().gold,
         backgroundColor: Colour().dgrey,
         borderColor: Colour().dgrey,
-        paddingBottom: 20,
-        margin: 20
     }
 
     return (
@@ -151,55 +149,104 @@ export const EraTable = (props) => {
                     <Row>
                         <Col xs={24} sm={8}>
                             {/* <Center> */}
-                            <Button onClick={refresh} style={buttonStyles}>
-                                <ReloadOutlined style={{ fontSize: "20px", color: Colour().gold, margin: "0px 0px 20px 0px" }} /> <Click>REFRESH</Click>
+                            <Button id="emissionTimerRefreshBtn" nClick={refresh} style={buttonStyles}>
+                                <ReloadOutlined style={{ color: Colour().gold}} />
+                                REFRESH
                             </Button>
                             {/* </Center> */}
                         </Col>
 
                         <Col xs={24} sm={8}>
-                            <Center><Text size={40} margin={"0px 0px"}>{timer}</Text></Center>
+                            <div id="vetherEraTimer">
+                                <Text size={40} margin={"0px 0px"}>{timer}</Text>
+                            </div>
                             {!small &&
-                                <div>
+                                <>
                                     <Progress percent={(((82400 - eraData.secondsToGo) / 82400) * 100).toFixed(0)} strokeColor={Colour().gold} status="active" />
-                                    <Center><LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey></Center>
-                                </div>
+                                    <Center i>
+                                        <LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey>
+                                    </Center>
+                                </>
                             }
                         </Col>
 
                         <Col xs={24} sm={8}>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row style={{ marginBottom: '3rem' }}>
                         <Col xs={24} sm={6}>
                         </Col>
                         {small &&
                             <Col xs={24} sm={12}>
-                                <Center><LabelGrey margin={"0px 0px 0px"}>ERA 1, DAY {eraData.day}</LabelGrey></Center>
+                                <Center>
+                                    <span style={{
+                                        margin: '0 0 0',
+                                        fontWeight: 'bold'
+                                    }}>
+                                        ERA 1, DAY {eraData.day}
+                                    </span>
+                                </Center>
                             </Col>
                         }
                         {!small &&
                             <Col xs={24} sm={12} style={poolStyles}>
-                                <Center><LabelGrey margin={"20px 0px 0px"}>ERA 1, DAY {eraData.day}</LabelGrey></Center>
+                                <Center>
+                                    <span style={{
+                                        margin: '20px 0px 0px',
+                                        color: '#000',
+                                        fontWeight: 'bold'
+                                    }}>
+                                        ERA 1, DAY {eraData.day}
+                                    </span>
+                                </Center>
                                 <Breakpoint medium up>
-                                    <Center><Text size={48} margin={"0px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                                    <Center>
+                                        <Text
+                                            size={48}
+                                            margin={"1.3rem 0"}
+                                            style={{
+                                                lineHeight: '3rem',
+                                                textAlign: 'center'
+                                            }}
+                                        >
+                                            {prettify(eraData.emission)} VETH
+                                        </Text>
+                                    </Center>
                                 </Breakpoint>
                                 <Breakpoint small down>
-                                    <Center><Text size={32} margin={"10px 0px 0px"}>{prettify(eraData.emission)} VETH</Text></Center>
+                                    <Center>
+                                        <p style={{
+                                            fontSize: '32px',
+                                            margin: '10px 0 10px',
+                                            lineHeight: '2.3rem',
+                                            textAlign: 'center',
+                                            fontWeight: 'bold'
+                                        }}>
+                                            {prettify(eraData.emission)} VETH
+                                        </p>
+                                    </Center>
                                 </Breakpoint>
-                                <Center><LabelGrey margin={"0px 0px 20px"}>TO BE EMITTED TODAY</LabelGrey></Center>
+                                <Center>
+                                    <span
+                                        style={{
+                                            margin: '0 0 20px',
+                                            color: '#000',
+                                            textAlign: 'center',
+                                            fontWeight: 'bold'
+                                        }}>TO BE EMITTED TODAY</span>
+                                </Center>
                             </Col>
                         }
                         <Col xs={24} sm={6}>
                         </Col>
                     </Row>
-                    <Row style={{ marginTop: 20 }}>
-                        <Col xs={24} sm={8}>
-                        </Col>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center'
+                    }}>
                         <BurnCard marketData={marketData} eraData={eraData} />
-                        <Col xs={24} sm={8}>
-                        </Col>
-                    </Row>
+                    </div>
 
 
                     {/* <Row>
