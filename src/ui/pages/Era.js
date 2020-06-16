@@ -1,17 +1,15 @@
 import React from 'react'
 
-import { H2, Subtitle, HR, Gap } from '../components'
 import { EraTable } from './era-web3'
 
 const Era = () => {
 
     return (
         <div>
-            <Gap />
-            <H2>CURRENT ERA</H2><br />
-            <Subtitle>Today's emission of Vether.</Subtitle>
+            <h2>CURRENT ERA</h2>
+            <p>Today's emission of Vether.</p>
             <EraTable />
-            <HR />
+            <hr />
         </div>
     )
 }

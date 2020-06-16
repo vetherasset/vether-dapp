@@ -7,3 +7,4 @@ firebase-debug.log
 .vercel
 .idea
 .idea/*
+.env
