@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../App.css';
+import '../App.less';
 import { H2, Subtitle, Gap, HR } from '../components'
 import { EmissionTable } from '../content'
 

@@ -1,14 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Layout } from 'antd';
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.less'
 
 import Header from './ui/layout/Header'
+import Footer from './ui/layout/Footer'
 import Sidebar from './ui/layout/Sidebar'
-import FooterMobile from './ui/layout/FooterMobile'
 import Hero from './ui/pages/Hero'
 import Acquire from './ui/pages/Acquire'
-// import Claim from './ui/pages/Claim'
 import Stake from './ui/pages/Stake'
 import Trade from './ui/pages/Trade'
 import Stats from './ui/pages/Stats'
@@ -17,7 +16,7 @@ import { Colour } from './ui/components'
 
 import { ContextProvider } from './context'
 
-import Breakpoint, { BreakpointProvider } from 'react-socks';
+import { BreakpointProvider } from 'react-socks';
 
 const { Content } = Layout;
 
@@ -25,13 +24,13 @@ const App = () => {
 
 	return (
 		<Router>
-			<div>
-				<ContextProvider>
-					<BreakpointProvider>
-						<Layout style={{ height: "100vh" }}>
-							<Sidebar />
-							<Header />
-							<Content style={{ background: Colour().dgrey, color: Colour().white, paddingLeft: 30, paddingTop: 50, paddingRight:30, paddingBottom:20 }}>
+			<ContextProvider>
+				<BreakpointProvider>
+					<Header />
+					<Layout style={{ height: "100vh" }}>
+						<Sidebar />
+						<Content style={{ background: Colour().dgrey, color: Colour().white}}>
+							<div className="ant-wrapper">
 								<Switch>
 									<Route path="/" exact component={Hero} />
 									<Route path="/overview" exact component={Hero} />
@@ -42,17 +41,12 @@ const App = () => {
 									<Route path="/stats" exact component={Stats} />
 									<Route path="/whitepaper" exact component={Whitepaper} />
 								</Switch>
-								<Breakpoint small down>
-									<FooterMobile />
-								</Breakpoint>
-							</Content>
-							{/* <Breakpoint small down>
-									<FooterMobile />
-								</Breakpoint> */}
-						</Layout>
-					</BreakpointProvider>
-				</ContextProvider>
-			</div>
+								<Footer/>
+							</div>
+						</Content>
+					</Layout>
+				</BreakpointProvider>
+			</ContextProvider>
 		</Router>
 	);
 }
