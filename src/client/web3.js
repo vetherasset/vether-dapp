@@ -2,6 +2,7 @@ import Web3 from 'web3'
 import VETHER from '../artifacts/DeployedVether.json'
 import UNISWAP from '../artifacts/UniswapExchange.json'
 import REGISTRY from '../artifacts/UniswapRegistry.json'
+import GASMINE from '../artifacts/GasMineContract.json'
 
 const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE') ? true : false
 
@@ -23,6 +24,18 @@ export const vetherAddr = () => {
 
 export const vetherAbi = () => {
 	return VETHER.abi
+}
+
+export const gasMineAddr = () => {
+    if(TESTNET) {
+        return '0x0f3e723c20096171488444597bd49b5c9de9f8fb'
+    } else {
+        return '0x0f3e723c20096171488444597bd49b5c9de9f8fb'
+    }
+}
+
+export const gasMineAbi = () => {
+	return GASMINE.abi
 }
 
 export const infuraAPI = () => {

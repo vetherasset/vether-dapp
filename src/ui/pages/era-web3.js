@@ -196,7 +196,9 @@ export const EraTable = (props) => {
                     <Row style={{ marginTop: 20 }}>
                         <Col xs={24} sm={8}>
                         </Col>
-                        <BurnCard marketData={marketData} eraData={eraData} />
+                        {!small &&
+                            <BurnCard marketData={marketData} eraData={eraData} />
+                        }
                         <Col xs={24} sm={8}>
                         </Col>
                     </Row>

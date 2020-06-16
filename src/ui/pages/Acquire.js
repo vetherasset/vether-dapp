@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Row } from 'antd'
 import { H2, Subtitle, Text, HR, Gap, LabelGrey, Click } from '../components'
 import { AcquireTable } from './acquire-web3'
+import { GasMineTable } from './acquire-web3'
 import { TokenTable } from './tokens'
 import { ClaimTable } from './claim-web3'
 import { EraTable } from './era-web3'
@@ -72,7 +73,28 @@ const Acquire = () => {
 					<Click><a href='https://github.com/vetherasset/vether-miner' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>GET THE CLIENT -></a></Click>
 					<Gap />
 				</TabPane>
-				<TabPane tab="BURN TOKENS" key="2">
+				<TabPane tab="GAS MINE" key="2">
+					<Gap />
+					<H2>ACQUIRE VETHER USING GAS MINING</H2><br />
+					<Subtitle>Burn gas to acquire Vether.</Subtitle><br /><br />
+					<Subtitle>This method will partially refund the user their gas after the transaction.</Subtitle><br /><br />
+					{safari &&
+						<div>
+							<br />
+							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
+							<br />
+							<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a></Click>
+						</div>
+					}
+					{!safari &&
+						<div>
+							<GasMineTable></GasMineTable>
+						</div>
+					}
+					<HR />
+					<Gap />
+				</TabPane>
+				<TabPane tab="BURN TOKENS" key="3">
 					<Gap />
 					<H2>BURN TOKENS</H2><br />
 					<Subtitle>Burn the tokens on your wallet to get VETHER.</Subtitle><br />
@@ -91,7 +113,7 @@ const Acquire = () => {
 						</div>
 					}
 				</TabPane>
-				<TabPane tab="CLAIM SHARE" key="3">
+				<TabPane tab="CLAIM SHARE" key="4">
 					<Gap />
 					<H2>CLAIM VETHER</H2><br />
 					<Subtitle>Claim your share of a previous day’s emission. </Subtitle><br />
