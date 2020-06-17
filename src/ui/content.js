@@ -28,8 +28,7 @@ export const Abstract = (props) => {
 				</div>
 			}
 			{!props.abstract &&
-				<div>
-					<Text>
+				<p>
 						Vether is designed to be a store-of-value with properties of strict scarcity,
 						unforgeable costliness and a fixed emission schedule. Vether mimics
 						characteristics of Bitcoin, where miners compete to expend capital to acquire
@@ -37,8 +36,7 @@ export const Abstract = (props) => {
 						Vether participants compete to purchase it by destroying capital on-chain.
 						As a result, all units of Vether are acquired at-cost and by anyone.
 						This mechanism is called Proof-of-Value.
-			</Text>
-				</div>
+				</p>
 			}
 		</div>
 	)
@@ -53,8 +51,11 @@ export const Logo = () => {
 export const EmissionTable = () => {
 
 	return (
-		<div>
-			<Breakpoint medium up>
+		<>
+			<Breakpoint medium up
+						style={{
+							fontFamily: 'Courier New'
+						}}>
 				<div style={{ marginLeft: "0px" }}>
 
 					<P size={14}>|-----|--------|-------|-------|-----------|---------|------------|---------|-------|</P>
@@ -77,7 +78,10 @@ export const EmissionTable = () => {
 				</div>
 			</Breakpoint>
 
-			<Breakpoint small down>
+			<Breakpoint small down
+						style={{
+							fontFamily: 'Courier New'
+						}}>
 
 				<div style={{ marginLeft: "0px" }}>
 
@@ -119,7 +123,7 @@ export const EmissionTable = () => {
 			</Breakpoint>
 
 			<P>*Stock-To-Flow (the inverse of inflation).</P>
-		</div>
+		</>
 	)
 }
 
