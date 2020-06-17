@@ -85,7 +85,6 @@ const Acquire = () => {
 							<GasMineTable></GasMineTable>
 						</div>
 					}
-					<hr />
 				</TabPane>
 				<TabPane tab="BURN TOKENS" key="3" style={{ textAlign: "left" }}>
 					<h2>BURN TOKENS</h2><br />
