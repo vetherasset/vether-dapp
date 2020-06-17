@@ -68,17 +68,16 @@ const Acquire = () => {
 					<p>Run the mining client to continuously mine Vether.</p>
 					<a href='https://github.com/vetherasset/vether-miner' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>GET THE CLIENT -></a>
 				</TabPane>
-				<TabPane tab="GAS MINE" key="2">
-					<Gap />
-					<H2>ACQUIRE VETHER USING GAS MINING</H2><br />
-					<Subtitle>Burn gas to acquire Vether.</Subtitle><br /><br />
-					<Subtitle>This method will partially refund the user their gas after the transaction.</Subtitle><br /><br />
+				<TabPane tab="GAS MINE" key="2" style={{ textAlign: "left" }}>
+					<h2>ACQUIRE VETHER USING GAS MINING</h2>
+					<p>Burn gas to acquire Vether.</p>
+					<p>This method will partially refund the user their gas after the transaction.</p>
 					{safari &&
 						<div>
 							<br />
 							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
 							<br />
-							<Click><a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a></Click>
+							<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
 						</div>
 					}
 					{!safari &&
@@ -86,13 +85,11 @@ const Acquire = () => {
 							<GasMineTable></GasMineTable>
 						</div>
 					}
-					<HR />
-					<Gap />
+					<hr />
 				</TabPane>
-				<TabPane tab="BURN TOKENS" key="3">
-					<Gap />
-					<H2>BURN TOKENS</H2><br />
-					<Subtitle>Burn the tokens on your wallet to get VETHER.</Subtitle><br />
+				<TabPane tab="BURN TOKENS" key="3" style={{ textAlign: "left" }}>
+					<h2>BURN TOKENS</h2><br />
+					<p>Burn the tokens on your wallet to get VETHER.</p><br />
 					<Text>Note: If there are any errors in your MetaMask, do not proceed, the token is not compatible with Vether.</Text><br /><br />
 					{safari &&
 						<>
@@ -107,12 +104,10 @@ const Acquire = () => {
 						</>
 					}
 				</TabPane>
-				<TabPane tab="CLAIM SHARE" key="4">
-					<Gap />
-					<H2>CLAIM VETHER</H2><br />
-					<Subtitle>Claim your share of a previous day’s emission. </Subtitle><br />
+				<TabPane tab="CLAIM SHARE" key="4" style={{ textAlign: "left" }}>
+					<h2>CLAIM VETHER</h2><br />
+					<p>Claim your share of a previous day’s emission. </p><br />
 					<Text>Note: you cannot claim on the same day of contribution. Please wait a day. </Text><br />
-					<Gap />
 					{safari &&
 						<>
 							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
