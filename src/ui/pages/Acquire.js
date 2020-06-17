@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Row } from 'antd'
 import { Text, LabelGrey } from '../components'
 import { AcquireTable } from './acquire-web3'
+import { GasMineTable } from './acquire-web3'
 import { TokenTable } from './tokens'
 import { ClaimTable } from './claim-web3'
 import { EraTable } from './era-web3'
@@ -67,9 +68,28 @@ const Acquire = () => {
 					<p>Run the mining client to continuously mine Vether.</p>
 					<a href='https://github.com/vetherasset/vether-miner' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>GET THE CLIENT -></a>
 				</TabPane>
-				<TabPane tab="BURN TOKENS" key="2" style={{ textAlign: "left" }}>
-					<h2>BURN TOKENS</h2>
-					<p>Burn the tokens on your wallet to get VETHER.</p>
+				<TabPane tab="GAS MINE" key="2" style={{ textAlign: "left" }}>
+					<h2>ACQUIRE VETHER USING GAS MINING</h2>
+					<p>Burn gas to acquire Vether.</p>
+					<p>This method will partially refund the user their gas after the transaction.</p>
+					{safari &&
+						<div>
+							<br />
+							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
+							<br />
+							<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
+						</div>
+					}
+					{!safari &&
+						<div>
+							<GasMineTable></GasMineTable>
+						</div>
+					}
+					<hr />
+				</TabPane>
+				<TabPane tab="BURN TOKENS" key="3" style={{ textAlign: "left" }}>
+					<h2>BURN TOKENS</h2><br />
+					<p>Burn the tokens on your wallet to get VETHER.</p><br />
 					<Text>Note: If there are any errors in your MetaMask, do not proceed, the token is not compatible with Vether.</Text><br /><br />
 					{safari &&
 						<>
@@ -84,10 +104,10 @@ const Acquire = () => {
 						</>
 					}
 				</TabPane>
-				<TabPane tab="CLAIM SHARE" key="3" style={{ textAlign: "left" }}>
-					<h2>CLAIM VETHER</h2>
-					<p>Claim your share of a previous day’s emission.</p>
-					<Text>Note: you cannot claim on the same day of contribution. Please wait a day. </Text>
+				<TabPane tab="CLAIM SHARE" key="4" style={{ textAlign: "left" }}>
+					<h2>CLAIM VETHER</h2><br />
+					<p>Claim your share of a previous day’s emission. </p><br />
+					<Text>Note: you cannot claim on the same day of contribution. Please wait a day. </Text><br />
 					{safari &&
 						<>
 							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
