@@ -28,9 +28,9 @@ export const vetherAbi = () => {
 
 export const gasMineAddr = () => {
     if(TESTNET) {
-        return '0x0f3e723c20096171488444597bd49b5c9de9f8fb'
+        return '0xE5EdDde02968D27D4A580cc85351cCBD244CBBCA'
     } else {
-        return '0x0f3e723c20096171488444597bd49b5c9de9f8fb'
+        return '0x8A9C1Cd4074751e94F2c4075D333Fb3226CA9378'
     }
 }
 

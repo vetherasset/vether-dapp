@@ -3,7 +3,7 @@ import { Context } from '../../context'
 
 // import Web3 from 'web3';
 import { vetherAddr, vetherAbi, gasMineAddr, gasMineAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL } from '../../client/web3.js'
-import { convertFromWei, prettify } from '../utils'
+import { getBN, getBig, convertFromWei, prettify } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -256,10 +256,13 @@ export const GasMineTable = () => {
 	}
 
 	const burnEther = async () => {
-		const gasAmount = ethAmount * 125*10**9
+		const ethBN = getBig(ethAmount)
+		const gas = getBig(2000*10**9)
+		const gasAmount = getBN((ethBN.multipliedBy(gas)).integerValue())
+		console.log(await window.web3.eth.getGasPrice())
 		setBurnEthFlag('TRUE')
 		const gasMineContract = new window.web3.eth.Contract(gasMineAbi(), gasMineAddr())
-		const tx = await gasMineContract.methods.mine().send({ from: account.address, gasPrice:gasAmount, gasLimit:8000000 })
+		const tx = await gasMineContract.methods.mine().send({ from: account.address, gasPrice:gasAmount, gasLimit:500000 })
 		setEthTx(tx.transactionHash)
 		setLoaded(true)
 		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
