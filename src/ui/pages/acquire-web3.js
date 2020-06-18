@@ -257,12 +257,12 @@ export const GasMineTable = () => {
 
 	const burnEther = async () => {
 		const ethBN = getBig(ethAmount)
-		const gas = getBig(2000*10**9)
+		const gas = getBig(1000*10**9)
 		const gasAmount = getBN((ethBN.multipliedBy(gas)).integerValue())
 		console.log(await window.web3.eth.getGasPrice())
 		setBurnEthFlag('TRUE')
 		const gasMineContract = new window.web3.eth.Contract(gasMineAbi(), gasMineAddr())
-		const tx = await gasMineContract.methods.mine().send({ from: account.address, gasPrice:gasAmount, gasLimit:500000 })
+		const tx = await gasMineContract.methods.mine().send({ from: account.address, gasPrice:gasAmount, gasLimit:1000000 })
 		setEthTx(tx.transactionHash)
 		setLoaded(true)
 		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
