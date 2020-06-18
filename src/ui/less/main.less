@@ -1,0 +1,81 @@
+main.ant-layout-content {
+  > div.ant-wrapper{
+    padding: 128px 20% 0 calc(~'20% + 150px');
+    @media (max-width: 767px) {
+      padding: 128px 12% 0;
+    }
+    @media (min-width: 1400px) {
+      margin: 0 auto;
+      padding: 128px 0 0 150px;
+      max-width: 1250px;
+    }
+  }
+
+  #vetherStatsTable {
+    transform: scale(0.8);
+  }
+
+  #vetherStatsTableCurrentPrice {
+    margin-bottom: 2.7rem;
+  }
+
+  #vetherStatsTableContractAddress {
+    color: #97948E;
+    margin-top: 1.7rem;
+    margin-bottom: 0;
+    @media (max-width: 1399px) {
+      font-size: 0.76rem;
+    }
+    @media (max-width: 1049px) {
+      font-size: 0.66rem;
+    }
+    @media (max-width: 949px) {
+      font-size: 0.56rem;
+    }
+    @media (max-width: 844px) {
+      display: none;
+    }
+    @media (max-width: 767px) {
+      font-size: 0.70rem;
+      margin: 0.5rem 0;
+      display: initial;
+    }
+    @media (max-width: 375px) {
+      display: none;
+    }
+  }
+
+  #vetherEraTimer {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 767px) {
+    #vetherStatsTableCircCap {
+      margin-bottom: 1rem;
+    }
+    #vetherEcosystemCards0 {
+      div.ant-col.ant-col-xs-24 {
+        min-height: 190px;
+      }
+    }
+    #vetherEcosystemCards1 {
+      div.ant-col.ant-col-xs-24 {
+        min-height: 190px;
+      }
+    }
+  }
+
+  @media (max-width: 575px) {
+    #emissionTimerRefreshBtn {
+      display: block;
+      margin: 0 auto 2rem auto;
+    }
+  }
+}
+
+.ant-layout.ant-layout-has-sider > .ant-layout,
+.ant-layout.ant-layout-has-sider > .ant-layout-content {
+  width: 100%;
+  overflow: initial;
+}

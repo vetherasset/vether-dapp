@@ -240,14 +240,15 @@ export const EraTable = (props) => {
                         <Col xs={24} sm={6}>
                         </Col>
                     </Row>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center'
-                    }}>
-                        <BurnCard marketData={marketData} eraData={eraData} />
-                    </div>
-
+                    <Row style={{ marginTop: 20 }}>
+                        <Col xs={24} sm={8}>
+                        </Col>
+                        {!small &&
+                            <BurnCard marketData={marketData} eraData={eraData} />
+                        }
+                        <Col xs={24} sm={8}>
+                        </Col>
+                    </Row>
 
                     {/* <Row>
                         <Col xs={21} sm={11}>
