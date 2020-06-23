@@ -3,7 +3,7 @@ import { Context } from '../../context'
 
 // import Web3 from 'web3'
 import { vetherAddr, vetherAbi, vetherOldAddr, vetherOldAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
-import { convertFromWei, convertToWei, getSecondsToGo } from '../utils'
+import { convertFromWei, getSecondsToGo } from '../utils'
 
 import { LabelGrey, Button, Colour, Click } from '../components'
 import { LoadingOutlined } from '@ant-design/icons';
@@ -38,8 +38,7 @@ const Upgrade = () => {
 		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		context.accountData ? getAccountData(address) : loadAccountData(contract, address)
 		await context.eraData ? await getEraData() : await loadEraData(contract)
-		
-		
+		console.log(eraData)
 	}
 
 	const getAccountData = async (address) => {
@@ -109,7 +108,7 @@ const Upgrade = () => {
 	const unlock = async () => {
 		const contract = new window.web3.eth.Contract(vetherOldAbi(), vetherOldAddr())
 		const totalSupply = await contract.methods.totalSupply().call()
-		const tx = await contract.methods.approve(vetherAddr(), totalSupply).send({ from: account.address })
+		await contract.methods.approve(vetherAddr(), totalSupply).send({ from: account.address })
 		setUnlocked(true)
 	}
 
