@@ -63,12 +63,13 @@ const Acquire = () => {
 							<AcquireTable/>
 						</>
 					}
-					<hr />
+					{/* <hr />
 					<h2>MINE VETHER</h2>
 					<p>Run the mining client to continuously mine Vether.</p>
 					<a href='https://github.com/vetherasset/vether-miner' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 16 }}>GET THE CLIENT -></a>
+				 */}
 				</TabPane>
-				<TabPane tab="GAS MINE" key="2" style={{ textAlign: "left" }}>
+				{/* <TabPane tab="GAS MINE" key="2" style={{ textAlign: "left" }}>
 					<h2>ACQUIRE VETHER USING GAS MINING</h2>
 					<p>Burn gas to acquire Vether.</p>
 					<p>This method will partially refund the user their gas after the transaction.</p>
@@ -86,8 +87,8 @@ const Acquire = () => {
 						</div>
 					}
 				</TabPane>
-				<TabPane tab="BURN TOKENS" key="3" style={{ textAlign: "left" }}>
-					<h2>BURN TOKENS</h2><br />
+				<TabPane tab="BURN TOKENS" key="3" style={{ textAlign: "left" }}> */}
+					{/* <h2>BURN TOKENS</h2><br />
 					<p>Burn the tokens on your wallet to get VETHER.</p><br />
 					<Text>Note: If there are any errors in your MetaMask, do not proceed, the token is not compatible with Vether.</Text><br /><br />
 					{safari &&
@@ -102,7 +103,7 @@ const Acquire = () => {
 							<TokenTable/>
 						</>
 					}
-				</TabPane>
+				</TabPane> */}
 				<TabPane tab="CLAIM SHARE" key="4" style={{ textAlign: "left" }}>
 					<h2>CLAIM VETHER</h2><br />
 					<p>Claim your share of a previous day’s emission. </p><br />

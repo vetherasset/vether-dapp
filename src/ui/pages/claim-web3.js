@@ -43,33 +43,12 @@ export const ClaimTable = () => {
 		setWalletFlag(true)
 		const accounts = await window.web3.eth.getAccounts()
 		const address = accounts[0]
-		// const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
 		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		setContract(contract)
 		context.accountData ? getAccountData() : loadAccountData(contract, address)
 		const eraData_ = await context.eraData ? await getEraData() : await loadEraData(contract)
-		// console.log(eraData_)
 		context.arrayDays ? await getDays() : await loadDays(eraData_, contract, address, false)
-		// console.log(arrayDays, context.arrayDays)
-		// getDays(eraDay_, contract, address)
-		// console.log(account.vethBalance)
-		// console.log(context.accountData)
-		// ethEnabled()
-		// if (!ethEnabled()) {
-		// 	// alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
-		// } else {
-			
-		// }
 	}
-
-	// const ethEnabled = () => {
-	// 	if (window.ethereum) {
-	// 		window.web3 = new Web3(window.ethereum);
-	// 		window.ethereum.enable();
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
 
 	const getAccountData = async () => {
         setAccount(context.accountData)
@@ -168,16 +147,15 @@ export const ClaimTable = () => {
 	}
 
 	const checkShare = async () => {
-		const eraData_ = eraData.eraData
 		const share = getBN(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())
 		setClaimAmt(convertFromWei(share))
 		setCheckFlag(true)
 		const currentTime = Math.round((new Date()) / 1000)
-		// console.log(currentTime, +eraData_.nextDay, eraData_)
-		if (share > 0 && +userData.day < +eraData_.day) {
+		// console.log(currentTime, +eraData.nextDay, eraData)
+		if (share > 0 && +userData.day < +eraData.day) {
 			// Has a share, day requested is less than current day (so yesterday)
 			setZeroFlag(false)
-		} else if (share > 0 && currentTime > +eraData_.nextDay) {
+		} else if (share > 0 && currentTime > +eraData.nextDay) {
 			// Has a share, current time is greater than next day time (so gone past day)
 			setZeroFlag(false)
 		} else {
@@ -188,8 +166,8 @@ export const ClaimTable = () => {
 
 	const claimShare = async () => {
 		setClaimFlag(true)
-		console.log(contract)
-		console.log(userData.era, userData.day, account.address)
+		// console.log(contract)
+		// console.log(userData.era, userData.day, account.address)
 		const tx = await contract.methods.withdrawShare(userData.era, userData.day).send({ from: account.address })
 		setLoaded(true)
 		setTxHash(tx.transactionHash)
@@ -206,7 +184,7 @@ export const ClaimTable = () => {
 		styles.marginLeft = 10
 
 		const handleDayClick = useCallback((item, i) => {
-			console.log(item, i, userData.era, item)
+			// console.log(item, i, userData.era, item)
 			setUserData({ era: userData.era, day: item })
 		}, [])
 
