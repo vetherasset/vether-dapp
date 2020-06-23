@@ -7,6 +7,7 @@ import Header from './ui/layout/Header'
 import Footer from './ui/layout/Footer'
 import Sidebar from './ui/layout/Sidebar'
 import Hero from './ui/pages/Hero'
+import Upgrade from './ui/pages/Upgrade'
 import Acquire from './ui/pages/Acquire'
 import Stake from './ui/pages/Stake'
 import Trade from './ui/pages/Trade'
@@ -34,6 +35,7 @@ const App = () => {
 								<Switch>
 									<Route path="/" exact component={Hero} />
 									<Route path="/overview" exact component={Hero} />
+									<Route path="/upgrade" exact component={Upgrade} />
 									<Route path="/acquire" exact component={Acquire} />
 									<Route path="/claim" exact component={Acquire} />
 									<Route path="/stake" exact component={Stake} />

@@ -1,5 +1,6 @@
 import Web3 from 'web3'
-import VETHER from '../artifacts/DeployedVether.json'
+import VETHEROLD from '../artifacts/VetherOld.json'
+import VETHER from '../artifacts/Vether.json'
 import UNISWAP from '../artifacts/UniswapExchange.json'
 import REGISTRY from '../artifacts/UniswapRegistry.json'
 import GASMINE from '../artifacts/GasMineContract.json'
@@ -14,11 +15,23 @@ export const getEtherscanURL = () => {
     }
 }
 
-export const vetherAddr = () => {
+export const vetherOldAddr = () => {
     if(TESTNET) {
-        return '0x4257e8a2052aFE4E7a52ee9233139EB28FB4BF44'
+        return '0x04cFc5Df3c091bc6c050909eab808dF7a0910C91'
     } else {
         return '0x31Bb711de2e457066c6281f231fb473FC5c2afd3'
+    }
+}
+
+export const vetherOldAbi = () => {
+	return VETHEROLD.abi
+}
+
+export const vetherAddr = () => {
+    if(TESTNET) {
+        return '0x02E53F80Ee139bF46D0Cd20B34a86d1f2926544B'
+    } else {
+        return '0xc3e934cc79d0eE0FE7BE206914A9e5E5f87192B4'
     }
 }
 
