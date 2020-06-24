@@ -132,13 +132,15 @@ const Upgrade = () => {
 		<>
 			<h1>Upgrade Vether</h1>
 			<span>Upgrade your old Vether to the new Vether.</span>
+			<br/><br/>
+			<span>Hold tight - Upgrading will be made available soon.</span>
 			{safari &&
 				<>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
 					<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
 				</>
 			}
-			{!safari &&
+			{/* {!safari &&
 				<div>
 					<br /><br />
 					<h2>Step 1 - Unlock Old Vether</h2>
@@ -176,7 +178,7 @@ const Upgrade = () => {
 					<br /><br /><br />
 
 				</div>
-			}
+			} */}
 		</>
 	)
 }
