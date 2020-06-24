@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
+import { vetherOldAddr, vetherOldAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
 import {convertFromWei, convertToWei, getSecondsToGo, getBN, prettify} from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
@@ -43,7 +43,7 @@ export const ClaimTable = () => {
 		setWalletFlag(true)
 		const accounts = await window.web3.eth.getAccounts()
 		const address = accounts[0]
-		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+		const contract = new window.web3.eth.Contract(vetherOldAbi(), vetherOldAddr())
 		setContract(contract)
 		context.accountData ? getAccountData() : loadAccountData(contract, address)
 		const eraData_ = await context.eraData ? await getEraData() : await loadEraData(contract)
@@ -151,6 +151,7 @@ export const ClaimTable = () => {
 		setClaimAmt(convertFromWei(share))
 		setCheckFlag(true)
 		const currentTime = Math.round((new Date()) / 1000)
+		// console.log(contract)
 		// console.log(currentTime, +eraData.nextDay, eraData)
 		if (share > 0 && +userData.day < +eraData.day) {
 			// Has a share, day requested is less than current day (so yesterday)
@@ -310,122 +311,122 @@ export const ClaimTable = () => {
 	)
 }
 
-export const SendTable = () => {
+// export const SendTable = () => {
 
-	const context = useContext(Context)
+// 	const context = useContext(Context)
 
-	const [account, setAccount] = useState(
-		{ address: '', vethBalance: '', ethBalance: '' })
+// 	const [account, setAccount] = useState(
+// 		{ address: '', vethBalance: '', ethBalance: '' })
 
-	const [contract, setContract] = useState(null)
-	const [sendAmt, setSendAmt] = useState(null)
-	const [sendAddress, setSendAddress] = useState(null)
-	const [txHash, setTxHash] = useState(null)
-	const [sendFlag, setSendFlag] = useState(false)
-	const [loaded, setLoaded] = useState(null)
-	const [walletFlag, setWalletFlag] = useState(true)
+// 	const [contract, setContract] = useState(null)
+// 	const [sendAmt, setSendAmt] = useState(null)
+// 	const [sendAddress, setSendAddress] = useState(null)
+// 	const [txHash, setTxHash] = useState(null)
+// 	const [sendFlag, setSendFlag] = useState(false)
+// 	const [loaded, setLoaded] = useState(null)
+// 	const [walletFlag, setWalletFlag] = useState(true)
 
-	useEffect(() => {
-		connect()
-		// eslint-disable-next-line
-	}, [])
+// 	useEffect(() => {
+// 		connect()
+// 		// eslint-disable-next-line
+// 	}, [])
 
-	const connect = async () => {
-			window.web3 = new Web3(window.ethereum);
-			setWalletFlag(true)
-			const accounts = await window.web3.eth.getAccounts()
-			const address = accounts[0]
-			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-			context.accountData ? getAccountData() : loadAccountData(contract, address)
-			setContract(contract)
-	}
+// 	const connect = async () => {
+// 			window.web3 = new Web3(window.ethereum);
+// 			setWalletFlag(true)
+// 			const accounts = await window.web3.eth.getAccounts()
+// 			const address = accounts[0]
+// 			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+// 			context.accountData ? getAccountData() : loadAccountData(contract, address)
+// 			setContract(contract)
+// 	}
 	
-	const getAccountData = async () => {
-		setAccount(context.accountData)
-		setSendAmt(context.accountData.vethBalance)
-    }
+// 	const getAccountData = async () => {
+// 		setAccount(context.accountData)
+// 		setSendAmt(context.accountData.vethBalance)
+//     }
 
-    const loadAccountData = async (contract_, address) => {
-        var ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
-        const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
-        setAccount({
-            address: address,
-            vethBalance: vethBalance,
-            ethBalance: ethBalance
-        })
-        context.setContext({
-            "accountData": {
-                'address': address,
-                'vethBalance': vethBalance,
-                'ethBalance': ethBalance
-            }
-		})
-		setSendAmt(vethBalance)
-	}
+//     const loadAccountData = async (contract_, address) => {
+//         var ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
+//         const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
+//         setAccount({
+//             address: address,
+//             vethBalance: vethBalance,
+//             ethBalance: ethBalance
+//         })
+//         context.setContext({
+//             "accountData": {
+//                 'address': address,
+//                 'vethBalance': vethBalance,
+//                 'ethBalance': ethBalance
+//             }
+// 		})
+// 		setSendAmt(vethBalance)
+// 	}
 
 
-	const onAmountChange = e => {
-		setSendAmt(e.target.value)
-	}
+// 	const onAmountChange = e => {
+// 		setSendAmt(e.target.value)
+// 	}
 
-	const onAddressChange = e => {
-		setSendAddress(e.target.value)
-	}
+// 	const onAddressChange = e => {
+// 		setSendAddress(e.target.value)
+// 	}
 
-	const sendVether = async () => {
-		setSendFlag(true)
-		console.log(contract)
-		console.log(convertToWei(sendAmt), account.address)
-		const tx = await contract.methods.transfer(sendAddress, convertToWei(sendAmt)).send({ from: account.address })
-		//console.log(tx.transactionHash)
-		setLoaded(true)
-		setTxHash(tx.transactionHash)
-		setSendAmt(0)
-	}
+// 	const sendVether = async () => {
+// 		setSendFlag(true)
+// 		console.log(contract)
+// 		console.log(convertToWei(sendAmt), account.address)
+// 		const tx = await contract.methods.transfer(sendAddress, convertToWei(sendAmt)).send({ from: account.address })
+// 		//console.log(tx.transactionHash)
+// 		setLoaded(true)
+// 		setTxHash(tx.transactionHash)
+// 		setSendAmt(0)
+// 	}
 
-	const getLink = () => {
-		return getEtherscanURL().concat('tx/').concat(txHash)
-	}
+// 	const getLink = () => {
+// 		return getEtherscanURL().concat('tx/').concat(txHash)
+// 	}
 
-	return (
-		<div>
-			{walletFlag &&
-				<div>
-					<Row>
-						<Col xs={12} sm={3}>
-							<Input size={'large'} allowClear onChange={onAmountChange} placeholder={account.vethBalance} />
-							<br></br>
-							<Sublabel>Set Amount</Sublabel>
-							<br></br>
-						</Col>
-						<Col xs={12} sm={10} style={{ marginLeft: 10, marginRight: 20 }}>
-							<Input size={'large'} allowClear onChange={onAddressChange} placeholder="Enter Address" />
-							<br></br>
-							<Sublabel>Set Destination Address</Sublabel>
-							<br></br>
-						</Col>
-						<Col xs={24} sm={6}>
-							<Button onClick={sendVether}> SEND >></Button>
-							<br></br>
-							<Sublabel>Send Vether</Sublabel>
-							<br></br>
-						</Col>
-					</Row>
-					<br></br>
-						{sendFlag &&
-							<div>
-								{!loaded &&
-									<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
-								}
-								{loaded &&
-									<div>
-										<Click><a href={getLink()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-									</div>
-								}
-							</div>
-						}
-				</div>
-			}
-		</div>
-	)
-}
+// 	return (
+// 		<div>
+// 			{walletFlag &&
+// 				<div>
+// 					<Row>
+// 						<Col xs={12} sm={3}>
+// 							<Input size={'large'} allowClear onChange={onAmountChange} placeholder={account.vethBalance} />
+// 							<br></br>
+// 							<Sublabel>Set Amount</Sublabel>
+// 							<br></br>
+// 						</Col>
+// 						<Col xs={12} sm={10} style={{ marginLeft: 10, marginRight: 20 }}>
+// 							<Input size={'large'} allowClear onChange={onAddressChange} placeholder="Enter Address" />
+// 							<br></br>
+// 							<Sublabel>Set Destination Address</Sublabel>
+// 							<br></br>
+// 						</Col>
+// 						<Col xs={24} sm={6}>
+// 							<Button onClick={sendVether}> SEND >></Button>
+// 							<br></br>
+// 							<Sublabel>Send Vether</Sublabel>
+// 							<br></br>
+// 						</Col>
+// 					</Row>
+// 					<br></br>
+// 						{sendFlag &&
+// 							<div>
+// 								{!loaded &&
+// 									<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+// 								}
+// 								{loaded &&
+// 									<div>
+// 										<Click><a href={getLink()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+// 									</div>
+// 								}
+// 							</div>
+// 						}
+// 				</div>
+// 			}
+// 		</div>
+// 	)
+// }

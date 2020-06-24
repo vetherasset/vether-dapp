@@ -36,18 +36,19 @@ const Upgrade = () => {
 		const accounts = await window.web3.eth.getAccounts()
 		const address = accounts[0]
 		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		context.accountData ? getAccountData(address) : loadAccountData(contract, address)
+		context.accountData ? getAccountData(contract, address) : loadAccountData(contract, address)
 		await context.eraData ? await getEraData() : await loadEraData(contract)
 		console.log(eraData)
 	}
 
-	const getAccountData = async (address) => {
+	const getAccountData = async (contract, address) => {
 		setAccount(context.accountData)
 		const contractOld = new window.web3.eth.Contract(vetherOldAbi(), vetherOldAddr())
 		const allowance = convertFromWei(await contractOld.methods.allowance(address, vetherAddr()).call())
 		const balance = convertFromWei(await contractOld.methods.balanceOf(address).call())
-		console.log(+allowance, +balance)
-		if(+allowance >= +balance){
+		const ownership = convertFromWei(await contract.methods.mapPreviousOwnership(address).call())
+		console.log(+allowance, +balance, +ownership)
+		if(+allowance >= +balance && +ownership > 0){
 			setUnlocked(true)
 		}
 	}
@@ -70,8 +71,9 @@ const Upgrade = () => {
 		const contractOld = new window.web3.eth.Contract(vetherOldAbi(), vetherOldAddr())
 		const allowance = convertFromWei(await contractOld.methods.allowance(address, vetherAddr()).call())
 		const balance = convertFromWei(await contractOld.methods.balanceOf(address).call())
-		console.log(+allowance, +balance)
-		if(+allowance >= +balance){
+		const ownership = convertFromWei(await contract.methods.mapPreviousOwnership(address).call())
+		console.log(+allowance, +balance, +ownership)
+		if(+allowance >= +balance && +ownership > 0){
 			setUnlocked(true)
 		}
 	}
@@ -130,13 +132,15 @@ const Upgrade = () => {
 		<>
 			<h1>Upgrade Vether</h1>
 			<span>Upgrade your old Vether to the new Vether.</span>
+			<br/><br/>
+			<span>Hold tight - Upgrading will be made available soon.</span>
 			{safari &&
 				<>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
 					<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
 				</>
 			}
-			{!safari &&
+			{/* {!safari &&
 				<div>
 					<br /><br />
 					<h2>Step 1 - Unlock Old Vether</h2>
@@ -174,7 +178,7 @@ const Upgrade = () => {
 					<br /><br /><br />
 
 				</div>
-			}
+			} */}
 		</>
 	)
 }
