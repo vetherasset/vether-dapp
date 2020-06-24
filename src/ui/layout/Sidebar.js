@@ -11,8 +11,8 @@ const Sidebar = (props) => {
     "overview",
     "upgrade",
     "acquire",
-    "stake",
-    "trade",
+    // "stake",
+    // "trade",
     "stats",
     "whitepaper"
   ]
