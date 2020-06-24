@@ -14,6 +14,7 @@ const Upgrade = () => {
 
 	const [safari, setSafari] = useState(null)
 	const [unlocked, setUnlocked] = useState(null)
+	const [enable] = useState(false)
 
 	const context = useContext(Context)
 
@@ -29,6 +30,7 @@ const Upgrade = () => {
 		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		setSafari(isSafari)
 		connect()
+		console.log(unlocked, upgradeFlag)
 		// eslint-disable-next-line
 	}, [])
 
@@ -140,7 +142,7 @@ const Upgrade = () => {
 					<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
 				</>
 			}
-			{/* {!safari &&
+			{(!safari && enable)  && 
 				<div>
 					<br /><br />
 					<h2>Step 1 - Unlock Old Vether</h2>
@@ -178,7 +180,7 @@ const Upgrade = () => {
 					<br /><br /><br />
 
 				</div>
-			} */}
+			}
 		</>
 	)
 }

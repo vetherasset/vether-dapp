@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
-import Web3 from 'web3'
+// import Web3 from 'web3'
 import { vetherOldAddr, vetherOldAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
-import {convertFromWei, convertToWei, getSecondsToGo, getBN, prettify} from '../utils'
+import {convertFromWei, getSecondsToGo, getBN, prettify} from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -207,12 +207,6 @@ export const ClaimTable = () => {
 		<div>
 			{walletFlag &&
 				<div>
-					{/* <Row>
-						<Col xs={12}>
-							<WalletCard accountData={account}/>
-						</Col>
-					</Row> */}
-
 					<Row>
 						<Col style={{ marginBottom: 20 }}>
 							<LabelGrey>CLAIMS FOUND IN THESE DAYS: </LabelGrey>
@@ -276,7 +270,6 @@ export const ClaimTable = () => {
 									<br></br>
 									<Text size={14}>Your unclaimed Vether on this day.</Text><br />
 									<Text size={14}>(Please wait for the day to finish first before claiming) </Text><br />
-									{/* <Button size={12} onClick={continueAnyway}> continue anyway ></Button> */}
 								</Col>
 
 								{!zeroFlag &&
