@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { Row } from 'antd'
 import { Text, LabelGrey } from '../components'
-// import { AcquireTable } from './acquire-web3'
+import { AcquireTable } from './acquire-web3'
 // import { GasMineTable } from './acquire-web3'
 // import { TokenTable } from './tokens'
 import { ClaimTable } from './claim-web3'
@@ -48,7 +48,7 @@ const Acquire = () => {
 
 
 			<Tabs defaultActiveKey='1' activeKey={tab} onChange={onChange} size={'large'} style={{ marginTop: 20, textAlign: "center" }}>
-				{/* <TabPane tab="BURN ETHER" key="1" style={{ textAlign: "left" }}>
+				<TabPane tab="BURN ETHER" key="1" style={{ textAlign: "left" }}>
 					<h2>ACQUIRE VETHER</h2>
 					<p>Acquire a share of today’s emission by burning assets, such as Ether or ERC-20 tokens.</p>
 					{safari &&
@@ -63,7 +63,7 @@ const Acquire = () => {
 							<AcquireTable/>
 						</>
 					}
-				</TabPane> */}
+				</TabPane>
 					{/* <h2>BURN TOKENS</h2><br />
 					<p>Burn the tokens on your wallet to get VETHER.</p><br />
 					<Text>Note: If there are any errors in your MetaMask, do not proceed, the token is not compatible with Vether.</Text><br /><br />
@@ -80,7 +80,7 @@ const Acquire = () => {
 						</>
 					}
 				</TabPane> */}
-				<TabPane tab="CLAIM SHARE" key="1" style={{ textAlign: "left" }}>
+				<TabPane tab="CLAIM SHARE" key="4" style={{ textAlign: "left" }}>
 					<h2>CLAIM VETHER</h2><br />
 					<p>Claim your share of a previous day’s emission. </p><br />
 					<Text>Note: you cannot claim on the same day of contribution. Please wait a day. </Text><br />

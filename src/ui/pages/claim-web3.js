@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
 // import Web3 from 'web3'
-import { vetherOldAddr, vetherOldAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
 import {convertFromWei, getSecondsToGo, getBN, prettify} from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
@@ -43,7 +43,7 @@ export const ClaimTable = () => {
 		setWalletFlag(true)
 		const accounts = await window.web3.eth.getAccounts()
 		const address = accounts[0]
-		const contract = new window.web3.eth.Contract(vetherOldAbi(), vetherOldAddr())
+		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		setContract(contract)
 		context.accountData ? getAccountData() : loadAccountData(contract, address)
 		const eraData_ = await context.eraData ? await getEraData() : await loadEraData(contract)

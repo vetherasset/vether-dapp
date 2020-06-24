@@ -14,7 +14,7 @@ const Upgrade = () => {
 
 	const [safari, setSafari] = useState(null)
 	const [unlocked, setUnlocked] = useState(null)
-	const [enable] = useState(false)
+	const [enable] = useState(true)
 
 	const context = useContext(Context)
 
@@ -135,7 +135,6 @@ const Upgrade = () => {
 			<h1>Upgrade Vether</h1>
 			<span>Upgrade your old Vether to the new Vether.</span>
 			<br/><br/>
-			<span>Hold tight - Upgrading will be made available soon.</span>
 			{safari &&
 				<>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
