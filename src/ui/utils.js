@@ -19,7 +19,7 @@ export function convertFromWei(number) {
 export function convertToWei(number) {
     var num = new BigNumber(number)
     var final = num.multipliedBy(10**18)
-    return (final).toString()
+    return (final).toFixed(0)
 }
 
 export function convertToDate(date) {

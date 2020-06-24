@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button as AntButton } from "antd"
-import { HomeOutlined, FileTextOutlined, RightSquareOutlined, LoginOutlined, LineChartOutlined, PieChartOutlined, CheckSquareOutlined } from '@ant-design/icons';
+import { HomeOutlined, FileTextOutlined, RightSquareOutlined, UpCircleOutlined, 
+  LoginOutlined, LineChartOutlined, PieChartOutlined, CheckSquareOutlined } from '@ant-design/icons';
 
 export const Font = () => {
   return "Courier"
@@ -284,6 +285,13 @@ export const Icon = (props) => {
       <HomeOutlined style={styles}>
         {props.children}
       </HomeOutlined>
+    )
+  }
+  if(props.icon === "upgrade"){
+    return (
+      <UpCircleOutlined style={styles}>
+        {props.children}
+      </UpCircleOutlined>
     )
   }
   if(props.icon === "acquire"){
