@@ -101,7 +101,7 @@ export const getUniswapPriceEth = async () => {
         valueEth = 0.00
         console.log(err)
     }
-    return convertFromWei(valueEth)
+    return (valueEth)
 }
 
 export const getExchangeAddr = async (token) =>{
@@ -112,36 +112,12 @@ export const getExchangeAddr = async (token) =>{
     return exchange
 }
 
-export const getUniswapTokenPriceEth = async (token) => {
-    const exchange = await getExchangeAddr(token)
-    const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-    const contract = new web3.eth.Contract(uniSwapAbi(), exchange)
-    const _1 = (1*10**18).toString()
-    let valueEth;
-    try {
-        valueEth = await contract.methods.getTokenToEthInputPrice(_1).call()
-    } catch(err) {
-        valueEth = 0.00
-        console.log(err)
-    }
-    return convertFromWei(valueEth)
-}
-
-export const getGasValue = async () => {
-    
-}
-
 export const getUniswapDetails = async () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
     const ethBalance = convertFromWei(await web3.eth.getBalance(uniSwapAddr()))
 	const vethBalance = convertFromWei(await contract.methods.balanceOf(uniSwapAddr()).call())
-    const uniswapDetails = {"eth":ethBalance, "veth":vethBalance, address:uniSwapAddr()}
-    return uniswapDetails
-}
-
-function convertFromWei(number) {
-    return number / 1000000000000000000
+    return {"eth":ethBalance, "veth":vethBalance, address:uniSwapAddr()}
 }
 
 export const getAccounts = async (i) => {
@@ -151,8 +127,7 @@ export const getAccounts = async (i) => {
 }
 
 export const getBalance = async (acc) => {
-    let bal_ = await getWeb3().eth.getBalance(acc)
-    return bal_
+    return await getWeb3().eth.getBalance(acc)
 }
 
 export const vetherContract = () => {
@@ -163,6 +138,9 @@ export const vetherContract = () => {
 }
 
 export const getVethBalance = async (acc) => {
-    let bal_ = await vetherContract().methods.balanceOf(acc).call()
-    return bal_
+    return await vetherContract().methods.balanceOf(acc).call()
+}
+
+function convertFromWei(number) {
+    return number / 1000000000000000000
 }
