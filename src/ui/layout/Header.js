@@ -203,9 +203,7 @@ const Header = () => {
                             <Col xs={4}>
                                 <img src={logotype} style={logotypeStyles} alt="Vether - A strictly-scarce Ethereum-based asset." />
                             </Col>
-                            <Col xs={16} style={{ textAlign: 'center'}}>
-                                <Text  size={20}>UPGRADE YOUR VETHER NOW</Text>
-                                </Col>
+                            <Col xs={16} style={{ textAlign: 'center'}}/>
                             <Col xs={4} style={{ textAlign: 'center'}}>
                                 <WalletConnectButton
                                     backgroundColor="transparent"
