@@ -66,7 +66,7 @@ export const getWeb3 = () => {
 
 export const uniSwapAddr = () => {
     if(TESTNET) {
-        return '0x5bDcfb5cA25651176dcc674E7d08a7f67dF72D7d'
+        return null
     } else {
         return '0x03e008804c5bf70e20b5a0b7233cf2687ccd2a96'
     }
