@@ -195,10 +195,9 @@ const Header = () => {
     }
 
     return (
-        <div>
-            <Breakpoint medium up>
+        <>
                 <Layout.Header>
-                    <div>
+                    <Breakpoint medium up>
                         <Row>
                             <Col xs={4}>
                                 <img src={logotype} style={logotypeStyles} alt="Vether - A strictly-scarce Ethereum-based asset." />
@@ -239,22 +238,19 @@ const Header = () => {
                                 </Drawer>
                             </Col>
                         </Row>
-                    </div>
-                </Layout.Header>
-            </Breakpoint>
-            <Breakpoint small down>
-                <Layout.Header>
-                    <Menu onClick={handleClick} mode="horizontal" selectedKeys={[page]} style={menuStyles}>
-                        {menu_items.map((item) => (
-                            <Menu.Item key={item}>
-                                <Link to={"/" + item}>
-                                    <Icon icon={item} style={getIconStyles(item)} />
-                                </Link>
-                            </Menu.Item>
-                        ))}
-                    </Menu>
+                    </Breakpoint>
+                    <Breakpoint small down>
+                        <Menu onClick={handleClick} mode="horizontal" selectedKeys={[page]} style={menuStyles}>
+                            {menu_items.map((item) => (
+                                <Menu.Item key={item}>
+                                    <Link to={"/" + item}>
+                                        <Icon icon={item} style={getIconStyles(item)} />
+                                    </Link>
+                                </Menu.Item>
+                            ))}
+                        </Menu>
 
-                    {/* <Row>
+                        {/* <Row>
                     <Col>
                         <Link to={"/overview"}><Icon icon={"overview"} style={getStyles('overview')} /></Link>&nbsp;
                         <Link to={"/acquire"}><Icon icon={"acquire"} style={getStyles('acquire')} /></Link>&nbsp;
@@ -265,9 +261,9 @@ const Header = () => {
                         <Link to={"/whitepaper"}><Icon icon={"whitepaper"} style={getStyles('whitepaper')} /></Link>
                     </Col>
                 </Row> */}
+                    </Breakpoint>
                 </Layout.Header>
-            </Breakpoint>
-        </div >
+        </ >
     )
 }
 

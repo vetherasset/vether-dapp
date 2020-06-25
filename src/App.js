@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Layout } from 'antd';
 import 'antd/dist/antd.less'
 
+import Notification from './ui/layout/Notification'
 import Header from './ui/layout/Header'
 import Footer from './ui/layout/Footer'
 import Sidebar from './ui/layout/Sidebar'
@@ -27,8 +28,9 @@ const App = () => {
 		<Router>
 			<ContextProvider>
 				<BreakpointProvider>
-					<Header />
-					<Layout style={{ height: "100vh" }}>
+					<Notification />
+					<Header/>
+					<main>
 						<Sidebar />
 						<Content style={{ background: Colour().dgrey, color: Colour().white}}>
 							<div className="ant-wrapper">
@@ -46,7 +48,7 @@ const App = () => {
 								<Footer/>
 							</div>
 						</Content>
-					</Layout>
+					</main>
 				</BreakpointProvider>
 			</ContextProvider>
 		</Router>
