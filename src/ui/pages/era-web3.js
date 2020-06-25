@@ -230,7 +230,7 @@ export const EraTable = (props) => {
                                     <span
                                         style={{
                                             margin: '0 0 20px',
-                                            color: '#000',
+                                            color: '#402f00',
                                             textAlign: 'center',
                                             fontWeight: 'bold'
                                         }}>TO BE EMITTED TODAY</span>
