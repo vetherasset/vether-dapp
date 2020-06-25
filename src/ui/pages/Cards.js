@@ -101,32 +101,22 @@ export const Links = (props) => {
             <p>Useful links and resources</p>
             <Row>
                 <Col>
-                    <Click><a href='https://etherscan.io/address/0x506d07722744e4a390cd7506a2ba1a8157e63745' rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>UNISWAP CONTRACT -></a></Click>
+                    <Click><a href='https://etherscan.io/address/0x01217729940055011f17befe6270e6e59b7d0337' rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VETHER CONTRACT -></a></Click>
                 </Col>
             </Row>
             <Row>
                 <Col>
-                    <Click><a href='https://etherscan.io/address/0x31Bb711de2e457066c6281f231fb473FC5c2afd3' rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VETHER CONTRACT -></a></Click>
+                    <Click><a href='https://etherscan.io/address/0x0111011001100001011011000111010101100101' rel="noopener noreferrer" title="Burn Address" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>BURN ADDRESS -></a></Click>
                 </Col>
             </Row>
             <Row>
                 <Col>
-                    <Click><a href='https://etherscan.io/address/0x0111011001100001011011000111010101100101' rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>BURN ADDRESS -></a></Click>
+                    <Click><a href="https://uniswap.info/token/0x01217729940055011f17befe6270e6e59b7d0337" rel="noopener noreferrer" title="Pool Analytics" target="_blank" style={{ color: Colour().gold, fontSize: "12px" }}>POOL ANALYTICS -></a></Click>
                 </Col>
             </Row>
             <Row>
                 <Col>
-                    <Click><a href="https://pools.fyi/#/trades/0x506d07722744e4a390cd7506a2ba1a8157e63745?id=101163240114&period=7" rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: Colour().gold, fontSize: "12px" }}>POOL ANALYTICS -></a></Click>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <Click><a href='https://v1.uniswap.exchange/swap?outputCurrency=0x31Bb711de2e457066c6281f231fb473FC5c2afd3' rel="noopener noreferrer" title="Uniswap Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VIEW ON UNISWAP V1 -></a></Click>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <Click><a href='https://www.coingecko.com/en/coins/vether' rel="noopener noreferrer" title="Coingecko Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VIEW ON COINGECKO -></a></Click>
+                    <Click><a href='https://uniswap.exchange/swap/0x01217729940055011f17befe6270e6e59b7d0337' rel="noopener noreferrer" title="Uniswap Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VIEW ON UNISWAP V1 -></a></Click>
                 </Col>
             </Row>
         </>
