@@ -66,9 +66,9 @@ export const getWeb3 = () => {
 
 export const uniSwapAddr = () => {
     if(TESTNET) {
-        return '0x5bDcfb5cA25651176dcc674E7d08a7f67dF72D7d'
+        return null
     } else {
-        return '0x506D07722744E4A390CD7506a2Ba1A8157E63745'
+        return '0x03e008804c5bf70e20b5a0b7233cf2687ccd2a96'
     }
 }
 
@@ -78,9 +78,9 @@ export const uniSwapAbi = () => {
 
 export const registryAddr = () => {
     if(TESTNET) {
-        return '0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36'
+        return null
     } else {
-        return '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95'
+        return '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
     }
 }
 
