@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import VETHEROLD from '../artifacts/VetherOld.json'
 import VETHER from '../artifacts/Vether.json'
-import UNISWAP from '../artifacts/UniswapExchange.json'
+import UNISWAP from '../artifacts/UniswapPair.json'
 import REGISTRY from '../artifacts/UniswapRegistry.json'
 import GASMINE from '../artifacts/GasMineContract.json'
 
@@ -91,8 +91,16 @@ export const registryAbi = () => {
 export const getUniswapPriceEth = async () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-    const _1 = (1*10**18).toString()
-    const valueEth = await contract.methods.getTokenToEthInputPrice(_1).call()
+    let valueEth;
+    try {
+        const reserves = await contract.methods.getReserves().call()
+        const vether = reserves.reserve0
+        const ether = reserves.reserve1
+        valueEth = ether/vether
+    } catch(err) {
+        valueEth = 0.00
+        console.log(err)
+    }
     return convertFromWei(valueEth)
 }
 
@@ -109,7 +117,7 @@ export const getUniswapTokenPriceEth = async (token) => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(uniSwapAbi(), exchange)
     const _1 = (1*10**18).toString()
-    var valueEth;
+    let valueEth;
     try {
         valueEth = await contract.methods.getTokenToEthInputPrice(_1).call()
     } catch(err) {
@@ -137,24 +145,24 @@ function convertFromWei(number) {
 }
 
 export const getAccounts = async (i) => {
-    var web3_ = getWeb3()
-    var accounts = await web3_.eth.getAccounts()
+    let web3_ = getWeb3()
+    let accounts = await web3_.eth.getAccounts()
     return accounts[i]
 }
 
 export const getBalance = async (acc) => {
-    var bal_ = await getWeb3().eth.getBalance(acc)
+    let bal_ = await getWeb3().eth.getBalance(acc)
     return bal_
 }
 
 export const vetherContract = () => {
-    var abi_ = vetherAbi()
-    var addr_ = vetherAddr() 
-    var web3_ = getWeb3()
+    let abi_ = vetherAbi()
+    let addr_ = vetherAddr()
+    let web3_ = getWeb3()
     return new web3_.eth.Contract(abi_, addr_)
 }
 
 export const getVethBalance = async (acc) => {
-    var bal_ = await vetherContract().methods.balanceOf(acc).call()
+    let bal_ = await vetherContract().methods.balanceOf(acc).call()
     return bal_
 }
