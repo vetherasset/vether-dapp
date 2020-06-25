@@ -106,7 +106,7 @@ export const VetherTable = () => {
     }
 
     function convertToETH(vether) {
-        return (vether * marketData.priceETH).toFixed(3)
+        return (vether * marketData.priceETH)
     }
 
     // function convertToUSD(vether) {
@@ -153,7 +153,7 @@ export const VetherTable = () => {
 
                     <Row style={{marginTop:20}}>
                         <Col xs={24} sm={12}>
-                            <LabelGrey size={14}>TOTAL SUPPLY: </LabelGrey>
+                            <LabelGrey size={14}>TOTAL SUPPLY</LabelGrey>
                             <br />
                             <Text size={24}>{prettify(vetherData.totalSupply)} VETH</Text>
                         </Col>
@@ -165,12 +165,12 @@ export const VetherTable = () => {
 
                     <Row style={{marginTop:20}}>
                         <Col xs={24} sm={12}>
-                            <LabelGrey size={14}>EMITTED: </LabelGrey>
+                            <LabelGrey size={14}>EMITTED</LabelGrey>
                             <br />
                             <Text size={24}>{prettify((+emissionData.totalEmitted).toFixed(0))} VETH</Text>
                         </Col>
                         <Col id="vetherStatsTableCircCap"xs={24} sm={12}>
-                            <LabelGrey size={14}>CIRCULATING CAP: </LabelGrey>
+                            <LabelGrey size={14}>CIRCULATING CAP</LabelGrey>
                             <br />
                             <Text size={24}>${prettify((convertEthtoUSD(convertToETH(emissionData.totalEmitted), 0)))}</Text>
                         </Col>

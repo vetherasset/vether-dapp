@@ -4,24 +4,41 @@ import { Row, Col } from 'antd';
 
 const styles = {
   textAlign: 'center',
-  margin: '86px 0 64px 0'
+  margin: '86px 0 3rem 0'
 }
 
 const Footer = (props) => {
 
   return (
-      <Row>
-        <Col style={styles} span={24}>
-          <hr/>
-          <span style={{
-            fontSize: '14px',
-            color: '#97948e',
-            textTransform: 'uppercase'
-          }}>
-            Contract deployed on 12th May 2020
-          </span>
-        </Col>
-      </Row>
+      <footer>
+          <Row>
+              <Col style={styles} span={24}>
+                  <hr/>
+                  <ul>
+                      <li>
+                          <a href="https://etherscan.io/address/0x01217729940055011f17befe6270e6e59b7d0337" target="_blank">
+                              Vether Contract
+                          </a>
+                      </li>
+                      <li>
+                          <a href="https://github.com/vetherasset/vether-dapp" target="_blank">
+                              Source Code
+                          </a>
+                      </li>
+                      <li>
+                          <a href="https://github.com/vetherasset/vips" target="_blank">
+                              Improvement proposals
+                          </a>
+                      </li>
+                      <li>
+                          <a href="https://github.com/vetherasset/vether-dapp/issues" target="_blank">
+                              Report Issues
+                          </a>
+                      </li>
+                  </ul>
+              </Col>
+          </Row>
+      </footer>
   )
 }
 
