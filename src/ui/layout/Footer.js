@@ -16,22 +16,22 @@ const Footer = (props) => {
                   <hr/>
                   <ul>
                       <li>
-                          <a href="https://etherscan.io/address/0x01217729940055011f17befe6270e6e59b7d0337" target="_blank">
+                          <a href="https://etherscan.io/address/0x01217729940055011f17befe6270e6e59b7d0337" target="_blank" rel="noopener noreferrer">
                               Vether Contract
                           </a>
                       </li>
                       <li>
-                          <a href="https://github.com/vetherasset/vether-dapp" target="_blank">
+                          <a href="https://github.com/vetherasset/vether-dapp" target="_blank" rel="noopener noreferrer">
                               Source Code
                           </a>
                       </li>
                       <li>
-                          <a href="https://github.com/vetherasset/vips" target="_blank">
+                          <a href="https://github.com/vetherasset/vips" target="_blank" rel="noopener noreferrer">
                               Improvement proposals
                           </a>
                       </li>
                       <li>
-                          <a href="https://github.com/vetherasset/vether-dapp/issues" target="_blank">
+                          <a href="https://github.com/vetherasset/vether-dapp/issues" target="_blank" rel="noopener noreferrer">
                               Report Issues
                           </a>
                       </li>
