@@ -85,31 +85,31 @@ const Sidebar = (props) => {
     <Layout.Sider style={sidebarStyles} width={"150"} trigger={null} collapsible breakpoint="md"
     collapsedWidth="0">
 
-  <Breakpoint small down>
-      <Menu onClick={handleClick} mode="inline" selectedKeys={[page]}>
-        {menu_items.map((item) => (
-          <Menu.Item key={item} style={getStyles(item)}>
-            <Link to={"/" + item}>             
-              <Icon icon={item} style={getIconStyles(item)} />
-            </Link>
-          </Menu.Item>
-        ))}
-      </Menu>
+      <Breakpoint small down>
+        <Menu onClick={handleClick} mode="inline" selectedKeys={[page]}>
+          {menu_items.map((item) => (
+            <Menu.Item key={item} style={getStyles(item)}>
+              <Link to={"/" + item}>
+                <Icon icon={item} style={getIconStyles(item)} />
+              </Link>
+            </Menu.Item>
+          ))}
+        </Menu>
       </Breakpoint>
 
       <Breakpoint medium up>
-      <Menu onClick={handleClick} mode="inline" theme="light" selectedKeys={[page]}>
-        {menu_items.map((item) => (
-          <Menu.Item key={item} style={getStyles(item)}>
-            <Link to={"/" + item}>             
-                <Icon icon={item} style={getIconStyles(item)} />
-                <span>{isSelected(item) ? <Text bold={true} color="#fff">{item}</Text> : 
-                <Text bold={true} color="#97948E">{item}</Text>}</span>
-            </Link>
-          </Menu.Item>
-        ))}
-      </Menu>
-      </Breakpoint>
+        <Menu onClick={handleClick} mode="inline" theme="light" selectedKeys={[page]}>
+          {menu_items.map((item) => (
+            <Menu.Item key={item} style={getStyles(item)}>
+              <Link to={"/" + item}>
+                  <Icon icon={item} style={getIconStyles(item)} />
+                  <span>{isSelected(item) ? <Text bold={true} color="#fff">{item}</Text> :
+                  <Text bold={true} color="#97948E">{item}</Text>}</span>
+              </Link>
+            </Menu.Item>
+          ))}
+        </Menu>
+        </Breakpoint>
     </Layout.Sider>
   )
 }

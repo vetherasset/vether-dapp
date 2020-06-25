@@ -31,8 +31,9 @@ const Header = () => {
     const menu_items = [
         "overview",
         "acquire",
-        "stake",
-        "trade",
+        "upgrade",
+        // "stake",
+        // "trade",
         "stats",
         "whitepaper"
     ]
