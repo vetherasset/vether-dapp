@@ -193,7 +193,7 @@ export const EraTable = (props) => {
                                 <Center>
                                     <span style={{
                                         margin: '20px 0px 0px',
-                                        color: '#000',
+                                        color: '#402f00',
                                         fontWeight: 'bold'
                                     }}>
                                         ERA 1, DAY {eraData.day}
