@@ -144,20 +144,24 @@ const Upgrade = () => {
 			{(!safari && enable)  && 
 				<div>
 					<br /><br />
-					<h2>Step 1 - Unlock Old Vether</h2>
+					<h2>STEP 1</h2>
+					<span>Unlock Old Vether</span>
 					{!unlocked &&
-						<Button
-							backgroundColor="transparent"
-							onClick={unlock}
-						>
-							UNLOCK &gt;&gt;
-						</Button>
+						<p>
+							<Button
+								backgroundColor="transparent"
+								onClick={unlock}
+							>
+								UNLOCK &gt;&gt;
+							</Button>
+						</p>
 					}
 					<br/><br/><br/>
 
-					<h2>Step 2 - Upgrade</h2>
+					<h2>STEP 2</h2>
+					<span>Perform upgrade</span>
 					{unlocked &&
-						<div>
+						<p>
 							<Button
 								backgroundColor="transparent"
 								onClick={upgrade}
@@ -175,7 +179,7 @@ const Upgrade = () => {
 									}
 								</div>
 							}
-						</div>
+						</p>
 					}
 
 					<br/><br/><br/>
