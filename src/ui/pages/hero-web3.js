@@ -136,7 +136,7 @@ export const VetherTable = () => {
                         <Logo/>
                     </div>
                     <div style={{textAlign: 'center'}}>
-                        <Text size={32}>${(convertEthtoUSD(marketData.priceETH, 2))}</Text>
+                        <Text size={32} style={{ display: 'none'}}>${(convertEthtoUSD(marketData.priceETH, 2))}</Text>
                     </div>
                 </Col>
                 <Col xs={24} sm={16}>
