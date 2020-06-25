@@ -159,7 +159,7 @@ const Upgrade = () => {
 					<br/><br/><br/>
 
 					<h2>STEP 2</h2>
-					<span>Perform upgrade</span>
+					<span>Perform Upgrade</span>
 					{unlocked &&
 						<p>
 							<Button
