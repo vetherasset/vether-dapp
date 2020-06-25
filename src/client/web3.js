@@ -78,9 +78,9 @@ export const uniSwapAbi = () => {
 
 export const registryAddr = () => {
     if(TESTNET) {
-        return '0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36'
+        return null
     } else {
-        return '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95'
+        return '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
     }
 }
 
