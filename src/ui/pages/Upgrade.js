@@ -132,8 +132,8 @@ const Upgrade = () => {
 
 	return (
 		<>
-			<h1>Upgrade Vether</h1>
-			<span>Upgrade your old Vether to the new Vether.</span>
+			<h1>UPGRADE VETHER</h1>
+			<span>Upgrade your old Vether to the new Vether</span>
 			<br/><br/>
 			{safari &&
 				<>
@@ -145,13 +145,15 @@ const Upgrade = () => {
 				<div>
 					<br /><br />
 					<h2>Step 1 - Unlock Old Vether</h2>
-					<Button
-						backgroundColor="transparent"
-						onClick={unlock}
-					>
-						UNLOCK &gt;&gt;
-							</Button>
-					<br /><br /><br />
+					{!unlocked &&
+						<Button
+							backgroundColor="transparent"
+							onClick={unlock}
+						>
+							UNLOCK &gt;&gt;
+						</Button>
+					}
+					<br/><br/><br/>
 
 					<h2>Step 2 - Upgrade</h2>
 					{unlocked &&
@@ -176,7 +178,7 @@ const Upgrade = () => {
 						</div>
 					}
 
-					<br /><br /><br />
+					<br/><br/><br/>
 
 				</div>
 			}
