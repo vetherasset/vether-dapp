@@ -116,7 +116,7 @@ export const Links = (props) => {
             </Row>
             <Row>
                 <Col>
-                    <Click><a href='https://uniswap.exchange/swap/0x01217729940055011f17befe6270e6e59b7d0337' rel="noopener noreferrer" title="Uniswap Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VIEW ON UNISWAP V1 -></a></Click>
+                    <Click><a href='https://uniswap.exchange/swap/0x01217729940055011f17befe6270e6e59b7d0337' rel="noopener noreferrer" title="Uniswap Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VIEW ON UNISWAP -></a></Click>
                 </Col>
             </Row>
         </>
