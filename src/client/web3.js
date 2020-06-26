@@ -91,12 +91,17 @@ export const registryAbi = () => {
 export const getUniswapPriceEth = async () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+    const regExp = /e-(\d+)/;
     let valueEth;
+
     try {
         const reserves = await contract.methods.getReserves().call()
         const vether = reserves.reserve0
         const ether = reserves.reserve1
         valueEth = ether/vether
+        valueEth = valueEth.toString()
+        valueEth = valueEth.replace(regExp, '')
+        valueEth = Number(valueEth).toFixed(6)
     } catch(err) {
         valueEth = 0.00
         console.log(err)

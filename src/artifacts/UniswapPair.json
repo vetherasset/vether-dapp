@@ -1,5 +1,5 @@
 {
-    "contractName": "Uniswap",
+    "contractName": "UniswapPair",
 	"abi": [
       {
         "anonymous": false,
