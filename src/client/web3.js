@@ -96,9 +96,7 @@ export const getUniswapPriceEth = async () => {
 
     try {
         const reserves = await contract.methods.getReserves().call()
-        const vether = reserves.reserve0
-        const ether = reserves.reserve1
-        valueEth = ether/vether
+        valueEth = reserves.reserve1/reserves.reserve0
         valueEth = valueEth.toString()
         valueEth = valueEth.replace(regExp, '')
         valueEth = Number(valueEth).toFixed(6)
