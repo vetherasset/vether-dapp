@@ -200,7 +200,7 @@ const Header = () => {
                     <Breakpoint medium up>
                         <Row>
                             <Col xs={4}>
-                                <img src={logotype} style={logotypeStyles} alt="Vether - A strictly-scarce Ethereum-based asset." />
+                                <img src={logotype} style={logotypeStyles} alt="Vether - A strictly-scarce Ethereum-based asset" />
                             </Col>
                             <Col xs={16} style={{ textAlign: 'center'}}/>
                             <Col xs={4} style={{ textAlign: 'center'}}>

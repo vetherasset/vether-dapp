@@ -6,39 +6,16 @@ import { Text, P } from './components'
 import icon from '../assets/VETHER.svg';
 
 export const Abstract = (props) => {
-	// const [abstract, setAbstract] = useState(false)
-
-	// if(props.abstract === true){
-	// 	setA
-	// }
 	return (
-		<div>
-			{props.abstract &&
-				<div>
-					<Text bold={true} size={14}>Abstract. </Text>
-					<Text>
-						Vether is designed to be a store-of-value with properties of strict scarcity,
-						unforgeable costliness [1] and a fixed emission schedule. Vether mimics
-						characteristics of Bitcoin [2], where miners compete to expend capital to acquire
-						newly-minted coins and chase ever-decreasing margins.  Instead of expending capital,
-						Vether participants compete to purchase it by destroying capital on-chain.
-						As a result, all units of Vether are acquired at-cost and by anyone.
-						This mechanism is called Proof-of-Value.
-			</Text>
-				</div>
-			}
-			{!props.abstract &&
-				<p>
-						Vether is designed to be a store-of-value with properties of strict scarcity,
-						unforgeable costliness and a fixed emission schedule. Vether mimics
-						characteristics of Bitcoin, where miners compete to expend capital to acquire
-						newly-minted coins and chase ever-decreasing margins.  Instead of expending capital,
-						Vether participants compete to purchase it by destroying capital on-chain.
-						As a result, all units of Vether are acquired at-cost and by anyone.
-						This mechanism is called Proof-of-Value.
-				</p>
-			}
-		</div>
+		<>
+			Vether is designed to be a store-of-value with properties of strict scarcity,
+			unforgeable costliness and a fixed emission schedule. Vether mimics
+			characteristics of Bitcoin, where miners compete to expend capital to acquire
+			newly-minted coins and chase ever-decreasing margins.  Instead of expending capital,
+			Vether participants compete to purchase it by destroying capital on-chain.
+			As a result, all units of Vether are acquired at-cost and by anyone.
+			This mechanism is called Proof-of-Value.
+		</>
 	)
 }
 
@@ -101,7 +78,7 @@ export const EmissionTable = () => {
 					<P>| &nbsp;11 | &nbsp;&nbsp;&nbsp;244 | &nbsp;2684 | &nbsp;&nbsp;7.2 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 | </P>
 					<P>| &nbsp;14 | &nbsp;&nbsp;1064 | 3,748 | &nbsp;10.0 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 | </P>
 					<P>-------------------------------------------</P>
-					<br></br>
+					<br/>
 					<P>|-----|---------|------------|---------|-------|</P>
 					<P>| Era | &nbsp;&nbsp;Total | Cumulative | Annual% | &nbsp;S2F* |</P>
 					<P>|-----|---------|------------|---------|-------|</P>
