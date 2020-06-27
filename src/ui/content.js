@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Breakpoint } from 'react-socks';
 
-import { Text, P } from './components'
+import { P } from './components'
 import icon from '../assets/VETHER.svg';
 
 export const Abstract = (props) => {
