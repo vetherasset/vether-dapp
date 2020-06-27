@@ -16,17 +16,18 @@ const Cards = () => {
                 title: 'CLAIM VETHER',
                 subtitle: 'Claim Vether from a previous day',
                 link: "/claim"
-            },
-            {
-                title: 'STAKE VETHER',
-                subtitle: 'Stake Vether to earn trading fees',
-                link: "/stake"
-            },
-            {
-                title: 'TRADE VETHER',
-                subtitle: 'Buy or sell Vether',
-                link: "/trade"
-            }]
+            }// ,
+            // {
+            //     title: 'STAKE VETHER',
+            //     subtitle: 'Stake Vether to earn trading fees',
+            //     link: "/stake"
+            // },
+            // {
+            //     title: 'TRADE VETHER',
+            //     subtitle: 'Buy or sell Vether',
+            //     link: "/trade"
+            // }
+         ]
     }
 
     const cardStyles = {
@@ -51,18 +52,18 @@ const Cards = () => {
                         link={cardContent()[1].link} />
                 </Col>
             </Row>
-            <Row id="vetherEcosystemCards1">
-                <Col style={cardStyles} xs={12}>
-                    <Card title={cardContent()[2].title}
-                        subtitle={cardContent()[2].subtitle}
-                        link={cardContent()[2].link} />
-                </Col>
-                <Col style={cardStyles} xs={12}>
-                    <Card title={cardContent()[3].title}
-                        subtitle={cardContent()[3].subtitle}
-                        link={cardContent()[3].link} />
-                </Col>
-            </Row>
+            {/*<Row id="vetherEcosystemCards1">*/}
+            {/*    <Col style={cardStyles} xs={12}>*/}
+            {/*        <Card title={cardContent()[2].title}*/}
+            {/*            subtitle={cardContent()[2].subtitle}*/}
+            {/*            link={cardContent()[2].link} />*/}
+            {/*    </Col>*/}
+            {/*    <Col style={cardStyles} xs={12}>*/}
+            {/*        <Card title={cardContent()[3].title}*/}
+            {/*            subtitle={cardContent()[3].subtitle}*/}
+            {/*            link={cardContent()[3].link} />*/}
+            {/*    </Col>*/}
+            {/*</Row>*/}
         </>
     )
 }
