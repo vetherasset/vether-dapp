@@ -269,25 +269,25 @@ const Stats = () => {
                     </div>
                 }
             </Row>
-            <Row>
-                {!loadedPrice &&
-                    <div>
-                        <Col xs={24} lg={23} style={ChartStyles}>
-                            <LoadingOutlined style={loadingStyles} />
-                        </Col>
-                    </div>
-                }
-                {loadedPrice &&
-                    <div>
-                        <Col xs={24}>
-                            <ChartPrice
-                                days={priceData.days}
-                                priceData={priceData}
-                                uniswapPrices={priceData.uniswapPrices} />
-                        </Col>
-                    </div>
-                }
-            </Row>
+            {/*<Row>*/}
+            {/*    {!loadedPrice &&*/}
+            {/*        <div>*/}
+            {/*            <Col xs={24} lg={23} style={ChartStyles}>*/}
+            {/*                <LoadingOutlined style={loadingStyles} />*/}
+            {/*            </Col>*/}
+            {/*        </div>*/}
+            {/*    }*/}
+            {/*    {loadedPrice &&*/}
+            {/*        <div>*/}
+            {/*            <Col xs={24}>*/}
+            {/*                <ChartPrice*/}
+            {/*                    days={priceData.days}*/}
+            {/*                    priceData={priceData}*/}
+            {/*                    uniswapPrices={priceData.uniswapPrices} />*/}
+            {/*            </Col>*/}
+            {/*        </div>*/}
+            {/*    }*/}
+            {/*</Row>*/}
 
             <Click><a href='https://github.com/EverexIO/Ethplorer/wiki/Ethplorer-API' rel="noopener noreferrer" title="ETHPlorer link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> DATA FROM ETHPLORER -> </a></Click><br />
             <Click><a href='https://www.chartjs.org/' rel="noopener noreferrer" title="Chartjs link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> CHARTS FROM CHARTJS -> </a></Click>
