@@ -194,7 +194,7 @@ const Stats = () => {
                     </Col>
                 }
                 {loaded &&
-                    <div>
+                    <>
                         <Col xs={24} lg={9}>
                             <Breakpoint small down>
                                 <ChartData eraData={eraData}
@@ -219,7 +219,7 @@ const Stats = () => {
                                 />
                             </Breakpoint>
                         </Col>
-                    </div>
+                    </>
                 }
                 <Col xs={24} lg={15}>
                     <ChartEmission emissionArray={emissionArray} />
@@ -227,67 +227,68 @@ const Stats = () => {
             </Row>
             <Row>
                 {!loadedClaims &&
-                    <div>
+                    <>
                         <Col xs={24} xl={11} style={ChartStyles}>
                             <LoadingOutlined style={loadingStyles} />
                         </Col>
                         <Col xs={24} xl={11} style={ChartStyles}>
                             <LoadingOutlined style={loadingStyles} />
                         </Col>
-                    </div>
+                    </>
                 }
                 {loadedClaims &&
-                    <div>
+                    <>
                         <Col xs={24} xl={12}>
                             <ChartEther claimArray={claimData} />
                         </Col>
                         <Col xs={24} xl={12}>
                             <ChartClaim claimArray={claimData} />
                         </Col>
-                    </div>
+                    </>
                 }
             </Row>
             <Row>
                 {!loaded &&
-                    <div>
+                    <>
                         <Col xs={24} lg={15} style={ChartStyles}>
                             <LoadingOutlined style={loadingStyles} />
                         </Col>
                         <Col xs={24} lg={7} style={ChartStyles}>
                             <LoadingOutlined style={loadingStyles} />
                         </Col>
-                    </div>
+                    </>
                 }
                 {loaded &&
-                    <div>
+                    <>
                         <Col xs={24} lg={16}>
                             <ChartDistro holderArray={chartData.holderArray} />
                         </Col>
                         <Col xs={24} lg={8}>
                             <ChartPie holderArray={chartData.holderArray} />
                         </Col>
-                    </div>
+                    </>
                 }
             </Row>
-            {/*<Row>*/}
-            {/*    {!loadedPrice &&*/}
-            {/*        <div>*/}
-            {/*            <Col xs={24} lg={23} style={ChartStyles}>*/}
-            {/*                <LoadingOutlined style={loadingStyles} />*/}
-            {/*            </Col>*/}
-            {/*        </div>*/}
-            {/*    }*/}
-            {/*    {loadedPrice &&*/}
-            {/*        <div>*/}
-            {/*            <Col xs={24}>*/}
-            {/*                <ChartPrice*/}
-            {/*                    days={priceData.days}*/}
-            {/*                    priceData={priceData}*/}
-            {/*                    uniswapPrices={priceData.uniswapPrices} />*/}
-            {/*            </Col>*/}
-            {/*        </div>*/}
-            {/*    }*/}
-            {/*</Row>*/}
+            <Row>
+                {!loadedPrice &&
+                    <>
+                        <Col xs={24} lg={23} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles} />
+                        </Col>
+                    </>
+                }
+                {loadedPrice &&
+                    <>
+                        <Col xs={24} style={{ display: 'none'}}>
+                            <ChartPrice
+                                days={priceData.days}
+                                priceData={priceData}
+                                uniswapPrices={priceData.uniswapPrices}
+                            />
+                        </Col>
+                    </>
+                }
+            </Row>
 
             <Click><a href='https://github.com/EverexIO/Ethplorer/wiki/Ethplorer-API' rel="noopener noreferrer" title="ETHPlorer link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> DATA FROM ETHPLORER -> </a></Click><br />
             <Click><a href='https://www.chartjs.org/' rel="noopener noreferrer" title="Chartjs link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> CHARTS FROM CHARTJS -> </a></Click>
