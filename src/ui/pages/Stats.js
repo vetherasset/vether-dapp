@@ -70,10 +70,10 @@ const Stats = () => {
     const loadChartData = async () => {
 
         const apiKey = process.env.REACT_APP_ETHPLORER_API
-        const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
+        const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x01217729940055011f17befe6270e6e59b7d0337?apiKey='
         const response2 = await axios.get(baseURL + apiKey + '&limit=1000')
         let holderArray = response2.data
-        const baseURL2 = 'https://api.ethplorer.io/getTokenInfo/0x31Bb711de2e457066c6281f231fb473FC5c2afd3?apiKey='
+        const baseURL2 = 'https://api.ethplorer.io/getTokenInfo/0x01217729940055011f17befe6270e6e59b7d0337?apiKey='
         const response3 = await axios.get(baseURL2 + apiKey)
         let transfers = response3.data.transfersCount
 
@@ -183,7 +183,6 @@ const Stats = () => {
         fontSize: 32
     }
 
-
     return (
         <div style={{ marginRight: -50 }}>
             <h1>STATS</h1>
@@ -195,7 +194,7 @@ const Stats = () => {
                     </Col>
                 }
                 {loaded &&
-                    <div>
+                    <>
                         <Col xs={24} lg={9}>
                             <Breakpoint small down>
                                 <ChartData eraData={eraData}
@@ -220,7 +219,7 @@ const Stats = () => {
                                 />
                             </Breakpoint>
                         </Col>
-                    </div>
+                    </>
                 }
                 <Col xs={24} lg={15}>
                     <ChartEmission emissionArray={emissionArray} />
@@ -228,65 +227,66 @@ const Stats = () => {
             </Row>
             <Row>
                 {!loadedClaims &&
-                    <div>
+                    <>
                         <Col xs={24} xl={11} style={ChartStyles}>
                             <LoadingOutlined style={loadingStyles} />
                         </Col>
                         <Col xs={24} xl={11} style={ChartStyles}>
                             <LoadingOutlined style={loadingStyles} />
                         </Col>
-                    </div>
+                    </>
                 }
                 {loadedClaims &&
-                    <div>
+                    <>
                         <Col xs={24} xl={12}>
                             <ChartEther claimArray={claimData} />
                         </Col>
                         <Col xs={24} xl={12}>
                             <ChartClaim claimArray={claimData} />
                         </Col>
-                    </div>
+                    </>
                 }
             </Row>
             <Row>
                 {!loaded &&
-                    <div>
+                    <>
                         <Col xs={24} lg={15} style={ChartStyles}>
                             <LoadingOutlined style={loadingStyles} />
                         </Col>
                         <Col xs={24} lg={7} style={ChartStyles}>
                             <LoadingOutlined style={loadingStyles} />
                         </Col>
-                    </div>
+                    </>
                 }
                 {loaded &&
-                    <div>
+                    <>
                         <Col xs={24} lg={16}>
                             <ChartDistro holderArray={chartData.holderArray} />
                         </Col>
                         <Col xs={24} lg={8}>
                             <ChartPie holderArray={chartData.holderArray} />
                         </Col>
-                    </div>
+                    </>
                 }
             </Row>
             <Row>
                 {!loadedPrice &&
-                    <div>
+                    <>
                         <Col xs={24} lg={23} style={ChartStyles}>
                             <LoadingOutlined style={loadingStyles} />
                         </Col>
-                    </div>
+                    </>
                 }
                 {loadedPrice &&
-                    <div>
-                        <Col xs={24}>
+                    <>
+                        <Col xs={24} style={{ display: 'none'}}>
                             <ChartPrice
                                 days={priceData.days}
                                 priceData={priceData}
-                                uniswapPrices={priceData.uniswapPrices} />
+                                uniswapPrices={priceData.uniswapPrices}
+                            />
                         </Col>
-                    </div>
+                    </>
                 }
             </Row>
 
