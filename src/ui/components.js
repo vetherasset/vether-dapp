@@ -71,16 +71,19 @@ export const Label = (props) => {
 
 export const LabelGrey = (props) => {
   let styles = {...props.style || {}}
-  styles.fontSize = "16px"
   styles.fontWeight = "bold"
-  styles.color = Colour().grey
   styles.margin = "20px 0px"
 
-    if (props.margin) {
+  if (props.margin) {
     styles.margin = props.margin
   }
   if (props.size) {
     styles.fontSize = props.size
+  }
+  if (props.color) {
+    styles.color = props.color
+  } else {
+    styles.color = Colour().grey
   }
 
   return (

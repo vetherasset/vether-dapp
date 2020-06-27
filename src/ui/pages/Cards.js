@@ -74,7 +74,7 @@ const Card = (props) => {
     const cardStyles = {
         borderWidth: '1px',
         // borderStyle: 'dashed',
-        borderRadius: 5,
+        borderRadius: 6,
         // borderColor: Colour().black,
         // margin: 10,
         padding: 20,
