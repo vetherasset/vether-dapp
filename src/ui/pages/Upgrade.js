@@ -24,6 +24,7 @@ const Upgrade = () => {
 		{ era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
 
 	const [upgradeFlag, setUpgradeFlag] = useState(false)
+	const [upgradeValid, setUpgradeValid] = useState(false)
 	const [txHash, setTxHash] = useState(null)
 
 	useEffect(() => {
@@ -41,6 +42,16 @@ const Upgrade = () => {
 		context.accountData ? getAccountData(contract, address) : loadAccountData(contract, address)
 		await context.eraData ? await getEraData() : await loadEraData(contract)
 		console.log(eraData)
+		checkUpgradeValid(contract, address)
+	}
+
+	const checkUpgradeValid = async (contractNew, address) => {
+		const contractOld = new window.web3.eth.Contract(vetherOldAbi(), vetherOldAddr())
+		const balance = convertFromWei(await contractOld.methods.balanceOf(address).call())
+		const ownership = convertFromWei(await contractNew.methods.mapPreviousOwnership(address).call())
+		if(balance > 0 && ownership > 0){
+			setUpgradeValid(true)
+		}
 	}
 
 	const getAccountData = async (contract, address) => {
@@ -132,6 +143,15 @@ const Upgrade = () => {
 
 	return (
 		<>
+		{!upgradeValid && 
+				<div>
+					<h2>No Vether to Upgrade</h2>
+					<span>You don't have any Vether to upgrade.</span>
+				</div>
+		}
+
+		{upgradeValid && 
+		<div>
 			<h1>UPGRADE VETHER</h1>
 			<span>Upgrade your old Vether to the new Vether</span>
 			<br/><br/>
@@ -141,6 +161,7 @@ const Upgrade = () => {
 					<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
 				</>
 			}
+			
 			{(!safari && enable)  && 
 				<div>
 					<br /><br />
@@ -186,6 +207,8 @@ const Upgrade = () => {
 
 				</div>
 			}
+		</div>
+		}	
 		</>
 	)
 }
