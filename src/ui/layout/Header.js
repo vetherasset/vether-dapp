@@ -170,8 +170,7 @@ const Header = () => {
 
     const getAddrShort = () => {
         const addr = (context.accountData?.address)? context.accountData.address : '0x000000000'
-        const addrShort = addr.substring(0,7) + '...' + addr?.substring(addr.length-5, addr.length)
-        return addrShort
+        return addr.substring(0,7) + '...' + addr?.substring(addr.length-5, addr.length)
     }
 
     // const showDrawer = () => {

@@ -113,7 +113,6 @@ export const Text = (props) => {
   let styles = {...props.style || {}}
   styles.fontSize = "14px"
   styles.color = Colour().white
-  styles.margin = "20px 0px"
 
   if (props.bold) {
     styles.fontWeight = "bold"
@@ -266,65 +265,51 @@ export const Center = (props) => (
 
 export const Icon = (props) => {
 
-  let styles = {...props.style || {}}
-  styles.margin = "0px 10px 0px 0px"
-  styles.fontWeight = "bold"
-
-  if (props.color) {
-    styles.color = props.color
-  }
-  if (props.size) {
-    styles.fontSize = props.size
-  }
-  if (props.margin) {
-    styles.margin = props.margin
-  }
-
   if(props.icon === "overview"){
     return (
-      <HomeOutlined style={styles}>
+      <HomeOutlined>
         {props.children}
       </HomeOutlined>
     )
   }
   if(props.icon === "upgrade"){
     return (
-      <UpCircleOutlined style={styles}>
+      <UpCircleOutlined>
         {props.children}
       </UpCircleOutlined>
     )
   }
   if(props.icon === "acquire"){
     return (
-      <RightSquareOutlined style={styles}>
+      <RightSquareOutlined>
         {props.children}
       </RightSquareOutlined>
     )
   }
   if(props.icon === "claim"){
     return (
-      <CheckSquareOutlined style={styles}>
+      <CheckSquareOutlined>
         {props.children}
       </CheckSquareOutlined>
     )
   }
   if(props.icon === "stake"){
     return (
-      <LoginOutlined style={styles}>
+      <LoginOutlined>
         {props.children}
       </LoginOutlined>
     )
   }
   if(props.icon === "trade"){
     return (
-      <LineChartOutlined style={styles}>
+      <LineChartOutlined>
         {props.children}
       </LineChartOutlined>
     )
   }
   if(props.icon === "stats"){
     return (
-      <PieChartOutlined style={styles}>
+      <PieChartOutlined>
         {props.children}
       </PieChartOutlined >
     )
@@ -333,7 +318,7 @@ export const Icon = (props) => {
   
   if(props.icon === "whitepaper"){
     return (
-      <FileTextOutlined style={styles}>
+      <FileTextOutlined>
         {props.children}
       </FileTextOutlined>
     )

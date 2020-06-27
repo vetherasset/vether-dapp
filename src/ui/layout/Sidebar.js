@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { Menu, Layout } from 'antd';
-import { Text, Icon, Colour } from '../components'
+import { Text, Icon } from '../components'
 
 import Breakpoint from 'react-socks';
 
@@ -29,14 +29,6 @@ const Sidebar = (props) => {
     }
   }, [menu_items])
 
-//   const getIcon = (key) => {
-//     if (isSelected(key)) {
-//       return key + "-active"
-//     } else {
-//       return key + "-inactive"
-//     }
-//   }
-
   const isSelected = (key) => {
     return key === page
   }
@@ -45,52 +37,17 @@ const Sidebar = (props) => {
     setPage(key)
   }
 
-  const sidebarStyles = {
-    backgroundColor: Colour().black
-  }
-
-  const selected_styles = {
-    backgroundColor: Colour().dgrey,
-    color: Colour().grey,
-  }
-
-  const getStyles = (key) => {
-    if (key === page) {
-      return selected_styles
-    } else {
-      return {}
-    }
-  }
-
-  const icon_styles = {
-    fontSize: "14px",
-    color: Colour().grey,
-  }
-
-  const icon_selected_styles = {
-    fontSize: "14px",
-    color: "#fff",
-  }
-
-    const getIconStyles = (key) => {
-    if (isSelected(key)) {
-      return icon_selected_styles
-    } else {
-      return icon_styles
-    }
-  }
-
   return (
 
-    <Layout.Sider style={sidebarStyles} width={"150"} trigger={null} collapsible breakpoint="md"
+    <Layout.Sider width={"150"} trigger={null} collapsible breakpoint="md"
     collapsedWidth="0">
 
       <Breakpoint small down>
         <Menu onClick={handleClick} mode="inline" selectedKeys={[page]}>
           {menu_items.map((item) => (
-            <Menu.Item key={item} style={getStyles(item)}>
+            <Menu.Item key={item}>
               <Link to={"/" + item}>
-                <Icon icon={item} style={getIconStyles(item)} />
+                <Icon icon={item}/>
               </Link>
             </Menu.Item>
           ))}
@@ -100,16 +57,18 @@ const Sidebar = (props) => {
       <Breakpoint medium up>
         <Menu onClick={handleClick} mode="inline" theme="light" selectedKeys={[page]}>
           {menu_items.map((item) => (
-            <Menu.Item key={item} style={getStyles(item)}>
+            <Menu.Item key={item}>
               <Link to={"/" + item}>
-                  <Icon icon={item} style={getIconStyles(item)} />
-                  <span>{isSelected(item) ? <Text bold={true} color="#fff">{item}</Text> :
-                  <Text bold={true} color="#97948E">{item}</Text>}</span>
+                  <Icon icon={item}/>
+                  {isSelected(item) ?
+                      <Text bold={true} color="#fff">{item}</Text> :
+                      <Text color="#97948E">{item}</Text>
+                  }
               </Link>
             </Menu.Item>
           ))}
         </Menu>
-        </Breakpoint>
+      </Breakpoint>
     </Layout.Sider>
   )
 }
