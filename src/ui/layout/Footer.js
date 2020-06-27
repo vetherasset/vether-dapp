@@ -17,22 +17,22 @@ const Footer = (props) => {
                   <ul>
                       <li>
                           <a href="https://etherscan.io/address/0x01217729940055011f17befe6270e6e59b7d0337" target="_blank" rel="noopener noreferrer">
-                              Vether Contract
+                              Vether&nbsp;Contract
                           </a>
                       </li>
                       <li>
                           <a href="https://github.com/vetherasset/vether-dapp" target="_blank" rel="noopener noreferrer">
-                              Source Code
+                              Source&nbsp;Code
                           </a>
                       </li>
                       <li>
                           <a href="https://github.com/vetherasset/vips" target="_blank" rel="noopener noreferrer">
-                              Improvement proposals
+                              Improvement&nbsp;roposals
                           </a>
                       </li>
                       <li>
                           <a href="https://github.com/vetherasset/vether-dapp/issues" target="_blank" rel="noopener noreferrer">
-                              Report Issues
+                              Report&nbsp;Isues
                           </a>
                       </li>
                   </ul>

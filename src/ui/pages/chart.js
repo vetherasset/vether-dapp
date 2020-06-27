@@ -2,16 +2,21 @@ import React, { useEffect, useRef, useState } from 'react';
 import Chartjs from 'chart.js'
 
 import { Row, Col } from 'antd'
-import {Colour, Font, Text, Center, LabelGrey} from '../components'
+import {Colour, Text, Center, LabelGrey} from '../components'
 import {convertToDate, prettify} from '../utils'
 
 export const ChartStyles = {
-    marginLeft:0,
-    marginRight:50,
-    marginTop:25,
-    marginBottom:25,
+    marginLeft: 0,
+    marginRight: 35,
+    marginTop: 20,
+    marginBottom: 20,
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingTop: 5,
+    paddingBottom: 5,
     backgroundColor:Colour().black,
-    minHeight:468
+    borderRadius: 6,
+    minHeight: 468
   }
 
 const getChartConfig = () => {
@@ -40,8 +45,8 @@ const getChartConfig = () => {
                 scaleLabel: {
                     display: true,
                     labelString: "",
-                    fontFamily: Font(),
-                    fontSize:16
+                    fontFamily: 'Lato,sans-serif',
+                    fontSize:14
                 },
                 gridLines: {
                     display: true ,
@@ -56,8 +61,8 @@ const getChartConfig = () => {
                 scaleLabel: {
                     display: true,
                     labelString: "",
-                    fontFamily: Font(),
-                    fontSize:16
+                    fontFamily: 'Lato,sans-serif',
+                    fontSize:14
                 },
                 gridLines: {
                     display: false ,
@@ -69,15 +74,16 @@ const getChartConfig = () => {
         title: {
             display: true,
             text: '',
-            fontFamily: Font(),
+            fontFamily: 'Lato,sans-serif',
             padding:10,
-            fontSize:20
+            fontSize:16.32,
+            fontColor: Colour().grey,
         },
         legend: {
             display: false,
             position: "bottom",
             labels:{
-                fontFamily: Font(),
+                fontFamily: 'Lato,sans-serif',
             }
             
         },
@@ -105,7 +111,7 @@ const rightAxisConfig = () => {
     scaleLabel: {
         display: true,
         labelString: "Total Ether",
-        fontFamily: Font(),
+        fontFamily: 'Lato,sans-serif',
         fontSize:16
     },
     gridLines: {
@@ -433,7 +439,7 @@ export const ChartData = (props) =>{
     return(
         <div style={ChartStyles}>
             <div style={paneStyles}>
-                <Center><LabelGrey size={18}>Vether Overview</LabelGrey></Center>
+                <Center><LabelGrey>Vether Overview</LabelGrey></Center>
 
                 <Row style={rowStyles}>
                     <Col xs={12}
@@ -441,7 +447,7 @@ export const ChartData = (props) =>{
                              padding: '0 1rem'
                          }}
                     >
-                        <LabelGrey size={props.size}>Total Holders</LabelGrey><br />
+                        <LabelGrey size={props.size} color="#636362">Total Holders</LabelGrey><br />
                         <Text size={1.25*props.size}>{props.holders} holders</Text>
                     </Col>
                     <Col xs={12}
@@ -449,7 +455,7 @@ export const ChartData = (props) =>{
                              padding: '0 1rem'
                          }}
                     >
-                        <LabelGrey size={props.size}>Total Transfers</LabelGrey><br />
+                        <LabelGrey size={props.size} color="#636362">Total Transfers</LabelGrey><br />
                         <Text size={1.25*props.size}>{props.transfers} transfers</Text>
                     </Col>
                 </Row>
@@ -460,7 +466,7 @@ export const ChartData = (props) =>{
                              padding: '0 1rem'
                          }}
                     >
-                        <LabelGrey size={props.size}>Total Burnt</LabelGrey><br />
+                        <LabelGrey size={props.size} color="#636362">Total Burnt</LabelGrey><br />
                         <Text size={1.25*props.size}>{prettify((+emissionData.totalBurnt).toFixed(2))} ETH</Text>
                     </Col>
                     <Col xs={12}
@@ -468,7 +474,7 @@ export const ChartData = (props) =>{
                              padding: '0 1rem'
                          }}
                     >
-                        <LabelGrey size={props.size}>Total Fees</LabelGrey><br />
+                        <LabelGrey size={props.size} color="#636362">Total Fees</LabelGrey><br />
                         <Text size={1.25*props.size}>{prettify((+emissionData.totalFees).toFixed(2))} VETH</Text>
                     </Col>
                     {/* <Col xs={8}>
@@ -481,7 +487,7 @@ export const ChartData = (props) =>{
                              padding: '0 1rem'
                          }}
                     >
-                        <LabelGrey size={props.size}>Current Emission</LabelGrey><br />
+                        <LabelGrey size={props.size} color="#636362">Current Emission</LabelGrey><br />
                         <Text size={1.25*props.size}>{eraData.emission} ETH</Text>
                     </Col>
                     <Col xs={12}
@@ -489,7 +495,7 @@ export const ChartData = (props) =>{
                              padding: '0 1rem'
                          }}
                     >
-                        <LabelGrey size={props.size}>Next Emission</LabelGrey><br />
+                        <LabelGrey size={props.size} color="#636362">Next Emission</LabelGrey><br />
                         <Text size={1.25*props.size}>{eraData.emission / 2} VETH</Text>
                     </Col>
                     {/* <Col xs={8}>
@@ -501,11 +507,11 @@ export const ChartData = (props) =>{
                              padding: '0 1rem'
                          }}
                     >
-                        <LabelGrey size={props.size}>Genesis</LabelGrey><br />
+                        <LabelGrey size={props.size} color="#636362">Genesis</LabelGrey><br />
                         <Text size={1.25*props.size}>{genesis}</Text>
                     </Col>
                     <Col xs={8}>
-                        <LabelGrey size={props.size}>Halving</LabelGrey><br />
+                        <LabelGrey size={props.size} color="#636362">Halving</LabelGrey><br />
                         <Text size={1.25*props.size}>{halving}</Text>
                     </Col>
                     <Col xs={8}
@@ -513,7 +519,7 @@ export const ChartData = (props) =>{
                              padding: '0 1rem'
                          }}
                     >
-                        <LabelGrey size={props.size}>Emitted</LabelGrey><br />
+                        <LabelGrey size={props.size} color="#636362">Emitted</LabelGrey><br />
                         <Text size={1.25*props.size}>{end}</Text>
                     </Col>
                 </Row>
