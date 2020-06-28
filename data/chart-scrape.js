@@ -7,7 +7,7 @@ const axios = require('axios')
 
 function BN2Int(BN){return(((new BigNumber(BN)).toFixed()/10**18).toFixed(2))}
 
-const newArray = async () => {
+const newArray1 = async () => {
 
     const provider = ethers.getDefaultProvider();
     const contract = new ethers.Contract(vether.addr(), vether.abi(), provider)
@@ -54,6 +54,56 @@ const newArray = async () => {
         vether: vetherArray
     }
     await fs.writeFileSync('./src/data/claimArray.json', JSON.stringify(claimObject, null,4), 'utf8')
+    console.log(claimObject)
+}
+
+const newArray2 = async () => {
+
+    const provider = ethers.getDefaultProvider();
+    const contract = new ethers.Contract(vether.addr2(), vether.abi(), provider)
+    const currentEra = 1
+    const emission = 2048
+    const currentDay = await contract.currentDay()
+    var dayArray = []
+    var burntArray = []
+    var unclaimedArray = []
+    var emissionArray = []
+    var totals = 0
+    var totalsArray = []
+    var vetherEmitted = 0
+    var vetherArray = []
+    var vetherClaimed = 0
+    var claimedArray = []
+    for (var i = 1; i <= currentEra; i++) {
+        for (var j = 45; j < currentDay; j++) {
+            const burntForDay = BN2Int(await contract.mapEraDay_Units(i, j))
+            // const unclaimedUnits = BN2Int(await contract.mapEraDay_UnitsRemaining(i, j))
+            //const emissionForDay = BN2Int(await contract.mapEraDay_Emission(i, j))
+            const unclaimedEmission = BN2Int(await contract.mapEraDay_EmissionRemaining(i, j))
+            // const claimRate = (((burntForDay - unclaimedUnits) / burntForDay)*100).toFixed(2)
+            totals += +burntForDay
+            vetherEmitted += emission
+            vetherClaimed += emission - +unclaimedEmission
+            dayArray.push(j)
+            burntArray.push(burntForDay)
+            unclaimedArray.push(unclaimedEmission)
+            emissionArray.push(emission)
+            totalsArray.push(totals)
+            vetherArray.push(vetherEmitted)
+            claimedArray.push(vetherClaimed)
+            // console.log(claimedArray)
+        }
+    }
+    const claimObject = {
+        days: dayArray,
+        burns: burntArray,
+        unclaims: unclaimedArray,
+        emission: emissionArray,
+        totals: totalsArray,
+        claims: claimedArray,
+        vether: vetherArray
+    }
+    await fs.writeFileSync('./src/data/claimArray2.json', JSON.stringify(claimObject, null,4), 'utf8')
     console.log(claimObject)
 }
 
@@ -113,8 +163,8 @@ const refreshArray = async () => {
 }
 
 const main = async () => {
-    // newArray()
-    refreshArray()
+    newArray2()
+    // refreshArray()
 }
 
 main()
