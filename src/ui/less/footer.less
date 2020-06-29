@@ -3,20 +3,17 @@ footer {
     list-style-type: none;
     li {
       display: inline;
-      @media (max-width: 767px) {
-        display: block;
-      }
       a {
         text-transform: uppercase;
         color: #97948e;
         font-size: 14px;
+        @media (max-width: 767px) {
+          font-size: 9px;
+        }
       }
     }
     li:nth-last-child(n+2) {
       margin-right: 1.3rem;
-      @media (max-width: 767px) {
-        margin-right: 0;
-      }
     }
   }
 }
