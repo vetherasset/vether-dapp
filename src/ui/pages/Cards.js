@@ -102,7 +102,7 @@ export const Links = (props) => {
             <p>Useful links and resources</p>
             <Row>
                 <Col>
-                    <Click><a href='https://etherscan.io/address/0x01217729940055011f17befe6270e6e59b7d0337' rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VETHER CONTRACT -></a></Click>
+                    <Click><a href='https://etherscan.io/address/0x75572098dc462F976127f59F8c97dFa291f81d8b' rel="noopener noreferrer" title="Etherscan Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VETHER CONTRACT -></a></Click>
                 </Col>
             </Row>
             <Row>
@@ -112,12 +112,12 @@ export const Links = (props) => {
             </Row>
             <Row>
                 <Col>
-                    <Click><a href="https://uniswap.info/token/0x01217729940055011f17befe6270e6e59b7d0337" rel="noopener noreferrer" title="Pool Analytics" target="_blank" style={{ color: Colour().gold, fontSize: "12px" }}>POOL ANALYTICS -></a></Click>
+                    <Click><a href="https://uniswap.info/token/0x75572098dc462F976127f59F8c97dFa291f81d8b" rel="noopener noreferrer" title="Pool Analytics" target="_blank" style={{ color: Colour().gold, fontSize: "12px" }}>POOL ANALYTICS -></a></Click>
                 </Col>
             </Row>
             <Row>
                 <Col>
-                    <Click><a href='https://uniswap.exchange/swap/0x01217729940055011f17befe6270e6e59b7d0337' rel="noopener noreferrer" title="Uniswap Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VIEW ON UNISWAP -></a></Click>
+                    <Click><a href='https://uniswap.exchange/swap/0x75572098dc462F976127f59F8c97dFa291f81d8b' rel="noopener noreferrer" title="Uniswap Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VIEW ON UNISWAP -></a></Click>
                 </Col>
             </Row>
         </>

@@ -25,7 +25,7 @@ export const vetherAddr2 = () => {
     if(TESTNET) {
         return '0x53753efb66b420fe461263e190fbb45f40ba1f79'
     } else {
-        return '0x01217729940055011f17befe6270e6e59b7d0337'
+        return '0x01217729940055011F17BeFE6270e6E59B7d0337'
     }
 }
 
@@ -56,9 +56,9 @@ export const getWeb3 = () => {
 
 export const uniSwapAddr = () => {
     if(TESTNET) {
-        return '0x03e008804c5bf70e20b5a0b7233cf2687ccd2a96'
+        return '0x8ccfbbcdeb7c9bb62e545a20a3b43b05a04e3682'
     } else {
-        return '0x03e008804c5bf70e20b5a0b7233cf2687ccd2a96'
+        return '0x8ccfbbcdeb7c9bb62e545a20a3b43b05a04e3682'
     }
 }
 
