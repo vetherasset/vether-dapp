@@ -1,9 +1,7 @@
 import Web3 from 'web3'
-import VETHEROLD from '../artifacts/VetherOld.json'
-import VETHER from '../artifacts/Vether.json'
+import VETHER from '../artifacts/Vether3.json'
 import UNISWAP from '../artifacts/UniswapPair.json'
 import REGISTRY from '../artifacts/UniswapRegistry.json'
-import GASMINE from '../artifacts/GasMineContract.json'
 
 const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE') ? true : false
 
@@ -15,40 +13,32 @@ export const getEtherscanURL = () => {
     }
 }
 
-export const vetherOldAddr = () => {
+export const vetherAddr1 = () => {
     if(TESTNET) {
-        return '0x04cFc5Df3c091bc6c050909eab808dF7a0910C91'
+        return '0x3aaC4384E118388076C7E4085f39d364781D8604'
     } else {
         return '0x31Bb711de2e457066c6281f231fb473FC5c2afd3'
     }
 }
 
-export const vetherOldAbi = () => {
-	return VETHEROLD.abi
-}
-
-export const vetherAddr = () => {
+export const vetherAddr2 = () => {
     if(TESTNET) {
-        return '0x02E53F80Ee139bF46D0Cd20B34a86d1f2926544B'
+        return '0x53753efb66b420fe461263e190fbb45f40ba1f79'
     } else {
         return '0x01217729940055011f17befe6270e6e59b7d0337'
     }
 }
 
-export const vetherAbi = () => {
-	return VETHER.abi
-}
-
-export const gasMineAddr = () => {
+export const vetherAddr = () => {
     if(TESTNET) {
-        return '0xE5EdDde02968D27D4A580cc85351cCBD244CBBCA'
+        return '0x68BDD33B0185b3Bf97Da0DEeC0f6d8EF2525193F'
     } else {
-        return '0x8A9C1Cd4074751e94F2c4075D333Fb3226CA9378'
+        return '0x9ABF00Ad9339cdFa6E1e7CF932025fa45a1DC9B8'
     }
 }
 
-export const gasMineAbi = () => {
-	return GASMINE.abi
+export const vetherAbi = () => {
+	return VETHER.abi
 }
 
 export const infuraAPI = () => {
@@ -66,7 +56,7 @@ export const getWeb3 = () => {
 
 export const uniSwapAddr = () => {
     if(TESTNET) {
-        return null
+        return '0x03e008804c5bf70e20b5a0b7233cf2687ccd2a96'
     } else {
         return '0x03e008804c5bf70e20b5a0b7233cf2687ccd2a96'
     }
@@ -78,7 +68,7 @@ export const uniSwapAbi = () => {
 
 export const registryAddr = () => {
     if(TESTNET) {
-        return null
+        return '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
     } else {
         return '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
     }

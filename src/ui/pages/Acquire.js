@@ -23,6 +23,7 @@ const Acquire = () => {
 	useEffect(() => {
 		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		setSafari(isSafari)
+		setSafari(true)
 		let pathname = window.location.pathname.split("/")[1]
 		if (pathname === 'claim' && !loaded) {
 			setLoaded(true)
