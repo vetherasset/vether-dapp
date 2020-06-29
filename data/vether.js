@@ -5,7 +5,7 @@ const addr = () => {
 }
 
 const addr2 = () => {
-	return '0x01217729940055011F17BeFE6270e6E59B7d0337'
+	return '0x75572098dc462F976127f59F8c97dFa291f81d8b'
 }
 
 const abi = () => {

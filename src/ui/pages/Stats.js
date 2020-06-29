@@ -70,10 +70,10 @@ const Stats = () => {
     const loadChartData = async () => {
 
         const apiKey = process.env.REACT_APP_ETHPLORER_API
-        const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x01217729940055011f17befe6270e6e59b7d0337?apiKey='
+        const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x75572098dc462F976127f59F8c97dFa291f81d8b?apiKey='
         const response2 = await axios.get(baseURL + apiKey + '&limit=1000')
         let holderArray = response2.data
-        const baseURL2 = 'https://api.ethplorer.io/getTokenInfo/0x01217729940055011f17befe6270e6e59b7d0337?apiKey='
+        const baseURL2 = 'https://api.ethplorer.io/getTokenInfo/0x75572098dc462F976127f59F8c97dFa291f81d8b?apiKey='
         const response3 = await axios.get(baseURL2 + apiKey)
         let transfers = response3.data.transfersCount
 
