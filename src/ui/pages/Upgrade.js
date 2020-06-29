@@ -7,7 +7,7 @@ import { convertFromWei, prettify, getSecondsToGo } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LabelGrey, Button, Colour, Click, Text } from '../components'
-import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { LoadingOutlined, QuestionCircleOutlined, CheckCircleFilled } from '@ant-design/icons';
 
 import '../../App.less';
 
@@ -194,14 +194,13 @@ const Upgrade = () => {
 			{enable &&
 				<div>
 					{!upgradeValid &&
-						<div>
-							<h2>No Vether to Upgrade</h2>
-							<span>You don't have any Vether to upgrade.</span>
-						</div>
+						<>
+							<span><CheckCircleFilled/> You don't have any Vether to upgrade</span>
+						</>
 					}
 
 					{upgradeValid &&
-						<div>
+						<>
 							<span>Upgrade Vether1 or Vether2 to the new Vether</span>
 							<br /><br />
 							{safari &&
@@ -212,11 +211,11 @@ const Upgrade = () => {
 							}
 
 							{!safari &&
-								<div>
+								<>
 									<Row>
 										<Col xs={12}>
 											{vether1 &&
-												<div>
+												<>
 													<h2>Vether 1</h2>
 													<span>1. Unlock Vether1</span>
 													{!unlocked &&
@@ -239,7 +238,7 @@ const Upgrade = () => {
 															>UPGRADE &gt;&gt; </Button><br />
 
 															{upgradeFlag &&
-																<div>
+																<>
 																	{!txHash &&
 																		<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
 																	}
@@ -248,11 +247,11 @@ const Upgrade = () => {
 																			<Click><a href={getLink()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
 																		</div>
 																	}
-																</div>
+																</>
 															}
 														</p>
 													}
-												</div>
+												</>
 											}
 										</Col>
 
@@ -285,19 +284,20 @@ const Upgrade = () => {
 										</Col>
 									</Row>
 									<br /><br />
-								</div>
+								</>
 							}
-						</div>
+						</>
 					}
 					
 				</div>
 			}
 			<hr/>
-			<span>You can search for Vether3 ownership below.</span>
-					<br /><br />
+			<h3>OWNERSHIP</h3>
+			<p>Search for Vether3 ownership</p>
+					<br />
 					<Row>
 						<Col xs={13}>
-							<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onAddressChange} placeholder={'enter address to check'} />
+							<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onAddressChange} placeholder={'Check by address'} />
 							<br></br>
 						</Col>
 						<Col xs={11} sm={3} style={{ marginLeft: 20 }}>
@@ -310,7 +310,7 @@ const Upgrade = () => {
 						</Col>
 						<Col xs={24} sm={4}>
 							<Text size={32}>{prettify(ownership)}</Text>
-							<Tooltip placement="right" title="The amount of Veth this owner has in Vether3 to upgrade to.">
+							<Tooltip placement="right" title="The amount of Vether this owner has in Vether3 to upgrade to.">
 								&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} /><br />
 							</Tooltip>
 							<LabelGrey>Ownership</LabelGrey>
