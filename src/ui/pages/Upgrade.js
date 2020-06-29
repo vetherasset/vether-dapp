@@ -7,7 +7,7 @@ import { convertFromWei, prettify, getSecondsToGo } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LabelGrey, Button, Colour, Click, Text } from '../components'
-import { LoadingOutlined, QuestionCircleOutlined, CheckCircleFilled } from '@ant-design/icons';
+import { LoadingOutlined, QuestionCircleOutlined, CheckCircleFilled, CheckOutlined } from '@ant-design/icons';
 
 import '../../App.less';
 
@@ -201,12 +201,13 @@ const Upgrade = () => {
 
 					{upgradeValid &&
 						<>
-							<span>Upgrade Vether1 or Vether2 to the new Vether</span>
-							<br /><br />
+							<span>Swap your asset for the new Vether</span>
 							{safari &&
 								<>
 									<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
-									<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
+									<p>
+										<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ fontSize: 13 }}>Download Metamask</a>
+									</p>
 								</>
 							}
 
@@ -216,22 +217,26 @@ const Upgrade = () => {
 										<Col xs={12}>
 											{vether1 &&
 												<>
-													<h2>Vether 1</h2>
-													<span>1. Unlock Vether1</span>
+													<br/>
+													<h3>Vether 1</h3>
+													<p>
+														<i>
+															You need to approve Vether for transfers first.<br/>
+															Once the approval is confirmed perform upgrade.
+														</i>
+													</p>
 													{!unlocked &&
-														<p>
+														<>
 															<Button
 																backgroundColor="transparent"
 																onClick={unlock}
 															>
 																UNLOCK &gt;&gt;
-											</Button>
-														</p>
+															</Button>
+														</>
 													}
-													<br /><br />
-													<span>2. Perform Upgrade</span>
 													{unlocked &&
-														<p>
+														<>
 															<Button
 																backgroundColor="transparent"
 																onClick={upgradeV1}
@@ -240,16 +245,18 @@ const Upgrade = () => {
 															{upgradeFlag &&
 																<>
 																	{!txHash &&
-																		<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+																	<LoadingOutlined/>
 																	}
 																	{txHash &&
-																		<div>
-																			<Click><a href={getLink()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-																		</div>
+																		<>
+																			<Click>
+																				<CheckOutlined/> <a href={getLink()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VIEW TRANSACTION -></a>
+																			</Click>
+																		</>
 																	}
 																</>
 															}
-														</p>
+														</>
 													}
 												</>
 											}
@@ -257,29 +264,37 @@ const Upgrade = () => {
 
 										<Col xs={12}>
 											{vether2 &&
-												<div>
-													<h2>Vether 2</h2>
-													<span>1. Perform Upgrade</span>
+												<>
+													<br/>
+													<h3>Vether 2</h3>
 													<p>
+														<i>
+															You need to approve Vether for transfers first.<br/>
+															Once the approval is confirmed perform upgrade.
+														</i>
+													</p>
+													<>
 														<Button
 															backgroundColor="transparent"
 															onClick={upgradeV2}
 														>UPGRADE &gt;&gt; </Button><br />
 
 														{upgradeFlag2 &&
-															<div>
+															<>
 																{!txHash2 &&
-																	<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+																	<LoadingOutlined/>
 																}
 																{txHash2 &&
-																	<div>
-																		<Click><a href={getLink2()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-																	</div>
+																	<>
+																		<Click>
+																			<CheckOutlined/> <a href={getLink2()} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}>VIEW TRANSACTION -></a>
+																		</Click>
+																	</>
 																}
-															</div>
+															</>
 														}
-													</p>
-												</div>
+													</>
+												</>
 											}
 										</Col>
 									</Row>
