@@ -3,7 +3,7 @@ import { Context } from '../../context'
 
 import Web3 from 'web3'
 import { vetherAddr1, vetherAddr2, vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
-import { convertFromWei, getSecondsToGo } from '../utils'
+import { convertFromWei, prettify, getSecondsToGo } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LabelGrey, Button, Colour, Click, Text } from '../components'
@@ -300,7 +300,7 @@ const Upgrade = () => {
 							<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onAddressChange} placeholder={'enter address to check'} />
 							<br></br>
 						</Col>
-						<Col xs={11} sm={6} style={{ marginLeft: 20 }}>
+						<Col xs={11} sm={3} style={{ marginLeft: 20 }}>
 							<Button
 								backgroundColor="transparent"
 								onClick={checkOwnership}
@@ -309,7 +309,7 @@ const Upgrade = () => {
 						</Button>
 						</Col>
 						<Col xs={24} sm={4}>
-							<Text size={32}>{ownership}</Text>
+							<Text size={32}>{prettify(ownership)}</Text>
 							<Tooltip placement="right" title="The amount of Veth this owner has in Vether3 to upgrade to.">
 								&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} /><br />
 							</Tooltip>

@@ -12,7 +12,6 @@ const Claim = () => {
 	useEffect(() => {
 		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		setSafari(isSafari)
-		setSafari(true)
 	}, [])
 
 	return (
