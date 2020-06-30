@@ -37,11 +37,11 @@ const App = () => {
 								<Switch>
 									<Route path="/" exact component={Hero} />
 									<Route path="/overview" exact component={Hero} />
-									<Route path="/upgrade" exact component={Upgrade} />
-									<Route path="/acquire" exact component={Acquire} />
-									<Route path="/claim" exact component={Acquire} />
-									<Route path="/stake" exact component={Stake} />
-									<Route path="/trade" exact component={Trade} />
+									{/*<Route path="/upgrade" exact component={Upgrade} />*/}
+									{/*<Route path="/acquire" exact component={Acquire} />*/}
+									{/*<Route path="/claim" exact component={Acquire} />*/}
+									{/*<Route path="/stake" exact component={Stake} />*/}
+									{/*<Route path="/trade" exact component={Trade} />*/}
 									<Route path="/stats" exact component={Stats} />
 									<Route path="/whitepaper" exact component={Whitepaper} />
 								</Switch>
