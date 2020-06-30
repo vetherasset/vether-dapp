@@ -325,7 +325,7 @@ const Upgrade = () => {
 						</Col>
 						<Col xs={24} sm={4}>
 							<Text size={32}>{prettify(ownership)}</Text>
-							<Tooltip placement="right" title="The amount of Vether this owner has in Vether3 to upgrade to.">
+							<Tooltip placement="right" title="The amount of Vether this owner has in Vether V3 to upgrade to.">
 								&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} /><br />
 							</Tooltip>
 							<LabelGrey>Total</LabelGrey>
