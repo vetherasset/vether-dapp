@@ -8,10 +8,10 @@ import Header from './ui/layout/Header'
 import Footer from './ui/layout/Footer'
 import Sidebar from './ui/layout/Sidebar'
 import Hero from './ui/pages/Hero'
-import Upgrade from './ui/pages/Upgrade'
-import Acquire from './ui/pages/Acquire'
-import Stake from './ui/pages/Stake'
-import Trade from './ui/pages/Trade'
+// import Upgrade from './ui/pages/Upgrade'
+// import Acquire from './ui/pages/Acquire'
+// import Stake from './ui/pages/Stake'
+// import Trade from './ui/pages/Trade'
 import Stats from './ui/pages/Stats'
 import Whitepaper from './ui/pages/Whitepaper'
 import { Colour } from './ui/components'
@@ -37,11 +37,11 @@ const App = () => {
 								<Switch>
 									<Route path="/" exact component={Hero} />
 									<Route path="/overview" exact component={Hero} />
-									<Route path="/upgrade" exact component={Upgrade} />
-									<Route path="/acquire" exact component={Acquire} />
-									<Route path="/claim" exact component={Acquire} />
-									<Route path="/stake" exact component={Stake} />
-									<Route path="/trade" exact component={Trade} />
+									{/*<Route path="/upgrade" exact component={Upgrade} />*/}
+									{/*<Route path="/acquire" exact component={Acquire} />*/}
+									{/*<Route path="/claim" exact component={Acquire} />*/}
+									{/*<Route path="/stake" exact component={Stake} />*/}
+									{/*<Route path="/trade" exact component={Trade} />*/}
 									<Route path="/stats" exact component={Stats} />
 									<Route path="/whitepaper" exact component={Whitepaper} />
 								</Switch>
