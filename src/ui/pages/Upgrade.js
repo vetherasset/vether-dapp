@@ -7,7 +7,7 @@ import { convertFromWei, prettify, getSecondsToGo } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LabelGrey, Button, Colour, Click, Text } from '../components'
-import { LoadingOutlined, QuestionCircleOutlined, CheckCircleFilled, CheckOutlined } from '@ant-design/icons';
+import { LoadingOutlined, QuestionCircleOutlined, CheckCircleFilled, CheckOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 import '../../App.less';
 
@@ -22,7 +22,10 @@ const Upgrade = () => {
 
 	const [safari, setSafari] = useState(null)
 	const [enable, setEnable] = useState(false)
+	const [nowallet, setNowallet] = useState(true)
+
 	const [upgradeValid, setUpgradeValid] = useState(false)
+
 	const [vether1, setVether1] = useState(false)
 	const [unlocked, setUnlocked] = useState(null)
 	const [upgradeFlag, setUpgradeFlag] = useState(false)
@@ -47,6 +50,7 @@ const Upgrade = () => {
 		window.web3 = new Web3(window.ethereum);
 		const accountConnected = (await window.web3.eth.getAccounts())[0];
 		if(accountConnected){
+			setNowallet(false)
 			const accounts = await window.web3.eth.getAccounts()
 			const address = accounts[0]
 			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
@@ -188,14 +192,19 @@ const Upgrade = () => {
 	return (
 		<>
 			<h1>UPGRADE VETHER</h1>
-			{!enable &&
-				<LoadingOutlined />
+			{nowallet &&
+			<>
+				<span><InfoCircleOutlined /> In order to interact, open the app with wallet connected.</span>
+			</>
+			}
+			{!enable && !nowallet &&
+				<span><LoadingOutlined /></span>
 			}
 			{enable &&
 				<div>
 					{!upgradeValid &&
 						<>
-							<span><CheckCircleFilled/> You don't have any Vether to upgrade</span>
+							<span><CheckCircleFilled/> You don't have any Vether to upgrade.</span>
 						</>
 					}
 
