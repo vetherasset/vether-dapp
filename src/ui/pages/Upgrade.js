@@ -307,8 +307,8 @@ const Upgrade = () => {
 				</div>
 			}
 			<hr/>
-			<h3>OWNERSHIP</h3>
-			<p>Search for Vether3 ownership</p>
+			<h3>Vether eligible for upgrade</h3>
+			<p>Search for Vether (<i>total of V1 & V2</i>) eligible for upgrade.</p>
 					<br />
 					<Row>
 						<Col xs={13}>
@@ -328,7 +328,7 @@ const Upgrade = () => {
 							<Tooltip placement="right" title="The amount of Vether this owner has in Vether3 to upgrade to.">
 								&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} /><br />
 							</Tooltip>
-							<LabelGrey>Ownership</LabelGrey>
+							<LabelGrey>Total</LabelGrey>
 						</Col>
 					</Row>
 
