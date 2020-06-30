@@ -269,8 +269,8 @@ const Upgrade = () => {
 													<h3>Vether 2</h3>
 													<p>
 														<i>
-															You need to approve Vether for transfers first.<br/>
-															Once the approval is confirmed perform upgrade.
+															You are all set to perform the upgrade.<br/>
+															Hit the button and watch for confirmation.
 														</i>
 													</p>
 													<>
