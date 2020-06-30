@@ -22,7 +22,7 @@ const Upgrade = () => {
 
 	const [safari, setSafari] = useState(null)
 	const [enable, setEnable] = useState(false)
-	const [nowallet, setNowallet] = useState(true)
+	const [nowallet, setNowallet] = useState(false)
 
 	const [upgradeValid, setUpgradeValid] = useState(false)
 
@@ -50,7 +50,6 @@ const Upgrade = () => {
 		window.web3 = new Web3(window.ethereum);
 		const accountConnected = (await window.web3.eth.getAccounts())[0];
 		if(accountConnected){
-			setNowallet(false)
 			const accounts = await window.web3.eth.getAccounts()
 			const address = accounts[0]
 			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
@@ -61,6 +60,8 @@ const Upgrade = () => {
 			console.log(eraData)
 			await checkUpgradeValid(contract, address)
 			setEnable(true)
+		} else {
+			setNowallet(true)
 		}
 	}
 
