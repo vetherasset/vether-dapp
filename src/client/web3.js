@@ -33,7 +33,7 @@ export const vetherAddr = () => {
     if(TESTNET) {
         return '0x68BDD33B0185b3Bf97Da0DEeC0f6d8EF2525193F'
     } else {
-        return '0x75572098dc462F976127f59F8c97dFa291f81d8b'
+        return '0x4ba6ddd7b89ed838fed25d208d4f644106e34279'
     }
 }
 
