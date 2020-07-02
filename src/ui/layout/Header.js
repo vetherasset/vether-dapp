@@ -33,7 +33,7 @@ const Header = () => {
         "acquire",
         //"upgrade",
         //"stake",
-        "trade",
+        //"trade",
         "stats",
         "whitepaper"
     ]
