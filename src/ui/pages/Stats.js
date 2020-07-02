@@ -272,9 +272,9 @@ const Stats = () => {
             <Row>
                 {!loadedPrice &&
                     <>
-                        <Col xs={24} lg={23} style={ChartStyles}>
-                            <LoadingOutlined style={loadingStyles} />
-                        </Col>
+                        {/*<Col xs={24} lg={23} style={ChartStyles}>*/}
+                        {/*    <LoadingOutlined style={loadingStyles} />*/}
+                        {/*</Col>*/}
                     </>
                 }
                 {loadedPrice &&

@@ -1,5 +1,4 @@
 import React from 'react'
-import { uniSwapAddr } from "../../client/web3";
 import { Row, Col } from 'antd'
 import { Colour, Text, Click } from '../components'
 
