@@ -31,7 +31,7 @@ export const vetherAddr2 = () => {
 
 export const vetherAddr = () => {
     if(TESTNET) {
-        return '0x68BDD33B0185b3Bf97Da0DEeC0f6d8EF2525193F'
+        return '0xe4A4616b053affD80a3EaD0b15C30BbCD3872868'
     } else {
         return '0x4ba6ddd7b89ed838fed25d208d4f644106e34279'
     }
@@ -56,9 +56,9 @@ export const getWeb3 = () => {
 
 export const uniSwapAddr = () => {
     if(TESTNET) {
-        return '0x8ccfbbcdeb7c9bb62e545a20a3b43b05a04e3682'
+        return null
     } else {
-        return '0x8ccfbbcdeb7c9bb62e545a20a3b43b05a04e3682'
+        return '0x3696fa5ad6e5c74fdcbced9af74379d94c4b775a'
     }
 }
 
@@ -68,7 +68,7 @@ export const uniSwapAbi = () => {
 
 export const registryAddr = () => {
     if(TESTNET) {
-        return '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
+        return null
     } else {
         return '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
     }
