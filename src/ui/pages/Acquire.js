@@ -26,7 +26,7 @@ const Acquire = () => {
 		let pathname = window.location.pathname.split("/")[1]
 		if (pathname === 'claim' && !loaded) {
 			setLoaded(true)
-			setTab('3')
+			setTab('2')
 		}
 		// eslint-disable-next-line
 	}, [])
@@ -80,7 +80,7 @@ const Acquire = () => {
 						</>
 					}
 				</TabPane> */}
-				<TabPane tab="CLAIM SHARE" key="4" style={{ textAlign: "left" }}>
+				<TabPane tab="CLAIM SHARE" key="2" style={{ textAlign: "left" }}>
 					<h2>CLAIM VETHER</h2><br />
 					<p>Claim your share of a previous day’s emission. </p><br />
 					<Text>Note: you cannot claim on the same day of contribution. Please wait a day. </Text><br />
