@@ -6,7 +6,7 @@ const Notification = (props) => {
 
     return (
         <Row id="notification">
-            <b>Upgrade</b> your Vether now. More details <a href="https://medium.com/@randomizedxyz/vether-upgrade-deployed-56141061263f" rel="noopener noreferrer" target="_blank">here</a>.
+            <b>New Vether</b> has been distributed to all previous owners.
         </Row>
     )
 }
