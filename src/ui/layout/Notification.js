@@ -6,9 +6,10 @@ const Notification = (props) => {
 
     return (
         <Row id="notification">
-            <b>New Vether</b> has been distributed to all previous owners.
+            <b>Vether 4</b> has been distributed to revious owners.
         </Row>
     )
 }
 
 export default Notification
+
