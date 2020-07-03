@@ -6,7 +6,7 @@ const Notification = (props) => {
 
     return (
         <Row id="notification">
-            <b>Vether 4</b> has been distributed to revious owners.
+            <b>Vether 4</b> has been distributed to previous owners.
         </Row>
     )
 }
