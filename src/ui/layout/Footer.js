@@ -16,7 +16,7 @@ const Footer = (props) => {
                   <hr/>
                   <ul>
                       <li>
-                          <a href="https://etherscan.io/address/0x75572098dc462F976127f59F8c97dFa291f81d8b" target="_blank" rel="noopener noreferrer">
+                          <a href="https://etherscan.io/address/0x4ba6ddd7b89ed838fed25d208d4f644106e34279" target="_blank" rel="noopener noreferrer">
                               Contract
                           </a>
                       </li>
