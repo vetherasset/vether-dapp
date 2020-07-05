@@ -3,7 +3,7 @@ import { Context } from '../../context'
 
 // import Web3 from 'web3'
 import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
-import {convertFromWei, getSecondsToGo, getBN, prettify} from '../utils'
+import { convertFromWei, getSecondsToGo, getBN, prettify } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -70,7 +70,7 @@ export const ClaimTable = () => {
         setAccount(accountData)
 		context.setContext({'accountData':accountData})
 	}
-	
+
 	const getEraData = async () => {
 		setEraData(context.eraData)
 		return context.eraData
@@ -88,9 +88,9 @@ export const ClaimTable = () => {
 
 		const eraData = {
 			'era': era, 'day':day,
-			'nextEra':nextEra, 'nextDay':nextDay, 
+			'nextEra':nextEra, 'nextDay':nextDay,
 			'emission': emission, 'nextEmission':nextEmission,
-			"currentBurn": currentBurn,  
+			"currentBurn": currentBurn,
 			'secondsToGo':secondsToGo
 		}
         setEraData({
@@ -99,7 +99,7 @@ export const ClaimTable = () => {
         context.setContext(eraData)
 		return eraData
 	}
-	
+
 	const getDays = ()  => {
 		// console.log(context.arrayDays)
 		setArrayDays(context.arrayDays)
@@ -210,7 +210,7 @@ export const ClaimTable = () => {
 					<Row>
 						<Col style={{ marginBottom: 20 }}>
 							<LabelGrey>CLAIMS FOUND IN THESE DAYS: </LabelGrey>
-							<br></br>
+							<br/>
 							{!scanned &&
 								<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
 							}
@@ -229,23 +229,23 @@ export const ClaimTable = () => {
 								</Button>
 							</div>
 							}
-							<br></br>
+							<br/>
 							<Sublabel>(ERA 1)</Sublabel>
-							<br></br>
+							<br/>
 						</Col>
 					</Row>
 					<Row>
 						<Col xs={6} sm={3}>
 							<Input size={'large'} allowClear onChange={onEraChange} placeholder={userData.era} />
-							<br></br>
+							<br/>
 							<Sublabel>Set Era</Sublabel>
-							<br></br>
+							<br/>
 						</Col>
 						<Col xs={6} sm={3} style={{ marginLeft: 10, marginRight: 20 }}>
 							<Input size={'large'} allowClear onChange={onDayChange} placeholder={userData.day} />
-							<br></br>
+							<br/>
 							<Sublabel>Set Day</Sublabel>
-							<br></br>
+							<br/>
 						</Col>
 						<Col xs={8} sm={6}>
 							<Button
@@ -257,7 +257,7 @@ export const ClaimTable = () => {
 							<Tooltip placement="right" title="This will check your share in the Era and Day set">
 								&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
 							</Tooltip>
-							<br></br>
+							<br/>
 							<Sublabel>Check for claim</Sublabel>
 						</Col>
 					</Row>
@@ -267,7 +267,7 @@ export const ClaimTable = () => {
 							<Row>
 								<Col xs={12} sm={6} style={{ marginLeft: 0, marginRight: 30 }}>
 									<Label>{prettify(claimAmt)} VETH</Label>
-									<br></br>
+									<br/>
 									<Text size={14}>Your unclaimed Vether on this day.</Text><br />
 									<Text size={14}>(Please wait for the day to finish first before claiming) </Text><br />
 								</Col>
@@ -278,7 +278,7 @@ export const ClaimTable = () => {
 										<Tooltip placement="right" title="This will claim your share in the Era and Day set">
 											&nbsp;<QuestionCircleOutlined style={{color:Colour().grey}}/>
 										</Tooltip>
-										<br></br>
+										<br/>
 										<Text size={14}>Claim VETHER</Text>
 
 										{claimFlag &&
@@ -333,7 +333,7 @@ export const ClaimTable = () => {
 // 			context.accountData ? getAccountData() : loadAccountData(contract, address)
 // 			setContract(contract)
 // 	}
-	
+
 // 	const getAccountData = async () => {
 // 		setAccount(context.accountData)
 // 		setSendAmt(context.accountData.vethBalance)

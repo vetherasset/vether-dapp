@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
-import Web3 from 'web3';
+import Web3 from 'web3'
 import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, convertToDate, prettify } from '../utils'
@@ -94,7 +94,7 @@ export const VetherTable = () => {
         const priceVetherEth = await getUniswapPriceEth()
         const priceVetherUSD = priceEtherUSD * priceVetherEth
 
-        const marketData = { 
+        const marketData = {
             priceUSD: priceVetherUSD,
             priceETH: priceVetherEth,
             ethPrice: priceEtherUSD}

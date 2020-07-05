@@ -71,7 +71,6 @@ export const Label = (props) => {
 
 export const LabelGrey = (props) => {
   let styles = {...props.style || {}}
-  styles.fontWeight = "bold"
   styles.margin = "20px 0px"
 
   if (props.margin) {

@@ -79,7 +79,9 @@ export const AcquireTable = () => {
 	}
 
 	const getVethValue = () => {
-		const value = (+ethAmount / (+ethAmount + +currentBurn)) * 2048
+		let amount = ethAmount < 0 ? 0 : ethAmount
+		let value = (+amount / (+amount + +currentBurn)) * 2048
+		value = value < 0 || isNaN(value) ? 0 : value
 		return value
 	}
 
@@ -99,66 +101,63 @@ export const AcquireTable = () => {
 	}
 
 	return (
-		<div>
-			<div>
+		<>
+			<Label>BURN ETHER</Label>
+			<br />
+			<Row>
+				<Col xs={11} sm={4}>
+					<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
+					<br/>
+					<Button
+						backgroundColor="transparent"
+						onClick={maxEther}
+					>
+						{ethBalanceSpendable}
+					</Button>
+					<Tooltip placement="right" title="Your balance minus 0.1 is spendable to keep Ether later for gas.">
+						&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+					</Tooltip>
+					<br/>
+					<LabelGrey>Spendable ETH</LabelGrey>
+				</Col>
+				<Col xs={11} sm={6} style={{ marginLeft: 20 }}>
+					<Button
+						backgroundColor="transparent"
+						onClick={burnEther}
+					>
+						BURN >>
+					</Button>
+					<Tooltip placement="right" title="This burns your Ether into the contract.">
+						&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+					</Tooltip>
+					<br/>
+					<Sublabel>Burn ETH to acquire VETHER</Sublabel>
 
-				<Label>BURN ETHER</Label>
-				<br />
-				<Row>
-					<Col xs={11} sm={4}>
-						<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
-						<br></br>
-						<Button
-							backgroundColor="transparent"
-							onClick={maxEther}
-						>
-							{ethBalanceSpendable}
-						</Button>
-						<Tooltip placement="right" title="Your balance minus 0.1 is spendable to keep Ether later for gas.">
-							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
-						</Tooltip>
-						<br></br>
-						<LabelGrey>Spendable ETH</LabelGrey>
-					</Col>
-					<Col xs={11} sm={6} style={{ marginLeft: 20 }}>
-						<Button
-							backgroundColor="transparent"
-							onClick={burnEther}
-						>
-							BURN >>
-						</Button>
-						<Tooltip placement="right" title="This burns your Ether into the contract.">
-							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
-						</Tooltip>
-						<br></br>
-						<Sublabel>Burn ETH to acquire VETHER</Sublabel>
+					{burnEthFlag &&
+						<>
+							{!loaded &&
+								<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+							}
+							{loaded &&
+								<>
+									<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+									<br />
+									<Sublabel>Refresh to update</Sublabel>
+								</>
+							}
+						</>
+					}
 
-						{burnEthFlag &&
-							<div>
-								{!loaded &&
-									<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
-								}
-								{loaded &&
-									<div>
-										<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-										<br></br>
-										<Sublabel>Refresh to update</Sublabel>
-									</div>
-								}
-							</div>
-						}
-
-					</Col>
-					<Col xs={24} sm={4}>
-						<Text size={32}>{prettify(getVethValue())}</Text>
-						<Tooltip placement="right" title="The amount of VETH you get is dependent on how much you burn, compared to how much everyone else burns.">
-							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} /><br />
-						</Tooltip>
-						<LabelGrey>Potential VETH Value</LabelGrey>
-					</Col>
-				</Row>
-			</div>
-		</div>
+				</Col>
+				<Col xs={24} sm={4}>
+					<Text size={32}>{prettify(getVethValue())}</Text>
+					<Tooltip placement="right" title="The amount of VETH you get is dependent on how much you burn, compared to how much everyone else burns.">
+						&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} /><br />
+					</Tooltip>
+					<LabelGrey>Potential VETH Value</LabelGrey>
+				</Col>
+			</Row>
+		</>
 	)
 }
 

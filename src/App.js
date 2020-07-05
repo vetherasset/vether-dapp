@@ -9,9 +9,9 @@ import Footer from './ui/layout/Footer'
 import Sidebar from './ui/layout/Sidebar'
 import Hero from './ui/pages/Hero'
 import Acquire from './ui/pages/Acquire'
-// import Upgrade from './ui/pages/Upgrade'
+//import Upgrade from './ui/pages/Upgrade'
 // import Stake from './ui/pages/Stake'
-// import Trade from './ui/pages/Trade'
+import Trade from './ui/pages/Trade'
 import Stats from './ui/pages/Stats'
 import Whitepaper from './ui/pages/Whitepaper'
 import { Colour } from './ui/components'
@@ -41,7 +41,7 @@ const App = () => {
 									<Route path="/acquire" exact component={Acquire} />
 									<Route path="/claim" exact component={Acquire} />
 									{/*<Route path="/stake" exact component={Stake} />*/}
-									{/*<Route path="/trade" exact component={Trade} />*/}
+									<Route path="/trade" exact component={Trade} />
 									<Route path="/stats" exact component={Stats} />
 									<Route path="/whitepaper" exact component={Whitepaper} />
 								</Switch>
