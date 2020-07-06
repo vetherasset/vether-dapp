@@ -155,7 +155,7 @@ export const VetherTable = () => {
                         <Col xs={24} sm={12}>
                             <LabelGrey size={14}>TOTAL SUPPLY</LabelGrey>
                             <br />
-                            <Text size={24}>{prettify(vetherData.totalSupply)} VETH</Text>
+                            <Text size={24}>{prettify(vetherData.totalSupply)} $VETH</Text>
                         </Col>
                         <Col xs={24} sm={12}>
                             {/* <LabelGrey size={14}>TOTAL CAP: </LabelGrey><br />
@@ -167,7 +167,7 @@ export const VetherTable = () => {
                         <Col xs={24} sm={12}>
                             <LabelGrey size={14}>EMITTED</LabelGrey>
                             <br />
-                            <Text size={24}>{prettify((+emissionData.totalEmitted).toFixed(0))} VETH</Text>
+                            <Text size={24}>{prettify((+emissionData.totalEmitted).toFixed(0))} $VETH</Text>
                         </Col>
                         <Col id="vetherStatsTableCircCap"xs={24} sm={12}>
                             <LabelGrey size={14}>CIRCULATING CAP</LabelGrey>

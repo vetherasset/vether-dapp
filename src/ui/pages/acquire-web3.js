@@ -148,11 +148,12 @@ export const AcquireTable = () => {
 
 				</Col>
 
-				<Col xs={24} sm={4} style={{ marginTop: '-3px' }}>
-					<Text size={32}>{prettify(getVethValue())}</Text>
-					<Tooltip placement="right" title="The amount of VETH you get is&nbsp;dependent on how much you burn, compared to how much everyone else burns.">
-						&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
-					</Tooltip>
+				<Col xs={24} sm={6} style={{ marginTop: '-3px' }}>
+					<Text size={32}>{prettify(getVethValue())}&nbsp;$VETH
+						<Tooltip placement="right" title="The amount of VETH you get is&nbsp;dependent on how much you burn, compared to how much everyone else burns.">
+							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
+						</Tooltip>
+					</Text>
 					<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Potential VETH Value</LabelGrey>
 				</Col>
 			</Row>
