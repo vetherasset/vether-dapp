@@ -109,7 +109,7 @@ export const AcquireTable = () => {
 		<>
 			<Row>
 				<Col xs={11} sm={4}>
-					<Input size={'large'} style={{ marginBottom: 10 }} onChange={onInputAmountChange} placeholder={amount.toSpend} value={amount.toSpend} suffix={'Ξ'}/>
+					<Input size={'large'} style={{ marginBottom: 10 }} onChange={onInputAmountChange} placeholder={amount.toSpend} suffix={'Ξ'}/>
 					<br/>
 					<Button
 						backgroundColor="transparent"
