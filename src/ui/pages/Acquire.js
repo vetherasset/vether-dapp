@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
 import { Row } from 'antd'
-import { Text, LabelGrey } from '../components'
+import { LabelGrey } from '../components'
 import { AcquireTable } from './acquire-web3'
-// import { GasMineTable } from './acquire-web3'
-// import { TokenTable } from './tokens'
 import { ClaimTable } from './claim-web3'
 import { EraTable } from './era-web3'
-// import { WalletCard } from '../ui'
 
 import '../../App.less';
 import { Tabs } from 'antd';
