@@ -20,8 +20,8 @@ export const AcquireTable = () => {
 	const [currentBurn, setCurrentBurn] = useState(1)
 
 	const notSpendAmount = 0
-	const spendable = (account.ethBalance - notSpendAmount).toFixed(4) < 0 ?
-		0 : (account.ethBalance - notSpendAmount).toFixed(4)
+	const spendable = (account.ethBalance - notSpendAmount).toPrecision(4) < 0 ?
+		0 : (account.ethBalance - notSpendAmount).toPrecision(4)
 
 	const [amount, setAmount] = useState({ toSpend: 0 })
 
@@ -63,7 +63,7 @@ export const AcquireTable = () => {
 		}
 
 		let spendable = ethBalance - notSpendAmount
-		spendable = spendable < 0 ? 0 : spendable
+		spendable = spendable < 0 ? 0 : spendable.toPrecision(4)
 
 		setAccount(accountData)
 		context.setContext({ 'accountData': accountData })
@@ -72,7 +72,7 @@ export const AcquireTable = () => {
 
 	const setMaxAmount = async () => {
 		let spendable = account.ethBalance - notSpendAmount
-		spendable = spendable < 0 ? 0 : spendable
+		spendable = spendable < 0 ? 0 : spendable.toPrecision(4)
 		setAmount({ toSpend: spendable })
 	}
 
@@ -88,7 +88,7 @@ export const AcquireTable = () => {
 	}
 
 	const burnEther = async () => {
-		const burnAmount = amount.toSpend * 1000000000000000000
+		const burnAmount = Web3.utils.toWei(amount.toSpend, 'ether')
 		setBurnEthFlag('TRUE')
 		const tx = await window.web3.eth.sendTransaction({ from: account.address, to: vetherAddr(), value: burnAmount })
 		setEthTx(tx.transactionHash)
