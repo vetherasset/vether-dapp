@@ -61,8 +61,7 @@ const Acquire = () => {
 
 				<TabPane tab="CLAIM SHARE" key="2" style={{ textAlign: "left" }}>
 					<h2>CLAIM VETHER</h2>
-					<p>Claim your share of a previous day’s emission. </p><br />
-					<Text>Note: you cannot claim on the same day of contribution. Please wait a day. </Text><br />
+					<p>Claim your share of a previous day’s emission. </p>
 					{safari &&
 						<>
 							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>

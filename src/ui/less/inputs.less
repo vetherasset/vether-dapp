@@ -7,6 +7,7 @@
 .ant-input{
   caret-color: #D09800;
 }
+
 .ant-input:placeholder-shown{
   color: #000
 }
@@ -19,5 +20,21 @@
 
 .ant-input-affix-wrapper .ant-input-prefix,
 .ant-input-affix-wrapper .ant-input-suffix {
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.ant-input-number-disabled,
+.ant-input[disabled] {
+  color: rgba(255, 255, 255, 0.25);
+  background: #110D01;
+  border: 1px solid #ffffff45;
+}
+
+.ant-input[disabled]:hover {
+  border-color: #ffffff40;
+  border-right-width: 1px !important;
+}
+
+.ant-input[disabled]::placeholder {
+  color: rgba(255, 255, 255, 0.25);
 }
