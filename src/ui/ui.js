@@ -153,12 +153,12 @@ export const BurnCard = (props) => {
                 <Row>
                     <Col xs={24} sm={12}>
                         <Center>
-                            <Text size={32} style={{marginBottom: 0}}>{prettify(+props.eraData.currentBurn)} ETH</Text>
+                            <Text size={32} style={{ marginBottom: 0 }}>{prettify(+props.eraData.currentBurn)} ETH</Text>
                         </Center>
                     </Col>
                     <Col xs={24} sm={12}>
                         <Center>
-                            <Text size={32} style={{marginBottom: 0}}>${prettify(convertEthtoUSD(props.eraData.currentBurn))}</Text>
+                            <Text size={32} style={{ marginBottom: 0 }}>${prettify(convertEthtoUSD(props.eraData.currentBurn))}</Text>
                         </Center>
                     </Col>
                 </Row>
