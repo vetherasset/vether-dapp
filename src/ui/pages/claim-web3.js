@@ -272,7 +272,7 @@ export const ClaimTable = () => {
 									<Text size={14}>(Please wait for the day to finish first before claiming) </Text><br />
 								</Col>
 
-								{!zeroFlag &&
+								{zeroFlag &&
 									<Col xs={8} sm={6}>
 										<Button onClick={claimShare}> CLAIM >></Button>
 										<Tooltip placement="right" title="This will claim your share in the Era and Day set">
