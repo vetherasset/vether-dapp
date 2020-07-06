@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
+import Web3 from "web3"
 
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL } from '../../client/web3.js'
 import { convertFromWei, prettify } from '../utils'
@@ -7,7 +8,6 @@ import { convertFromWei, prettify } from '../utils'
 import { Row, Col, Input, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { LabelGrey, Click, Button, Sublabel, Colour, Text } from '../components'
-import Web3 from "web3"
 
 export const AcquireTable = () => {
 
@@ -88,7 +88,7 @@ export const AcquireTable = () => {
 	}
 
 	const burnEther = async () => {
-		const burnAmount = amount.toSpend * 1000000000000000000
+		const burnAmount = Web3.utils.toWei(amount.toSpend, 'ether')
 		setBurnEthFlag('TRUE')
 		const tx = await window.web3.eth.sendTransaction({ from: account.address, to: vetherAddr(), value: burnAmount })
 		setEthTx(tx.transactionHash)
