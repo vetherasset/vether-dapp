@@ -247,9 +247,6 @@ export const ClaimTable = () => {
 
 										{claimFlag &&
 										<>
-											{!loaded &&
-											<LoadingOutlined style={{ marginBottom: 0 }} />
-											}
 											{loaded &&
 											<>
 												<Click>
