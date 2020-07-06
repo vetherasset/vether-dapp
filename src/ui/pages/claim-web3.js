@@ -200,7 +200,7 @@ export const ClaimTable = () => {
 						<Input size={'large'} disabled={true} onChange={onEraChange} value={userData.era} placeholder={'1'} suffix={'Era'}/>
 					</Col>
 					<Col xs={6} sm={4} style={{ marginLeft: 10, marginRight: 20 }}>
-						<Input size={'large'} allowClear onChange={onDayChange} placeholder={userData.day} suffix={'Day'}/>
+						<Input size={'large'} allowClear onChange={onDayChange} value={userData.day} placeholder={userData.day} suffix={'Day'}/>
 					</Col>
 					<Col xs={8} sm={8} style={{ marginTop: '-3px' }}>
 						<Button
