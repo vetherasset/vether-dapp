@@ -124,7 +124,6 @@ export const HistoryTable = () => {
 
     const loadData = async() =>{
         const baseURL = 'https://api.blocklytics.org/pools/v1/trades/0x3696fa5ad6e5c74fdcbced9af74379d94c4b775a?key='
-
         const response = await axios.get(baseURL + process.env.REACT_APP_BLOCKLYTICS_API)
 		let returnData = response.data.results
         console.log(returnData)

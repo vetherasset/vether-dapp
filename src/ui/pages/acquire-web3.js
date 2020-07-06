@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
-// import Web3 from 'web3';
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL } from '../../client/web3.js'
 import { convertFromWei, prettify } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
-import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { LabelGrey, Label, Click, Button, Sublabel, Colour, Text } from '../components'
-import Web3 from "web3";
-// import { EraTable } from './era-web3'
+import { QuestionCircleOutlined } from '@ant-design/icons'
+import { LabelGrey, Click, Button, Sublabel, Colour, Text } from '../components'
+import Web3 from "web3"
 
 export const AcquireTable = () => {
 
@@ -19,17 +17,17 @@ export const AcquireTable = () => {
 	const [loaded, setLoaded] = useState(null)
 	const [burnEthFlag, setBurnEthFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
-	// const [walletFlag, setWalletFlag] = useState(null)
-	const [ethAmount, setEthAmount] = useState(0)
 	const [currentBurn, setCurrentBurn] = useState(1)
 
-	const ethBalanceSpendable = (account.ethBalance - 0.1).toFixed(4) < 0 ?
-		0 : (account.ethBalance - 0.1).toFixed(4)
+	const notSpendAmount = 0
+	const spendable = (account.ethBalance - notSpendAmount).toFixed(4) < 0 ?
+		0 : (account.ethBalance - notSpendAmount).toFixed(4)
+
+	const [amount, setAmount] = useState({ toSpend: 0 })
 
 	useEffect(() => {
 		connect()
-		// eslint-disable-next-line
-	}, [])
+	})
 
 	const connect = async () => {
 		window.web3 = new Web3(window.ethereum);
@@ -47,8 +45,10 @@ export const AcquireTable = () => {
 	}
 
 	const getAccountData = async () => {
+		let spendable = context.accountData.ethBalance - notSpendAmount
+		spendable = spendable < 0 ? 0 : spendable
 		setAccount(context.accountData)
-		setEthAmount(context.accountData.ethBalance - 0.1)
+		setAmount({ toSpend: spendable })
 	}
 
 	const loadAccountData = async (contract_, address) => {
@@ -64,31 +64,36 @@ export const AcquireTable = () => {
 			uniBalance: uniBalance,
 			uniSupply: uniSupply
 		}
+
+		let spendable = ethBalance - notSpendAmount
+		spendable = spendable < 0 ? 0 : spendable
+
 		setAccount(accountData)
 		context.setContext({ 'accountData': accountData })
-		setEthAmount(ethBalance - 0.1)
+		setAmount({toSpend: spendable})
 	}
 
-	const maxEther = async () => {
-		setEthAmount(account.ethBalance - 0.1)
-		console.log("maxEther", ethAmount)
+	const setMaxAmount = async () => {
+		let spendable = account.ethBalance - notSpendAmount
+		spendable = spendable < 0 ? 0 : spendable
+		setAmount({ toSpend: spendable })
 	}
 
-	const onEthAmountChange = e => {
-		setEthAmount(e.target.value)
+	const onInputAmountChange = e => {
+		setAmount({ toSpend: e.target.value })
 	}
 
 	const getVethValue = () => {
-		let amount = ethAmount < 0 ? 0 : ethAmount
-		let value = (+amount / (+amount + +currentBurn)) * 2048
+		let ethAmount = amount.toSpend < 0 ? 0 : amount.toSpend
+		let value = (+ethAmount / (+ethAmount + +currentBurn)) * 2048
 		value = value < 0 || isNaN(value) ? 0 : value
 		return value
 	}
 
 	const burnEther = async () => {
-		const amount = ethAmount * 1000000000000000000
+		const burnAmount = amount.toSpend * 1000000000000000000
 		setBurnEthFlag('TRUE')
-		const tx = await window.web3.eth.sendTransaction({ from: account.address, to: vetherAddr(), value: amount })
+		const tx = await window.web3.eth.sendTransaction({ from: account.address, to: vetherAddr(), value: burnAmount })
 		setEthTx(tx.transactionHash)
 		setLoaded(true)
 		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
@@ -102,46 +107,39 @@ export const AcquireTable = () => {
 
 	return (
 		<>
-			<Label>BURN ETHER</Label>
-			<br />
 			<Row>
 				<Col xs={11} sm={4}>
-					<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
+					<Input size={'large'} style={{ marginBottom: 10 }} onChange={onInputAmountChange} placeholder={amount.toSpend} value={amount.toSpend} suffix={'Ξ'}/>
 					<br/>
 					<Button
 						backgroundColor="transparent"
-						onClick={maxEther}
+						onClick={setMaxAmount}
 					>
-						{ethBalanceSpendable}
+						{spendable} Ξ
 					</Button>
-					<Tooltip placement="right" title="Your balance minus 0.1 is spendable to keep Ether later for gas.">
-						&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+					<Tooltip placement="right" title="This is your maximum spendable Ether.
+					Hit the number to set it as amount to spend.">
+						&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
 					</Tooltip>
-					<br/>
-					<LabelGrey>Spendable ETH</LabelGrey>
+					<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Spendable ETH</LabelGrey>
 				</Col>
-				<Col xs={11} sm={6} style={{ marginLeft: 20 }}>
+
+				<Col xs={11} sm={6} style={{ marginLeft: '20px', marginTop: '-3px' }}>
 					<Button
 						backgroundColor="transparent"
 						onClick={burnEther}
 					>
 						BURN >>
 					</Button>
-					<Tooltip placement="right" title="This burns your Ether into the contract.">
-						&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
-					</Tooltip>
-					<br/>
-					<Sublabel>Burn ETH to acquire VETHER</Sublabel>
+					<Sublabel>BURN ETH TO ACQUIRE VETH</Sublabel>
 
 					{burnEthFlag &&
 						<>
-							{!loaded &&
-								<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
-							}
 							{loaded &&
 								<>
-									<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-									<br />
+									<Click>
+										<a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a>
+									</Click>
 									<Sublabel>Refresh to update</Sublabel>
 								</>
 							}
@@ -149,12 +147,13 @@ export const AcquireTable = () => {
 					}
 
 				</Col>
-				<Col xs={24} sm={4}>
+
+				<Col xs={24} sm={4} style={{ marginTop: '-3px' }}>
 					<Text size={32}>{prettify(getVethValue())}</Text>
-					<Tooltip placement="right" title="The amount of VETH you get is dependent on how much you burn, compared to how much everyone else burns.">
-						&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} /><br />
+					<Tooltip placement="right" title="The amount of VETH you get is&nbsp;dependent on how much you burn, compared to how much everyone else burns.">
+						&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
 					</Tooltip>
-					<LabelGrey>Potential VETH Value</LabelGrey>
+					<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Potential VETH Value</LabelGrey>
 				</Col>
 			</Row>
 		</>

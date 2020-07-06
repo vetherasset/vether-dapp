@@ -71,8 +71,10 @@ export const Label = (props) => {
 
 export const LabelGrey = (props) => {
   let styles = {...props.style || {}}
-  styles.margin = "20px 0px"
 
+  if(props.display) {
+    styles.display = props.display
+  }
   if (props.margin) {
     styles.margin = props.margin
   }
