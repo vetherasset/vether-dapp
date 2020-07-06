@@ -5,7 +5,7 @@ import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from 
 import { convertFromWei, getSecondsToGo, getBN, prettify } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
-import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { LoadingOutlined, QuestionCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import {Sublabel, Click, Button, Text, Colour, LabelGrey} from '../components'
 
 export const ClaimTable = () => {
@@ -270,7 +270,9 @@ export const ClaimTable = () => {
 
 							{claimAmt <= 0 &&
 								<>
-									<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Sorry, there is&nbsp;nothing to claim.</LabelGrey>
+									<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
+										<InfoCircleOutlined />&nbsp; Sorry, there's&nbsp;nothing to claim.
+									</LabelGrey>
 								</>
 							}
 						</Row>
