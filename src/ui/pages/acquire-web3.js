@@ -45,10 +45,7 @@ export const AcquireTable = () => {
 	}
 
 	const getAccountData = async () => {
-		let spendable = context.accountData.ethBalance - notSpendAmount
-		spendable = spendable < 0 ? 0 : spendable
 		setAccount(context.accountData)
-		setAmount({ toSpend: spendable })
 	}
 
 	const loadAccountData = async (contract_, address) => {
@@ -109,7 +106,7 @@ export const AcquireTable = () => {
 		<>
 			<Row>
 				<Col xs={11} sm={4}>
-					<Input size={'large'} style={{ marginBottom: 10 }} onChange={onInputAmountChange} placeholder={amount.toSpend} suffix={'Ξ'}/>
+					<Input size={'large'} style={{ marginBottom: 10 }} onChange={onInputAmountChange} value={amount.toSpend} placeholder={amount.toSpend} suffix={'Ξ'}/>
 					<br/>
 					<Button
 						backgroundColor="transparent"
