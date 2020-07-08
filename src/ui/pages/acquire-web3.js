@@ -122,12 +122,10 @@ export const AcquireTable = () => {
 				</Col>
 
 				<Col xs={11} sm={6} style={{ marginLeft: '20px', marginTop: '-3px' }}>
-					<Button
-						backgroundColor="transparent"
-						onClick={burnEther}
-					>
-						BURN >>
-					</Button>
+					{amount.toSpend > 0
+						? <Button backgroundColor="transparent" onClick={burnEther}>BURN >></Button>
+						: <Button backgroundColor="transparent" disabled>BURN >></Button>
+					}
 					<Sublabel>BURN ETH TO ACQUIRE VETH</Sublabel>
 
 					{burnEthFlag &&

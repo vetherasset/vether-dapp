@@ -235,7 +235,6 @@ export const Button = (props) => {
   let styles = {...props.style || {}}
   styles.height = "20px"
   styles.padding = "0px 0px"
-  styles.color = Colour().gold
   styles.display = "inline-block"
   styles.border = "none";
 
