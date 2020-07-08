@@ -14,6 +14,8 @@ export const AcquireTable = () => {
 	const context = useContext(Context)
 	const [account, setAccount] = useState(
 		{ address: '', vethBalance: '', ethBalance: '', uniBalance: '', uniSupply: '' })
+	const [connected, setConnected] = useState(false)
+
 	const [loaded, setLoaded] = useState(null)
 	const [burnEthFlag, setBurnEthFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
@@ -30,7 +32,6 @@ export const AcquireTable = () => {
 	})
 
 	const connect = async () => {
-		window.web3 = new Web3(window.ethereum);
 		const accountConnected = (await window.web3.eth.getAccounts())[0];
 		if(accountConnected){
 			const accounts = await window.web3.eth.getAccounts()
@@ -41,6 +42,7 @@ export const AcquireTable = () => {
 			const era = 1
 			const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
 			setCurrentBurn(currentBurn)
+			setConnected(true)
 		}
 	}
 
@@ -122,7 +124,7 @@ export const AcquireTable = () => {
 				</Col>
 
 				<Col xs={11} sm={6} style={{ marginLeft: '20px', marginTop: '-3px' }}>
-					{amount.toSpend > 0
+					{amount.toSpend > 0 && connected
 						? <Button backgroundColor="transparent" onClick={burnEther}>BURN >></Button>
 						: <Button backgroundColor="transparent" disabled>BURN >></Button>
 					}

@@ -26,7 +26,7 @@ export const ClaimTable = () => {
 
 	const [loaded, setLoaded] = useState(null)
 	const [scanned, setScanned] = useState(false)
-	const [walletFlag, setWalletFlag] = useState(true)
+	const [connected, setConnected] = useState(false)
 
 	const [checkFlag, setCheckFlag] = useState(null)
 	const [claimFlag, setClaimFlag] = useState(null)
@@ -37,14 +37,17 @@ export const ClaimTable = () => {
 	}, [])
 
 	const connect = async () => {
-		setWalletFlag(true)
-		const accounts = await window.web3.eth.getAccounts()
-		const address = accounts[0]
-		const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-		setContract(contract)
-		context.accountData ? getAccountData() : loadAccountData(contract, address)
-		const eraData_ = await context.eraData ? await getEraData() : await loadEraData(contract)
-		context.arrayDays ? await getDays() : await loadDays(eraData_, contract, address, false)
+		const accountConnected = (await window.web3.eth.getAccounts())[0];
+		if(accountConnected){
+			const accounts = await window.web3.eth.getAccounts()
+			const address = accounts[0]
+			const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+			setContract(contract)
+			context.accountData ? getAccountData() : loadAccountData(contract, address)
+			const eraData_ = await context.eraData ? await getEraData() : await loadEraData(contract)
+			context.arrayDays ? await getDays() : await loadDays(eraData_, contract, address, false)
+			setConnected(true)
+		}
 	}
 
 	const getAccountData = async () => {
@@ -62,9 +65,10 @@ export const ClaimTable = () => {
 			vethBalance: vethBalance,
 			ethBalance: ethBalance,
 			uniBalance: uniBalance,
-			uniSupply:uniSupply
+			uniSupply: uniSupply
 		}
 		setAccount(accountData)
+		setConnected(true)
 		context.setContext({'accountData':accountData})
 	}
 
@@ -112,7 +116,7 @@ export const ClaimTable = () => {
 		let startDay = (daysContributed > 5) ? daysContributed - 5 : 0
 		startDay = older ? 0 : startDay
 		// console.log({startDay})
-		for (var j = daysContributed-1; j >= startDay; j--) {
+		for (let j = daysContributed-1; j >= startDay; j--) {
 			let day = +(await contract_.methods.mapMemberEra_Days(account_, era, j).call())
 			// console.log({era}, {day}, {daysContributed}, {eraData_})
 			if (era < +eraData_.era || (era >= +eraData_.era && day <= +eraData_.day)) {
@@ -193,89 +197,90 @@ export const ClaimTable = () => {
 
 	return (
 		<>
-			{walletFlag &&
-			<>
-				<Row>
-					<Col xs={6} sm={4}>
-						<Input size={'large'} disabled={true} onChange={onEraChange} value={userData.era} placeholder={'1'} suffix={'Era'}/>
-					</Col>
-					<Col xs={6} sm={4} style={{ marginLeft: 10, marginRight: 20 }}>
-						<Input size={'large'} allowClear onChange={onDayChange} value={userData.day} placeholder={userData.day} suffix={'Day'}/>
-					</Col>
-					<Col xs={8} sm={8} style={{ marginTop: '-3px' }}>
-						<Button
-							backgroundColor="transparent"
-							onClick={checkShare}
-						>
-							CHECK >>
-						</Button>
-						<Sublabel>CHECK FOR CLAIM</Sublabel>
-					</Col>
-				</Row>
+			<Row>
+				<Col xs={6} sm={4}>
+					<Input size={'large'} disabled={true} onChange={onEraChange} value={userData.era} placeholder={'1'} suffix={'Era'}/>
+				</Col>
+				<Col xs={6} sm={4} style={{ marginLeft: 10, marginRight: 20 }}>
+					{connected
+						? <Input size={'large'} onChange={onDayChange} value={userData.day} placeholder={userData.day} suffix={'Day'}/>
+						: <Input size={'large'} disabled placeholder={userData.day} suffix={'Day'}/>
+					}
+				</Col>
 
-				{checkFlag &&
-					<>
-						<Row>
-							{claimAmt > 0 &&
-								<>
-									<Col xs={8} sm={8} style={{ marginLeft: 0, marginRight: 30 }}>
-										<span style={{
-											display: 'block',
-											fontSize: '32px',
-											marginTop: '7px'
-										}}>
-											{prettify(claimAmt)} $VETH
-											<Tooltip placement="right" title="Your total share in the Era and Day to claim.">
-											&nbsp;<QuestionCircleOutlined style={{color:Colour().grey, marginBottom: '0'}}/>
-										</Tooltip>
-										</span>
-										<LabelGrey style={{ fontStyle: 'italic' }}>Your unclaimed Vether on this day.</LabelGrey>
-										<p>Please wait for the day to finish first before claiming.</p>
-									</Col>
-								</>
-							}
+				<Col xs={8} sm={8} style={{ marginTop: '-3px' }}>
+					{userData.day > 0 && connected
+						? <Button backgroundColor="transparent" onClick={checkShare}>CHECK >></Button>
+						: <Button backgroundColor="transparent" disabled>CHECK >></Button>
+					}
+					<Sublabel>CHECK FOR CLAIM</Sublabel>
+				</Col>
+			</Row>
 
-							{claimAmt > 0 &&
-								<>
-									<Col xs={8} sm={6}>
-										<Button
-											backgroundColor="transparent"
-											onClick={claimShare}>
-											CLAIM >>
-										</Button>
-										<Sublabel>CLAIM VETHER</Sublabel>
+			{checkFlag &&
+				<>
+					<Row>
+						{claimAmt > 0 &&
+							<>
+								<Col xs={8} sm={8} style={{ marginLeft: 0, marginRight: 30 }}>
+									<span style={{
+										display: 'block',
+										fontSize: '32px',
+										marginTop: '7px'
+									}}>
+										{prettify(claimAmt)} $VETH
+										<Tooltip placement="right" title="Your total share in the Era and Day to claim.">
+										&nbsp;<QuestionCircleOutlined style={{color:Colour().grey, marginBottom: '0'}}/>
+									</Tooltip>
+									</span>
+									<LabelGrey style={{ fontStyle: 'italic' }}>Your unclaimed Vether on this day.</LabelGrey>
+									<p>Please wait for the day to finish first before claiming.</p>
+								</Col>
+							</>
+						}
 
-										{claimFlag &&
+						{claimAmt > 0 &&
+							<>
+								<Col xs={8} sm={6}>
+									<Button
+										backgroundColor="transparent"
+										onClick={claimShare}>
+										CLAIM >>
+									</Button>
+									<Sublabel>CLAIM VETHER</Sublabel>
+
+									{claimFlag &&
+									<>
+										{loaded &&
 										<>
-											{loaded &&
-											<>
-												<Click>
-													<a href={getLink()}rel="noopener noreferrer" title="Transaction Link"
-													   target="_blank" style={{
-													   	color: Colour().gold,
-														fontSize: 12 }}>
-														VIEW TRANSACTION ->
-													</a>
-												</Click>
-											</>
-											}
+											<Click>
+												<a href={getLink()}rel="noopener noreferrer" title="Transaction Link"
+												   target="_blank" style={{
+													color: Colour().gold,
+													fontSize: 12 }}>
+													VIEW TRANSACTION ->
+												</a>
+											</Click>
 										</>
 										}
-									</Col>
-								</>
-							}
+									</>
+									}
+								</Col>
+							</>
+						}
 
-							{claimAmt <= 0 &&
-								<>
-									<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
-										<InfoCircleOutlined />&nbsp; Sorry, there's&nbsp;nothing to claim.
-									</LabelGrey>
-								</>
-							}
-						</Row>
-					</>
-				}
+						{claimAmt <= 0 &&
+							<>
+								<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
+									<InfoCircleOutlined />&nbsp; Sorry, there's&nbsp;nothing to claim.
+								</LabelGrey>
+							</>
+						}
+					</Row>
+				</>
+			}
 
+			{connected &&
 				<Row>
 					<Col>
 						{!scanned &&
@@ -299,7 +304,6 @@ export const ClaimTable = () => {
 						<Sublabel>ERA 1</Sublabel>
 					</Col>
 				</Row>
-			</>
 			}
 		</>
 	)
