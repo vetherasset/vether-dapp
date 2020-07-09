@@ -151,7 +151,7 @@ export const HistoryTable = () => {
             render: (record) => {
                 return (
                     <>
-                        {(+record.fromAmount).toFixed(5)} ETH
+                        {(+record.fromAmount).toFixed(5)}
                     </>
                 )
             }
@@ -162,7 +162,7 @@ export const HistoryTable = () => {
             render: (record) => {
                 return (
                     <>
-                        {(+record.toAmount).toFixed(5)} VETH
+                        {(+record.toAmount).toFixed(5)}
                     </>
                 )
             }
