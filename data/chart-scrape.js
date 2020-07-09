@@ -75,7 +75,7 @@ const newArray2 = async () => {
     var vetherClaimed = 0
     var claimedArray = []
     for (var i = 1; i <= currentEra; i++) {
-        for (var j = 45; j < currentDay; j++) {
+        for (var j = 0; j < currentDay; j++) {
             const burntForDay = BN2Int(await contract.mapEraDay_Units(i, j))
             // const unclaimedUnits = BN2Int(await contract.mapEraDay_UnitsRemaining(i, j))
             //const emissionForDay = BN2Int(await contract.mapEraDay_Emission(i, j))
@@ -91,7 +91,7 @@ const newArray2 = async () => {
             totalsArray.push(totals)
             vetherArray.push(vetherEmitted)
             claimedArray.push(vetherClaimed)
-            // console.log(claimedArray)
+            console.log(j, burntForDay)
         }
     }
     const claimObject = {
