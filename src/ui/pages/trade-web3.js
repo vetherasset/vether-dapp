@@ -149,9 +149,10 @@ export const HistoryTable = () => {
             title: 'Token Amount',
             key: 'fromAmount',
             render: (record) => {
+                const symbol = record.fromSymbol === 'WETH' ? 'ETH' : 'VETH'
                 return (
                     <>
-                        {(+record.fromAmount).toFixed(5)}
+                        {(+record.fromAmount).toFixed(5)} {symbol}
                     </>
                 )
             }
@@ -160,9 +161,10 @@ export const HistoryTable = () => {
             title: 'Token Amount',
             key: 'toAmount',
             render: (record) => {
+                const symbol = record.toSymbol === 'WETH' ? 'ETH' : 'VETH'
                 return (
                     <>
-                        {(+record.toAmount).toFixed(5)}
+                        {(+record.toAmount).toFixed(5)} {symbol}
                     </>
                 )
             }
@@ -173,7 +175,7 @@ export const HistoryTable = () => {
             render: (record) => {
                 return (
                     <>
-                        <TimeAgo date={record.timestamp} />
+                        <TimeAgo live={false} date={record.timestamp} />
                     </>
                 )
             }
