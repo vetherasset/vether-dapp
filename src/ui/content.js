@@ -78,23 +78,23 @@ export const EmissionTable = () => {
 					<P>| &nbsp;11 | &nbsp;&nbsp;&nbsp;244 | &nbsp;2684 | &nbsp;&nbsp;7.2 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 | </P>
 					<P>| &nbsp;14 | &nbsp;&nbsp;1064 | 3,748 | &nbsp;10.0 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 | </P>
 					<P>-------------------------------------------</P>
-					<br/>
-					<P>|-----|---------|------------|---------|-------|</P>
-					<P>| Era | &nbsp;&nbsp;Total | Cumulative | Annual% | &nbsp;S2F* |</P>
-					<P>|-----|---------|------------|---------|-------|</P>
-					<P>| &nbsp;&nbsp;1 | 499,714 | &nbsp;&nbsp;&nbsp;499,714 | &nbsp;&nbsp;&nbsp;154% | &nbsp;&nbsp;&nbsp;&nbsp;1 |</P>
-					<P>| &nbsp;&nbsp;2 | 249,856 | &nbsp;&nbsp;&nbsp;749,568 | &nbsp;&nbsp;&nbsp;&nbsp;51% | &nbsp;&nbsp;&nbsp;&nbsp;2 |</P>
-					<P>| &nbsp;&nbsp;3 | 144,928 | &nbsp;&nbsp;&nbsp;874,496 | &nbsp;&nbsp;&nbsp;&nbsp;22% | &nbsp;&nbsp;&nbsp;&nbsp;5 |</P>
-					<P>| &nbsp;&nbsp;4 | &nbsp;62,464 | &nbsp;&nbsp;&nbsp;936,960 | &nbsp;&nbsp;&nbsp;&nbsp;10% | &nbsp;&nbsp;&nbsp;10 |</P>
-					<P>| &nbsp;&nbsp;5 | &nbsp;31,232 | &nbsp;&nbsp;&nbsp;968,192 | &nbsp;&nbsp;&nbsp;5.0% | &nbsp;&nbsp;&nbsp;20 |</P>
-					<P>| &nbsp;&nbsp;6 | &nbsp;15,616 | &nbsp;&nbsp;&nbsp;983,808 | &nbsp;&nbsp;&nbsp;2.4% | &nbsp;&nbsp;&nbsp;41 |</P>
-					<P>| &nbsp;&nbsp;7 | &nbsp;&nbsp;7,808 | &nbsp;&nbsp;&nbsp;991,616 | &nbsp;&nbsp;&nbsp;1.2% | &nbsp;&nbsp;&nbsp;83 |</P>
-					<P>| &nbsp;&nbsp;8 | &nbsp;&nbsp;3,904 | &nbsp;&nbsp;&nbsp;995,520 | &nbsp;&nbsp;&nbsp;0.6% | &nbsp;&nbsp;166 |</P>
-					<P>| &nbsp;&nbsp;9 | &nbsp;&nbsp;1,952 | &nbsp;&nbsp;&nbsp;997,472 | &nbsp;&nbsp;&nbsp;0.3% | &nbsp;&nbsp;333 |</P>
-					<P>| &nbsp;10 | &nbsp;&nbsp;&nbsp;&nbsp;976 | &nbsp;&nbsp;&nbsp;998,448 | &nbsp;&nbsp;&nbsp;0.2% | &nbsp;&nbsp;666 |</P>
-					<P>| &nbsp;11 | &nbsp;&nbsp;&nbsp;&nbsp;488 | &nbsp;&nbsp;&nbsp;998,936 | &nbsp;&nbsp;0.07% | 1,333 |</P>
-					<P>| &nbsp;14 | &nbsp;&nbsp;&nbsp;1064 | &nbsp;1,000,000 | &nbsp;&nbsp;0.04% | 2,670 |</P>
-					<P>-----------------------------------------------</P>
+					{/*<br/>*/}
+					{/*<P>|-----|---------|------------|---------|-------|</P>*/}
+					{/*<P>| Era | &nbsp;&nbsp;Total | Cumulative | Annual% | &nbsp;S2F* |</P>*/}
+					{/*<P>|-----|---------|------------|---------|-------|</P>*/}
+					{/*<P>| &nbsp;&nbsp;1 | 499,714 | &nbsp;&nbsp;&nbsp;499,714 | &nbsp;&nbsp;&nbsp;154% | &nbsp;&nbsp;&nbsp;&nbsp;1 |</P>*/}
+					{/*<P>| &nbsp;&nbsp;2 | 249,856 | &nbsp;&nbsp;&nbsp;749,568 | &nbsp;&nbsp;&nbsp;&nbsp;51% | &nbsp;&nbsp;&nbsp;&nbsp;2 |</P>*/}
+					{/*<P>| &nbsp;&nbsp;3 | 144,928 | &nbsp;&nbsp;&nbsp;874,496 | &nbsp;&nbsp;&nbsp;&nbsp;22% | &nbsp;&nbsp;&nbsp;&nbsp;5 |</P>*/}
+					{/*<P>| &nbsp;&nbsp;4 | &nbsp;62,464 | &nbsp;&nbsp;&nbsp;936,960 | &nbsp;&nbsp;&nbsp;&nbsp;10% | &nbsp;&nbsp;&nbsp;10 |</P>*/}
+					{/*<P>| &nbsp;&nbsp;5 | &nbsp;31,232 | &nbsp;&nbsp;&nbsp;968,192 | &nbsp;&nbsp;&nbsp;5.0% | &nbsp;&nbsp;&nbsp;20 |</P>*/}
+					{/*<P>| &nbsp;&nbsp;6 | &nbsp;15,616 | &nbsp;&nbsp;&nbsp;983,808 | &nbsp;&nbsp;&nbsp;2.4% | &nbsp;&nbsp;&nbsp;41 |</P>*/}
+					{/*<P>| &nbsp;&nbsp;7 | &nbsp;&nbsp;7,808 | &nbsp;&nbsp;&nbsp;991,616 | &nbsp;&nbsp;&nbsp;1.2% | &nbsp;&nbsp;&nbsp;83 |</P>*/}
+					{/*<P>| &nbsp;&nbsp;8 | &nbsp;&nbsp;3,904 | &nbsp;&nbsp;&nbsp;995,520 | &nbsp;&nbsp;&nbsp;0.6% | &nbsp;&nbsp;166 |</P>*/}
+					{/*<P>| &nbsp;&nbsp;9 | &nbsp;&nbsp;1,952 | &nbsp;&nbsp;&nbsp;997,472 | &nbsp;&nbsp;&nbsp;0.3% | &nbsp;&nbsp;333 |</P>*/}
+					{/*<P>| &nbsp;10 | &nbsp;&nbsp;&nbsp;&nbsp;976 | &nbsp;&nbsp;&nbsp;998,448 | &nbsp;&nbsp;&nbsp;0.2% | &nbsp;&nbsp;666 |</P>*/}
+					{/*<P>| &nbsp;11 | &nbsp;&nbsp;&nbsp;&nbsp;488 | &nbsp;&nbsp;&nbsp;998,936 | &nbsp;&nbsp;0.07% | 1,333 |</P>*/}
+					{/*<P>| &nbsp;14 | &nbsp;&nbsp;&nbsp;1064 | &nbsp;1,000,000 | &nbsp;&nbsp;0.04% | 2,670 |</P>*/}
+					{/*<P>-----------------------------------------------</P>*/}
 				</div>
 
 			</Breakpoint>

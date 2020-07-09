@@ -115,7 +115,8 @@ const Whitepaper = () => {
 			<h2>Appendix A - Emission Schedule</h2>
 			<p>The Emission Schedule is as follows:</p>
 
-			<EmissionTable /><br />
+			<EmissionTable />
+			<br />
 
 			<h2>Appendix B - Fee Era</h2>
 			<p style={{

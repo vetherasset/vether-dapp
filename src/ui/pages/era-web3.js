@@ -145,7 +145,7 @@ export const EraTable = (props) => {
                 </div>
             } */}
             {loaded &&
-                <div>
+                <>
                     <Row>
                         <Col xs={24} sm={8}>
                             {/* <Center> */}
@@ -292,7 +292,7 @@ export const EraTable = (props) => {
                             </Row>
                         </Col>
                     </Row> */}
-                </div>
+                </>
             }
         </div>
     )
