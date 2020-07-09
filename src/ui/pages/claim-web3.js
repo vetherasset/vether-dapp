@@ -107,7 +107,7 @@ export const ClaimTable = () => {
 		let options = []
 		let daysContributed = await contract_.methods.getDaysContributedForEra(account_, era).call()
 
-		for (let j = daysContributed-2; j >= 0; j--) {
+		for (let j = daysContributed-1; j >= 0; j--) {
 			let day = +(await contract_.methods.mapMemberEra_Days(account_, era, j).call())
 			if (era < +eraData_.era || (era >= +eraData_.era && day <= +eraData_.day)) {
 				const share = getBN(await contract_.methods.getEmissionShare(era, day, account_).call())
@@ -172,8 +172,8 @@ export const ClaimTable = () => {
 				</Col>
 				<Col xs={6} sm={4} style={{ marginLeft: 10, marginRight: 20 }}>
 					{daysLoaded
-						? <Select size={'large'} style={{ width: 183 }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
-						: <Select onDropdownVisibleChange={reloadDays} size={'large'} style={{ width: 183 }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
+						? <Select size={'large'} style={{ width: '100%' }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
+						: <Select onDropdownVisibleChange={reloadDays} size={'large'} style={{ width: '100%' }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
 					}
 				</Col>
 
