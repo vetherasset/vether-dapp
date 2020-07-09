@@ -5,7 +5,7 @@ import axios from 'axios'
 import Breakpoint from 'react-socks';
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, uniSwapAddr, infuraAPI } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo } from '../utils'
 import { getETHPrice } from '../../client/market.js'
 
@@ -70,10 +70,10 @@ const Stats = () => {
     const loadChartData = async () => {
 
         const apiKey = process.env.REACT_APP_ETHPLORER_API
-        const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/0x75572098dc462F976127f59F8c97dFa291f81d8b?apiKey='
+        const baseURL = 'https://api.ethplorer.io/getTopTokenHolders/'+vetherAddr()+'?apiKey='
         const response2 = await axios.get(baseURL + apiKey + '&limit=1000')
         let holderArray = response2.data
-        const baseURL2 = 'https://api.ethplorer.io/getTokenInfo/0x75572098dc462F976127f59F8c97dFa291f81d8b?apiKey='
+        const baseURL2 = 'https://api.ethplorer.io/getTokenInfo/'+vetherAddr()+'?apiKey='
         const response3 = await axios.get(baseURL2 + apiKey)
         let transfers = response3.data.transfersCount
 
@@ -99,7 +99,7 @@ const Stats = () => {
         let dailyPriceData = claimArray?.burns?.map(item => ((item * ethPrice) / 2048).toFixed(2))
         let totalPriceData = claimArray?.totals?.map((item, i) => ((item * ethPrice) / (claimArray?.vether[i])).toFixed(2))
 
-        const baseURL3 = 'https://api.blocklytics.org/pools/v0/liquidity/0x506D07722744E4A390CD7506a2Ba1A8157E63745/history?key='
+        const baseURL3 = 'https://api.blocklytics.org/pools/v0/liquidity/'+uniSwapAddr()+'/history?key='
         const response4 = await axios.get(baseURL3 + process.env.REACT_APP_BLOCKLYTICS_API)
         let uniswapData = response4.data
         let uniswapPrices = uniswapData.map((item) => ((item.eth_ending_balance / item.token_ending_balance) * ethPrice).toFixed(2))
@@ -272,9 +272,9 @@ const Stats = () => {
             <Row>
                 {!loadedPrice &&
                     <>
-                        <Col xs={24} lg={23} style={ChartStyles}>
-                            <LoadingOutlined style={loadingStyles} />
-                        </Col>
+                        {/*<Col xs={24} lg={23} style={ChartStyles}>*/}
+                        {/*    <LoadingOutlined style={loadingStyles} />*/}
+                        {/*</Col>*/}
                     </>
                 }
                 {loadedPrice &&

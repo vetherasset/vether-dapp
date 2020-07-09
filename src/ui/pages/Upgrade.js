@@ -7,7 +7,7 @@ import { convertFromWei, prettify, getSecondsToGo } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LabelGrey, Button, Colour, Click, Text } from '../components'
-import { LoadingOutlined, QuestionCircleOutlined, CheckCircleFilled, CheckOutlined } from '@ant-design/icons';
+import { LoadingOutlined, QuestionCircleOutlined, CheckCircleFilled, CheckOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 import '../../App.less';
 
@@ -22,7 +22,10 @@ const Upgrade = () => {
 
 	const [safari, setSafari] = useState(null)
 	const [enable, setEnable] = useState(false)
+	const [nowallet, setNowallet] = useState(false)
+
 	const [upgradeValid, setUpgradeValid] = useState(false)
+
 	const [vether1, setVether1] = useState(false)
 	const [unlocked, setUnlocked] = useState(null)
 	const [upgradeFlag, setUpgradeFlag] = useState(false)
@@ -57,6 +60,8 @@ const Upgrade = () => {
 			console.log(eraData)
 			await checkUpgradeValid(contract, address)
 			setEnable(true)
+		} else {
+			setNowallet(true)
 		}
 	}
 
@@ -188,14 +193,19 @@ const Upgrade = () => {
 	return (
 		<>
 			<h1>UPGRADE VETHER</h1>
-			{!enable &&
-				<LoadingOutlined />
+			{nowallet &&
+			<>
+				<span><InfoCircleOutlined /> In order to interact, open the app with wallet connected.</span>
+			</>
+			}
+			{!enable && !nowallet &&
+				<span><LoadingOutlined /></span>
 			}
 			{enable &&
 				<div>
 					{!upgradeValid &&
 						<>
-							<span><CheckCircleFilled/> You don't have any Vether to upgrade</span>
+							<span><CheckCircleFilled/> You don't have any Vether to upgrade.</span>
 						</>
 					}
 
@@ -325,7 +335,7 @@ const Upgrade = () => {
 						</Col>
 						<Col xs={24} sm={4}>
 							<Text size={32}>{prettify(ownership)}</Text>
-							<Tooltip placement="right" title="The amount of Vether this owner has in Vether3 to upgrade to.">
+							<Tooltip placement="right" title="The amount of Vether this owner has in Vether V3 to upgrade to.">
 								&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} /><br />
 							</Tooltip>
 							<LabelGrey>Total</LabelGrey>

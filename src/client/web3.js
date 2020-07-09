@@ -1,4 +1,5 @@
 import Web3 from 'web3'
+import WETHER from '../artifacts/Wether.json'
 import VETHER from '../artifacts/Vether3.json'
 import UNISWAP from '../artifacts/UniswapPair.json'
 import REGISTRY from '../artifacts/UniswapRegistry.json'
@@ -10,6 +11,14 @@ export const getEtherscanURL = () => {
         return "https://rinkeby.etherscan.io/"
     } else {
         return "https://etherscan.io/"
+    }
+}
+
+export const wetherAddr = () => {
+    if(TESTNET) {
+        return null
+    } else {
+        return '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
     }
 }
 
@@ -31,10 +40,14 @@ export const vetherAddr2 = () => {
 
 export const vetherAddr = () => {
     if(TESTNET) {
-        return '0x68BDD33B0185b3Bf97Da0DEeC0f6d8EF2525193F'
+        return '0xe4A4616b053affD80a3EaD0b15C30BbCD3872868'
     } else {
         return '0x4ba6ddd7b89ed838fed25d208d4f644106e34279'
     }
+}
+
+export const wetherAbi = () => {
+    return WETHER.abi
 }
 
 export const vetherAbi = () => {
@@ -56,9 +69,9 @@ export const getWeb3 = () => {
 
 export const uniSwapAddr = () => {
     if(TESTNET) {
-        return '0x8ccfbbcdeb7c9bb62e545a20a3b43b05a04e3682'
+        return null
     } else {
-        return '0x8ccfbbcdeb7c9bb62e545a20a3b43b05a04e3682'
+        return '0x3696fa5ad6e5c74fdcbced9af74379d94c4b775a'
     }
 }
 
@@ -68,7 +81,7 @@ export const uniSwapAbi = () => {
 
 export const registryAddr = () => {
     if(TESTNET) {
-        return '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
+        return null
     } else {
         return '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
     }
@@ -108,7 +121,8 @@ export const getExchangeAddr = async (token) =>{
 export const getUniswapDetails = async () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-    const ethBalance = convertFromWei(await web3.eth.getBalance(uniSwapAddr()))
+    const wrappedEther = new web3.eth.Contract(wetherAbi(), wetherAddr())
+    const ethBalance = convertFromWei(await wrappedEther.methods.balanceOf(uniSwapAddr()).call())
 	const vethBalance = convertFromWei(await contract.methods.balanceOf(uniSwapAddr()).call())
     return {"eth":ethBalance, "veth":vethBalance, address:uniSwapAddr()}
 }

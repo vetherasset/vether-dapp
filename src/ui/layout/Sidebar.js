@@ -10,9 +10,9 @@ const Sidebar = (props) => {
   const menu_items = [
     "overview",
     "acquire",
-    // "upgrade",
+    //"upgrade",
     // "stake",
-    // "trade",
+    "trade",
     "stats",
     "whitepaper"
   ]

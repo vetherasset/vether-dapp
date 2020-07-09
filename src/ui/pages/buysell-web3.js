@@ -14,13 +14,11 @@ export const PoolTable = () => {
 
     const context = useContext(Context)
 
+    const [connected, setConnected] = useState(false)
     const [account, setAccount] = useState(
         { address: '', vethBalance: '', ethBalance: '' })
 
-
     const [contract, setContract] = useState(null)
-    // const [customAmount, setCustomAmount] = useState(null)
-    const [approvalAmount, setApprovalAmount] = useState(null)
     const [approved, setApproved] = useState(null)
     const [approveFlag, setApproveFlag] = useState(null)
     const [ethTx, setEthTx] = useState(null)
@@ -43,21 +41,27 @@ export const PoolTable = () => {
 
     const connect = async () => {
         window.web3 = new Web3(window.ethereum);
-        const accounts = await window.web3.eth.getAccounts()
-        const address = accounts[0]
-        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-        const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-        context.accountData ? getAccountData() : loadAccountData(contract, address)
-        setContract(contract)
-        checkApproval(address)
-        //setWalletFlag(true)
-        // ethEnabled()
-        // if (!ethEnabled()) {
-        //     // alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
-        // } else {
-            
-        //     // loadBlockchainData()
-        // }
+        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        if(accountConnected) {
+            const accounts = await window.web3.eth.getAccounts()
+            const address = accounts[0]
+            const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+            const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+            context.accountData ? getAccountData() : loadAccountData(contract, address)
+            setContract(contract)
+            checkApproval(address)
+            //setWalletFlag(true)
+            // ethEnabled()
+            // if (!ethEnabled()) {
+            //     // alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
+            // } else {
+
+            //     // loadBlockchainData()
+            // }
+            setConnected(true)
+        } else {
+            setConnected(false)
+        }
     }
 
     // const ethEnabled = () => {
@@ -101,7 +105,6 @@ export const PoolTable = () => {
             const spender = uniSwapAddr()
             const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
             const vethBalance = await tokenContract.methods.balanceOf(address).call()
-            setApprovalAmount(approval)
             console.log(approval, vethBalance)
             if (+approval >= +vethBalance && +vethBalance > 0) {
                 setApproved(true)
@@ -151,7 +154,7 @@ export const PoolTable = () => {
         const deadline = (Math.round(((new Date()).getTime()) / 1000) + 1000).toString()
         console.log(tokens_sold, min_eth, deadline, fromAcc_, uniSwapAddr())
         // tokenToEthSwapInput(uint256 tokens_sold, uint256 min_eth, uint256 deadline)
-        const tx = await exchangeContract.methods.tokenToEthSwapInput(tokens_sold, min_eth, deadline).send({ from: fromAcc_ })
+        const tx = await exchangeContract.methods.swap(tokens_sold, min_eth, deadline).send({ from: fromAcc_ })
         setVethTx(tx.transactionHash)
         loadAccountData(contract, fromAcc_)
         // loadUniswapData()
@@ -163,67 +166,68 @@ export const PoolTable = () => {
     }
 
     return (
-        <div>
+        <>
             <Row style={{ marginTop: 40, marginBottom: 50 }}>
                 <Col xs={24} sm={24} xl={6}>
                 </Col>
-                <Col xs={24} sm={24} xl={6} style={{ marginLeft: 0, marginRight: 0, marginBottom: 30 }}>
-                    <Label>{prettify(account.ethBalance)}</Label>
-                    <br></br>
-                    <LabelGrey>Spendable ETH Balance</LabelGrey>
-                    <Input size={'large'} style={{ marginBottom: 10, paddingRight: 50 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
-                    <br></br>
-                    <Button
-                        backgroundColor="transparent"
-                        onClick={buyVether}
-                    >
-                        BUY VETH >>
-                    </Button>
-                    <Tooltip placement="right" title="This will buy Vether with your Ether">
-                        &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey,  margin: 0 }} />
-                    </Tooltip>
-                    <Sublabel>BUY VETHER WITH ETH</Sublabel>
-                    {buyFlag &&
-                        <div>
+                {connected &&
+                    <Col xs={24} sm={24} xl={6} style={{ marginLeft: 0, marginRight: 0, marginBottom: 30 }}>
+                        <Label>{prettify(account.ethBalance)}</Label>
+                        <br/>
+                        <LabelGrey>Spendable ETH Balance</LabelGrey>
+                        <Input size={'large'} style={{ marginBottom: 10, paddingRight: 50 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
+                        <br/>
+                        <Tooltip placement="left" title="This will buy Vether with your Ether">
+                            <QuestionCircleOutlined style={{ color: Colour().grey,  margin: 0 }} />&nbsp;
+                        </Tooltip>
+                        <Button
+                            backgroundColor="transparent"
+                            onClick={buyVether}
+                        >
+                            BUY VETH >>
+                        </Button>
+                        <Sublabel>BUY VETHER WITH ETH</Sublabel>
+                        {buyFlag &&
+                        <>
                             {!loadedBuy &&
-                                <LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+                            <LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
                             }
                             {loadedBuy &&
-                                <div>
-                                    <Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-                                </div>
+                            <>
+                                <Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+                            </>
                             }
-                        </div>
-                    }
-                </Col>
+                        </>
+                        }
+                    </Col>
+                }
 
                 <Col xs={24} sm={24} xl={6} style={{ marginLeft:0, marginRight: 0, textAlign:"right" }}>
-                    {!approved &&
+                    {approved &&
                         <Row>
                             <Col xs={24}>
-                                <Button
-                                    backgroundColor="transparent"
-                                    onClick={unlockToken}
-                                >
-                                    UNLOCK >
-                                </Button>
-                                <Tooltip placement="right" title="This will unlock your Vether">
-                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
-                                </Tooltip>
-                                <br></br>
-                                <Sublabel>Unlock Vether first</Sublabel>
-                                <br></br>
+                                {!approveFlag &&
+                                <>
+                                    {!approved &&
+                                        <div style={{ paddingTop: '102px' }}>
+                                            <Button
+                                                backgroundColor="transparent"
+                                                onClick={unlockToken}
+                                            >
+                                                UNLOCK >>
+                                            </Button>
+                                            <Tooltip placement="right" title="This will unlock your Vether">
+                                                &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
+                                            </Tooltip>
+                                            <Sublabel>UNLOCK VETHER FIRST</Sublabel>
+                                        </div>
+                                    }
+                                </>
+                                }
                                 {approveFlag &&
-                                    <div>
+                                    <div style={{ paddingTop: '102px' }}>>
                                         {!approved &&
-                                            <LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
-                                        }
-                                        {approved &&
-                                            <div>
-                                                <Sublabel>Approval</Sublabel>
-                                                <br></br>
-                                                <LabelGrey>{convertFromWei(approvalAmount)}</LabelGrey>
-                                            </div>
+                                            <LoadingOutlined />
                                         }
                                     </div>
                                 }
@@ -234,10 +238,10 @@ export const PoolTable = () => {
                         <Row>
                             <Col xs={24}>
                                 <Label>{prettify(account.vethBalance)}</Label>
-                                <br></br>
+                                <br/>
                                 <LabelGrey>Available VETH Balance</LabelGrey>
                                 <Input size={'large'} style={{ marginBottom: 10, paddingLeft: 50 }} allowClear onChange={onVethAmountChange} placeholder={prettify(account.vethBalance)} />
-                                <br></br>
+                                <br/>
                                 <Button
                                     backgroundColor="transparent"
                                     onClick={sellVether}
@@ -247,19 +251,18 @@ export const PoolTable = () => {
                                 <Tooltip placement="right" title="This will sell your Vether for Ether">
                                     &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
                                 </Tooltip>
-                                <br></br>
                                 <Sublabel>SELL VETHER FOR ETH</Sublabel>
                                 {sellFlag &&
-                                    <div>
+                                    <>
                                         {!loadedSell &&
-                                            <LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+                                            <LoadingOutlined />
                                         }
                                         {loadedSell &&
-                                            <div>
+                                            <>
                                                 <Click><a href={getLink(vethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-                                            </div>
+                                            </>
                                         }
-                                    </div>
+                                    </>
                                 }
                             </Col>
                         </Row>
@@ -268,6 +271,6 @@ export const PoolTable = () => {
                 <Col xs={24} sm={24} xl={6}>
                 </Col>
             </Row>
-        </div>
+        </>
     )
 }

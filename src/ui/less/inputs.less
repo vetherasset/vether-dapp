@@ -7,6 +7,7 @@
 .ant-input{
   caret-color: #D09800;
 }
+
 .ant-input:placeholder-shown{
   color: #000
 }
@@ -15,4 +16,57 @@
   border-color: #D09800;
   background: #D09800;
   caret-color: #D09800;
+}
+
+.ant-input-affix-wrapper .ant-input-prefix,
+.ant-input-affix-wrapper .ant-input-suffix {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.ant-select-selection {
+  border-color: #D09800;
+}
+
+.ant-select-selection-selected-value {
+  color: #D09800;
+}
+
+.ant-select-dropdown-menu-item {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.ant-select-dropdown-menu-item-selected {
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 600;
+  background-color: lighten(#D09800, 15%);
+}
+
+.ant-select-dropdown-menu-item-active:hover:not(.ant-select-dropdown-menu-item-disabled) {
+  background-color: #d09800;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.ant-select-dropdown-menu-item-active:not(.ant-select-dropdown-menu-item-disabled) {
+  background-color: lighten(#D09800, 3%);
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.ant-select-arrow {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.ant-input-number-disabled,
+.ant-input[disabled] {
+  color: rgba(255, 255, 255, 0.25);
+  background: #110D01;
+  border: 1px solid #ffffff45;
+}
+
+.ant-input[disabled]:hover {
+  border-color: #ffffff40;
+  border-right-width: 1px !important;
+}
+
+.ant-input[disabled]::placeholder {
+  color: rgba(255, 255, 255, 0.25);
 }

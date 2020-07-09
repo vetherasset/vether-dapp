@@ -71,9 +71,10 @@ export const Label = (props) => {
 
 export const LabelGrey = (props) => {
   let styles = {...props.style || {}}
-  styles.fontWeight = "bold"
-  styles.margin = "20px 0px"
 
+  if(props.display) {
+    styles.display = props.display
+  }
   if (props.margin) {
     styles.margin = props.margin
   }
@@ -234,7 +235,6 @@ export const Button = (props) => {
   let styles = {...props.style || {}}
   styles.height = "20px"
   styles.padding = "0px 0px"
-  styles.color = Colour().gold
   styles.display = "inline-block"
   styles.border = "none";
 

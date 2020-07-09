@@ -9,36 +9,35 @@ export const PoolCard = (props) => {
 
     const poolStyles = {
         borderWidth: '1px',
-        borderStyle: 'dashed',
-        borderRadius: 5,
-        borderColor: Colour().grey,
-        paddingLeft: 5,
-        paddingRight: 5,
-        marginBottom: 30,
-        backgroundColor: Colour('0.2').yellow,
+        borderStyle: 'solid',
+        borderRadius: 6,
+        borderColor: Colour().gold,
+        margin: '30px 0',
+        padding: '20px',
+        backgroundColor: Colour().black,
     }
     const lineStyle = {
         borderLeft: '1px dashed',
-        borderColor: Colour().grey,
+        borderColor: '#97948e47',
         paddingLeft: 5
     }
     return (
-        <div>
+        <>
             <Col xs={24} sm={24} xl={12} style={poolStyles}>
                 <Row>
                     <Col xs={12}>
-                        <Text size={20} bold={true} color={Colour().dgrey}>ETH</Text>
+                        <Text size={20} style={{textAlign: 'left', display: 'block', margin: '0'}}>ETH Ξ</Text>
                         <Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(props.uniswapData.eth)}</Text></Center>
                         <Center><Text margin={"5px 0px 30px"}>${prettify(props.marketData.ethPrice * props.uniswapData.eth)}</Text></Center>
                     </Col>
                     <Col xs={12} style={lineStyle}>
-                        <Text size={20} bold={true} color={Colour().dgrey}>VETH</Text>
+                        <Text size={20} style={{textAlign: 'left', display: 'block', margin: '0 0 0 15px'}}>$VETH</Text>
                         <Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(props.uniswapData.veth)}</Text></Center>
                         <Center><Text margin={"5px 0px 30px"}>${prettify(props.marketData.ethPrice * props.uniswapData.eth)}</Text></Center>
                     </Col>
                 </Row>
             </Col>
-        </div>
+        </>
     )
 }
 
@@ -154,12 +153,12 @@ export const BurnCard = (props) => {
                 <Row>
                     <Col xs={24} sm={12}>
                         <Center>
-                            <Text size={32}>{prettify(+props.eraData.currentBurn)} ETH</Text>
+                            <Text size={32} style={{ marginBottom: 0 }}>{prettify(+props.eraData.currentBurn)} ETH</Text>
                         </Center>
                     </Col>
                     <Col xs={24} sm={12}>
                         <Center>
-                            <Text size={32}>${prettify(convertEthtoUSD(props.eraData.currentBurn))}</Text>
+                            <Text size={32} style={{ marginBottom: 0 }}>${prettify(convertEthtoUSD(props.eraData.currentBurn))}</Text>
                         </Center>
                     </Col>
                 </Row>
@@ -177,7 +176,7 @@ export const BurnCard = (props) => {
                 </Row>
                 <Row>
                     <Center><LabelGrey margin={"0px 0px 10px"}>IMPLIED VALUE OF VETHER TODAY</LabelGrey></Center>
-                    <br></br>
+                    <br/>
                 </Row>
             </Col>
 
