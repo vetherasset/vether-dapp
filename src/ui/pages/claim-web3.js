@@ -7,6 +7,7 @@ import { convertFromWei, getSecondsToGo, getBN, prettify } from '../utils'
 import { Row, Col, Input, Select, Tooltip } from 'antd'
 import { QuestionCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Sublabel, Click, Button, Colour, LabelGrey } from '../components'
+import string from "less/lib/less/functions/string";
 
 export const ClaimTable = () => {
 
@@ -21,7 +22,7 @@ export const ClaimTable = () => {
 	const [daysAsOptions, setDaysAsOptions] = useState(null)
 	const [daysLoaded, setDaysLoaded] = useState(false)
 	const [userData, setUserData] = useState(
-		{ era: '1', day: '0' })
+		{ era: 1, day: 0 })
 
 	const [contract, setContract] = useState(null)
 	const [claimAmt, setClaimAmt] = useState(null)
@@ -164,6 +165,11 @@ export const ClaimTable = () => {
 		return getEtherscanURL().concat('tx/').concat(txHash)
 	}
 
+	console.log('+++++++++++++++++little change here +++++++++++++++++')
+	console.log(eraData.day)
+	console.log('+++++++++++++++++little change here 222 +++++++++++++++++')
+	console.log(userData.day)
+
 	return (
 		<>
 			<Row>
@@ -203,12 +209,16 @@ export const ClaimTable = () => {
 									</Tooltip>
 									</span>
 									<LabelGrey style={{ fontStyle: 'italic' }}>Your unclaimed Vether on this day.</LabelGrey>
-									{/*<p>Please wait for the day to finish first before claiming.</p>*/}
+									{String(userData.day) === String(eraData.day) &&
+									<>
+										<p>Please wait for the day to finish first before claiming.</p>
+									</>
+									}
 								</Col>
 							</>
 						}
 
-						{claimAmt > 0 &&
+						{claimAmt > 0 && String(userData.day) !== String(eraData.day) &&
 							<>
 								<Col xs={8} sm={6}>
 									<Button
