@@ -107,7 +107,7 @@ export const ClaimTable = () => {
 		let options = []
 		let daysContributed = await contract_.methods.getDaysContributedForEra(account_, era).call()
 
-		for (let j = daysContributed-1; j >= 0; j--) {
+		for (let j = daysContributed-2; j >= 0; j--) {
 			let day = +(await contract_.methods.mapMemberEra_Days(account_, era, j).call())
 			if (era < +eraData_.era || (era >= +eraData_.era && day <= +eraData_.day)) {
 				const share = getBN(await contract_.methods.getEmissionShare(era, day, account_).call())
