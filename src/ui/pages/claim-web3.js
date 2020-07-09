@@ -5,9 +5,8 @@ import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from 
 import { convertFromWei, getSecondsToGo, getBN, prettify } from '../utils'
 
 import { Row, Col, Input, Select, Tooltip } from 'antd'
-import { QuestionCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Sublabel, Click, Button, Colour, LabelGrey } from '../components'
-import string from "less/lib/less/functions/string";
+import { QuestionCircleOutlined, InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons'
+import { Sublabel, Button, Colour, LabelGrey } from '../components'
 
 export const ClaimTable = () => {
 
@@ -142,6 +141,7 @@ export const ClaimTable = () => {
 
 	const onDayChange = day => {
 		setUserData({ era: userData.era, day: day })
+		setCheckFlag(false)
 	}
 
 	const checkShare = async () => {
@@ -164,11 +164,6 @@ export const ClaimTable = () => {
 	const getLink = () => {
 		return getEtherscanURL().concat('tx/').concat(txHash)
 	}
-
-	console.log('+++++++++++++++++little change here +++++++++++++++++')
-	console.log(eraData.day)
-	console.log('+++++++++++++++++little change here 222 +++++++++++++++++')
-	console.log(userData.day)
 
 	return (
 		<>
@@ -228,22 +223,21 @@ export const ClaimTable = () => {
 									</Button>
 									<Sublabel>CLAIM VETHER</Sublabel>
 
-									{claimFlag &&
-									<>
-										{loaded &&
+									{claimFlag && !loaded &&
 										<>
-											<Click>
-												<a href={getLink()}rel="noopener noreferrer" title="Transaction Link"
-												   target="_blank" style={{
-													color: Colour().gold
-												   }}
-												>
-													VIEW TRANSACTION ->
-												</a>
-											</Click>
+											<LoadingOutlined/>
 										</>
-										}
-									</>
+									}
+									{claimFlag && loaded &&
+										<>
+											<a href={getLink()}rel="noopener noreferrer" title="Transaction Link"
+											   target="_blank" style={{
+												color: Colour().gold
+											}}
+											>
+												VIEW TRANSACTION ->
+											</a>
+										</>
 									}
 								</Col>
 							</>
