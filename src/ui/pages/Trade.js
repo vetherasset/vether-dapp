@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
-import { LabelGrey } from '../components'
-import {TradeTable, HistoryTable} from './trade-web3'
-//import {PoolTable} from './buysell-web3'
+import {Center, LabelGrey, Text} from '../components'
+import {PoolStats, TokenPrice, TradeHistory} from './trade-web3'
+import { SwapInterface } from './buysell-web3'
 
-import '../../App.less';
+import '../../App.less'
+import { Row, Col } from 'antd'
+import {prettify} from "../utils";
 
 const Trade = () => {
 
@@ -19,7 +21,7 @@ const Trade = () => {
 		<>
 			<h1>TRADE VETHER</h1>
 			<span>Buy and Sell from Uniswap Pool</span>
-			<TradeTable/>
+			<PoolStats />
 			{safari &&
 				<>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
@@ -28,10 +30,11 @@ const Trade = () => {
 			}
 			{!safari &&
 				<>
-					{/*<PoolTable />*/}
+					<TokenPrice />
+					<SwapInterface />
 				</>
 			}
-			<HistoryTable />
+			<TradeHistory />
 		</>
 	)
 }

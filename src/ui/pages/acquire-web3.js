@@ -7,7 +7,7 @@ import { convertFromWei, prettify } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import { LabelGrey, Click, Button, Sublabel, Colour, Text } from '../components'
+import { LabelGrey, Button, Sublabel, Colour, Text } from '../components'
 
 export const AcquireTable = () => {
 
@@ -134,10 +134,7 @@ export const AcquireTable = () => {
 						<>
 							{loaded &&
 								<>
-									<Click>
-										<a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a>
-									</Click>
-									<Sublabel>Refresh to update</Sublabel>
+									<a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold }}> VIEW TRANSACTION -> </a>
 								</>
 							}
 						</>

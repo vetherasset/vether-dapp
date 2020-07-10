@@ -2,46 +2,47 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 import Web3 from 'web3';
 
-import { Row, Col, Input, Tooltip } from 'antd'
-import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Label, LabelGrey, Sublabel, Button, Click, Colour } from '../components'
+import { Row, Col, Input } from 'antd'
+import { SwapOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Label, Sublabel, Button, Colour } from '../components'
 
-import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL, infuraAPI } from '../../client/web3.js'
-// import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, prettify, totalSupply } from '../utils'
+import { vetherAddr, vetherAbi, wetherAddr, uniSwapAddr, uniSwapAbi, uniSwapRouterAbi, uniSwapRouterAddr, getEtherscanURL,
+    infuraAPI } from '../../client/web3.js'
+import { prettify, totalSupply } from '../utils'
 
-export const PoolTable = () => {
+export const SwapInterface = () => {
 
     const context = useContext(Context)
 
     const [connected, setConnected] = useState(false)
     const [account, setAccount] = useState(
         { address: '', vethBalance: '', ethBalance: '' })
-
     const [contract, setContract] = useState(null)
+
     const [approved, setApproved] = useState(null)
     const [approveFlag, setApproveFlag] = useState(null)
+
     const [ethTx, setEthTx] = useState(null)
-    const [ethAmount, setEthAmount] = useState(null)
+    const [ethAmount, setEthAmount] = useState(0)
+
     const [vethTx, setVethTx] = useState(null)
-    const [vethAmount, setVethAmount] = useState(null)
+    const [vethAmount, setVethAmount] = useState(0)
 
     const [buyFlag, setBuyFlag] = useState(false)
     const [loadedBuy, setLoadedBuy] = useState(null)
     const [sellFlag, setSellFlag] = useState(false)
     const [loadedSell, setLoadedSell] = useState(null)
 
-    const ethBalanceSpendable = (account.ethBalance - 0.1).toFixed(4) < 0 ?
-        0 : (account.ethBalance - 0.1).toFixed(4)
+    const ethBalanceSpendable = (account.ethBalance - 0).toFixed(4) < 0 ?
+        0 : (account.ethBalance - 0).toFixed(4)
 
     useEffect(() => {
         connect()
         // eslint-disable-next-line
-    }, [])
+    })
 
     const connect = async () => {
-        window.web3 = new Web3(window.ethereum);
-        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected) {
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
@@ -50,28 +51,11 @@ export const PoolTable = () => {
             context.accountData ? getAccountData() : loadAccountData(contract, address)
             setContract(contract)
             checkApproval(address)
-            //setWalletFlag(true)
-            // ethEnabled()
-            // if (!ethEnabled()) {
-            //     // alert("Please install an Ethereum-compatible browser or extension like MetaMask to use this dApp");
-            // } else {
-
-            //     // loadBlockchainData()
-            // }
             setConnected(true)
         } else {
             setConnected(false)
         }
     }
-
-    // const ethEnabled = () => {
-    //     if (window.ethereum) {
-    //         window.web3 = new Web3(window.ethereum);
-    //         window.ethereum.enable();
-    //         return true;
-    //     }
-    //     return false;
-    // }
 
     const getAccountData = async () => {
         setAccount(context.accountData)
@@ -80,8 +64,8 @@ export const PoolTable = () => {
     const loadAccountData = async (contract_, address) => {
         const accountConnected = (await window.web3.eth.getAccounts())[0];
         if(accountConnected) {
-            var ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
-            const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
+            let ethBalance = Web3.utils.fromWei(await window.web3.eth.getBalance(address), 'ether')
+            const vethBalance = Web3.utils.fromWei(await contract_.methods.balanceOf(address).call(), 'ether')
             setAccount({
                 address: address,
                 vethBalance: vethBalance,
@@ -123,24 +107,24 @@ export const PoolTable = () => {
     }
 
     const onEthAmountChange = e => {
-        setEthAmount(e.target.value)
-        // setCustomAmount(e.target.value)
+        setEthAmount(e.target.value.toString())
     }
     const onVethAmountChange = e => {
-        setVethAmount(e.target.value)
-        // setCustomAmount(e.target.value)
+        setVethAmount(e.target.value.toString())
     }
 
     const buyVether = async () => {
         setLoadedBuy(false)
         setBuyFlag(true)
-        const fromAcc_ = account.address
-        const toAcc_ = uniSwapAddr() //getAccounts(1)
-        const amount_ = ethAmount * 1000000000000000000
-        const tx = await window.web3.eth.sendTransaction({ from: fromAcc_, to: toAcc_, value: amount_ })
+        const contract = new window.web3.eth.Contract(uniSwapRouterAbi(), uniSwapRouterAddr())
+        const amountIn = Web3.utils.toWei(ethAmount, 'ether')
+        const amountOutMin = 1
+        const path = [ vetherAddr(), wetherAddr() ]
+        const sender = account.address
+        const deadline = (((new Date())/1000)+1000).toFixed(0)
+        const tx = await contract.methods.swapExactTokensForETH(amountIn, amountOutMin, path, sender, deadline).send({ from:sender }) // 2do add block.timestamp
         setEthTx(tx.transactionHash)
-        loadAccountData(contract, fromAcc_)
-        // loadUniswapData()
+        loadAccountData(contract, sender)
         setLoadedBuy(true)
     }
 
@@ -149,7 +133,7 @@ export const PoolTable = () => {
         setSellFlag(true)
         const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
         const fromAcc_ = account.address
-        const tokens_sold = (vethAmount * 1000000000000000000).toString()
+        const tokens_sold = Web3.utils.toWei(vethAmount, 'ether').toString()
         const min_eth = (1).toString()
         const deadline = (Math.round(((new Date()).getTime()) / 1000) + 1000).toString()
         console.log(tokens_sold, min_eth, deadline, fromAcc_, uniSwapAddr())
@@ -167,19 +151,12 @@ export const PoolTable = () => {
 
     return (
         <>
-            <Row style={{ marginTop: 40, marginBottom: 50 }}>
-                <Col xs={24} sm={24} xl={6}>
-                </Col>
+            <Row type="flex" justify="center" align="middle">
                 {connected &&
-                    <Col xs={24} sm={24} xl={6} style={{ marginLeft: 0, marginRight: 0, marginBottom: 30 }}>
-                        <Label>{prettify(account.ethBalance)}</Label>
-                        <br/>
-                        <LabelGrey>Spendable ETH Balance</LabelGrey>
-                        <Input size={'large'} style={{ marginBottom: 10, paddingRight: 50 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
-                        <br/>
-                        <Tooltip placement="left" title="This will buy Vether with your Ether">
-                            <QuestionCircleOutlined style={{ color: Colour().grey,  margin: 0 }} />&nbsp;
-                        </Tooltip>
+                    <Col span={5}>
+                        <Label display="block" style={{ marginBottom: '0.55rem' }}>Buy</Label>
+                        {/*<Label>{prettify(account.ethBalance)}</Label>*/}
+                        <Input size={'large'} style={{ marginBottom: "1.3rem" }} onChange={onEthAmountChange} defaultValue="0" placeholder={ethBalanceSpendable} suffix="ETH Ξ" />
                         <Button
                             backgroundColor="transparent"
                             onClick={buyVether}
@@ -194,7 +171,7 @@ export const PoolTable = () => {
                             }
                             {loadedBuy &&
                             <>
-                                <Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+                                <a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a>
                             </>
                             }
                         </>
@@ -202,7 +179,11 @@ export const PoolTable = () => {
                     </Col>
                 }
 
-                <Col xs={24} sm={24} xl={6} style={{ marginLeft:0, marginRight: 0, textAlign:"right" }}>
+                <Col span={2} style={{ textAlign: 'center' }}>
+                    <SwapOutlined style={{ fontSize: '19px' }}/>
+                </Col>
+
+                <Col span={5} style={{ textAlign:"right" }}>
                     {approved &&
                         <Row>
                             <Col xs={24}>
@@ -216,9 +197,6 @@ export const PoolTable = () => {
                                             >
                                                 UNLOCK >>
                                             </Button>
-                                            <Tooltip placement="right" title="This will unlock your Vether">
-                                                &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
-                                            </Tooltip>
                                             <Sublabel>UNLOCK VETHER FIRST</Sublabel>
                                         </div>
                                     }
@@ -237,20 +215,15 @@ export const PoolTable = () => {
                     {approved &&
                         <Row>
                             <Col xs={24}>
-                                <Label>{prettify(account.vethBalance)}</Label>
-                                <br/>
-                                <LabelGrey>Available VETH Balance</LabelGrey>
-                                <Input size={'large'} style={{ marginBottom: 10, paddingLeft: 50 }} allowClear onChange={onVethAmountChange} placeholder={prettify(account.vethBalance)} />
-                                <br/>
+                                <Label display="block" style={{ marginBottom: '0.55rem' }}>Sell</Label>
+                                {/*<Label>{prettify(account.vethBalance)}</Label>*/}
+                                <Input size={'large'} style={{ marginBottom: '1.3rem' }} onChange={onVethAmountChange} defaultValue={prettify(account.vethBalance)} placeholder={prettify(account.vethBalance)} suffix="$VETH" />
                                 <Button
                                     backgroundColor="transparent"
                                     onClick={sellVether}
                                 >
-                                    &lt;&lt;SELL VETH
+                                    SELL VETH >>
                                 </Button>
-                                <Tooltip placement="right" title="This will sell your Vether for Ether">
-                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
-                                </Tooltip>
                                 <Sublabel>SELL VETHER FOR ETH</Sublabel>
                                 {sellFlag &&
                                     <>
@@ -259,7 +232,7 @@ export const PoolTable = () => {
                                         }
                                         {loadedSell &&
                                             <>
-                                                <Click><a href={getLink(vethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+                                                <a href={getLink(vethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a>
                                             </>
                                         }
                                     </>
@@ -267,8 +240,6 @@ export const PoolTable = () => {
                             </Col>
                         </Row>
                     }
-                </Col>
-                <Col xs={24} sm={24} xl={6}>
                 </Col>
             </Row>
         </>

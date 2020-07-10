@@ -53,9 +53,11 @@ export const Label = (props) => {
   styles.fontSize = "16px"
   styles.fontWeight = "bold"
   styles.color = Colour().white
-  styles.margin = "20px 0px"
 
-    if (props.margin) {
+  if (props.display) {
+    styles.display = props.display
+  }
+  if (props.margin) {
     styles.margin = props.margin
   }
   if (props.size) {
@@ -118,6 +120,9 @@ export const Text = (props) => {
   styles.fontSize = "14px"
   styles.color = Colour().white
 
+  if (props.display) {
+    styles.margin = props.display
+  }
   if (props.bold) {
     styles.fontWeight = "bold"
   }
@@ -130,6 +135,7 @@ export const Text = (props) => {
   if (props.margin) {
     styles.margin = props.margin
   }
+
   return (
     <span style={styles}>
       {props.children}
