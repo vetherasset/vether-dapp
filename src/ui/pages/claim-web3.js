@@ -5,7 +5,7 @@ import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from 
 import { convertFromWei, getSecondsToGo, getBN, prettify } from '../utils'
 
 import { Row, Col, Input, Select, Tooltip } from 'antd'
-import { QuestionCircleOutlined, InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons'
+import { QuestionCircleOutlined, InfoCircleOutlined, CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons'
 import { Sublabel, Button, Colour, LabelGrey } from '../components'
 
 export const ClaimTable = () => {
@@ -204,7 +204,7 @@ export const ClaimTable = () => {
 									</Tooltip>
 									</span>
 									<LabelGrey style={{ fontStyle: 'italic' }}>Your unclaimed Vether on this day.</LabelGrey>
-									{String(userData.day) === String(eraData.day) &&
+									{String(userData.day) === String(eraData.day) && !claimFlag && !loaded &&
 									<>
 										<p>Please wait for the day to finish first before claiming.</p>
 									</>
@@ -228,8 +228,26 @@ export const ClaimTable = () => {
 											<LoadingOutlined/>
 										</>
 									}
-									{claimFlag && loaded &&
+								</Col>
+							</>
+						}
+
+						{claimAmt <= 0 &&
+							<>
+								{!claimFlag && !loaded &&
+									<>
+										<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
+											<InfoCircleOutlined />&nbsp; Sorry, there's&nbsp;nothing to claim.
+										</LabelGrey>
+									</>
+								}
+								{claimFlag && loaded &&
+								<>
+									<Col xs={8} sm={8} style={{ marginLeft: 0, marginRight: 30 }}>
 										<>
+											<LabelGrey style={{ fontStyle: 'italic' }}>
+												<CheckCircleOutlined />&nbsp;Your share on this day has ben successfully claimed.
+											</LabelGrey>
 											<a href={getLink()}rel="noopener noreferrer" title="Transaction Link"
 											   target="_blank" style={{
 												color: Colour().gold
@@ -238,18 +256,13 @@ export const ClaimTable = () => {
 												VIEW TRANSACTION ->
 											</a>
 										</>
-									}
-								</Col>
+										}
+									</Col>
+								</>
+								}
 							</>
 						}
 
-						{claimAmt <= 0 &&
-							<>
-								<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
-									<InfoCircleOutlined />&nbsp; Sorry, there's&nbsp;nothing to claim.
-								</LabelGrey>
-							</>
-						}
 					</Row>
 				</>
 			}
