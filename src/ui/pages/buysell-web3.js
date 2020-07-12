@@ -152,8 +152,8 @@ export const SwapInterface = () => {
     }
 
     const buyVether = async () => {
-        setLoadedBuy(false)
         setBuyFlag(true)
+        setLoadedBuy(false)
         const uniswapRouter = new window.web3.eth.Contract(uniSwapRouterAbi(), uniSwapRouterAddr())
         const amountOutMin = 0
         const path = [ wetherAddr(), vetherAddr() ]
@@ -247,13 +247,10 @@ export const SwapInterface = () => {
                         </Col>
                     </Row>
 
-                    { (buyFlag || sellFlag) &&
+                    { buyFlag &&
                         <>
                             <Row type="flex" justify="center" >
-                                <Col span={6} style={{ textAlign: 'left' }}>
-                                    {!loadedBuy &&
-                                    <LoadingOutlined style={{ marginBottom: 0, float: 'left' }}/>
-                                    }
+                                <Col span={12} style={{ textAlign: 'left' }}>
                                     {loadedBuy &&
                                     <>
                                         <a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link"
@@ -261,19 +258,23 @@ export const SwapInterface = () => {
                                     </>
                                     }
                                 </Col>
-                                <Col span={6} style={{ textAlign: 'right' }}>
-                                    {!loadedSell &&
-                                    <LoadingOutlined style={{ marginBottom: 0, float: 'right' }}/>
-                                    }
-                                    {loadedSell &&
-                                    <>
-                                        <a href={getLink(vethTx)} rel="noopener noreferrer" title="Transaction Link"
-                                           target="_blank">VIEW TRANSACTION -></a>
-                                    </>
-                                    }
-                                </Col>
                             </Row>
                         </>
+                    }
+
+                    { sellFlag &&
+                    <>
+                        <Row type="flex" justify="center" >
+                            <Col span={12} style={{ textAlign: 'right' }}>
+                                {loadedSell &&
+                                <>
+                                    <a href={getLink(vethTx)} rel="noopener noreferrer" title="Transaction Link"
+                                       target="_blank">VIEW TRANSACTION -></a>
+                                </>
+                                }
+                            </Col>
+                        </Row>
+                    </>
                     }
                 </>
             }
