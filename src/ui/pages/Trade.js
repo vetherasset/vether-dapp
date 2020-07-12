@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
-import {Center, LabelGrey, Text} from '../components'
-import {PoolStats, TokenPrice, TradeHistory} from './trade-web3'
+import { PoolStats, TradeHistory} from './trade-web3'
 import { SwapInterface } from './buysell-web3'
+import { LabelGrey } from '../components'
 
 import '../../App.less'
-import { Row, Col } from 'antd'
-import {prettify} from "../utils";
 
 const Trade = () => {
 
@@ -30,7 +28,6 @@ const Trade = () => {
 			}
 			{!safari &&
 				<>
-					<TokenPrice />
 					<SwapInterface />
 				</>
 			}

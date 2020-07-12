@@ -4,14 +4,14 @@ import Web3 from 'web3'
 import axios from 'axios'
 import TimeAgo from 'react-timeago'
 
-import {Row, Col, Table, Tooltip} from 'antd'
-import {LoadingOutlined, QuestionCircleOutlined} from '@ant-design/icons';
-import {LabelGrey, Label, Colour, Text, Center} from '../components'
+import { Row, Col, Table } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons';
+import { Label, Colour, Text, Center } from '../components'
 
 import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth, getUniswapDetails } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
 
-import {prettify} from '../utils'
+import { prettify } from '../utils'
 
 export const PoolStats = () => {
 
@@ -106,65 +106,22 @@ export const PoolStats = () => {
             <Row type="flex" justify="center">
                 <Col span={12}>
                     <Label display="block" style={{ marginBottom: '1.33rem' }}>Pooled Tokens</Label>
-                        <div style={poolStyles}>
-                            <Row>
-                                <Col xs={12}>
-                                    <Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>$VETH</Text>
-                                    <Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(uniswapData.veth)}</Text></Center>
-                                    <Center><Text margin={"5px 0px 30px"}>${prettify(priceData.ethPrice * uniswapData.eth)}</Text></Center>
-                                </Col>
-                                <Col xs={12} style={lineStyle}>
-                                    <Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0 0 0 15px' }}>ETH Ξ</Text>
-                                    <Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(uniswapData.eth)}</Text></Center>
-                                    <Center><Text margin={"5px 0px 30px"}>${prettify(priceData.ethPrice * uniswapData.eth)}</Text></Center>
-                                </Col>
-                            </Row>
-                        </div>
+                    <div style={poolStyles}>
+                        <Row>
+                            <Col xs={12}>
+                                <Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>$VETH</Text>
+                                <Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(uniswapData.veth)}</Text></Center>
+                                <Center><Text margin={"5px 0px 30px"}>${prettify(priceData.ethPrice * uniswapData.eth)}</Text></Center>
+                            </Col>
+                            <Col xs={12} style={lineStyle}>
+                                <Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0 0 0 15px' }}>ETH Ξ</Text>
+                                <Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(uniswapData.eth)}</Text></Center>
+                                <Center><Text margin={"5px 0px 30px"}>${prettify(priceData.ethPrice * uniswapData.eth)}</Text></Center>
+                            </Col>
+                        </Row>
+                    </div>
                 </Col>
 			</Row>
-        </>
-    )
-}
-
-export const TokenPrice = () => {
-
-    useEffect(() => {
-        loadMarketData()
-    } )
-
-    const [price, setPrice] = useState({
-        vethEth: 0,
-        ethUsd: 0,
-        vethUsd: 0
-    })
-
-    const loadMarketData = async () => {
-        const priceVethEth = await getUniswapPriceEth()
-        const priceEthUsd = await getETHPrice()
-
-        setPrice({
-            vethEth: priceVethEth,
-            ethUsd: priceEthUsd,
-            vethUsd: (priceVethEth * priceEthUsd).toFixed(2)
-        })
-
-        console.log(priceVethEth)
-        console.log(priceEthUsd)
-
-    }
-
-    return (
-        <>
-            <Row type="flex" justify="center">
-                <Col span={12}>
-                    <div style={{ textAlign: 'center' }}><span style={{ fontSize: 30 }}>${price.vethUsd}</span>
-                        <Tooltip placement="right" title="Current market rate you get.">
-                            &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
-                        </Tooltip>
-                    </div>
-                    <div style={{ textAlign: 'center' }}><LabelGrey>{price.vethEth}&nbsp;Ξ</LabelGrey></div>
-                </Col>
-            </Row>
         </>
     )
 }

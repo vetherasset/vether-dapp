@@ -102,7 +102,7 @@ export const getUniswapPriceEth = async () => {
         valueEth = pool.reserve1/pool.reserve0
         valueEth = valueEth.toString()
         valueEth = valueEth.replace(regExp, '')
-        valueEth = Number(valueEth).toFixed(6)
+        valueEth = Number(valueEth).toFixed(5)
     } catch(err) {
         valueEth = 0.00
         console.log(err)
