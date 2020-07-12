@@ -488,7 +488,7 @@ export const ChartData = (props) =>{
                          }}
                     >
                         <LabelGrey size={props.size} color="#636362">Current Emission</LabelGrey><br />
-                        <Text size={1.25*props.size}>{eraData.emission} ETH</Text>
+                        <Text size={1.25*props.size}>{eraData.emission} VETH</Text>
                     </Col>
                     <Col xs={12}
                          style={{
