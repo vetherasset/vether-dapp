@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import WETHER from '../artifacts/Wether.json'
 import VETHER from '../artifacts/Vether3.json'
 import UNISWAP from '../artifacts/UniswapPair.json'
-import REGISTRY from '../artifacts/UniswapRegistry.json'
+import ROUTER from '../artifacts/Router.json'
 
 const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE') ? true : false
 
@@ -79,16 +79,16 @@ export const uniSwapAbi = () => {
 	return UNISWAP.abi
 }
 
-export const registryAddr = () => {
+export const uniSwapRouterAddr = () => {
     if(TESTNET) {
         return null
     } else {
-        return '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
+        return '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
     }
 }
 
-export const registryAbi = () => {
-	return REGISTRY.abi
+export const uniSwapRouterAbi = () => {
+	return ROUTER.abi
 }
 
 export const getUniswapPriceEth = async () => {
@@ -102,20 +102,12 @@ export const getUniswapPriceEth = async () => {
         valueEth = pool.reserve1/pool.reserve0
         valueEth = valueEth.toString()
         valueEth = valueEth.replace(regExp, '')
-        valueEth = Number(valueEth).toFixed(6)
+        valueEth = Number(valueEth).toFixed(5)
     } catch(err) {
         valueEth = 0.00
         console.log(err)
     }
     return (valueEth)
-}
-
-export const getExchangeAddr = async (token) =>{
-    const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-    const registry = new web3.eth.Contract(registryAbi(), registryAddr())
-    const exchange = await registry.methods.getExchange(token).call()
-    console.log(exchange, token)
-    return exchange
 }
 
 export const getUniswapDetails = async () => {
