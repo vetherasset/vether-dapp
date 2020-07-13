@@ -78,17 +78,17 @@ const Sidebar = (props) => {
           <ul style={{ listStyle: 'none', display: 'inline-flex' }}>
               <li>
                 <a href="https://discord.gg/c5aBC7Q" rel="noopener noreferrer" target="_blank">
-                  <img src={DiscordIcon} alt="Vether Discord Server Logo" style={{ maxWidth: '21px' }}/>
+                  <img src={DiscordIcon} alt="Vether Discord Server Logo" style={{ maxWidth: '16px' }}/>
                 </a>
               </li>
               <li style={{ marginLeft: '14px'}}>
                 <a href="https://t.me/vetherasset" rel="noopener noreferrer" target="_blank">
-                  <img src={TelegramIcon} alt="Vether Telegram Group Logo" style={{ maxWidth: '21px' }}/>
+                  <img src={TelegramIcon} alt="Vether Telegram Group Logo" style={{ maxWidth: '16px' }}/>
                 </a>
               </li>
               <li style={{ marginLeft: '14px'}}>
                 <a href="https://github.com/vetherasset" rel="noopener noreferrer" target="_blank">
-                  <img src={GithubIcon} alt="Vetherasset Github Logo" style={{ maxWidth: '21px' }}/>
+                  <img src={GithubIcon} alt="Vetherasset Github Logo" style={{ maxWidth: '16px' }}/>
                 </a>
               </li>
           </ul>
