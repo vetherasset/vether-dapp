@@ -27,14 +27,11 @@ export const PoolStats = () => {
         { "eth": "", "veth": '' })
 
     useEffect(() => {
-        context.priceData ? getPriceData() : loadPriceData()
-        context.uniswapData ? getUniswapData() : loadUniswapData()
+        loadPriceData()
+        loadUniswapData()
         //eslint-disable-next-line
-    })
+    }, [])
 
-    const getPriceData = () => {
-        setPriceData(context.priceData)
-    }
 
     const loadPriceData = async () => {
         const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
@@ -70,10 +67,6 @@ export const PoolStats = () => {
                 'ethPrice': (priceEtherUSD).toFixed(2)
             }
         })
-    }
-
-    const getUniswapData = () => {
-        setUniswapData(context.uniswapData)
     }
 
     const loadUniswapData = async () => {
