@@ -107,7 +107,7 @@ export const SwapInterface = () => {
             const spender = uniSwapRouterAddr()
             const approval = await vetherContract.methods.allowance(from, spender).call()
             const vethBalance = await vetherContract.methods.balanceOf(address).call()
-            if (+approval >= +vethBalance && +vethBalance > 0) {
+            if (+approval >= +vethBalance && +vethBalance >= 0) {
                 setApproved(true)
             } else {
                 setApproved(false)
