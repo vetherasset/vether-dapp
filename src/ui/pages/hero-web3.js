@@ -23,12 +23,10 @@ export const VetherTable = () => {
         { priceUSD: '', priceETH: '', ethPrice: '' })
 
     useEffect(() => {
-
         context.vetherData ? getVetherData() : loadVetherData()
-        context.emissionData ? getEmissionData() : loadEmissionData()
-        context.marketData ? getMarketData() : loadMarketData()
-        // setLoaded(true)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        loadEmissionData()
+        loadMarketData()
+        // eslint-disable-next-line
     }, [])
 
     const getVetherData = () => {
@@ -59,9 +57,6 @@ export const VetherTable = () => {
         })
     }
 
-    const getEmissionData = () => {
-        setEmissionData(context.emissionData)
-    }
     const loadEmissionData = async () => {
         const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
@@ -85,10 +80,7 @@ export const VetherTable = () => {
             }
         })
     }
-
-    const getMarketData = async () => {
-        setMarketData(context.marketData)
-    }
+    
     const loadMarketData = async () => {
         const priceEtherUSD = await getETHPrice()
         const priceVetherEth = await getUniswapPriceEth()

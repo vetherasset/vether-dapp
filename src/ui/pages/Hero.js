@@ -5,7 +5,6 @@ import { Abstract } from '../content'
 import { VetherTable } from './hero-web3'
 import Era from './Era'
 import Cards, { Links } from './Cards'
-// import thumbnail from '../../assets/video_thumbnail.png';
 
 import '../../App.less';
 
