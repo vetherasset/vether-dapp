@@ -248,7 +248,7 @@ export const ClaimTable = () => {
 											<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
 												<CheckCircleOutlined style={{ marginBottom: '0' }}/>&nbsp;Your share on this day has been successfully claimed.
 											</LabelGrey>
-											<a href={getLink()}rel="noopener noreferrer" title="Transaction Link"
+											<a href={getLink()} rel="noopener noreferrer" title="Transaction Link"
 											   target="_blank" style={{
 												color: Colour().gold
 											}}

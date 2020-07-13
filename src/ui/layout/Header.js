@@ -2,16 +2,16 @@ import React, { useEffect, useState, useContext } from 'react'
 import { Context } from '../../context'
 
 import { Link } from "react-router-dom";
-import { Menu, Layout, Row, Col, Drawer } from 'antd';
+import { Menu, Layout, Row, Col } from 'antd';
 import { Colour, Icon, WalletStateIndicator, WalletConnectButton, LabelGrey, Text } from '../components'
 import logotype from '../../assets/logotype.svg';
 
 import Web3 from 'web3'
 import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getUniswapPriceEth } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { prettify, convertFromWei } from '../utils'
+import { convertFromWei } from '../utils'
 
-import Breakpoint from 'react-socks';
+import Breakpoint from 'react-socks'
 
 const Header = () => {
 
@@ -216,25 +216,6 @@ const Header = () => {
                                     />
                                     {`${connected? getAddrShort() : 'Connect Wallet'}`}
                                 </WalletConnectButton>
-                                <Drawer
-                                    title="WALLET"
-                                    placement="right"
-                                    closable={false}
-                                    onClose={onClose}
-                                    visible={visible}
-                                    headerStyle={headerDrawerStyles}
-                                    drawerStyle={drawerStyles}
-                                >
-                                    <Text size={24}>{prettify(+accountData?.ethBalance)}</Text>&nbsp;<Text size={20}>ETH</Text><br/>
-                                    <LabelGrey >${prettify(+accountData?.ethBalance * +marketData?.ethPrice)}</LabelGrey>
-                                    <br/><br/>
-                                    <Text size={24}>{prettify(+accountData?.vethBalance)}</Text>&nbsp;<Text size={20}>VETH</Text><br/>
-                                    <LabelGrey >${prettify(+accountData?.vethBalance * +marketData?.priceUSD)}</LabelGrey>
-                                    <br/><br/>
-                                    <Text size={24}>{prettify(+accountData?.uniBalance)}</Text>&nbsp;<Text size={20}>UNI-V1</Text><br/>
-                                    <br/><br/>
-
-                                </Drawer>
                             </Col>
                         </Row>
                     </Breakpoint>
