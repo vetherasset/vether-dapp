@@ -3,12 +3,11 @@ import { Context } from '../../context'
 
 import { Link } from "react-router-dom";
 import { Menu, Layout, Row, Col } from 'antd';
-import { Colour, Icon, WalletStateIndicator, WalletConnectButton, LabelGrey, Text } from '../components'
+import { Colour, Icon, WalletStateIndicator, WalletConnectButton } from '../components'
 import logotype from '../../assets/logotype.svg';
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getUniswapPriceEth } from '../../client/web3.js'
-import { getETHPrice } from '../../client/market.js'
+import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr } from '../../client/web3.js'
 import { convertFromWei } from '../utils'
 
 import Breakpoint from 'react-socks'
@@ -22,11 +21,6 @@ const Header = () => {
 
     const [connected, setConnected] = useState(false)
     const [page, setPage] = useState(null)
-    const [visible, setVisible] = useState(false)
-    const [accountData, setAccountData] = useState(
-		{ address: '', vethBalance: '', ethBalance: '', uniBalance:'', uniSupply:'' })
-    const [marketData, setMarketData] = useState(
-		{ priceUSD: '', priceETH: '', ethPrice: '' })
 
     const menu_items = [
         "overview",
@@ -59,8 +53,7 @@ const Header = () => {
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
             const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-            context.accountData ? getAccountData() : await loadAccountData(contract, address)
-            context.marketData ? getMarketData() : loadMarketData()
+            if(!context.accountData) { await loadAccountData(contract, address) }
             setConnected(true)
         } else {
             setConnected(false)
@@ -89,10 +82,6 @@ const Header = () => {
 		return false;
 	}
 
-    const getAccountData = async () => {
-        setAccountData(context.accountData)
-    }
-
     const loadAccountData = async (contract_, address) => {
         const ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
 		const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
@@ -106,28 +95,7 @@ const Header = () => {
 			uniBalance: uniBalance,
 			uniSupply:uniSupply
 		}
-        setAccountData(accountData)
 		context.setContext({'accountData':accountData})
-	}
-
-    const getMarketData = async () => {
-		setMarketData(context.marketData)
-	}
-	const loadMarketData = async () => {
-		const priceEtherUSD = await getETHPrice()
-		const priceVetherEth = await getUniswapPriceEth()
-		const priceVetherUSD = priceEtherUSD * priceVetherEth
-
-		const marketData = {
-			priceUSD: priceVetherUSD,
-			priceETH: priceVetherEth,
-			ethPrice: priceEtherUSD
-		}
-
-		setMarketData(marketData)
-		context.setContext({
-			"marketData": marketData
-		})
 	}
 
     const logotypeStyles = {
@@ -170,27 +138,6 @@ const Header = () => {
     const getAddrShort = () => {
         const addr = (context.accountData?.address)? context.accountData.address : '0x000000000'
         return addr.substring(0,7) + '...' + addr?.substring(addr.length-5, addr.length)
-    }
-
-    // const showDrawer = () => {
-    //     setVisible(true);
-    // };
-
-    const onClose = () => {
-        setVisible(false);
-    };
-
-    const headerDrawerStyles = {
-        backgroundColor: Colour().black,
-        color: Colour().white,
-        height:66,
-        fontSize:'20px',
-    }
-
-    const drawerStyles = {
-        backgroundColor: Colour().black,
-        color: Colour().white,
-
     }
 
     return (

@@ -74,7 +74,7 @@ const Sidebar = (props) => {
             ))}
           </Menu>
         </Row>
-        <Row type="flex" span={24} style={{ width: '100%', justifyContent: 'center', paddingBottom: '14px' }} align="end">
+        <Row type="flex" span={24} style={{ width: '100%', justifyContent: 'center', paddingBottom: '14px' }}>
           <ul style={{ listStyle: 'none', display: 'inline-flex' }}>
               <li>
                 <a href="https://discord.gg/c5aBC7Q" rel="noopener noreferrer" target="_blank">
