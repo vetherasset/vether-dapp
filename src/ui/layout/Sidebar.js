@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom"
 import { Row, Menu, Layout } from 'antd'
+import Breakpoint from 'react-socks'
+
+import { FireFilled, MediumOutlined } from '@ant-design/icons';
 import { Text, Icon } from '../components'
 import DiscordIcon from '../../assets/discord.svg'
 import GithubIcon from '../../assets/github.svg'
 import TelegramIcon from '../../assets/telegram.svg'
-
-
-import Breakpoint from 'react-socks';
 
 const Sidebar = (props) => {
 
   const menu_items = [
     "overview",
     "acquire",
-    //"upgrade",
+    //"upgrade",F
     // "stake",
     "trade",
     "stats",
@@ -75,20 +75,34 @@ const Sidebar = (props) => {
           </Menu>
         </Row>
         <Row type="flex" span={24} style={{ width: '100%', justifyContent: 'center', paddingBottom: '14px' }}>
+          <ul style={{ listStyle: 'none', display: 'block', width: '100%', textAlign: 'left', padding: '0 0 0 14px', margin: 0 }}>
+            <li>
+              <Link to="/donations" style={{ fontSize: '14px', color: '#97948e' }}>
+                <FireFilled style={{ margin: 0, maxWidth: '16px', marginRight: '5px' }}/>
+                Donations
+              </Link>
+            </li>
+          </ul>
+          <hr style={{ width: '100%', margin: '0.9rem 0 1.2rem' }} />
           <ul style={{ listStyle: 'none', display: 'inline-flex' }}>
               <li>
                 <a href="https://discord.gg/c5aBC7Q" rel="noopener noreferrer" target="_blank">
-                  <img src={DiscordIcon} alt="Vether Discord Server Logo" style={{ maxWidth: '16px' }}/>
+                  <img src={DiscordIcon} alt="Vether Discord Server Logo" style={{ maxHeight: '16px' }}/>
                 </a>
               </li>
               <li style={{ marginLeft: '14px'}}>
                 <a href="https://t.me/vetherasset" rel="noopener noreferrer" target="_blank">
-                  <img src={TelegramIcon} alt="Vether Telegram Group Logo" style={{ maxWidth: '16px' }}/>
+                  <img src={TelegramIcon} alt="Vether Telegram Group Logo" style={{ maxHeight: '16px' }}/>
+                </a>
+              </li>
+              <li style={{ marginLeft: '14px'}}>
+                <a href="https://medium.com/vether-asset">
+                  <MediumOutlined style={{ margin: '5px 0 0 0', color: '#fff' }}/>
                 </a>
               </li>
               <li style={{ marginLeft: '14px'}}>
                 <a href="https://github.com/vetherasset" rel="noopener noreferrer" target="_blank">
-                  <img src={GithubIcon} alt="Vetherasset Github Logo" style={{ maxWidth: '16px' }}/>
+                  <img src={GithubIcon} alt="Vetherasset Github Logo" style={{ maxHeight: '16px' }}/>
                 </a>
               </li>
           </ul>
