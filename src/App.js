@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Layout } from 'antd';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import { Layout } from 'antd'
 import 'antd/dist/antd.less'
 
 import Header from './ui/layout/Header'
@@ -12,6 +12,7 @@ import Acquire from './ui/pages/Acquire'
 import Trade from './ui/pages/Trade'
 import Stats from './ui/pages/Stats'
 import Whitepaper from './ui/pages/Whitepaper'
+import Donations from './ui/pages/Donations'
 import { Colour } from './ui/components'
 
 import { ContextProvider } from './context'
@@ -40,6 +41,7 @@ const App = () => {
 									<Route path="/trade" exact component={Trade} />
 									<Route path="/stats" exact component={Stats} />
 									<Route path="/whitepaper" exact component={Whitepaper} />
+									<Route path="/donations" exact component={Donations} />*/}
 								</Switch>
 								<Footer/>
 							</div>
@@ -51,4 +53,4 @@ const App = () => {
 	);
 }
 
-export default App;
+export default App

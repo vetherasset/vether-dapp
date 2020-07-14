@@ -70,3 +70,21 @@
 .ant-input[disabled]::placeholder {
   color: rgba(255, 255, 255, 0.25);
 }
+
+.ant-radio-button-wrapper:first-child {
+  border-left: 1px solid #97948e;
+}
+
+.ant-radio-button-wrapper {
+  color: #97948e;
+  border: 1px solid #97948e;
+}
+
+.ant-radio-button-wrapper:not(:first-child)::before {
+  background-color: #000;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before {
+  background-color: #000 !important;
+  opacity: 1;
+}

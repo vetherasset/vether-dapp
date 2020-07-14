@@ -50,7 +50,7 @@ export const H2 = (props) => {
 
 export const Label = (props) => {
   let styles = {...props.style || {}}
-  styles.fontSize = "16px"
+  styles.fontSize = "1rem"
   styles.fontWeight = "bold"
   styles.color = Colour().white
 
