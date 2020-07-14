@@ -90,7 +90,7 @@ export const Donations = () => {
 
     return (
         <>
-            <h1>Donate Now</h1>
+            <h1>DONATE NOW</h1>
             <p>Support ongoing development by donating to developers.</p>
             <Row span={24}>
                 <Col xl={12}>
