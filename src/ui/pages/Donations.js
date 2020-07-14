@@ -43,15 +43,15 @@ export const Donations = () => {
     }
 
     const devs = [
-        // {
-        //     name: 'strictly_scarce',
-        //     address: 'noaddress',
-        //     about: 'Author, contract developer and deployer, dapp developer'
-        // },
+        {
+            name: 'strictly_scarce',
+            address: '0x109ab1440fCEEAdbb1c49fbD29f0d3eF653eD0ec',
+            about: 'Author, contract developer and deployer, dapp developer'
+        },
         {
             name: 'ylwghst',
             address: '0x05c111014A6FAFca2714CeE52e7f3a6c1c246073',
-            about: 'Dapp developer, front-end engineer, infrastructure maintainer'
+            about: 'Dapp developer, front-end dev, infrastructure maintainer'
         }
     ]
 
