@@ -3,104 +3,51 @@ import { Context } from '../../context'
 import axios from 'axios'
 
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getUniswapPriceEth, getUniswapDetails, getEtherscanURL } from '../../client/web3.js'
-import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, convertToWei, prettify, getBN, getBig } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import {
-	H2,
-	Text,
 	LabelGrey,
 	Label,
 	Click,
 	Button,
 	Sublabel,
 	Colour,
-	Center
 } from '../components'
-import { PoolCard, UniswapCard } from '../ui'
+import { UniswapCard } from '../ui'
 import Web3 from "web3";
 
-export const PoolTable = () => {
+export const StakingStats = () => {
 
 	const context = useContext(Context)
-
-	const [marketData, setMarketData] = useState(
-		{ priceUSD: '', priceETH: '', ethPrice: '' })
-	const [uniswapData, setUniswapData] = useState(
-		{ "eth": "", "veth": '' })
 
 	const [returns, setReturns] = useState(null)
 
 	useEffect(() => {
-		context.uniswapData ? getUniswapData() : loadUniswapData()
-		context.marketData ? getMarketData() : loadMarketData()
-		context.returnData ? getReturnData() : loadReturnData()
+		loadReturnData()
 		// eslint-disable-next-line
 	}, [])
 
-	const getUniswapData = () => {
-		setUniswapData(context.uniswapData)
-	}
-
-	const loadUniswapData = async () => {
-		const uniswapBal = await getUniswapDetails()
-		setUniswapData(uniswapBal)
-		context.setContext({
-			"uniswapData": uniswapBal
-		})
-	}
-
-	const getMarketData = async () => {
-		setMarketData(context.marketData)
-	}
-	const loadMarketData = async () => {
-		const priceEtherUSD = await getETHPrice()
-		const priceVetherEth = await getUniswapPriceEth()
-		const priceVetherUSD = priceEtherUSD * priceVetherEth
-
-		const marketData = {
-			priceUSD: priceVetherUSD,
-			priceETH: priceVetherEth,
-			ethPrice: priceEtherUSD
-		}
-
-		setMarketData(marketData)
-		context.setContext({
-			"marketData": marketData
-		})
-	}
-
-	const getReturnData = () => {
-		setReturns(context.returnData)
-	}
-
 	const loadReturnData = async () => {
-		const baseURL3 = 'https://api.blocklytics.org/uniswap/v1/returns/0x506D07722744E4A390CD7506a2Ba1A8157E63745?key='
-        const response4 = await axios.get(baseURL3 + process.env.REACT_APP_BLOCKLYTICS_API + '&period=14&daysBack=7')
-		let returnData = response4.data
-		console.log(returnData)
-		let returns = returnData.reduce((acc, item) => ((+acc + +item.D7_annualized)/2), 0)
-		console.log(returnData)
-		setReturns(returns)
-		context.setContext({'returnData':returns})
+		const baseURL3 = 'https://api.blocklytics.org/pools/v1/returns/' + uniSwapAddr() + '?key='
+		const response4 = await axios.get(baseURL3 + process.env.REACT_APP_BLOCKLYTICS_API + '&periods=1')
+		const returnData = response4.data
+		const roi = (returnData.results[0].roi)
+		const roiAnn = (((Math.pow((1+roi), (1))-1))*100)
+		setReturns(roiAnn)
+		context.setContext({'returnData':roiAnn})
 	}
 
 	return (
-		<div style={{marginTop: '2rem'}}>
-			<Center><Text size={30} margin={"10px 0px 0px"}>${prettify(marketData.priceUSD)}</Text></Center>
-			<Center><LabelGrey margin={"0px 0px 10px"}>VALUE OF 1 VETH</LabelGrey></Center>
-			<Center><Text size={30} margin={"0px 0px 0px"}>{prettify(returns)}%</Text></Center>
-			<Center><LabelGrey margin={"0px 0px 10px"}>CURRENT POOL ROI (ANNUALISED)</LabelGrey></Center>
-			<Row style={{ marginBottom: 50 }}>
-				<Col xs={24} sm={6}>
-				</Col>
-				<PoolCard uniswapData={uniswapData} marketData={marketData}/>
-				<Col xs={24} sm={6}>
-				</Col>
-			</Row>
-		</div>
+		<>
+			<div style={{ textAlign: 'center' }}><span style={{ fontSize: 30 }}>{returns}%</span>
+				<Tooltip placement="right" title="Represents actual value.">
+					&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
+				</Tooltip>
+			</div>
+			<LabelGrey style={{ display: 'block', marginBottom: 0, textAlign: 'center' }}>ROI&nbsp;annualized</LabelGrey>
+		</>
 	)
 }
 
@@ -113,7 +60,6 @@ export const StakeTable = () => {
 	const [uniswapData, setUniswapData] = useState(
 		{ "eth": "", "veth": '' })
 
-	const [loading, setLoading] = useState(true)
 
 
 	useEffect(() => {
@@ -128,7 +74,6 @@ export const StakeTable = () => {
 		const address = await accounts[0]
 		context.accountData ? await getAccountData() : await loadAccountData(address)
 		context.uniswapData ? await getUniswapData() : await loadUniswapData()
-		setLoading(false)
 	}
 
 	const getAccountData = () => {
@@ -170,34 +115,19 @@ export const StakeTable = () => {
 	}
 
 	return (
-		<div>
+		<>
 			<Row>
-				{/* <Col xs={24} sm={12}>
-					{!loading &&
-						<WalletCard accountData={account} />
-					}
-				</Col> */}
 				<Col xs={24} sm={13}>
-					{!loading &&
-						<UniswapCard accountData={account} uniswapData={uniswapData} />
-					}
+					<UniswapCard accountData={account} uniswapData={uniswapData} />
 				</Col>
 			</Row>
-
-			<H2>MANAGE LIQUIDITY</H2><br />
-			Add liquidity to the pool (ETH and VETH) to earn on trade fees<br />
-			<br />
-			{!loading &&
-				<AddLiquidityTable accountData={account} />
-			}
-			<hr />
-			<H2>REMOVE LIQUIDITY</H2><br />
-			Remove liquidity from the pool<br />
-			<br /><br />
-			{!loading &&
-				<RemoveLiquidityTable accountData={account} />
-			}
-		</div>
+			<h2>ADD LIQUIDITY</h2>
+			Add liquidity to the pool to earn on trade fees.<br />
+			<AddLiquidityTable accountData={account} />
+			<h2>REMOVE LIQUIDITY</h2>
+			Remove liquidity from the pool.<br />
+			<RemoveLiquidityTable accountData={account} />
+		</>
 
 	)
 }
@@ -213,7 +143,6 @@ export const AddLiquidityTable = (props) => {
 	const [ethAmount, setEthAmount] = useState(null)
 	const [vetherPrice, setVetherPrice] = useState(null)
 	const [loaded, setLoaded] = useState(null)
-	const [loading, setLoading] = useState(true)
 	const [approved, setApproved] = useState(null)
 	const [approveFlag, setApproveFlag] = useState(null)
 	const [customAmount, setCustomAmount] = useState(null)
@@ -236,7 +165,6 @@ export const AddLiquidityTable = (props) => {
 			setEthAmount(account.ethBalance - 0.01)
 			setCustomAmount(account.ethBalance * (1 / (vethPrice)))
 			checkApproval(account.address)
-			setLoading(false)
 		}
 	}
 
@@ -288,96 +216,92 @@ export const AddLiquidityTable = (props) => {
 	}
 
 	return (
-		<div>
-			{!loading &&
-				<div>
-					{(account.vethBalance === "0") &&
-						<Row>
-							<Col xs={12}>
-								<Sublabel>You need Vether to stake.</Sublabel>
+			<>
+				{(account.vethBalance === "0") &&
+				<Row>
+					<Col xs={12}>
+						<Sublabel>You need Vether to stake.</Sublabel>
+					</Col>
+				</Row>
+				}
+				{(!approved && (account.vethBalance > 0)) &&
+				<Row>
+					<Col xs={24}>
+						<Button
+							backgroundColor="transparent"
+							onClick={unlockToken}
+						>
+							UNLOCK >
+						</Button>
+						<Tooltip placement="right" title="This will unlock your Vether">
+							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+						</Tooltip>
+						<br></br>
+						<Sublabel>Unlock Vether first</Sublabel>
+						<br></br>
+						{approveFlag &&
+						<div>
+							{!approved &&
+							<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+							}
+							{approved &&
+							<div>
+								<Sublabel>Approval</Sublabel>
+								<br></br>
+								<LabelGrey>{convertFromWei(approvalAmount)}</LabelGrey>
+							</div>
+							}
+						</div>
+						}
+					</Col>
+				</Row>
+				}
+				<br></br>
+				{approved &&
+				<>
+					<Row>
+						{(account.vethBalance > 0) &&
+						<div>
+							<Col xs={4}>
+								<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
+								<br></br>
+								<Label>{prettify(customAmount)}</Label>
+								<br></br>
+								<LabelGrey>VETH required to stake</LabelGrey>
 							</Col>
-						</Row>
-					}
-					{(!approved && (account.vethBalance > 0)) &&
-						<Row>
-							<Col xs={24}>
+							<Col xs={8} style={{ marginLeft: 20 }}>
 								<Button
 									backgroundColor="transparent"
-									onClick={unlockToken}
-								>
-									UNLOCK >
+									onClick={addUniswap}
+								> ADD >>
 								</Button>
-								<Tooltip placement="right" title="This will unlock your Vether">
+								<Tooltip placement="right" title="This will add Ether and Vether to the pool. You can claim it back later.">
 									&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
 								</Tooltip>
 								<br></br>
-								<Sublabel>Unlock Vether first</Sublabel>
-								<br></br>
-								{approveFlag &&
+								<Sublabel>ADD LIQUIDITY TO UNISWAP</Sublabel>
+
+								{addEthFlag &&
+								<div>
+									{!loaded &&
+									<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+									}
+									{loaded &&
 									<div>
-										{!approved &&
-											<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
-										}
-										{approved &&
-											<div>
-												<Sublabel>Approval</Sublabel>
-												<br></br>
-												<LabelGrey>{convertFromWei(approvalAmount)}</LabelGrey>
-											</div>
-										}
+										<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+										<br></br>
+										<Sublabel>Refresh to update</Sublabel>
 									</div>
+									}
+								</div>
 								}
 							</Col>
-						</Row>
-					}
-					<br></br>
-					{approved &&
-						<>
-							<Row>
-								{(account.vethBalance > 0) &&
-									<div>
-										<Col xs={4}>
-											<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
-											<br></br>
-											<Label>{prettify(customAmount)}</Label>
-											<br></br>
-											<LabelGrey>VETH required to stake</LabelGrey>
-										</Col>
-										<Col xs={8} style={{ marginLeft: 20 }}>
-											<Button
-												backgroundColor="transparent"
-												onClick={addUniswap}
-											> ADD >>
-											</Button>
-											<Tooltip placement="right" title="This will add Ether and Vether to the pool. You can claim it back later.">
-												&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
-											</Tooltip>
-											<br></br>
-											<Sublabel>ADD LIQUIDITY TO UNISWAP</Sublabel>
-
-											{addEthFlag &&
-												<div>
-													{!loaded &&
-														<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
-													}
-													{loaded &&
-														<div>
-															<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-															<br></br>
-															<Sublabel>Refresh to update</Sublabel>
-														</div>
-													}
-												</div>
-											}
-										</Col>
-									</div>
-								}
-							</Row>
-						</>
-					}
-				</div>
-			}
-		</div>
+						</div>
+						}
+					</Row>
+				</>
+				}
+			</>
 	)
 }
 
@@ -423,51 +347,50 @@ export const RemoveLiquidityTable = (props) => {
 	}
 
 	return (
-		<div>
+		<>
 			{(account.uniBalance === "0") &&
-				<Row>
-					<Col xs={12}>
-						<Sublabel>You don't have a share of the pool.</Sublabel>
-					</Col>
-				</Row>
+			<Row>
+				<Col xs={12}>
+					<Sublabel>You don't have a share of the pool.</Sublabel>
+				</Col>
+			</Row>
 			}
 			{(account.uniBalance > 0) &&
-				<Row>
-					<div>
-						<Col xs={4}>
-							<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onAmountChange} placeholder={100} />
-							<br></br>
-							<Sublabel>Proportion to remove (%)</Sublabel>
-						</Col>
-						<Col xs={12} sm={7} style={{ paddingLeft: 20 }}>
-							<Button
-								backgroundColor="transparent"
-								onClick={removeLiquidity}
-							> REMOVE >>
-							</Button>
-							<Tooltip placement="right" title="This will claim back your assets.">
-								&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
-							</Tooltip>
-							<br></br>
-							<Sublabel>Remove liquidity from the pool.</Sublabel>
-							{burnTknFlag &&
-								<div>
-									{!loaded2 &&
-										<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
-									}
-									{loaded2 &&
-										<div>
-											<Click><a href={getLink(tknTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-											<br></br>
-											<Sublabel>Refresh to update</Sublabel>
-										</div>
-									}
-								</div>
+			<Row>
+				<>
+					<Col xs={4}>
+						<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onAmountChange} placeholder={100} />
+						<br/>
+						<Sublabel>Proportion to remove (%)</Sublabel>
+					</Col>
+					<Col xs={12} sm={7} style={{ paddingLeft: 20 }}>
+						<Button
+							backgroundColor="transparent"
+							onClick={removeLiquidity}
+						> REMOVE >>
+						</Button>
+						<Tooltip placement="right" title="This will claim back your assets.">
+							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+						</Tooltip>
+						<Sublabel>Remove liquidity from the pool.</Sublabel>
+						{burnTknFlag &&
+						<>
+							{!loaded2 &&
+							<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
 							}
-						</Col>
-					</div>
-				</Row>
+							{loaded2 &&
+							<>
+								<Click><a href={getLink(tknTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+								<br/>
+								<Sublabel>Refresh to update</Sublabel>
+							</>
+							}
+						</>
+						}
+					</Col>
+				</>
+			</Row>
 			}
-		</div>
+		</>
 	)
 }

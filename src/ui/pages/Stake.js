@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { LabelGrey } from '../components'
-import { PoolTable, StakeTable } from './stake-web3'
+import { StakingStats, StakeTable } from './stake-web3'
 
 import '../../App.less';
 
@@ -17,8 +17,8 @@ const Stake = () => {
 	return (
 		<>
 			<h1>VETHER LIQUIDITY POOL</h1>
-			<span>The Uniswap Liquidity Pool provides liquidity for Vether.</span>
-			<PoolTable/>
+			<span style={{ display: 'block' }}>The Uniswap Liquidity Pool provides liquidity for Vether.</span>
+			<StakingStats/>
 			<hr/>
 			{safari &&
 				<>
