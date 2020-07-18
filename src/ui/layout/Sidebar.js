@@ -76,7 +76,7 @@ const Sidebar = (props) => {
         <Row type="flex" span={24} style={{ width: '100%', justifyContent: 'center', paddingBottom: '14px' }}>
           <ul style={{ listStyle: 'none', display: 'block', width: '100%', textAlign: 'center', margin: '0 0 0 -9px' }}>
             <li>
-              <Link to="/donations" style={{ fontSize: '14px', color: '#97948e' }}>
+              <Link to="/donations" style={{ fontSize: '14px', color: '#97948e' }} onClick={() => handleClick({})}>
                 <FireFilled style={{ margin: 0, maxWidth: '16px', marginRight: '5px' }}/>
                 Donations
               </Link>
