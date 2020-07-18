@@ -178,9 +178,10 @@ export const TradeHistory = () => {
             title: 'Time',
             key: 'timestamp',
             render: (record) => {
+                const now = new Date(record.timestamp).toLocaleString()
                 return (
                     <>
-                        <TimeAgo live={false} date={record.timestamp} />
+                        <TimeAgo live={true} date={now} />
                     </>
                 )
             }
@@ -204,10 +205,10 @@ export const TradeHistory = () => {
     return(
         <>
             <h2>Trade History</h2>
-            {!loading && 
+            {!loading &&
                 <LoadingOutlined />
             }
-            {loading && 
+            {loading &&
                 <Table dataSource={tradeHistory} columns={columns} pagination={true} rowKey="id" />
             }
         </>
