@@ -6,23 +6,15 @@ import {
 	getUniswapPriceEth, getEtherscanURL, infuraAPI,
 } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, convertToWei, prettify, oneBN, BN2Str, getBN } from '../utils'
+import { convertFromWei, prettify, oneBN, BN2Str, getBN } from '../utils'
 import { calcShare } from '../math'
 
-import { Row, Col, Input, Tooltip } from 'antd'
-import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import {
-	H2,
-	Text,
-	LabelGrey,
-	Click,
-	Button,
-	Sublabel,
-	Colour,
-	Center
-} from '../components'
+import { Row, Col, Select, Input } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons';
+import { Text, LabelGrey, Button, Sublabel, Colour, Center, Label } from '../components'
 
 import Web3 from "web3";
+import {uniSwapRouterAddr} from "../../client/web3";
 
 export const PoolTable = () => {
 
@@ -113,7 +105,6 @@ export const PoolTable = () => {
 		<div style={{ marginTop: '2rem' }}>
 			<Row type="flex" justify="center">
 				<Col span={18}>
-					{/* <Label display="block" style={{ marginBottom: '1.33rem' }}>Pooled Tokens</Label> */}
 					<div style={poolStyles}>
 						<Row>
 							<Col xs={12}>
@@ -169,6 +160,8 @@ export const StakeTable = () => {
 			vetherShare: '', assetShare: '', roi: ''
 		})
 
+
+	const [connected, setConnected ] = useState(false)
 	const [loading, setLoading] = useState(true)
 
 
@@ -178,16 +171,15 @@ export const StakeTable = () => {
 	}, [])
 
 	const connect = async () => {
-		// setWalletFlag('TRUE')
-		window.web3 = new Web3(window.ethereum);
-		var accounts = await window.web3.eth.getAccounts()
-		const address = await accounts[0]
-		context.accountData ? await getAccountData() : await loadAccountData(address)
-		setLoading(false)
-	}
-
-	const getAccountData = () => {
-		setAccount(context.accountData)
+		const accountConnected = (await window.web3.eth.getAccounts())[0]
+		if(accountConnected) {
+			window.web3 = new Web3(window.ethereum);
+			var accounts = await window.web3.eth.getAccounts()
+			const address = await accounts[0]
+			await loadAccountData(address)
+			setConnected(true)
+			setLoading(false)
+		}
 	}
 
 	const loadAccountData = async (account) => {
@@ -226,35 +218,25 @@ export const StakeTable = () => {
 	}
 
 	return (
-		<div>
-			<Row>
-				{/* <Col xs={24} sm={12}>
-					{!loading &&
-						<WalletCard accountData={account} />
+		<>
+			<h2>ADD LIQUIDITY</h2>
+			{connected && loading &&
+				<LoadingOutlined style={{ mnarginBottom: 0 }} />
+			}
+			{connected && !loading &&
+				<AddLiquidityTable accountData={account}/>
+			}
+			{connected && !loading &&
+				<>
+					{!account.stakeUnits === "0" &&
+					<>
+						<hr />
+						<RemoveLiquidityTable accountData={account} />
+					</>
 					}
-				</Col> */}
-				<Col xs={24} sm={13}>
-					{/* {!loading &&
-						// <UniswapCard accountData={account} uniswapData={uniswapData} />
-					} */}
-				</Col>
-			</Row>
-
-			<H2>MANAGE LIQUIDITY</H2><br />
-			Add liquidity to the pool (ETH and VETH) to earn on trade fees<br />
-			<br />
-			{!loading &&
-				<AddLiquidityTable accountData={account} />
+				</>
 			}
-			<hr />
-			<H2>REMOVE LIQUIDITY</H2><br />
-			Remove liquidity from the pool<br />
-			<br /><br />
-			{!loading &&
-				<RemoveLiquidityTable accountData={account} />
-			}
-		</div>
-
+		</>
 	)
 }
 
@@ -264,19 +246,34 @@ export const AddLiquidityTable = (props) => {
 
 	const totalSupply = getBN(1000000 * 10 ** 18)
 
+	const assets = [
+		{
+			name: 'Vether',
+			symbol: '$VETH'
+		},
+		{
+			name: 'Ether',
+			symbol: 'Ξ'
+		}
+	]
+
+	const [asset0, setAsset0] = useState(null)
+	const [amount0, setAmount0] = useState(0)
+
+	const [asset1, setAsset1] = useState(null)
+	const [amount1, setAmount1] = useState(0)
+
 	const [stakeFlag, setStakeFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
-	const [ethAmount, setEthAmount] = useState(null)
 	const [vetherPrice, setVetherPrice] = useState(null)
-	const [loaded, setLoaded] = useState(null)
 	const [loading, setLoading] = useState(true)
-	const [approved, setApproved] = useState(null)
+	const [approved, setApproved] = useState(true)
 	const [approveFlag, setApproveFlag] = useState(null)
-	const [vethAmount, setVethAmount] = useState(null)
-	const [approvalAmount, setApprovalAmount] = useState(null)
 
-	const ethBalanceSpendable = (account.ethBalance - 0.1).toFixed(4) < 0 ?
-		0 : (account.ethBalance - 0.1).toFixed(4)
+	// const ethBalanceSpendable = (account.ethBalance - 0.1).toFixed(4) < 0 ?
+	// 	0 : (account.ethBalance - 0.1).toFixed(4)
+
+	const { Option } = Select
 
 	useEffect(() => {
 		connect()
@@ -285,29 +282,29 @@ export const AddLiquidityTable = (props) => {
 	}, [])
 
 	const connect = async () => {
-		// setWalletFlag('TRUE')
 		const vethPrice = await getUniswapPriceEth()
 		setVetherPrice(vethPrice)
-		if (account) {
-			setVethAmount(account.vethBalance)
-			setEthAmount(account.ethBalance - 0.01)
-			setVethAmount(account.vethBalance)
-			checkApproval(account.address)
+		const accountConnected = (await window.web3.eth.getAccounts())[0]
+		if (accountConnected) {
+			const accounts = await window.web3.eth.getAccounts()
+			const address = accounts[0]
+			checkApproval(address)
 			setLoading(false)
 		}
 	}
 
 	const checkApproval = async (address) => {
 		const accountConnected = (await window.web3.eth.getAccounts())[0];
-		if (accountConnected) {
-			const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-			const fromAcc = address
-			const spender = vetherPoolsAddr()
-			const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
-			const vethBalance = await tokenContract.methods.balanceOf(address).call()
-			setApprovalAmount(approval)
-			if (+approval >= +vethBalance && +vethBalance > 0) {
+		if (accountConnected){
+			const vetherContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+			const from = address
+			const spender = uniSwapRouterAddr()
+			const approval = await vetherContract.methods.allowance(from, spender).call()
+			const vethBalance = await vetherContract.methods.balanceOf(address).call()
+			if (+approval >= +vethBalance && +vethBalance >= 0) {
 				setApproved(true)
+			} else {
+				setApproved(false)
 			}
 		}
 	}
@@ -324,147 +321,149 @@ export const AddLiquidityTable = (props) => {
 
 	const stake = async () => {
 		const fromAcc = account.address
-		const amountVeth = (convertToWei(vethAmount)).toString()
-		const amountEth = (convertToWei(ethAmount)).toString()
+		let amountVeth
+		let amountEth
+		if (amount0.name === 'Vether') {
+			amountVeth = amount0
+			amountEth = amount1
+		} else {
+			amountVeth = amount1
+			amountEth = amount0
+		}
 		setStakeFlag('TRUE')
+		console.log(stakeFlag)
 		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
 		const tx = await poolContract.methods.stake(amountVeth, amountEth, ETH).send({ value: amountEth, from: fromAcc })
 		setEthTx(tx.transactionHash)
-		setLoaded(true)
+		console.log(ethTx)
 	}
 
-	const onEthAmountChange = e => {
-		setEthAmount(e.target.value)
-	}
-	const onVethAmountChange = e => {
-		setVethAmount(e.target.value)
+	const onAssetChange = (value) => {
+		setAsset0(assets[value])
+		addAnotherAsset(value)
 	}
 
-	const getLink = (tx) => {
-		return getEtherscanURL().concat('tx/').concat(tx)
+	const addAnotherAsset = (value) => {
+		if(value === 0) {
+			setAsset1(assets[1])
+		} else {
+			setAsset1(assets[0])
+		}
 	}
+
+	const onAsset0amountChange = e => {
+		setAmount0(e.target.value)
+		console.log(amount0)
+	}
+
+	const onAsset1amountChange = e => {
+		setAmount1(e.target.value)
+		console.log(amount1)
+	}
+
+	// const getLink = (tx) => {
+	// 	return getEtherscanURL().concat('tx/').concat(tx)
+	// }
 
 	return (
-		<div>
-			{!loading &&
-				<div>
-					{(account.vethBalance === "0") &&
-						<Row>
-							<Col xs={12}>
-								<Sublabel>You need Vether to stake.</Sublabel>
-							</Col>
-						</Row>
+		<>
+			<h2 style={{ fontStyle: 'italic' }}>Select asset to provide.</h2>
+			<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Select an asset you would like to provide. Vether pool is non-proportional. Unlike Uniswap, where you need to provide<br/>
+			an equal proportion of both tokens, Vether pools allow you to provide liquidity in unequal proportions.</LabelGrey>
+
+			<Row style={{ marginBottom: '1.33rem' }}>
+				<Col span={4}>
+					<Label display="block" style={{marginBottom: '0.55rem'}}>Asset</Label>
+					<Select size={'large'} placeholder="Select" onChange={onAssetChange} style={{ width: 135 }}>
+						{assets.map((asset, index) => {
+							return(
+								<Option value={index} key={index}>{asset.name}</Option>
+							)
+						})}
+					</Select>
+				</Col>
+				<Col span={5}>
+					<Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
+					{asset0
+						? <Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset0amountChange} value={amount0} suffix={asset0.symbol}/>
+						: <Input size={'large'} style={{ marginBottom: 10 }} disabled/>
 					}
-					{(!approved && (account.vethBalance > 0)) &&
+				</Col>
+			</Row>
+
+			{asset1 &&
+				<>
+					<h2 style={{ fontStyle: 'italic' }}>Would you like to stake {asset1.name} as well?</h2>
+					<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You may provide both tokens in just one transaction, whilst this is not required.<br/>
+					If you don't want to add {asset1.name} just leave following amount at 0.</LabelGrey>
+					<Row style={{ marginBottom: '1.33rem' }}>
+						<Col span={5}>
+							<Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
+							<Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset1amountChange} value={amount1} suffix={asset1.symbol}/>
+						</Col>
+					</Row>
+
+					{amount0 > 0
+						? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
+						: <Button backgroundColor="transparent" disabled>ADD >></Button>
+					}
+					<Sublabel>ADD LIQUIDITY TO THE POOL</Sublabel>
+				</>
+			}
+
+			{!loading &&
+				<>
+					{!approved &&
 						<Row>
 							<Col xs={24}>
-								<Button
-									backgroundColor="transparent"
-									onClick={unlockToken}
-								>
-									UNLOCK >
-								</Button>
-								<Tooltip placement="right" title="This will unlock your Vether">
-									&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
-								</Tooltip>
-								<br></br>
-								<Sublabel>Unlock Vether first</Sublabel>
-								<br></br>
+								<Button backgroundColor="transparent" onClick={unlockToken}>UNLOCK >></Button>
+								<Sublabel>APPROVE VETHER FIRST</Sublabel>
 								{approveFlag &&
-									<div>
+									<>
 										{!approved &&
-											<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+											<LoadingOutlined style={{ marginBottom: 0 }} />
 										}
-										{approved &&
-											<div>
-												<Sublabel>Approval</Sublabel>
-												<br></br>
-												<LabelGrey>{convertFromWei(approvalAmount)}</LabelGrey>
-											</div>
-										}
-									</div>
+									</>
 								}
 							</Col>
 						</Row>
 					}
-					<br></br>
-					{approved &&
+
+					{approved && account.stakeUnits > 0 &&
 						<>
+							<hr/>
+							<h2>BALANCE</h2>
 							<Row>
-								{(account.vethBalance > 0) &&
-									<div>
-										<Row>
-											<Col xs={12}>
-												<Row>
-													<Col xs={24}>
-														<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
-														<br></br>
-														<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onVethAmountChange} placeholder={account.vethBalance} />
-														<br></br>
-													</Col>
-													<Col xs={24} style={{ paddingLeft: 20 }}>
-														<Button
-															backgroundColor="transparent"
-															onClick={stake}
-														> ADD >>
-											</Button>
-														<Tooltip placement="right" title="This will add Ether and Vether to the pool. You can claim it back later.">
-															&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
-														</Tooltip>
-														<br></br>
-														<Sublabel>Add liquidity to the pool</Sublabel>
-
-														{stakeFlag &&
-															<div>
-																{!loaded &&
-																	<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
-																}
-																{loaded &&
-																	<div>
-																		<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-																		<br></br>
-																		<Sublabel>Refresh to update</Sublabel>
-																	</div>
-																}
-															</div>
-														}
-													</Col>
-
-												</Row>
-											</Col>
-											<Col xs={12}>
-												<Row>
-													<Col xs={8} style={{ paddingLeft: 20 }}>
-														<span><h6>Asset Share</h6><h3>{prettify(account.assetShare)}</h3></span>
-													</Col>
-													<Col xs={8} style={{ paddingLeft: 20 }}>
-														<span><h6>Vether Share</h6><h3>{prettify(account.vetherShare)}</h3></span>
-													</Col>
-													<Col xs={8} style={{ paddingLeft: 20 }}>
-														<span><h6>Units</h6><h3>{prettify(account.stakeUnits)}</h3></span>
-													</Col>
-												</Row>
-												<Row>
-													<Col xs={8} style={{ paddingLeft: 20 }}>
-														<span><h6>Asset Staked</h6><h3>{prettify(account.assetStaked)}</h3></span>
-													</Col>
-													<Col xs={8} style={{ paddingLeft: 20 }}>
-														<span><h6>Vether Staked</h6><h3>{prettify(account.vetherStaked)}</h3></span>
-													</Col>
-													<Col xs={8} style={{ paddingLeft: 20 }}>
-														<span><h6>ROI</h6><h3>{prettify(account.roi)}</h3></span>
-													</Col>
-												</Row>
-											</Col>
-										</Row>
-									</div>
-								}
+								<Col span={24}>
+									<Row>
+										<Col xs={8}>
+											<span><h6>Asset Share</h6><h3>{prettify(account.assetShare)}</h3></span>
+										</Col>
+										<Col xs={8}>
+											<span><h6>Vether Share</h6><h3>{prettify(account.vetherShare)}</h3></span>
+										</Col>
+										<Col xs={8}>
+											<span><h6>Units</h6><h3>{prettify(account.stakeUnits)}</h3></span>
+										</Col>
+									</Row>
+									<Row>
+										<Col xs={8}>
+											<span><h6>Asset Staked</h6><h3>{prettify(account.assetStaked)}</h3></span>
+										</Col>
+										<Col xs={8}>
+											<span><h6>Vether Staked</h6><h3>{prettify(account.vetherStaked)}</h3></span>
+										</Col>
+										<Col xs={8}>
+											<span><h6>ROI</h6><h3>{prettify(account.roi)}</h3></span>
+										</Col>
+									</Row>
+								</Col>
 							</Row>
 						</>
 					}
-				</div>
+				</>
 			}
-		</div>
+		</>
 	)
 }
 
@@ -476,7 +475,6 @@ export const RemoveLiquidityTable = (props) => {
 	const [tknTx, setTknTx] = useState(null)
 	const [loaded2, setLoaded2] = useState(null)
 	const [unstakeAmount, setUnstakeAmount] = useState('10000')
-	// const [unstakeUnits, setUnstakeUnits] = useState('0')
 
 	useEffect(() => {
 		console.log(account.stakeUnits)
@@ -513,52 +511,39 @@ export const RemoveLiquidityTable = (props) => {
 	// }
 
 	return (
-		<div>
-			{(account.stakeUnits === "0") &&
-				<Row>
-					<Col xs={12}>
-						<Sublabel>You don't have a share of the pool.</Sublabel>
-					</Col>
-				</Row>
-			}
+		<>
+			<h2>REMOVE LIQUIDITY</h2>
+			<p>Remove your assets from the pool.</p>
 			{(account.stakeUnits > 0) &&
-				<div>
+				<>
 					<Row>
-						<Col xs={12}>
-							<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onAmountChange} placeholder={100} />
-							<br></br>
-							<Sublabel>Proportion to remove (%)</Sublabel>
+						<Col xs={2}>
+							<Label display="block" style={{marginBottom: '0.55rem'}}>Proportion</Label>
+							<Input size={'large'} style={{ marginBottom: 10 }} onChange={onAmountChange} placeholder={100} suffix={'%'}/>
 						</Col>
-						<Col xs={12} sm={7} style={{ paddingLeft: 20 }}>
-							<Button
-								backgroundColor="transparent"
-								onClick={unstake}
-							> REMOVE >>
-							</Button>
-							<Tooltip placement="right" title="This will claim back your assets.">
-								&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
-							</Tooltip>
-							<br></br>
-							<Sublabel>Remove liquidity from the pool.</Sublabel>
+						<Col xs={12} sm={7} style={{ paddingLeft: 20, paddingTop: 30 }}>
+							{unstakeAmount > 0
+								? <Button backgroundColor="transparent" onClick={unstake}>REMOVE >></Button>
+								: <Button backgroundColor="transparent" disabled>REMOVE >></Button>
+							}
+							<Sublabel margin={0}>REMOVE LIQUIDITY FROM THE POOL</Sublabel>
 							{burnTknFlag &&
-								<div>
+								<>
 									{!loaded2 &&
 										<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
 									}
 									{loaded2 &&
-										<div>
-											<Click><a href={getLink(tknTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-											<br></br>
-											<Sublabel>Refresh to update</Sublabel>
-										</div>
+										<>
+											<a href={getLink(tknTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>VIEW TRANSACTION -></a>
+										</>
 									}
-								</div>
+								</>
 							}
 						</Col>
 					</Row>
-					
-				</div>
+
+				</>
 			}
-		</div>
+		</>
 	)
 }

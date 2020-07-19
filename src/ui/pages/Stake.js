@@ -24,8 +24,8 @@ const Stake = () => {
 
 	return (
 		<>
-			<h1>VETHER LIQUIDITY POOL</h1>
-			<span>Try out Vether Pools V0.1 below.</span>
+			<h1>LIQUIDITY POOL</h1>
+			<p>Try out the beta version of Vether liquidity pool.</p>
 			<PoolTable />
 			{safari &&
 				<>
@@ -34,7 +34,7 @@ const Stake = () => {
 				</>
 			}
 			{!safari &&
-				<div>
+				<>
 					<Tabs defaultActiveKey='1' activeKey={tab} onChange={onChange} size={'large'} style={{ marginTop: 20, textAlign: "center" }}>
 						<TabPane tab="STAKE" key="1" style={{ textAlign: "left" }}>
 
@@ -48,7 +48,7 @@ const Stake = () => {
 
 						</TabPane>
 					</Tabs>
-				</div>
+				</>
 			}
 		</>
 	)

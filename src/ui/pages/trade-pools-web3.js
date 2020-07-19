@@ -217,6 +217,8 @@ export const SwapPoolsInterface = () => {
 
     return (
         <>
+            <h2>TRADE VETHER</h2>
+            <p>Buy and Sell from the pool.</p>
             {connected && approved &&
                 <>
                     {/* <Row type="flex" justify="center">
@@ -231,35 +233,39 @@ export const SwapPoolsInterface = () => {
                         </Col>
                     </Row> */}
 
-                    <Row type="flex" justify="center" align="middle">
-                        <Col span={8}>
-                            <Label display="block" style={{marginBottom: '0.55rem'}}>Buy</Label>
-                            {/*<Label>{prettify(account.ethBalance)}</Label>*/}
-                            <Input size={'large'} style={{marginBottom: "1.3rem"}} onChange={onEthAmountChange} value={ethAmount}
-                                   placeholder={ethAmountCalculated} suffix="ETH Ξ"/>
-                            {ethAmount > 0
-                                ? <Button backgroundColor="transparent" onClick={buyVether}>BUY VETH >></Button>
-                                : <Button backgroundColor="transparent" disabled>BUY VETH >></Button>
-                            }
-                            <Sublabel>BUY VETHER WITH ETH</Sublabel>
-                        </Col>
-
-                        <Col span={3} style={{textAlign: 'center'}}>
-                            <SwapOutlined style={{fontSize: '19px'}}/>
-                        </Col>
-
-                        <Col span={8} style={{textAlign: "right"}}>
-                            <Row>
-                                <Col xs={24}>
-                                    <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>
-                                    {/*<Label>{prettify(account.vethBalance)}</Label>*/}
-                                    <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
-                                           placeholder={vethAmountCalculated} suffix="$VETH"/>
-                                    {vethAmount > 0
-                                        ? <Button backgroundColor="transparent" onClick={sellVether}>&lt;&lt;SELL VETH</Button>
-                                        : <Button backgroundColor="transparent" disabled>&lt;&lt;SELL VETH</Button>
+                    <Row type="flex" justify="center">
+                        <Col span={18}>
+                            <Row type="flex" justify="center" align="middle">
+                                <Col span={8}>
+                                    <Label display="block" style={{marginBottom: '0.55rem'}}>Buy</Label>
+                                    {/*<Label>{prettify(account.ethBalance)}</Label>*/}
+                                    <Input size={'large'} style={{marginBottom: "1.3rem"}} onChange={onEthAmountChange} value={ethAmount}
+                                           placeholder={ethAmountCalculated} suffix="ETH Ξ"/>
+                                    {ethAmount > 0
+                                        ? <Button backgroundColor="transparent" onClick={buyVether}>BUY VETH >></Button>
+                                        : <Button backgroundColor="transparent" disabled>BUY VETH >></Button>
                                     }
-                                    <Sublabel>SELL VETHER FOR ETH</Sublabel>
+                                    <Sublabel>BUY VETHER WITH ETH</Sublabel>
+                                </Col>
+
+                                <Col span={3} style={{textAlign: 'center'}}>
+                                    <SwapOutlined style={{fontSize: '19px'}}/>
+                                </Col>
+
+                                <Col span={8} style={{textAlign: "right"}}>
+                                    <Row>
+                                        <Col xs={24}>
+                                            <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>
+                                            {/*<Label>{prettify(account.vethBalance)}</Label>*/}
+                                            <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
+                                                   placeholder={vethAmountCalculated} suffix="$VETH"/>
+                                            {vethAmount > 0
+                                                ? <Button backgroundColor="transparent" onClick={sellVether}>&lt;&lt;SELL VETH</Button>
+                                                : <Button backgroundColor="transparent" disabled>&lt;&lt;SELL VETH</Button>
+                                            }
+                                            <Sublabel>SELL VETHER FOR ETH</Sublabel>
+                                        </Col>
+                                    </Row>
                                 </Col>
                             </Row>
                         </Col>

@@ -1,8 +1,9 @@
-import React from 'react';
+import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { Layout } from 'antd'
 import 'antd/dist/antd.less'
 
+import Notification from './ui/layout/Notification'
 import Header from './ui/layout/Header'
 import Footer from './ui/layout/Footer'
 import Sidebar from './ui/layout/Sidebar'
@@ -17,16 +18,28 @@ import { Colour } from './ui/components'
 
 import { ContextProvider } from './context'
 
-import { BreakpointProvider } from 'react-socks';
+import { BreakpointProvider } from 'react-socks'
 
-const { Content } = Layout;
+const { Content } = Layout
 
 const App = () => {
+
+	const betaWarning = () => { return  (
+			<>
+				This functionality is early beta version, so there is a <b>risk involved</b>.
+			</>
+		)
+	}
 
 	return (
 		<Router>
 			<ContextProvider>
 				<BreakpointProvider>
+					<Switch>
+						<Route path="/stake">
+							<Notification message={betaWarning()} pathname={'stake'}/>
+						</Route>
+					</Switch>
 					<Header/>
 					<main>
 						<Sidebar />

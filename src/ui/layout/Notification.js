@@ -1,12 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-import {Row} from 'antd';
+import '../less/notification.less'
+import {Row} from 'antd'
 
 const Notification = (props) => {
 
+    const pathname = window.location.pathname.split("/")[1]
+
+    useEffect(() => {
+        if  (props.pathname === pathname) {
+            document.getElementById('root').classList.add('notification-on')
+        }
+        return () => {
+            document.getElementById('root').classList.remove('notification-on')
+        }
+    }, [])
+
     return (
         <Row id="notification">
-            <b>Vether 4</b> has been distributed to previous owners.
+            {props.message}
         </Row>
     )
 }
