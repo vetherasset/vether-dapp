@@ -6,7 +6,7 @@ import {
 	getUniswapPriceEth, getEtherscanURL, infuraAPI,
 } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, convertToWei, prettify, oneBN, getBN } from '../utils'
+import { convertFromWei, convertToWei, prettify, oneBN, BN2Str, getBN } from '../utils'
 import { calcShare } from '../math'
 
 import { Row, Col, Input, Tooltip } from 'antd'
@@ -36,7 +36,6 @@ export const PoolTable = () => {
 	useEffect(() => {
 		context.poolData ? getPoolData() : loadPoolData()
 		context.marketData ? getMarketData() : loadMarketData()
-		console.log(marketData)
 		// eslint-disable-next-line
 	}, [])
 
@@ -46,10 +45,10 @@ export const PoolTable = () => {
 	}
 
 	const loadPoolData = async () => {
-		const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-		const poolContract = new web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+		const poolContract = new web3_.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
 		let poolData = await poolContract.methods.poolData(ETH).call()
-		let price = await poolContract.methods.calcValueInAsset(oneBN, ETH).call()
+		let price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
 		let roi = await poolContract.methods.getPoolROI(ETH).call()
 		const poolData_ = {
 			"eth": convertFromWei(poolData.asset),
@@ -60,12 +59,11 @@ export const PoolTable = () => {
 			"txCount": poolData.txCount,
 			"roi": (+roi / 100) - 100
 		}
-		console.log({ poolData_ })
+		console.log(poolData_)
 		setPoolData(poolData_)
 		context.setContext({
 			"poolData": poolData_
 		})
-		console.log(poolData_)
 	}
 
 	const getMarketData = async () => {
@@ -200,7 +198,7 @@ export const StakeTable = () => {
 			const ethBalance = convertFromWei(await web3.eth.getBalance(account))
 			const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
 
-			const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+			const poolContract = new web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
 			let stakeData = await poolContract.methods.getMemberStakeData(account, ETH).call()
 
 			let poolData = await poolContract.methods.poolData(ETH).call()
@@ -302,8 +300,7 @@ export const AddLiquidityTable = (props) => {
 	const checkApproval = async (address) => {
 		const accountConnected = (await window.web3.eth.getAccounts())[0];
 		if (accountConnected) {
-			const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-			const tokenContract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+			const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 			const fromAcc = address
 			const spender = vetherPoolsAddr()
 			const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
@@ -317,8 +314,7 @@ export const AddLiquidityTable = (props) => {
 
 	const unlockToken = async () => {
 		setApproveFlag(true)
-		const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-		const tokenContract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+		const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		const fromAcc = account.address
 		const spender = vetherPoolsAddr()
 		const value = totalSupply.toString()
@@ -331,8 +327,7 @@ export const AddLiquidityTable = (props) => {
 		const amountVeth = (convertToWei(vethAmount)).toString()
 		const amountEth = (convertToWei(ethAmount)).toString()
 		setStakeFlag('TRUE')
-		const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-		const poolContract = new web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
 		const tx = await poolContract.methods.stake(amountVeth, amountEth, ETH).send({ value: amountEth, from: fromAcc })
 		setEthTx(tx.transactionHash)
 		setLoaded(true)
@@ -501,8 +496,7 @@ export const RemoveLiquidityTable = (props) => {
 
 	const unstake = async () => {
 		setBurnTknFlag(true)
-		const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-		const poolContract = new web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
 		console.log(unstakeAmount, ETH)
 		const tx = await poolContract.methods.unstake(unstakeAmount, ETH).send({ from: account.address })
 		setTknTx(tx.transactionHash)
