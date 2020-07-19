@@ -26,7 +26,7 @@ const App = () => {
 
 	const betaWarning = () => { return  (
 			<>
-				This functionality is early beta version, so there is a <b>risk involved</b>.
+				This feature is early beta version, so there is a <b>risk involved</b>.
 			</>
 		)
 	}
