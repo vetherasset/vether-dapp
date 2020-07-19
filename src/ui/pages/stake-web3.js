@@ -220,7 +220,7 @@ export const StakeTable = () => {
 	return (
 		<>
 			<h2>ADD LIQUIDITY</h2>
-			{connected && loading &&
+			{loading &&
 				<LoadingOutlined style={{ mnarginBottom: 0 }} />
 			}
 			{connected && !loading &&
