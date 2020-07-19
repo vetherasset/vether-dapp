@@ -120,26 +120,26 @@ export const PoolTable = () => {
 						</Row>
 						<Row>
 							<Col>
-								<Center><Text size={12} style={{ textAlign: 'center', display: 'block', margin: '10px 0px 0px 0px' }}>PRICE</Text></Center>
-								<Center><Text size={18} color={Colour().white} margin={"5px 0px 5px 0px"}>${prettify(poolData.price * marketData.ethPrice)}</Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '10px 0px 0px 0px' }}>PRICE</Text></Center>
+								<Center><Text size={'size: 1.7rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>${prettify(poolData.price * marketData.ethPrice)}</Text></Center>
 							</Col>
 						</Row>
 						<Row style={topLineStyle}>
 							<Col xs={6}>
-								<Center><Text size={12} style={{ textAlign: 'center', display: 'block', margin: '0' }}>VOL (VETH)</Text></Center>
-								<Center><Text size={18} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.volume)}</Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>VOL ($VETH)</Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.volume)}</Text></Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={12} style={{ textAlign: 'center', display: 'block', margin: '0' }}>FEES (VETH)</Text></Center>
-								<Center><Text size={18} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.fees)}</Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>FEES ($VETH)</Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.fees)}</Text></Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={12} style={{ textAlign: 'center', display: 'block', margin: '0' }}>TX COUNT</Text></Center>
-								<Center><Text size={18} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.txCount)}</Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>TX COUNT</Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.txCount)}</Text></Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={12} style={{ textAlign: 'center', display: 'block', margin: '0' }}>ROI</Text></Center>
-								<Center><Text size={18} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.roi)}%</Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>ROI</Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.roi)}%</Text></Center>
 							</Col>
 						</Row>
 					</div>
