@@ -1,5 +1,8 @@
 import BigNumber from 'bignumber.js'
 
+export const one = 1 * 10 ** 18;
+export const oneBN = new BigNumber(1 * 10 ** 18)
+
 export function getBN(BN){
     return (new BigNumber(BN)).toFixed()
 }

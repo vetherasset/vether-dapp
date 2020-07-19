@@ -25,7 +25,7 @@ const Header = () => {
     const menu_items = [
         "overview",
         "acquire",
-        //"stake",
+        "stake",
         "trade",
         "stats",
         "whitepaper"
@@ -86,8 +86,8 @@ const Header = () => {
         const ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
 		const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
 		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-		const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(address).call())
-		const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
+		const uniBalance = 0 //convertFromWei(await exchangeContract.methods.balanceOf(address).call())
+		const uniSupply = 0 //convertFromWei(await exchangeContract.methods.totalSupply().call())
 		const accountData = {
 			address: address,
 			vethBalance: vethBalance,
