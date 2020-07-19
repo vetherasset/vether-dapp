@@ -36,8 +36,6 @@ export const PoolTable = () => {
 	useEffect(() => {
 		context.poolData ? getPoolData() : loadPoolData()
 		context.marketData ? getMarketData() : loadMarketData()
-		console.log(marketData)
-		console.log(poolData)
 		// eslint-disable-next-line
 	}, [])
 
