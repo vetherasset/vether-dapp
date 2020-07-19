@@ -83,7 +83,8 @@ const Sidebar = (props) => {
             ))}
           </Menu>
         </Row>
-        <Row type="flex" span={24} style={{ width: '100%', justifyContent: 'center', paddingBottom: '14px' }}>
+
+        <Row className="sidebar-footer" type="flex" span={24} style={{ width: '100%', justifyContent: 'center', paddingBottom: '14px' }}>
           <ul style={{ listStyle: 'none', display: 'block', width: '100%', textAlign: 'center', margin: '0 0 0 -9px' }}>
             <li>
               <Link to="/donations" style={{ fontSize: '14px', color: '#97948e' }} onClick={() => handleClick({})}>
