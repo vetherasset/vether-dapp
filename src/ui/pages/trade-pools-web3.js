@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 import Web3 from 'web3'
 
-import {Row, Col, Input, Tooltip} from 'antd'
-import {SwapOutlined, LoadingOutlined, QuestionCircleOutlined} from '@ant-design/icons';
-import {Label, Sublabel, Button, Colour, LabelGrey} from '../components'
+import {Row, Col, Input} from 'antd'
+import {SwapOutlined, LoadingOutlined} from '@ant-design/icons';
+import {Label, Sublabel, Button, } from '../components'
 
 import { ETH, vetherAddr, vetherAbi, vetherPoolsAddr, vetherPoolsAbi, getEtherscanURL,
     infuraAPI, getUniswapPriceEth } from '../../client/web3.js'

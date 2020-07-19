@@ -15,7 +15,6 @@ import {
 	H2,
 	Text,
 	LabelGrey,
-	Label,
 	Click,
 	Button,
 	Sublabel,
@@ -37,6 +36,7 @@ export const PoolTable = () => {
 	useEffect(() => {
 		context.poolData ? getPoolData() : loadPoolData()
 		context.marketData ? getMarketData() : loadMarketData()
+		console.log(marketData)
 		// eslint-disable-next-line
 	}, [])
 
@@ -165,7 +165,7 @@ export const StakeTable = () => {
 	const [account, setAccount] = useState(
 		{
 			address: '', vethBalance: '', ethBalance: '',
-			stakeUnits: '', vetherStaked: '', vetherStaked: '',
+			stakeUnits: '', vetherStaked: '', assetStaked: '',
 			vetherShare: '', assetShare: '', roi: ''
 		})
 
@@ -279,6 +279,7 @@ export const AddLiquidityTable = (props) => {
 
 	useEffect(() => {
 		connect()
+		console.log(vetherPrice)
 		// eslint-disable-next-line
 	}, [])
 
@@ -474,7 +475,7 @@ export const RemoveLiquidityTable = (props) => {
 	const [tknTx, setTknTx] = useState(null)
 	const [loaded2, setLoaded2] = useState(null)
 	const [unstakeAmount, setUnstakeAmount] = useState('10000')
-	const [unstakeUnits, setUnstakeUnits] = useState('0')
+	// const [unstakeUnits, setUnstakeUnits] = useState('0')
 
 	useEffect(() => {
 		console.log(account.stakeUnits)
@@ -488,9 +489,9 @@ export const RemoveLiquidityTable = (props) => {
 	const onAmountChange = e => {
 		setUnstakeAmount(e.target.value * 100)
 	}
-	const onUnitsChange = e => {
-		setUnstakeUnits(convertToWei(e.target.value))
-	}
+	// const onUnitsChange = e => {
+	// 	setUnstakeUnits(convertToWei(e.target.value))
+	// }
 
 	const unstake = async () => {
 		setBurnTknFlag(true)
@@ -501,14 +502,14 @@ export const RemoveLiquidityTable = (props) => {
 		setLoaded2(true)
 	}
 
-	const unstakeExact = async () => {
-		setBurnTknFlag(true)
-		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
-		console.log(unstakeUnits, ETH)
-		const tx = await poolContract.methods.unstakeExact(unstakeUnits, ETH).send({ from: account.address })
-		setTknTx(tx.transactionHash)
-		setLoaded2(true)
-	}
+	// const unstakeExact = async () => {
+	// 	setBurnTknFlag(true)
+	// 	const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+	// 	console.log(unstakeUnits, ETH)
+	// 	const tx = await poolContract.methods.unstakeExact(unstakeUnits, ETH).send({ from: account.address })
+	// 	setTknTx(tx.transactionHash)
+	// 	setLoaded2(true)
+	// }
 
 	return (
 		<div>
