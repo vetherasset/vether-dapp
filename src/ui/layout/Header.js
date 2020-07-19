@@ -7,7 +7,7 @@ import { Colour, Icon, WalletStateIndicator, WalletConnectButton } from '../comp
 import logotype from '../../assets/logotype.svg';
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr } from '../../client/web3.js'
+import { vetherAddr, vetherAbi,  } from '../../client/web3.js'
 import { convertFromWei } from '../utils'
 
 import Breakpoint from 'react-socks'
@@ -85,7 +85,7 @@ const Header = () => {
     const loadAccountData = async (contract_, address) => {
         const ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
 		const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
-		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
+		// const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
 		const uniBalance = 0 //convertFromWei(await exchangeContract.methods.balanceOf(address).call())
 		const uniSupply = 0 //convertFromWei(await exchangeContract.methods.totalSupply().call())
 		const accountData = {
