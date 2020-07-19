@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
-import axios from 'axios'
 
-import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getUniswapPriceEth, getUniswapDetails, getEtherscanURL } from '../../client/web3.js'
+import {
+	ETH, vetherAddr, vetherAbi, vetherPoolsAddr, vetherPoolsAbi,
+	getUniswapPriceEth, getEtherscanURL
+} from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, convertToWei, prettify, getBN, getBig } from '../utils'
+import { convertFromWei, convertToWei, prettify, oneBN, getBN } from '../utils'
+import { calcShare } from '../math'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -19,7 +22,7 @@ import {
 	Colour,
 	Center
 } from '../components'
-import { PoolCard, UniswapCard } from '../ui'
+
 import Web3 from "web3";
 
 export const PoolTable = () => {
@@ -28,27 +31,38 @@ export const PoolTable = () => {
 
 	const [marketData, setMarketData] = useState(
 		{ priceUSD: '', priceETH: '', ethPrice: '' })
-	const [uniswapData, setUniswapData] = useState(
-		{ "eth": "", "veth": '' })
-
-	const [returns, setReturns] = useState(null)
+	const [poolData, setPoolData] = useState(
+		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "txCount": "", 'roi': "" })
 
 	useEffect(() => {
-		context.uniswapData ? getUniswapData() : loadUniswapData()
+		context.poolData ? getPoolData() : loadPoolData()
 		context.marketData ? getMarketData() : loadMarketData()
-		context.returnData ? getReturnData() : loadReturnData()
 		// eslint-disable-next-line
 	}, [])
 
-	const getUniswapData = () => {
-		setUniswapData(context.uniswapData)
+	const getPoolData = () => {
+		setPoolData(context.poolData)
+		console.log('pooldata', context.poolData)
 	}
 
-	const loadUniswapData = async () => {
-		const uniswapBal = await getUniswapDetails()
-		setUniswapData(uniswapBal)
+	const loadPoolData = async () => {
+		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		let poolData = await poolContract.methods.poolData(ETH).call()
+		let price = await poolContract.methods.calcValueInAsset(oneBN, ETH).call()
+		let roi = await poolContract.methods.getPoolROI(ETH).call()
+		const poolData_ = {
+			"eth": convertFromWei(poolData.asset),
+			"veth": convertFromWei(poolData.vether),
+			"price": convertFromWei(price),
+			"volume": convertFromWei(poolData.volume),
+			"fees": convertFromWei(poolData.fees),
+			"txCount": poolData.txCount,
+			"roi": (+roi / 100) - 100
+		}
+		console.log({ poolData_ })
+		setPoolData(poolData_)
 		context.setContext({
-			"uniswapData": uniswapBal
+			"poolData": poolData_
 		})
 	}
 
@@ -72,32 +86,72 @@ export const PoolTable = () => {
 		})
 	}
 
-	const getReturnData = () => {
-		setReturns(context.returnData)
+	const poolStyles = {
+		borderWidth: '1px',
+		borderStyle: 'solid',
+		borderRadius: 6,
+		borderColor: Colour().gold,
+		marginBottom: '1.3rem',
+		padding: '20px',
+		backgroundColor: Colour().black,
 	}
 
-	const loadReturnData = async () => {
-		const baseURL3 = 'https://api.blocklytics.org/uniswap/v1/returns/0x506D07722744E4A390CD7506a2Ba1A8157E63745?key='
-        const response4 = await axios.get(baseURL3 + process.env.REACT_APP_BLOCKLYTICS_API + '&period=14&daysBack=7')
-		let returnData = response4.data
-		console.log(returnData)
-		let returns = returnData.reduce((acc, item) => ((+acc + +item.D7_annualized)/2), 0)
-		console.log(returnData)
-		setReturns(returns)
-		context.setContext({'returnData':returns})
+	const lineStyle = {
+		borderLeft: '1px dashed',
+		borderColor: '#97948e47',
+		paddingLeft: 5
+	}
+	const topLineStyle = {
+		borderTop: '1px dashed',
+		borderColor: '#97948e47',
+		paddingLeft: 5,
+		marginTop: 10,
+		paddingTop: 10
 	}
 
 	return (
-		<div style={{marginTop: '2rem'}}>
-			<Center><Text size={30} margin={"10px 0px 0px"}>${prettify(marketData.priceUSD)}</Text></Center>
-			<Center><LabelGrey margin={"0px 0px 10px"}>VALUE OF 1 VETH</LabelGrey></Center>
-			<Center><Text size={30} margin={"0px 0px 0px"}>{prettify(returns)}%</Text></Center>
-			<Center><LabelGrey margin={"0px 0px 10px"}>CURRENT POOL ROI (ANNUALISED)</LabelGrey></Center>
-			<Row style={{ marginBottom: 50 }}>
-				<Col xs={24} sm={6}>
-				</Col>
-				<PoolCard uniswapData={uniswapData} marketData={marketData}/>
-				<Col xs={24} sm={6}>
+		<div style={{ marginTop: '2rem' }}>
+			<Row type="flex" justify="center">
+				<Col span={18}>
+					{/* <Label display="block" style={{ marginBottom: '1.33rem' }}>Pooled Tokens</Label> */}
+					<div style={poolStyles}>
+						<Row>
+							<Col xs={12}>
+								<Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>$VETH</Text>
+								<Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.veth)}</Text></Center>
+								{/* <Center><Text margin={"5px 0px 30px"}>${prettify(priceData.ethPrice * poolData.eth)}</Text></Center> */}
+							</Col>
+							<Col xs={12} style={lineStyle}>
+								<Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0 0 0 15px' }}>ETH Ξ</Text>
+								<Center><Text size={30} color={Colour().white} margin={"20px 0px 20px 0px"}>{prettify(poolData.eth)}</Text></Center>
+								{/* <Center><Text margin={"5px 0px 30px"}>${prettify(priceData.ethPrice * poolData.eth)}</Text></Center> */}
+							</Col>
+						</Row>
+						<Row>
+							<Col>
+								<Center><Text size={14} style={{ textAlign: 'left', display: 'block', margin: '10px 0px 0px 0px' }}>PRICE (ETH)</Text></Center>
+								<Center><Text size={18} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.price)}</Text></Center>
+							</Col>
+						</Row>
+						<Row style={topLineStyle}>
+							<Col xs={6}>
+								<Center><Text size={14} style={{ textAlign: 'left', display: 'block', margin: '0' }}>VOLUME</Text></Center>
+								<Center><Text size={18} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.volume)}</Text></Center>
+							</Col>
+							<Col xs={6}>
+								<Center><Text size={14} style={{ textAlign: 'left', display: 'block', margin: '0' }}>FEES</Text></Center>
+								<Center><Text size={18} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.fees)}</Text></Center>
+							</Col>
+							<Col xs={6}>
+								<Center><Text size={14} style={{ textAlign: 'left', display: 'block', margin: '0' }}>TX COUNT</Text></Center>
+								<Center><Text size={18} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.txCount)}</Text></Center>
+							</Col>
+							<Col xs={6}>
+								<Center><Text size={14} style={{ textAlign: 'left', display: 'block', margin: '0' }}>ROI</Text></Center>
+								<Center><Text size={18} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.roi)}%</Text></Center>
+							</Col>
+						</Row>
+					</div>
 				</Col>
 			</Row>
 		</div>
@@ -109,9 +163,11 @@ export const StakeTable = () => {
 	const context = useContext(Context)
 
 	const [account, setAccount] = useState(
-		{ address: '', vethBalance: '', ethBalance: '', uniBalance: '', uniSupply: '' })
-	const [uniswapData, setUniswapData] = useState(
-		{ "eth": "", "veth": '' })
+		{
+			address: '', vethBalance: '', ethBalance: '',
+			stakeUnits: '', vetherStaked: '', vetherStaked: '',
+			vetherShare: '', assetShare: '', roi: ''
+		})
 
 	const [loading, setLoading] = useState(true)
 
@@ -127,7 +183,6 @@ export const StakeTable = () => {
 		var accounts = await window.web3.eth.getAccounts()
 		const address = await accounts[0]
 		context.accountData ? await getAccountData() : await loadAccountData(address)
-		context.uniswapData ? await getUniswapData() : await loadUniswapData()
 		setLoading(false)
 	}
 
@@ -137,36 +192,36 @@ export const StakeTable = () => {
 
 	const loadAccountData = async (account) => {
 		const accountConnected = (await window.web3.eth.getAccounts())[0];
-		if(accountConnected) {
+		if (accountConnected) {
 			const contract = await new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 			const ethBalance = convertFromWei(await window.web3.eth.getBalance(account))
 			const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
-			const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-			const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(account).call())
-			const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
+
+			const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+			let stakeData = await poolContract.methods.getMemberStakeData(account, ETH).call()
+
+			let poolData = await poolContract.methods.poolData(ETH).call()
+			let poolShare = calcShare(getBN(stakeData.stakeUnits), getBN(poolData.poolUnits), getBN(poolData.asset), getBN(poolData.vether))
+
+			// let vetherShare = await poolContract.methods.getStakerShareVether(account, ETH).call()
+			// let assetShare = await poolContract.methods.getStakerShareAsset(account, ETH).call()
+			let memberROI = await poolContract.methods.getMemberROI(account, ETH).call()
+			console.log(memberROI)
 
 			const accountData = {
-				address: account,
-				vethBalance: vethBalance,
-				ethBalance: ethBalance,
-				uniBalance: uniBalance,
-				uniSupply: uniSupply
+				'address': account,
+				'vethBalance': vethBalance,
+				'ethBalance': ethBalance,
+				'stakeUnits': convertFromWei(stakeData.stakeUnits),
+				'vetherStaked': convertFromWei(stakeData.vether),
+				'assetStaked': convertFromWei(stakeData.asset),
+				'vetherShare': convertFromWei(poolShare.vether),
+				'assetShare': convertFromWei(poolShare.asset),
+				"roi": (+memberROI)
 			}
 			setAccount(accountData)
-			context.setContext({"accountData": accountData})
+			context.setContext({ "accountData": accountData })
 		}
-	}
-
-	const getUniswapData = () => {
-		setUniswapData(context.uniswapData)
-	}
-
-	const loadUniswapData = async () => {
-		const uniswapDetails = await getUniswapDetails()
-		setUniswapData(uniswapDetails)
-		context.setContext({
-			"uniswapData": uniswapDetails
-		})
 	}
 
 	return (
@@ -178,9 +233,9 @@ export const StakeTable = () => {
 					}
 				</Col> */}
 				<Col xs={24} sm={13}>
-					{!loading &&
-						<UniswapCard accountData={account} uniswapData={uniswapData} />
-					}
+					{/* {!loading &&
+						// <UniswapCard accountData={account} uniswapData={uniswapData} />
+					} */}
 				</Col>
 			</Row>
 
@@ -208,7 +263,7 @@ export const AddLiquidityTable = (props) => {
 
 	const totalSupply = getBN(1000000 * 10 ** 18)
 
-	const [addEthFlag, setAddUniswapFlag] = useState(null)
+	const [stakeFlag, setStakeFlag] = useState(null)
 	const [ethTx, setEthTx] = useState(null)
 	const [ethAmount, setEthAmount] = useState(null)
 	const [vetherPrice, setVetherPrice] = useState(null)
@@ -216,7 +271,7 @@ export const AddLiquidityTable = (props) => {
 	const [loading, setLoading] = useState(true)
 	const [approved, setApproved] = useState(null)
 	const [approveFlag, setApproveFlag] = useState(null)
-	const [customAmount, setCustomAmount] = useState(null)
+	const [vethAmount, setVethAmount] = useState(null)
 	const [approvalAmount, setApprovalAmount] = useState(null)
 
 	const ethBalanceSpendable = (account.ethBalance - 0.1).toFixed(4) < 0 ?
@@ -232,9 +287,9 @@ export const AddLiquidityTable = (props) => {
 		const vethPrice = await getUniswapPriceEth()
 		setVetherPrice(vethPrice)
 		if (account) {
-			setCustomAmount(account.vethBalance)
+			setVethAmount(account.vethBalance)
 			setEthAmount(account.ethBalance - 0.01)
-			setCustomAmount(account.ethBalance * (1 / (vethPrice)))
+			setVethAmount(account.vethBalance)
 			checkApproval(account.address)
 			setLoading(false)
 		}
@@ -242,10 +297,10 @@ export const AddLiquidityTable = (props) => {
 
 	const checkApproval = async (address) => {
 		const accountConnected = (await window.web3.eth.getAccounts())[0];
-		if(accountConnected){
+		if (accountConnected) {
 			const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 			const fromAcc = address
-			const spender = uniSwapAddr()
+			const spender = vetherPoolsAddr()
 			const approval = await tokenContract.methods.allowance(fromAcc, spender).call()
 			const vethBalance = await tokenContract.methods.balanceOf(address).call()
 			setApprovalAmount(approval)
@@ -259,28 +314,28 @@ export const AddLiquidityTable = (props) => {
 		setApproveFlag(true)
 		const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		const fromAcc = account.address
-		const spender = uniSwapAddr()
+		const spender = vetherPoolsAddr()
 		const value = totalSupply.toString()
 		await tokenContract.methods.approve(spender, value).send({ from: fromAcc })
 		checkApproval(account.address)
 	}
 
-	const addUniswap = async () => {
+	const stake = async () => {
 		const fromAcc = account.address
-		const deadline = (Math.round(((new Date()) / 1000) + 1000)).toString()
-		const min_liquidity = (1).toString()
-		const amountVeth = (convertToWei(customAmount)).toString()
+		const amountVeth = (convertToWei(vethAmount)).toString()
 		const amountEth = (convertToWei(ethAmount)).toString()
-		setAddUniswapFlag('TRUE')
-		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-		const tx = await exchangeContract.methods.addLiquidity(min_liquidity, amountVeth, deadline).send({ value: amountEth, from: fromAcc })
+		setStakeFlag('TRUE')
+		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		const tx = await poolContract.methods.stake(amountVeth, amountEth, ETH).send({ value: amountEth, from: fromAcc })
 		setEthTx(tx.transactionHash)
 		setLoaded(true)
 	}
 
 	const onEthAmountChange = e => {
 		setEthAmount(e.target.value)
-		setCustomAmount(e.target.value * (1 / vetherPrice))
+	}
+	const onVethAmountChange = e => {
+		setVethAmount(e.target.value)
 	}
 
 	const getLink = (tx) => {
@@ -336,40 +391,70 @@ export const AddLiquidityTable = (props) => {
 							<Row>
 								{(account.vethBalance > 0) &&
 									<div>
-										<Col xs={4}>
-											<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
-											<br></br>
-											<Label>{prettify(customAmount)}</Label>
-											<br></br>
-											<LabelGrey>VETH required to stake</LabelGrey>
-										</Col>
-										<Col xs={8} style={{ marginLeft: 20 }}>
-											<Button
-												backgroundColor="transparent"
-												onClick={addUniswap}
-											> ADD >>
+										<Row>
+											<Col xs={12}>
+												<Row>
+													<Col xs={24}>
+														<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onEthAmountChange} placeholder={ethBalanceSpendable} />
+														<br></br>
+														<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onVethAmountChange} placeholder={account.vethBalance} />
+														<br></br>
+													</Col>
+													<Col xs={24} style={{ paddingLeft: 20 }}>
+														<Button
+															backgroundColor="transparent"
+															onClick={stake}
+														> ADD >>
 											</Button>
-											<Tooltip placement="right" title="This will add Ether and Vether to the pool. You can claim it back later.">
-												&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
-											</Tooltip>
-											<br></br>
-											<Sublabel>ADD LIQUIDITY TO UNISWAP</Sublabel>
+														<Tooltip placement="right" title="This will add Ether and Vether to the pool. You can claim it back later.">
+															&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey }} />
+														</Tooltip>
+														<br></br>
+														<Sublabel>Add liquidity to the pool</Sublabel>
 
-											{addEthFlag &&
-												<div>
-													{!loaded &&
-														<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
-													}
-													{loaded &&
-														<div>
-															<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
-															<br></br>
-															<Sublabel>Refresh to update</Sublabel>
-														</div>
-													}
-												</div>
-											}
-										</Col>
+														{stakeFlag &&
+															<div>
+																{!loaded &&
+																	<LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+																}
+																{loaded &&
+																	<div>
+																		<Click><a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold, fontSize: 12 }}> VIEW TRANSACTION -> </a></Click>
+																		<br></br>
+																		<Sublabel>Refresh to update</Sublabel>
+																	</div>
+																}
+															</div>
+														}
+													</Col>
+
+												</Row>
+											</Col>
+											<Col xs={12}>
+												<Row>
+													<Col xs={8} style={{ paddingLeft: 20 }}>
+														<span><h6>Asset Share</h6><h3>{prettify(account.assetShare)}</h3></span>
+													</Col>
+													<Col xs={8} style={{ paddingLeft: 20 }}>
+														<span><h6>Vether Share</h6><h3>{prettify(account.vetherShare)}</h3></span>
+													</Col>
+													<Col xs={8} style={{ paddingLeft: 20 }}>
+														<span><h6>Units</h6><h3>{prettify(account.stakeUnits)}</h3></span>
+													</Col>
+												</Row>
+												<Row>
+													<Col xs={8} style={{ paddingLeft: 20 }}>
+														<span><h6>Asset Staked</h6><h3>{prettify(account.assetStaked)}</h3></span>
+													</Col>
+													<Col xs={8} style={{ paddingLeft: 20 }}>
+														<span><h6>Vether Staked</h6><h3>{prettify(account.vetherStaked)}</h3></span>
+													</Col>
+													<Col xs={8} style={{ paddingLeft: 20 }}>
+														<span><h6>ROI</h6><h3>{prettify(account.roi)}</h3></span>
+													</Col>
+												</Row>
+											</Col>
+										</Row>
 									</div>
 								}
 							</Row>
@@ -388,9 +473,11 @@ export const RemoveLiquidityTable = (props) => {
 	const [burnTknFlag, setBurnTknFlag] = useState(null)
 	const [tknTx, setTknTx] = useState(null)
 	const [loaded2, setLoaded2] = useState(null)
-	const [customAmount, setCustomAmount] = useState(100)
+	const [unstakeAmount, setUnstakeAmount] = useState('10000')
+	const [unstakeUnits, setUnstakeUnits] = useState('0')
 
 	useEffect(() => {
+		console.log(account.stakeUnits)
 		// eslint-disable-next-line
 	}, [])
 
@@ -399,42 +486,43 @@ export const RemoveLiquidityTable = (props) => {
 	}
 
 	const onAmountChange = e => {
-		setCustomAmount(e.target.value)
+		setUnstakeAmount(e.target.value * 100)
+	}
+	const onUnitsChange = e => {
+		setUnstakeUnits(convertToWei(e.target.value))
 	}
 
-	const getUniSupply = (part) => {
-		const numerator = (getBig(convertToWei(account.uniBalance))).multipliedBy(part)
-		const final = numerator.div(100)
-		return final.integerValue(1)
-	}
-
-	const removeLiquidity = async () => {
+	const unstake = async () => {
 		setBurnTknFlag(true)
-		console.log(account.uniBalance, customAmount)
-		const amount = (getUniSupply(customAmount)).toString()
-		const min_eth = (1).toString()
-		const min_tokens = (1).toString()
-		const deadline = (Math.round(((new Date()) / 1000) + 1000)).toString()
-		console.log(amount, min_eth, min_tokens, deadline)
-		const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-		const tx = await exchangeContract.methods.removeLiquidity(amount, min_eth, min_tokens, deadline).send({ from: account.address })
+		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		console.log(unstakeAmount, ETH)
+		const tx = await poolContract.methods.unstake(unstakeAmount, ETH).send({ from: account.address })
+		setTknTx(tx.transactionHash)
+		setLoaded2(true)
+	}
+
+	const unstakeExact = async () => {
+		setBurnTknFlag(true)
+		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		console.log(unstakeUnits, ETH)
+		const tx = await poolContract.methods.unstakeExact(unstakeUnits, ETH).send({ from: account.address })
 		setTknTx(tx.transactionHash)
 		setLoaded2(true)
 	}
 
 	return (
 		<div>
-			{(account.uniBalance === "0") &&
+			{(account.stakeUnits === "0") &&
 				<Row>
 					<Col xs={12}>
 						<Sublabel>You don't have a share of the pool.</Sublabel>
 					</Col>
 				</Row>
 			}
-			{(account.uniBalance > 0) &&
-				<Row>
-					<div>
-						<Col xs={4}>
+			{(account.stakeUnits > 0) &&
+				<div>
+					<Row>
+						<Col xs={12}>
 							<Input size={'large'} style={{ marginBottom: 10 }} allowClear onChange={onAmountChange} placeholder={100} />
 							<br></br>
 							<Sublabel>Proportion to remove (%)</Sublabel>
@@ -442,7 +530,7 @@ export const RemoveLiquidityTable = (props) => {
 						<Col xs={12} sm={7} style={{ paddingLeft: 20 }}>
 							<Button
 								backgroundColor="transparent"
-								onClick={removeLiquidity}
+								onClick={unstake}
 							> REMOVE >>
 							</Button>
 							<Tooltip placement="right" title="This will claim back your assets.">
@@ -465,8 +553,9 @@ export const RemoveLiquidityTable = (props) => {
 								</div>
 							}
 						</Col>
-					</div>
-				</Row>
+					</Row>
+					
+				</div>
 			}
 		</div>
 	)
