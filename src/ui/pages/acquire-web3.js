@@ -139,7 +139,6 @@ export const AcquireTable = () => {
 							}
 						</>
 					}
-
 				</Col>
 
 				<Col xs={24} sm={6} style={{ marginTop: '-3px' }}>

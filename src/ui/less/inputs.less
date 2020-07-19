@@ -23,6 +23,10 @@
   color: rgba(255, 255, 255, 0.45);
 }
 
+.ant-input-suffix {
+  margin: 0;
+}
+
 .ant-select-selection {
   border-color: #D09800;
 }
@@ -87,4 +91,25 @@
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before {
   background-color: #000 !important;
   opacity: 1;
+}
+
+.ant-radio-inner {
+  margin: 0;
+  border-color: #97948e;
+  color: #fff;
+  width: 17px;
+  border-radius: 50%;
+}
+
+.ant-radio-inner::after {
+  left: 4px;
+}
+
+label.ant-radio-wrapper {
+  color: #ffffffa6;
+}
+span.ant-radio + * {
+  padding-right: 12px;
+  padding-left: 12px;
+  vertical-align: middle;
 }
