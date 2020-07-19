@@ -7,9 +7,9 @@ import {SwapOutlined, LoadingOutlined} from '@ant-design/icons';
 import {Label, Sublabel, Button, } from '../components'
 
 import { ETH, vetherAddr, vetherAbi, vetherPoolsAddr, vetherPoolsAbi, getEtherscanURL,
-    infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
-import { totalSupply, convertToWei } from '../utils.js'
-import { getETHPrice } from "../../client/market.js"
+    infuraAPI } from '../../client/web3.js'
+import { totalSupply, convertToWei, BN2Str, oneBN, convertFromWei } from '../utils.js'
+import { calcSwapOutput } from '../math.js'
 
 export const SwapPoolsInterface = () => {
 
@@ -31,20 +31,17 @@ export const SwapPoolsInterface = () => {
     const [vethAmount, setVethAmount] = useState(0)
     const [vethAmountCalculated, setVethAmountCalculated] = useState(0)
 
-    const [price, setPrice] = useState({
-        vethEth: 0,
-        ethUsd: 0,
-        vethUsd: 0
-    })
-
     const [buyFlag, setBuyFlag] = useState(false)
     const [loadedBuy, setLoadedBuy] = useState(null)
     const [sellFlag, setSellFlag] = useState(false)
     const [loadedSell, setLoadedSell] = useState(null)
 
+    const [poolData, setPoolData] = useState(
+		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "txCount": "", 'roi': "" })
+
     useEffect(() => {
         connect()
-        loadPriceData()
+        // loadPriceData()
         // eslint-disable-next-line
     }, [])
 
@@ -56,6 +53,7 @@ export const SwapPoolsInterface = () => {
             const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
             const vetherContract = new web3.eth.Contract(vetherAbi(), vetherAddr())
             context.accountData ? getAccountData() : loadAccountData(vetherContract, address)
+            context.poolData ? getPoolData() : loadPoolData()
             setVetherContract(vetherContract)
             checkApproval(address)
             setConnected(true)
@@ -88,16 +86,43 @@ export const SwapPoolsInterface = () => {
         }
     }
 
-    const loadPriceData = async () => {
-        const priceVethEth = await getUniswapPriceEth()
-        const priceEthUsd = await getETHPrice()
+    const getPoolData = () => {
+		setPoolData(context.poolData)
+		console.log('pooldata', context.poolData)
+	}
 
-        setPrice({
-            vethEth: priceVethEth,
-            ethUsd: priceEthUsd,
-            vethUsd: (priceVethEth * priceEthUsd).toFixed(2)
-        })
-    }
+	const loadPoolData = async () => {
+		const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+		const poolContract = new web3_.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		let poolData = await poolContract.methods.poolData(ETH).call()
+		let price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
+		let roi = await poolContract.methods.getPoolROI(ETH).call()
+		const poolData_ = {
+			"eth": convertFromWei(poolData.asset),
+			"veth": convertFromWei(poolData.vether),
+			"price": convertFromWei(price),
+			"volume": convertFromWei(poolData.volume),
+			"fees": convertFromWei(poolData.fees),
+			"txCount": poolData.txCount,
+			"roi": (+roi / 100) - 100
+		}
+		console.log(poolData_)
+		setPoolData(poolData_)
+		context.setContext({
+			"poolData": poolData_
+		})
+	}
+
+    // const loadPriceData = async () => {
+    //     const priceVethEth = await getUniswapPriceEth()
+    //     const priceEthUsd = await getETHPrice()
+
+    //     setPrice({
+    //         vethEth: priceVethEth,
+    //         ethUsd: priceEthUsd,
+    //         vethUsd: (priceVethEth * priceEthUsd).toFixed(2)
+    //     })
+    // }
 
     const checkApproval = async (address) => {
         const accountConnected = (await window.web3.eth.getAccounts())[0];
@@ -132,23 +157,24 @@ export const SwapPoolsInterface = () => {
     }
 
     const onEthAmountChange = e => {
-        loadPriceData()
+        // loadPriceData()
         const value = e.target.value
-        let valueInVeth = value / price.vethEth
-        valueInVeth = valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : valueInVeth
+        let valueInVeth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.eth), convertToWei(poolData.veth)))
+        valueInVeth = valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : convertFromWei(valueInVeth)
         setEthAmount(value.toString())
         setVethAmount("")
-        setVethAmountCalculated(valueInVeth.toFixed(5))
+        setVethAmountCalculated((+valueInVeth).toFixed(5))
     }
 
     const onVethAmountChange = e => {
-        loadPriceData()
+        // loadPriceData()
         const value = e.target.value
-        let valueInEth = value * price.vethEth
-        valueInEth = valueInEth === Infinity || isNaN(valueInEth) ? 0 : valueInEth
+        let valueInEth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.veth), convertToWei(poolData.eth)))
+        console.log(valueInEth, value, poolData.veth, poolData.eth)
+        valueInEth = +valueInEth === Infinity || isNaN(+valueInEth) ? 0 : convertFromWei(valueInEth)
         setVethAmount(value.toString())
         setEthAmount("")
-        setEthAmountCalculated(valueInEth.toFixed(5))
+        setEthAmountCalculated((+valueInEth).toFixed(5))
     }
 
     const buyVether = async () => {
@@ -230,8 +256,8 @@ export const SwapPoolsInterface = () => {
                                     <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
                                            placeholder={vethAmountCalculated} suffix="$VETH"/>
                                     {vethAmount > 0
-                                        ? <Button backgroundColor="transparent" onClick={sellVether}>SELL VETH >></Button>
-                                        : <Button backgroundColor="transparent" disabled>SELL VETH >></Button>
+                                        ? <Button backgroundColor="transparent" onClick={sellVether}>&lt;&lt;SELL VETH</Button>
+                                        : <Button backgroundColor="transparent" disabled>&lt;&lt;SELL VETH</Button>
                                     }
                                     <Sublabel>SELL VETHER FOR ETH</Sublabel>
                                 </Col>
