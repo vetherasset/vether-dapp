@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button as AntButton } from "antd"
-import { HomeOutlined, FileTextOutlined, RightSquareOutlined, UpCircleOutlined, 
+import { HomeOutlined, FileTextOutlined, RightSquareOutlined, UpCircleOutlined,
   LoginOutlined, LineChartOutlined, PieChartOutlined, CheckSquareOutlined } from '@ant-design/icons';
 
 export const Font = () => {
@@ -15,7 +15,7 @@ export const Colour = (alpha) => {
     }
   } else {
     colour = {
-      "black":"#110D01", 
+      "black":"#110D01",
       "white":"#FFF",
       "red":"#a8071a",
       "green":"#7cb305",
@@ -27,7 +27,7 @@ export const Colour = (alpha) => {
       "yellow":'#FFCE56'
     }
   }
-  
+
   return colour
 }
 
@@ -117,6 +117,7 @@ export const Sublabel = (props) => {
 
 export const Text = (props) => {
   let styles = {...props.style || {}}
+  let className
   styles.fontSize = "14px"
   styles.color = Colour().white
 
@@ -135,9 +136,12 @@ export const Text = (props) => {
   if (props.margin) {
     styles.margin = props.margin
   }
+  if (props.className) {
+    className = props.className
+  }
 
   return (
-    <span style={styles}>
+    <span style={styles} className={className}>
       {props.children}
     </span>
   )
@@ -323,8 +327,8 @@ export const Icon = (props) => {
       </PieChartOutlined >
     )
   }
-  
-  
+
+
   if(props.icon === "whitepaper"){
     return (
       <FileTextOutlined>
