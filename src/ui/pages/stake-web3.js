@@ -6,7 +6,7 @@ import {
 	getUniswapPriceEth, getEtherscanURL, infuraAPI,
 } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, convertToWei, prettify, oneBN, getBN } from '../utils'
+import { convertFromWei, convertToWei, prettify, oneBN, BN2Str, getBN } from '../utils'
 import { calcShare } from '../math'
 
 import { Row, Col, Input, Tooltip } from 'antd'
@@ -47,10 +47,10 @@ export const PoolTable = () => {
 	}
 
 	const loadPoolData = async () => {
-		const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-		const poolContract = new web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+		const poolContract = new web3_.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
 		let poolData = await poolContract.methods.poolData(ETH).call()
-		let price = await poolContract.methods.calcValueInAsset(oneBN, ETH).call()
+		let price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
 		let roi = await poolContract.methods.getPoolROI(ETH).call()
 		const poolData_ = {
 			"eth": convertFromWei(poolData.asset),
@@ -61,7 +61,7 @@ export const PoolTable = () => {
 			"txCount": poolData.txCount,
 			"roi": (+roi / 100) - 100
 		}
-		console.log({ poolData_ })
+		console.log(poolData_)
 		setPoolData(poolData_)
 		context.setContext({
 			"poolData": poolData_
