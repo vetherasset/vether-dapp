@@ -121,7 +121,7 @@ export const PoolTable = () => {
 						<Row>
 							<Col>
 								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '10px 0px 0px 0px' }}>PRICE</Text></Center>
-								<Center><Text size={'size: 1.7rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>${prettify(poolData.price * marketData.ethPrice)}</Text></Center>
+								<Center><Text size={'1.7rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>${prettify(poolData.price * marketData.ethPrice)}</Text></Center>
 							</Col>
 						</Row>
 						<Row style={topLineStyle}>
@@ -323,14 +323,14 @@ export const AddLiquidityTable = (props) => {
 		const fromAcc = account.address
 		let amountVeth
 		let amountEth
-		if (amount0.name === 'Vether') {
-			amountVeth = amount0
-			amountEth = amount1
+		if (asset0.name === 'Vether') {
+			amountVeth = Web3.utils.toWei(amount0.toString())
+			amountEth = Web3.utils.toWei(amount1.toString())
 		} else {
-			amountVeth = amount1
-			amountEth = amount0
+			amountVeth = Web3.utils.toWei(amount1.toString())
+			amountEth = Web3.utils.toWei(amount0.toString())
 		}
-		setStakeFlag('TRUE')
+		setStakeFlag(true)
 		console.log(stakeFlag)
 		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
 		const tx = await poolContract.methods.stake(amountVeth, amountEth, ETH).send({ value: amountEth, from: fromAcc })
