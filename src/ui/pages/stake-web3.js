@@ -96,23 +96,23 @@ export const PoolTable = () => {
 	return (
 		<div style={{ marginTop: '2rem' }}>
 			<Row type="flex" justify="center">
-				<Col span={14}>
+				<Col span={16}>
 					<div style={poolStyles}>
 						<Row>
 							<Col xs={12}>
 								<Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>$VETH</Text>
 								<Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.veth)}</Text></Center>
-								{/* <Center><Text margin={"5px 0px 30px"}>${prettify(priceData.ethPrice * poolData.eth)}</Text></Center> */}
+								<Center><span style={{ color: '#97948e', margin: 0 }}>${prettify(poolData.veth * (poolData.price * marketData.ethPrice))}</span></Center>
 							</Col>
 							<Col xs={12} style={lineStyle}>
 								<Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0 0 0 15px' }}>ETH Ξ</Text>
-								<Center><Text size={30} color={Colour().white} margin={"20px 0px 20px 0px"}>{prettify(poolData.eth)}</Text></Center>
-								{/* <Center><Text margin={"5px 0px 30px"}>${prettify(priceData.ethPrice * poolData.eth)}</Text></Center> */}
+								<Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.eth)}</Text></Center>
+								<Center><span style={{ color: '#97948e', margin: 0 }}>${prettify(marketData.ethPrice * poolData.eth)}</span></Center>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '10px 0px 0px 0px' }}>PRICE</Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>PRICE</Text></Center>
 								<Center>
 									<Text size={'1.9rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>${prettify(poolData.price * marketData.ethPrice)}
 										<Tooltip placement="right" title="Current market rate you get.">
