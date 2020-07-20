@@ -235,7 +235,7 @@ export const StakeTable = () => {
 			}
 			{connected && !loading &&
 				<>
-					{!account.stakeUnits === "0" &&
+					{account.stakeUnits > "0" &&
 					<>
 						<hr />
 						<RemoveLiquidityTable accountData={account} />
@@ -548,7 +548,6 @@ export const RemoveLiquidityTable = (props) => {
 							}
 						</Col>
 					</Row>
-
 				</>
 			}
 		</>
