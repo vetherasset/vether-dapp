@@ -203,7 +203,7 @@ export const TradeHistory = () => {
 
     return(
         <>
-            <h2>Last Trades</h2>
+            <h2>LAST TRADES</h2>
             {!loading &&
                 <LoadingOutlined />
             }
