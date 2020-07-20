@@ -203,11 +203,11 @@ export const TradeHistory = () => {
 
     return(
         <>
-            <h2>Trade History</h2>
-            {!loading && 
+            <h2>Last Trades</h2>
+            {!loading &&
                 <LoadingOutlined />
             }
-            {loading && 
+            {loading &&
                 <Table dataSource={tradeHistory} columns={columns} pagination={true} rowKey="id" />
             }
         </>
