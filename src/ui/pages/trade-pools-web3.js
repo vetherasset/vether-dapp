@@ -234,9 +234,9 @@ export const SwapPoolsInterface = () => {
                     </Row> */}
 
                     <Row type="flex" justify="center">
-                        <Col span={18}>
+                        <Col span={14}>
                             <Row type="flex" justify="center" align="middle">
-                                <Col span={8}>
+                                <Col span={10}>
                                     <Label display="block" style={{marginBottom: '0.55rem'}}>Buy</Label>
                                     {/*<Label>{prettify(account.ethBalance)}</Label>*/}
                                     <Input size={'large'} style={{marginBottom: "1.3rem"}} onChange={onEthAmountChange} value={ethAmount}
@@ -248,11 +248,11 @@ export const SwapPoolsInterface = () => {
                                     <Sublabel>BUY VETHER WITH ETH</Sublabel>
                                 </Col>
 
-                                <Col span={3} style={{textAlign: 'center'}}>
+                                <Col span={4} style={{textAlign: 'center'}}>
                                     <SwapOutlined style={{fontSize: '19px'}}/>
                                 </Col>
 
-                                <Col span={8} style={{textAlign: "right"}}>
+                                <Col span={10} style={{textAlign: "right"}}>
                                     <Row>
                                         <Col xs={24}>
                                             <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>

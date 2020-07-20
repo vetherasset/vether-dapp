@@ -52,7 +52,7 @@ export const PoolTable = () => {
 			"poolData": poolData_
 		})
 	}
-	
+
 	const loadMarketData = async () => {
 		const priceEtherUSD = await getETHPrice()
 		const priceVetherEth = await getUniswapPriceEth()
@@ -96,7 +96,7 @@ export const PoolTable = () => {
 	return (
 		<div style={{ marginTop: '2rem' }}>
 			<Row type="flex" justify="center">
-				<Col span={18}>
+				<Col span={14}>
 					<div style={poolStyles}>
 						<Row>
 							<Col xs={12}>
