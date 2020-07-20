@@ -180,7 +180,7 @@ export const TradeHistory = () => {
             render: (record) => {
                 return (
                     <>
-                        <TimeAgo live={false} date={record.timestamp} />
+                        <TimeAgo live={true} date={record.timestamp} />
                     </>
                 )
             }
