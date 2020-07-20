@@ -234,7 +234,7 @@ export const SwapPoolsInterface = () => {
                     </Row> */}
 
                     <Row type="flex" justify="center">
-                        <Col span={14}>
+                        <Col span={12}>
                             <Row type="flex" justify="center" align="middle">
                                 <Col span={10}>
                                     <Label display="block" style={{marginBottom: '0.55rem'}}>Buy</Label>
