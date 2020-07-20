@@ -260,8 +260,8 @@ export const SwapPoolsInterface = () => {
                                             <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
                                                    placeholder={vethAmountCalculated} suffix="$VETH"/>
                                             {vethAmount > 0
-                                                ? <Button backgroundColor="transparent" onClick={sellVether}>&lt;&lt;SELL VETH</Button>
-                                                : <Button backgroundColor="transparent" disabled>&lt;&lt;SELL VETH</Button>
+                                                ? <Button backgroundColor="transparent" onClick={sellVether}>SELL&nbsp;VETH&nbsp;>></Button>
+                                                : <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>
                                             }
                                             <Sublabel>SELL VETHER FOR ETH</Sublabel>
                                         </Col>

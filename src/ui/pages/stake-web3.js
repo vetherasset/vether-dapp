@@ -26,15 +26,10 @@ export const PoolTable = () => {
 		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "txCount": "", 'roi': "" })
 
 	useEffect(() => {
-		context.poolData ? getPoolData() : loadPoolData()
-		context.marketData ? getMarketData() : loadMarketData()
+		loadPoolData()
+		loadMarketData()
 		// eslint-disable-next-line
 	}, [])
-
-	const getPoolData = () => {
-		setPoolData(context.poolData)
-		console.log('pooldata', context.poolData)
-	}
 
 	const loadPoolData = async () => {
 		const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
@@ -57,10 +52,7 @@ export const PoolTable = () => {
 			"poolData": poolData_
 		})
 	}
-
-	const getMarketData = async () => {
-		setMarketData(context.marketData)
-	}
+	
 	const loadMarketData = async () => {
 		const priceEtherUSD = await getETHPrice()
 		const priceVetherEth = await getUniswapPriceEth()
@@ -141,7 +133,7 @@ export const PoolTable = () => {
 								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.fees)}</Text></Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>TX COUNT</Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>TRADES</Text></Center>
 								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.txCount)}</Text></Center>
 							</Col>
 							<Col xs={6}>
