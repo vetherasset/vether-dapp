@@ -133,12 +133,12 @@ export const PoolTable = () => {
 						</Row>
 						<Row style={topLineStyle}>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>VOL</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.volume)}&nbsp;<span style={{ fontSize: '1rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span></Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>VOL&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span></Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.volume)}</Text></Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>FEES</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.fees)}&nbsp;<span style={{ fontSize: '1rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span></Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>FEES&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span></Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.fees)}</Text></Center>
 							</Col>
 							<Col xs={6}>
 								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>TX COUNT</Text></Center>
