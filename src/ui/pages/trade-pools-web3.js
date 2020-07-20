@@ -10,6 +10,7 @@ import { ETH, vetherAddr, vetherAbi, vetherPoolsAddr, vetherPoolsAbi, getEthersc
     infuraAPI } from '../../client/web3.js'
 import { totalSupply, convertToWei, BN2Str, oneBN, convertFromWei } from '../utils.js'
 import { calcSwapOutput } from '../math.js'
+import { getETHPrice } from '../../client/market.js'
 
 export const SwapPoolsInterface = () => {
 
@@ -37,7 +38,7 @@ export const SwapPoolsInterface = () => {
     const [loadedSell, setLoadedSell] = useState(null)
 
     const [poolData, setPoolData] = useState(
-		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "txCount": "", 'roi': "" })
+		{ "eth": "", "ethPrice": "", "veth": '', 'price': "", "fees": "", "volume": "", "txCount": "", 'roi': "" })
 
     useEffect(() => {
         connect()
@@ -97,9 +98,10 @@ export const SwapPoolsInterface = () => {
 		let poolData = await poolContract.methods.poolData(ETH).call()
 		let price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
 		let roi = await poolContract.methods.getPoolROI(ETH).call()
-		const poolData_ = {
+        const poolData_ = {
 			"eth": convertFromWei(poolData.asset),
-			"veth": convertFromWei(poolData.vether),
+            "ethPrice": await getETHPrice(),
+            "veth": convertFromWei(poolData.vether),
 			"price": convertFromWei(price),
 			"volume": convertFromWei(poolData.volume),
 			"fees": convertFromWei(poolData.fees),
@@ -157,7 +159,7 @@ export const SwapPoolsInterface = () => {
     }
 
     const onEthAmountChange = e => {
-        // loadPriceData()
+        loadPoolData()
         const value = e.target.value
         let valueInVeth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.eth), convertToWei(poolData.veth)))
         valueInVeth = valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : convertFromWei(valueInVeth)
@@ -167,14 +169,14 @@ export const SwapPoolsInterface = () => {
     }
 
     const onVethAmountChange = e => {
-        // loadPriceData()
+        loadPoolData()
         const value = e.target.value
-        let valueInEth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.veth), convertToWei(poolData.eth)))
-        console.log(valueInEth, value, poolData.veth, poolData.eth)
-        valueInEth = +valueInEth === Infinity || isNaN(+valueInEth) ? 0 : convertFromWei(valueInEth)
+        let valueInVeth = value / (poolData.price * poolData.ethPrice)
+        console.log(valueInVeth)
+        valueInVeth = valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : valueInVeth
         setVethAmount(value.toString())
         setEthAmount("")
-        setEthAmountCalculated((+valueInEth).toFixed(5))
+        setEthAmountCalculated((valueInVeth).toFixed(5))
     }
 
     const buyVether = async () => {
