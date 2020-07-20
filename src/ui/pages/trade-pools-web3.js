@@ -9,7 +9,6 @@ import {Label, Sublabel, Button, } from '../components'
 import { ETH, vetherAddr, vetherAbi, vetherPoolsAddr, vetherPoolsAbi, getEtherscanURL,
     infuraAPI } from '../../client/web3.js'
 import { totalSupply, convertToWei, BN2Str, oneBN, convertFromWei } from '../utils.js'
-import { calcSwapOutput } from '../math.js'
 import { getETHPrice } from '../../client/market.js'
 
 export const SwapPoolsInterface = () => {
@@ -42,7 +41,6 @@ export const SwapPoolsInterface = () => {
 
     useEffect(() => {
         connect()
-        // loadPriceData()
         // eslint-disable-next-line
     }, [])
 
@@ -53,18 +51,14 @@ export const SwapPoolsInterface = () => {
             const address = accounts[0]
             const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
             const vetherContract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-            context.accountData ? getAccountData() : loadAccountData(vetherContract, address)
-            context.poolData ? getPoolData() : loadPoolData()
+            loadAccountData(vetherContract, address)
+            loadPoolData()
             setVetherContract(vetherContract)
             checkApproval(address)
             setConnected(true)
         } else {
             setConnected(false)
         }
-    }
-
-    const getAccountData = async () => {
-        setAccount(context.accountData)
     }
 
     const loadAccountData = async (contract, address) => {
@@ -86,11 +80,6 @@ export const SwapPoolsInterface = () => {
             })
         }
     }
-
-    const getPoolData = () => {
-		setPoolData(context.poolData)
-		console.log('pooldata', context.poolData)
-	}
 
 	const loadPoolData = async () => {
 		const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
@@ -114,17 +103,6 @@ export const SwapPoolsInterface = () => {
 			"poolData": poolData_
 		})
 	}
-
-    // const loadPriceData = async () => {
-    //     const priceVethEth = await getUniswapPriceEth()
-    //     const priceEthUsd = await getETHPrice()
-
-    //     setPrice({
-    //         vethEth: priceVethEth,
-    //         ethUsd: priceEthUsd,
-    //         vethUsd: (priceVethEth * priceEthUsd).toFixed(2)
-    //     })
-    // }
 
     const checkApproval = async (address) => {
         const accountConnected = (await window.web3.eth.getAccounts())[0];
@@ -161,22 +139,22 @@ export const SwapPoolsInterface = () => {
     const onEthAmountChange = e => {
         loadPoolData()
         const value = e.target.value
-        let valueInVeth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.eth), convertToWei(poolData.veth)))
-        valueInVeth = valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : convertFromWei(valueInVeth)
+        let valueInVeth = value / price.vethEth
+        valueInVeth = valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : valueInVeth
         setEthAmount(value.toString())
         setVethAmount("")
-        setVethAmountCalculated((+valueInVeth).toFixed(5))
+        setVethAmountCalculated(valueInVeth.toFixed(5))
     }
 
     const onVethAmountChange = e => {
         loadPoolData()
         const value = e.target.value
-        let valueInVeth = value / (poolData.price * poolData.ethPrice)
-        console.log(valueInVeth)
-        valueInVeth = valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : valueInVeth
+        let valueInEth = value * (poolData.price * poolData.ethPrice)
+        console.log(valueInEth)
+        valueInEth = valueInEth === Infinity || isNaN(valueInEth) ? 0 : valueInEth
         setVethAmount(value.toString())
         setEthAmount("")
-        setEthAmountCalculated((valueInVeth).toFixed(5))
+        setEthAmountCalculated((valueInEth).toFixed(5))
     }
 
     const buyVether = async () => {

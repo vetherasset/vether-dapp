@@ -15,7 +15,7 @@ export const getETHValueInUSD = async (eth) => {
 const getContract = () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-   return contract
+    return contract
 }
 
 export const getVETHPriceInEth = async (contract) => {
