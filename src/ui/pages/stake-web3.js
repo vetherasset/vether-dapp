@@ -9,8 +9,8 @@ import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, prettify, oneBN, BN2Str, getBN } from '../utils'
 import { calcShare } from '../math'
 
-import { Row, Col, Select, Input } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons';
+import { Row, Col, Select, Input, Tooltip } from 'antd'
+import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { Text, LabelGrey, Button, Sublabel, Colour, Center, Label } from '../components'
 
 import Web3 from "web3";
@@ -121,17 +121,24 @@ export const PoolTable = () => {
 						<Row>
 							<Col>
 								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '10px 0px 0px 0px' }}>PRICE</Text></Center>
-								<Center><Text size={'1.7rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>${prettify(poolData.price * marketData.ethPrice)}</Text></Center>
+								<Center>
+									<Text size={'1.9rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>${prettify(poolData.price * marketData.ethPrice)}
+										<Tooltip placement="right" title="Current market rate you get.">
+										&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
+										</Tooltip>
+									</Text>
+								</Center>
+								<Center><span style={{ color: '#97948e', margin: 0 }}>{prettify(poolData.price, 5)}&nbsp;Ξ</span></Center>
 							</Col>
 						</Row>
 						<Row style={topLineStyle}>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>VOL ($VETH)</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.volume)}</Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>VOL</Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.volume)}&nbsp;<span style={{ fontSize: '1rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span></Text></Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>FEES ($VETH)</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.fees)}</Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>FEES</Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.fees)}&nbsp;<span style={{ fontSize: '1rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span></Text></Center>
 							</Col>
 							<Col xs={6}>
 								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>TX COUNT</Text></Center>

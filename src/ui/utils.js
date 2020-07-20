@@ -31,8 +31,8 @@ export function convertToDate(date) {
     return new Date(1000 * date).toLocaleDateString("en-GB", { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
-export function prettify(amount) {
-    const number = ((+amount).toFixed(2)).toString()
+export function prettify(amount, fractionDigits = 2) {
+    const number = ((+amount).toFixed(fractionDigits)).toString()
     var parts = number.replace(/\.?0+$/, '').split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
