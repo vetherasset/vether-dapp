@@ -38,7 +38,7 @@ const Cards = () => {
     return (
         <>
             <h2>VETHER UTILITY</h2>
-            <p>Use the Vether Asset in its ecosystem</p>
+            <p>Use the Vether Asset in its ecosystem.</p>
             <Row id="vetherEcosystemCards0">
                 <Col style={cardStyles} xs={12}>
                     <Card title={cardContent()[0].title}
