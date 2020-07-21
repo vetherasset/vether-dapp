@@ -41,8 +41,6 @@ export const SwapPoolsInterface = () => {
 
     useEffect(() => {
         connect()
-        // loadPriceData()
-        // eslint-disable-next-line
     }, [])
 
     const connect = async () => {
@@ -52,18 +50,14 @@ export const SwapPoolsInterface = () => {
             const address = accounts[0]
             const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
             const vetherContract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-            context.accountData ? getAccountData() : loadAccountData(vetherContract, address)
-            context.poolData ? getPoolData() : loadPoolData()
+            loadAccountData(vetherContract, address)
+            loadPoolData()
             setVetherContract(vetherContract)
             checkApproval(address)
             setConnected(true)
         } else {
             setConnected(false)
         }
-    }
-
-    const getAccountData = async () => {
-        setAccount(context.accountData)
     }
 
     const loadAccountData = async (contract, address) => {
@@ -86,11 +80,6 @@ export const SwapPoolsInterface = () => {
         }
     }
 
-    const getPoolData = () => {
-		setPoolData(context.poolData)
-		console.log('pooldata', context.poolData)
-	}
-
 	const loadPoolData = async () => {
 		const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
 		const poolContract = new web3_.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
@@ -112,17 +101,6 @@ export const SwapPoolsInterface = () => {
 			"poolData": poolData_
 		})
 	}
-
-    // const loadPriceData = async () => {
-    //     const priceVethEth = await getUniswapPriceEth()
-    //     const priceEthUsd = await getETHPrice()
-
-    //     setPrice({
-    //         vethEth: priceVethEth,
-    //         ethUsd: priceEthUsd,
-    //         vethUsd: (priceVethEth * priceEthUsd).toFixed(2)
-    //     })
-    // }
 
     const checkApproval = async (address) => {
         const accountConnected = (await window.web3.eth.getAccounts())[0];
@@ -157,7 +135,7 @@ export const SwapPoolsInterface = () => {
     }
 
     const onEthAmountChange = e => {
-        // loadPriceData()
+        loadPoolData()
         const value = e.target.value
         let valueInVeth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.eth), convertToWei(poolData.veth)))
         valueInVeth = valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : convertFromWei(valueInVeth)
@@ -167,7 +145,7 @@ export const SwapPoolsInterface = () => {
     }
 
     const onVethAmountChange = e => {
-        // loadPriceData()
+        loadPoolData()
         const value = e.target.value
         let valueInEth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.veth), convertToWei(poolData.eth)))
         console.log(valueInEth, value, poolData.veth, poolData.eth)
@@ -221,18 +199,6 @@ export const SwapPoolsInterface = () => {
             <p>Buy and Sell from the pool.</p>
             {connected && approved &&
                 <>
-                    {/* <Row type="flex" justify="center">
-                        <Col span={18}>
-                            <Label display="block" style={{ marginBottom: '1.33rem' }}>Actual Price</Label>
-                            <div style={{ textAlign: 'center' }}><span style={{ fontSize: 30 }}>${price.vethUsd}</span>
-                                <Tooltip placement="right" title="Current market rate you get.">
-                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
-                                </Tooltip>
-                            </div>
-                            <LabelGrey style={{ display: 'block', marginBottom: 0, textAlign: 'center' }}>{price.vethEth}&nbsp;Ξ</LabelGrey>
-                        </Col>
-                    </Row> */}
-
                     <Row type="flex" justify="center">
                         <Col span={12}>
                             <Row type="flex" justify="center" align="middle">
