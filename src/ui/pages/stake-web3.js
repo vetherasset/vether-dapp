@@ -13,8 +13,7 @@ import { Row, Col, Select, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { Text, LabelGrey, Button, Sublabel, Colour, Center, Label } from '../components'
 
-import Web3 from "web3";
-import {uniSwapRouterAddr} from "../../client/web3";
+import Web3 from "web3"
 
 export const PoolTable = () => {
 
