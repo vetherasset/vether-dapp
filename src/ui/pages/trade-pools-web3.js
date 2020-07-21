@@ -41,6 +41,7 @@ export const SwapPoolsInterface = () => {
 
     useEffect(() => {
         connect()
+        // eslint-disable-next-line
     }, [])
 
     const connect = async () => {
