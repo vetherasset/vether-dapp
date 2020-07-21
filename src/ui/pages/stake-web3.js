@@ -100,12 +100,12 @@ export const PoolTable = () => {
 						<Row>
 							<Col xs={12}>
 								<Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>$VETH</Text>
-								<Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.veth)}</Text></Center>
+								<Center><Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.veth)}</Text></Center>
 								<Center><span style={{ color: '#97948e', margin: 0 }}>${prettify(poolData.veth * (poolData.price * marketData.ethPrice))}</span></Center>
 							</Col>
 							<Col xs={12} style={lineStyle}>
 								<Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0 0 0 15px' }}>ETH Ξ</Text>
-								<Center><Text size={30} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.eth)}</Text></Center>
+								<Center><Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.eth)}</Text></Center>
 								<Center><span style={{ color: '#97948e', margin: 0 }}>${prettify(marketData.ethPrice * poolData.eth)}</span></Center>
 							</Col>
 						</Row>
@@ -427,31 +427,34 @@ export const AddLiquidityTable = (props) => {
 					{approved && account.stakeUnits > 0 &&
 						<>
 							<hr/>
-							<h2>BALANCE</h2>
-							<Row>
-								<Col span={24}>
-									<Row>
-										<Col xs={8}>
-											<span><h6>Asset Share</h6><h3>{prettify(account.assetShare)}</h3></span>
-										</Col>
-										<Col xs={8}>
-											<span><h6>Vether Share</h6><h3>{prettify(account.vetherShare)}</h3></span>
-										</Col>
-										<Col xs={8}>
-											<span><h6>Units</h6><h3>{prettify(account.stakeUnits)}</h3></span>
-										</Col>
-									</Row>
-									<Row>
-										<Col xs={8}>
-											<span><h6>Asset Staked</h6><h3>{prettify(account.assetStaked)}</h3></span>
-										</Col>
-										<Col xs={8}>
-											<span><h6>Vether Staked</h6><h3>{prettify(account.vetherStaked)}</h3></span>
-										</Col>
-										<Col xs={8}>
-											<span><h6>ROI</h6><h3>{prettify(account.roi)}</h3></span>
-										</Col>
-									</Row>
+							<h2>POOLED LIQUIDITY</h2>
+							<p>Assets you have pooled.</p>
+							<Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '2.66rem' }}>
+								<Col xs={8}>
+									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>CURRENT SHARE</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.vetherShare)} $VETH</span>
+								</Col>
+								<Col xs={8}>
+									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>CURRENT SHARE</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.assetShare, 5)} Ξ</span>
+								</Col>
+								<Col xs={8}>
+									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.stakeUnits)}</span>
+								</Col>
+							</Row>
+							<Row type="flex" justify="center" style={{ textAlign: "center" }}>
+								<Col xs={8}>
+									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>STAKED</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.vetherStaked)} $VETH</span>
+								</Col>
+								<Col xs={8}>
+									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>STAKED</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.assetStaked, 5)} Ξ</span>
+								</Col>
+								<Col xs={8}>
+									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>CURRENT ROI</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.roi)}</span>
 								</Col>
 							</Row>
 						</>
@@ -483,6 +486,7 @@ export const RemoveLiquidityTable = (props) => {
 	const onAmountChange = e => {
 		setUnstakeAmount(e.target.value * 100)
 	}
+
 	// const onUnitsChange = e => {
 	// 	setUnstakeUnits(convertToWei(e.target.value))
 	// }
@@ -508,7 +512,7 @@ export const RemoveLiquidityTable = (props) => {
 	return (
 		<>
 			<h2>REMOVE LIQUIDITY</h2>
-			<p>Remove your assets from the pool.</p>
+			<p>Remove your pooled assets.</p>
 			{(account.stakeUnits > 0) &&
 				<>
 					<Row>
