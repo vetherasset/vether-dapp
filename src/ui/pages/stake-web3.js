@@ -297,7 +297,7 @@ export const AddLiquidityTable = (props) => {
 		if (accountConnected){
 			const vetherContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 			const from = address
-			const spender = uniSwapRouterAddr()
+			const spender = vetherPoolsAddr()
 			const approval = await vetherContract.methods.allowance(from, spender).call()
 			const vethBalance = await vetherContract.methods.balanceOf(address).call()
 			if (+approval >= +vethBalance && +vethBalance >= 0) {
@@ -359,10 +359,6 @@ export const AddLiquidityTable = (props) => {
 		setAmount1(e.target.value)
 		console.log(amount1)
 	}
-
-	// const getLink = (tx) => {
-	// 	return getEtherscanURL().concat('tx/').concat(tx)
-	// }
 
 	return (
 		<>
