@@ -273,11 +273,11 @@ export const SwapPoolsInterface = () => {
             {connected && !approved &&
                 <>
                     <Row type="flex" justify="center">
-                        <Col span={12} style={{ textAlign: 'left' }}>
+                        <Col span={24} style={{ textAlign: 'left' }}>
                             <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
                             {!approveFlag &&
                                 <>
-                                    <Button backgroundColor="transparent" onClick={unlockToken}>UNLOCK VETHER >></Button>
+                                    <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE VETHER >></Button>
                                     <Sublabel>APPROVE VETHER FOR TRADES</Sublabel>
                                 </>
                             }

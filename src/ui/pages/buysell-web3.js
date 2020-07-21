@@ -286,7 +286,7 @@ export const SwapInterface = () => {
                             <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
                             {!approveFlag &&
                                 <>
-                                    <Button backgroundColor="transparent" onClick={unlockToken}>UNLOCK VETHER >></Button>
+                                    <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE VETHER >></Button>
                                     <Sublabel>APPROVE VETHER FOR TRADES</Sublabel>
                                 </>
                             }
