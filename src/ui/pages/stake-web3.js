@@ -22,7 +22,7 @@ export const PoolTable = () => {
 	const [marketData, setMarketData] = useState(
 		{ priceUSD: '', priceETH: '', ethPrice: '' })
 	const [poolData, setPoolData] = useState(
-		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "txCount": "", 'roi': "" })
+		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "poolUnits": "", "txCount": "", 'roi': "" })
 
 	useEffect(() => {
 		loadPoolData()
@@ -41,11 +41,11 @@ export const PoolTable = () => {
 			"veth": convertFromWei(poolData.vether),
 			"price": convertFromWei(price),
 			"volume": convertFromWei(poolData.volume),
+			"poolUnits": poolData.poolUnits,
 			"fees": convertFromWei(poolData.fees),
 			"txCount": poolData.txCount,
 			"roi": (+roi / 100) - 100
 		}
-		console.log(poolData_)
 		setPoolData(poolData_)
 		context.setContext({
 			"poolData": poolData_
@@ -158,10 +158,8 @@ export const StakeTable = () => {
 			vetherShare: '', assetShare: '', roi: ''
 		})
 
-
 	const [connected, setConnected ] = useState(false)
 	const [loading, setLoading] = useState(true)
-
 
 	useEffect(() => {
 		connect()
@@ -203,7 +201,7 @@ export const StakeTable = () => {
 				'address': account,
 				'vethBalance': vethBalance,
 				'ethBalance': ethBalance,
-				'stakeUnits': convertFromWei(stakeData.stakeUnits),
+				'stakeUnits': (stakeData.stakeUnits / poolData.poolUnits) * 100,
 				'vetherStaked': convertFromWei(stakeData.vether),
 				'assetStaked': convertFromWei(stakeData.asset),
 				'vetherShare': convertFromWei(poolShare.vether),
@@ -440,7 +438,7 @@ export const AddLiquidityTable = (props) => {
 								</Col>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.stakeUnits)}</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.stakeUnits)} %</span>
 								</Col>
 							</Row>
 							<Row type="flex" justify="center" style={{ textAlign: "center" }}>
