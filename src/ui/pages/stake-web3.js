@@ -361,7 +361,7 @@ export const AddLiquidityTable = (props) => {
 		<>
 			<h2 style={{ fontStyle: 'italic' }}>Select asset to provide.</h2>
 			<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Select an asset you would like to provide. Vether pool is non-proportional. Unlike Uniswap, where you need to provide<br/>
-			an equal proportion of both tokens, Vether pools allow you to provide liquidity in unequal proportions.</LabelGrey>
+			an equal proportion of both assets, Vether pools allow you to provide liquidity in unequal proportions.</LabelGrey>
 
 			<Row style={{ marginBottom: '1.33rem' }}>
 				<Col span={4}>
@@ -386,7 +386,7 @@ export const AddLiquidityTable = (props) => {
 			{asset1 &&
 				<>
 					<h2 style={{ fontStyle: 'italic' }}>Would you like to stake {asset1.name} as well?</h2>
-					<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You may provide both tokens in just one transaction, whilst this is not required.<br/>
+					<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You may provide both assets in just one transaction, whilst this is not required.<br/>
 					If you don't want to add {asset1.name} just leave following amount at 0.</LabelGrey>
 					<Row style={{ marginBottom: '1.33rem' }}>
 						<Col span={5}>
@@ -429,11 +429,11 @@ export const AddLiquidityTable = (props) => {
 							<p>Assets you have pooled.</p>
 							<Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '2.66rem' }}>
 								<Col xs={8}>
-									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>CURRENT SHARE</span>
+									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
 									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.vetherShare)} $VETH</span>
 								</Col>
 								<Col xs={8}>
-									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>CURRENT SHARE</span>
+									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
 									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.assetShare, 5)} Ξ</span>
 								</Col>
 								<Col xs={8}>
