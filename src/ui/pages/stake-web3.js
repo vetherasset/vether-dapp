@@ -387,7 +387,7 @@ export const AddLiquidityTable = (props) => {
 				<>
 					<h2 style={{ fontStyle: 'italic' }}>Would you like to stake {asset1.name} as well?</h2>
 					<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You may provide both assets in just one transaction, whilst this is not required.<br/>
-					If you don't want to add {asset1.name} just leave following amount at 0.</LabelGrey>
+					If you don't want to add {asset1.name} just leave following amount at zero.</LabelGrey>
 					<Row style={{ marginBottom: '1.33rem' }}>
 						<Col span={5}>
 							<Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
