@@ -456,7 +456,7 @@ export const AddLiquidityTable = (props) => {
 									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.assetStaked, 5)} Ξ</span>
 								</Col>
 								<Col xs={8}>
-									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>CURRENT ROI</span>
+									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ROI</span>
 									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.roi)}</span>
 								</Col>
 							</Row>
