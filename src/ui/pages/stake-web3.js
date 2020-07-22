@@ -329,7 +329,12 @@ export const AddLiquidityTable = (props) => {
 		setStakeFlag(true)
 		console.log(stakeFlag)
 		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
-		const tx = await poolContract.methods.stake(amountVeth, amountEth, ETH).send({ value: amountEth, from: fromAcc })
+		const tx = await poolContract.methods.stake(amountVeth, amountEth, ETH).send({
+			value: amountEth,
+			from: fromAcc,
+			gasPrice: '',
+			gas: '240085'
+		})
 		setEthTx(tx.transactionHash)
 		console.log(ethTx)
 	}
