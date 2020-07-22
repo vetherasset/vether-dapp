@@ -278,7 +278,7 @@ export const SwapPoolsInterface = () => {
                             {!approveFlag &&
                                 <>
                                     <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE VETHER >></Button>
-                                    <Sublabel>APPROVE VETHER FOR TRADES</Sublabel>
+                                    <Sublabel>ALLOW VETHER FOR TRADES</Sublabel>
                                 </>
                             }
                             {approveFlag &&

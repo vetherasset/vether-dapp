@@ -415,7 +415,7 @@ export const AddLiquidityTable = (props) => {
 							<Col xs={24}>
 								<Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
 								<Button backgroundColor="transparent" onClick={unlockToken}>APPROVE >></Button>
-								<Sublabel>APPROVE VETHER FOR STAKING</Sublabel>
+								<Sublabel>ALLOW VETHER FOR STAKING</Sublabel>
 								{approveFlag &&
 									<>
 										{!approved &&
