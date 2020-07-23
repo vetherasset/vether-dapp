@@ -18,7 +18,7 @@ const Trade = () => {
 	return (
 		<>
 			<h1>TRADE VETHER</h1>
-			<span>Buy and Sell from Uniswap Pool</span>
+			<span>Buy and Sell from Uniswap Pool.</span>
 			<PoolStats />
 			{safari &&
 				<>
