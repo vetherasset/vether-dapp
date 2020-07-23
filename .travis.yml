@@ -1,12 +1,12 @@
 language: node_js
 node_js:
-  - '10'
   - '11'
 install:
   - yarn install
 script:
-  - node data/chart-scrape.js 
+  - node data/chart-scrape.js
+after_success:
+  - ./update-stats.sh
 branches:
   only:
   - master
-  - dev
