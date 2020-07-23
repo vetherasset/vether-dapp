@@ -9,7 +9,8 @@ import { vetherAddr, vetherAbi, uniSwapAddr, infuraAPI } from '../../client/web3
 import { convertFromWei, getSecondsToGo } from '../utils'
 import { getETHPrice } from '../../client/market.js'
 
-import emissionArray from '../../data/emissionArray.json';
+import emissionArray from '../../data/emissionArray.json'
+import claimArray from '../../data/claimArray.json'
 
 import '../../App.less';
 import { Row, Col } from 'antd'
@@ -55,8 +56,7 @@ const Stats = () => {
     }
 
     const loadClaimData = async () => {
-        const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
-        let claimData = response.data
+        const claimData = claimArray
         context.setContext({ 'claimData': claimData })
         setClaimData(claimData)
         setLoadedClaims(true)
@@ -67,6 +67,7 @@ const Stats = () => {
         setChartData(context.chartData)
         setLoaded(true)
     }
+
     const loadChartData = async () => {
 
         const apiKey = process.env.REACT_APP_ETHPLORER_API

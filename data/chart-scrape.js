@@ -103,7 +103,7 @@ const newArray2 = async () => {
         claims: claimedArray,
         vether: vetherArray
     }
-    await fs.writeFileSync('./src/data/claimArray2.json', JSON.stringify(claimObject, null,4), 'utf8')
+    await fs.writeFileSync('./src/data/claimArray.json', JSON.stringify(claimObject, null,4), 'utf8')
     console.log(claimObject)
 }
 
