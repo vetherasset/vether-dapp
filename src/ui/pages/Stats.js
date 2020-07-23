@@ -10,13 +10,12 @@ import { convertFromWei, getSecondsToGo } from '../utils'
 import { getETHPrice } from '../../client/market.js'
 
 import emissionArray from '../../data/emissionArray.json'
-import claimArray from '../../data/claimArray.json'
 
 import '../../App.less';
 import { Row, Col } from 'antd'
 import { Click, Colour } from '../components'
 import { ChartStyles, ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie, ChartPrice } from './chart'
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons'
 
 const Stats = () => {
 
@@ -56,7 +55,8 @@ const Stats = () => {
     }
 
     const loadClaimData = async () => {
-        const claimData = claimArray
+        const response = await axios.get('https://vether-stats-helper.herokuapp.com/')
+        let claimData = response.data
         context.setContext({ 'claimData': claimData })
         setClaimData(claimData)
         setLoadedClaims(true)
