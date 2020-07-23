@@ -26,7 +26,7 @@ const App = () => {
 
 	const betaWarning = () => { return  (
 			<>
-				This feature is early beta version, so there is a <b>risk involved</b>.
+				This feature is beta version, so there is a <b>risk involved</b>. Pool size is capped to 10 Ξ.
 			</>
 		)
 	}
