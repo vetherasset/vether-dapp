@@ -1,1 +1,4 @@
-node data/chart-scrape.js && git add "src/data/claimArray.json" && git commit -s -am "update charts" && git push origin dev
+node data/chart-scrape.js &&
+git add "src/data/claimArray.json" &&
+git commit -s -am "Update charts" &&
+git push origin master
