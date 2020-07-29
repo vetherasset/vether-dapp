@@ -333,7 +333,7 @@ export const AddLiquidityTable = (props) => {
 			value: amountEth,
 			from: fromAcc,
 			gasPrice: '',
-			gas: '240085'
+			gas: ''
 		})
 		setEthTx(tx.transactionHash)
 		console.log(ethTx)
