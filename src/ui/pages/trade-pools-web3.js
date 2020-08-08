@@ -6,7 +6,7 @@ import {Row, Col, Input} from 'antd'
 import {SwapOutlined, LoadingOutlined} from '@ant-design/icons';
 import {Label, Sublabel, Button, } from '../components'
 
-import { ETH, vetherAddr, vetherAbi, vetherPoolsAddr, vetherPoolsAbi, getEtherscanURL,
+import { ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, getEtherscanURL,
     infuraAPI } from '../../client/web3.js'
 import { totalSupply, convertToWei, BN2Str, oneBN, convertFromWei } from '../utils.js'
 import { calcSwapOutput } from '../math.js'
@@ -83,7 +83,7 @@ export const SwapPoolsInterface = () => {
 
 	const loadPoolData = async () => {
 		const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-		const poolContract = new web3_.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		const poolContract = new web3_.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
 		let poolData = await poolContract.methods.poolData(ETH).call()
 		let price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
 		let roi = await poolContract.methods.getPoolROI(ETH).call()
@@ -108,7 +108,7 @@ export const SwapPoolsInterface = () => {
         if(accountConnected){
             const vetherContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
             const from = address
-            const spender = vetherPoolsAddr()
+            const spender = vetherPools2Addr()
             const approval = await vetherContract.methods.allowance(from, spender).call()
             const vethBalance = await vetherContract.methods.balanceOf(address).call()
             if (+approval >= +vethBalance && +vethBalance >= 0) {
@@ -125,7 +125,7 @@ export const SwapPoolsInterface = () => {
             setApproveFlag(true)
             const vetherContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
             const from = account.address
-            const spender = vetherPoolsAddr()
+            const spender = vetherPools2Addr()
             const value = totalSupply.toString()
             await vetherContract.methods.approve(spender, value)
                 .send({
@@ -159,9 +159,9 @@ export const SwapPoolsInterface = () => {
     const buyVether = async () => {
         setBuyFlag(true)
         setLoadedBuy(false)
-        const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+        const poolContract = new window.web3.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
 		const amountEth = (convertToWei(ethAmount)).toString()
-        const tx = await poolContract.methods.sellAsset(ETH, amountEth)
+        const tx = await poolContract.methods.swap(amountEth, ETH, vetherAddr())
             .send({
                 from: account.address,
                 gasPrice: '',
@@ -176,9 +176,9 @@ export const SwapPoolsInterface = () => {
     const sellVether = async () => {
         setLoadedSell(false)
         setSellFlag(true)
-        const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+        const poolContract = new window.web3.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
         const amountVeth = (convertToWei(vethAmount)).toString()
-        const tx = await poolContract.methods.buyAsset(ETH, amountVeth)
+        const tx = await poolContract.methods.swap(amountVeth, vetherAddr(), ETH)
             .send({
                 from: account.address,
                 gasPrice: '',

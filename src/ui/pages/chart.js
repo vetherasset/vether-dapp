@@ -293,7 +293,7 @@ export const ChartDistro = (props) => {
     const setChart = async (holderArray, newChartInstance) => {
         if(holderArray.length){
             let holderShip = holderArray
-        .filter(item => convertFromWei(item.balance) < 10000)
+        .filter(item => convertFromWei(item.balance) < 100000)
         .filter(item => convertFromWei(item.balance) > 0.1)
         .map(item => convertFromWei(item.balance))
         let labels = []
@@ -360,7 +360,7 @@ export const ChartPie = (props) => {
         for(var i=1; i<=holderArray.length; i++){
         labels.push(i)
         let holderShip = holderArray
-        .filter(item => convertFromWei(item.balance) < 10000)
+        .filter(item => convertFromWei(item.balance) < 100000)
         .map(item => convertFromWei(item.balance))
         chartConfig.data.labels = labels
         chartConfig.data.datasets[0].data = holderShip

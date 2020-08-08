@@ -95,7 +95,7 @@ export const Donations = () => {
             <Row span={24}>
                 <Col xl={12}>
                     <Label display="block" style={{ marginBottom: '0' }}>Amount</Label>
-                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Select your desired amount</LabelGrey>
+                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Select your desired amount.</LabelGrey>
                     <Col xs={24} xl={24} style={{ marginBottom: '1.33rem' }}>
                         <Radio.Group value={sumRadioValue} onChange={onSumRadioChange} style={{ marginBottom: '1.33rem' }}>
                             {sums.map((sum) => {
@@ -108,7 +108,7 @@ export const Donations = () => {
                         <Input size={'medium'} style={{ marginBottom: 10, maxWidth: '247px' }} value={sumInputValue} placeholder={'Your custom amount'} onChange={onSumInputChange} suffix={ currency === 'Eth' ? 'Ξ' : currency } />
                     </Col>
                     <Label display="block" style={{ marginBottom: '0' }}>Developer</Label>
-                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Choose developer you wish to donate to</LabelGrey>
+                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Choose a developer you wish to donate to.</LabelGrey>
                     <Row>
                         <Col xl={12} style={{paddingRight: '21px'}}>
                             <Select size={'large'} style={{ width: '100%', marginBottom: '1.33rem' }} placeholder="Select a developer" onChange={onDevDataInputChange}>

@@ -9,13 +9,13 @@ import { vetherAddr, vetherAbi, uniSwapAddr, infuraAPI } from '../../client/web3
 import { convertFromWei, getSecondsToGo } from '../utils'
 import { getETHPrice } from '../../client/market.js'
 
-import emissionArray from '../../data/emissionArray.json';
+import emissionArray from '../../data/emissionArray.json'
 
 import '../../App.less';
 import { Row, Col } from 'antd'
 import { Click, Colour } from '../components'
 import { ChartStyles, ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie, ChartPrice } from './chart'
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons'
 
 const Stats = () => {
 
@@ -55,7 +55,7 @@ const Stats = () => {
     }
 
     const loadClaimData = async () => {
-        const response = await axios.get('https://raw.githubusercontent.com/vetherasset/vether-dapp/master/src/data/claimArray.json')
+        const response = await axios.get('https://vether-stats-helper.herokuapp.com/')
         let claimData = response.data
         context.setContext({ 'claimData': claimData })
         setClaimData(claimData)
@@ -67,6 +67,7 @@ const Stats = () => {
         setChartData(context.chartData)
         setLoaded(true)
     }
+
     const loadChartData = async () => {
 
         const apiKey = process.env.REACT_APP_ETHPLORER_API
