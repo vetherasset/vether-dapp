@@ -6,7 +6,7 @@ import {
 	getUniswapPriceEth, getEtherscanURL, infuraAPI,
 } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, prettify, oneBN, BN2Str, getBN } from '../utils'
+import { convertFromWei, prettify, oneBN, BN2Str, getBN, formatAPY } from '../utils'
 import { calcShare } from '../math'
 
 import { Row, Col, Select, Input, Tooltip } from 'antd'
@@ -44,7 +44,7 @@ export const PoolTable = () => {
 			"poolUnits": poolData.poolUnits,
 			"fees": convertFromWei(poolData.fees),
 			"txCount": poolData.txCount,
-			"apy": (+apy / 100) - 100
+			"apy": (+apy)
 		}
 		setPoolData(poolData_)
 		context.setContext({
@@ -137,7 +137,7 @@ export const PoolTable = () => {
 							</Col>
 							<Col xs={6}>
 								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>APY</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.apy)}%</Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{formatAPY(poolData.apy)}</Text></Center>
 							</Col>
 						</Row>
 					</div>
