@@ -2,6 +2,7 @@ import Web3 from 'web3'
 import WETHER from '../artifacts/Wether.json'
 import VETHER from '../artifacts/Vether3.json'
 import VETHERPOOLS from '../artifacts/VetherPools.json'
+import VETHERPOOLS2 from '../artifacts/VetherPools2.json'
 import UNISWAP from '../artifacts/UniswapPair.json'
 import ROUTER from '../artifacts/Router.json'
 
@@ -41,6 +42,14 @@ export const vetherPoolsAddr = () => {
     }
 }
 
+export const vetherPools2Addr = () => {
+    if(TESTNET) {
+        return '0xCFE254e64Bb766bDb0998801F7b9F2E6762a92DB'
+    } else {
+        return '0x52DEcc80d5233d35d3E2dCdC0Ad2ba0373155c45'
+    }
+}
+
 export const wetherAbi = () => {
     return WETHER.abi
 }
@@ -51,6 +60,10 @@ export const vetherAbi = () => {
 
 export const vetherPoolsAbi = () => {
 	return VETHERPOOLS.abi
+}
+
+export const vetherPools2Abi = () => {
+	return VETHERPOOLS2.abi
 }
 
 export const infuraAPI = () => {

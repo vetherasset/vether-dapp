@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
 import {
-	ETH, vetherAddr, vetherAbi, vetherPoolsAddr, vetherPoolsAbi,
+	ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, vetherPoolsAddr, vetherPoolsAbi, 
 	getUniswapPriceEth, getEtherscanURL, infuraAPI,
 } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
@@ -32,10 +32,10 @@ export const PoolTable = () => {
 
 	const loadPoolData = async () => {
 		const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-		const poolContract = new web3_.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		const poolContract = new web3_.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
 		let poolData = await poolContract.methods.poolData(ETH).call()
 		let price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
-		let roi = await poolContract.methods.getPoolROI(ETH).call()
+		let apy = await poolContract.methods.getPoolAPY(ETH).call()
 		const poolData_ = {
 			"eth": convertFromWei(poolData.asset),
 			"veth": convertFromWei(poolData.vether),
@@ -44,7 +44,7 @@ export const PoolTable = () => {
 			"poolUnits": poolData.poolUnits,
 			"fees": convertFromWei(poolData.fees),
 			"txCount": poolData.txCount,
-			"roi": (+roi / 100) - 100
+			"apy": (+apy / 100) - 100
 		}
 		setPoolData(poolData_)
 		context.setContext({
@@ -136,8 +136,8 @@ export const PoolTable = () => {
 								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.txCount)}</Text></Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>ROI</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.roi)}%</Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>APY</Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.apy)}%</Text></Center>
 							</Col>
 						</Row>
 					</div>
@@ -186,7 +186,7 @@ export const StakeTable = () => {
 			const ethBalance = convertFromWei(await web3.eth.getBalance(account))
 			const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
 
-			const poolContract = new web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+			const poolContract = new web3.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
 			let stakeData = await poolContract.methods.getMemberStakeData(account, ETH).call()
 
 			let poolData = await poolContract.methods.poolData(ETH).call()
@@ -294,7 +294,7 @@ export const AddLiquidityTable = (props) => {
 		if (accountConnected){
 			const vetherContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 			const from = address
-			const spender = vetherPoolsAddr()
+			const spender = vetherPools2Addr()
 			const approval = await vetherContract.methods.allowance(from, spender).call()
 			const vethBalance = await vetherContract.methods.balanceOf(address).call()
 			if (+approval >= +vethBalance && +vethBalance >= 0) {
@@ -309,7 +309,7 @@ export const AddLiquidityTable = (props) => {
 		setApproveFlag(true)
 		const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 		const fromAcc = account.address
-		const spender = vetherPoolsAddr()
+		const spender = vetherPools2Addr()
 		const value = totalSupply.toString()
 		await tokenContract.methods.approve(spender, value).send({ from: fromAcc })
 		checkApproval(account.address)
@@ -328,7 +328,7 @@ export const AddLiquidityTable = (props) => {
 		}
 		setStakeFlag(true)
 		console.log(stakeFlag)
-		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		const poolContract = new window.web3.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
 		const tx = await poolContract.methods.stake(amountVeth, amountEth, ETH).send({
 			value: amountEth,
 			from: fromAcc,
@@ -457,7 +457,7 @@ export const AddLiquidityTable = (props) => {
 								</Col>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ROI</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.roi)}</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify((account.roi/100) - 100)}%</span>
 								</Col>
 							</Row>
 						</>
@@ -496,7 +496,7 @@ export const RemoveLiquidityTable = (props) => {
 
 	const unstake = async () => {
 		setBurnTknFlag(true)
-		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		const poolContract = new window.web3.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
 		console.log(unstakeAmount, ETH)
 		const tx = await poolContract.methods.unstake(unstakeAmount, ETH).send({ from: account.address })
 		setTknTx(tx.transactionHash)
@@ -505,7 +505,7 @@ export const RemoveLiquidityTable = (props) => {
 
 	// const unstakeExact = async () => {
 	// 	setBurnTknFlag(true)
-	// 	const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+	// 	const poolContract = new window.web3.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
 	// 	console.log(unstakeUnits, ETH)
 	// 	const tx = await poolContract.methods.unstakeExact(unstakeUnits, ETH).send({ from: account.address })
 	// 	setTknTx(tx.transactionHash)
@@ -543,6 +543,110 @@ export const RemoveLiquidityTable = (props) => {
 							}
 						</Col>
 					</Row>
+				</>
+			}
+		</>
+	)
+}
+
+export const UpgradeTable = () => {
+
+	const context = useContext(Context)
+
+	const [account, setAccount] = useState(
+		{
+			address: '', vethBalance: '', ethBalance: '',
+			stakeUnits: '', vetherStaked: '', assetStaked: '',
+			vetherShare: '', assetShare: '', roi: ''
+		})
+
+	const [connected, setConnected ] = useState(false)
+	const [loading, setLoading] = useState(true)
+
+	useEffect(() => {
+		connect()
+		console.log(account)
+		// eslint-disable-next-line
+	}, [])
+
+	const connect = async () => {
+		const accountConnected = (await window.web3.eth.getAccounts())[0]
+		if(accountConnected) {
+			window.web3 = new Web3(window.ethereum);
+			var accounts = await window.web3.eth.getAccounts()
+			const address = await accounts[0]
+			// context.accountData ? await getAccountData() : 
+			await loadAccountData(address)
+			setConnected(true)
+			setLoading(false)
+		}
+	}
+
+	const getAccountData = async () => {
+		setAccount(context.accountData)
+	}
+
+	const loadAccountData = async (account) => {
+		const accountConnected = (await window.web3.eth.getAccounts())[0];
+		if (accountConnected) {
+			const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+			const contract = await new web3.eth.Contract(vetherAbi(), vetherAddr())
+			const ethBalance = convertFromWei(await web3.eth.getBalance(account))
+			const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
+
+			const poolContract = new web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+			let stakeData = await poolContract.methods.getMemberStakeData(account, ETH).call()
+
+			let poolData = await poolContract.methods.poolData(ETH).call()
+			let poolShare = calcShare(getBN(stakeData.stakeUnits), getBN(poolData.poolUnits), getBN(poolData.asset), getBN(poolData.vether))
+
+			// let vetherShare = await poolContract.methods.getStakerShareVether(account, ETH).call()
+			// let assetShare = await poolContract.methods.getStakerShareAsset(account, ETH).call()
+			let memberROI = await poolContract.methods.getMemberROI(account, ETH).call()
+			console.log(memberROI)
+
+			const accountData = {
+				'address': account,
+				'vethBalance': vethBalance,
+				'ethBalance': ethBalance,
+				'stakeUnits': (stakeData.stakeUnits / poolData.poolUnits) * 100,
+				'vetherStaked': convertFromWei(stakeData.vether),
+				'assetStaked': convertFromWei(stakeData.asset),
+				'vetherShare': convertFromWei(poolShare.vether),
+				'assetShare': convertFromWei(poolShare.asset),
+				"roi": (+memberROI)
+			}
+			setAccount(accountData)
+			context.setContext({ "accountData": accountData })
+		}
+	}
+
+	const upgrade = async () => {
+		const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
+		await poolContract.methods.upgrade(vetherPools2Addr()).send({ from: account.address })
+	}
+
+	return (
+		<>
+			<h2>UPGRADE FROM A PREVIOUS CONTRACT</h2>
+			{loading &&
+				<LoadingOutlined style={{ mnarginBottom: 0 }} />
+			}
+
+			{connected && !loading &&
+				<>
+					{account.stakeUnits > "0" &&
+					<>
+						<p>Upgrade from VetherPools1 to VetherPools2</p>
+						<Button backgroundColor="transparent" onClick={upgrade}>UPGRADE >></Button>
+						
+					</>
+					}
+					{account.stakeUnits === "0" &&
+					<>
+						<h3>NOTHING TO UPGRADE</h3>
+					</>
+					}
 				</>
 			}
 		</>

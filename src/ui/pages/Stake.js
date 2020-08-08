@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { LabelGrey } from '../components'
-import { PoolTable, StakeTable } from './stake-web3'
+import { PoolTable, StakeTable, UpgradeTable } from './stake-web3'
 import { SwapPoolsInterface } from './trade-pools-web3'
 import { Tabs } from 'antd';
 import '../../App.less';
@@ -25,7 +25,7 @@ const Stake = () => {
 	return (
 		<>
 			<h1>LIQUIDITY POOL</h1>
-			<p>Try out the beta version of Vether liquidity pool.</p>
+			<p>Try out the beta version of Vether liquidity pool - V2.</p>
 			<PoolTable />
 			{safari &&
 				<>
@@ -45,6 +45,11 @@ const Stake = () => {
 						<TabPane tab="TRADE" key="2" style={{ textAlign: "left" }}>
 
 							<SwapPoolsInterface />
+
+						</TabPane>
+						<TabPane tab="UPGRADE" key="3" style={{ textAlign: "left" }}>
+
+							<UpgradeTable />
 
 						</TabPane>
 					</Tabs>
