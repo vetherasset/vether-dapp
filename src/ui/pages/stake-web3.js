@@ -6,7 +6,7 @@ import {
 	getUniswapPriceEth, getEtherscanURL, infuraAPI,
 } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, prettify, oneBN, BN2Str, getBN, formatAPY } from '../utils'
+import { convertFromWei, prettify, oneBN, BN2Str, getBN } from '../utils'
 import { calcShare } from '../math'
 
 import { Row, Col, Select, Input, Tooltip } from 'antd'
@@ -22,7 +22,7 @@ export const PoolTable = () => {
 	const [marketData, setMarketData] = useState(
 		{ priceUSD: '', priceETH: '', ethPrice: '' })
 	const [poolData, setPoolData] = useState(
-		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "poolUnits": "", "txCount": "", 'roi': "" })
+		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "poolUnits": "", "txCount": "", 'age':"", 'roi': "", 'apy': "" })
 
 	useEffect(() => {
 		loadPoolData()
@@ -35,6 +35,8 @@ export const PoolTable = () => {
 		const poolContract = new web3_.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
 		let poolData = await poolContract.methods.poolData(ETH).call()
 		let price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
+		let age = await poolContract.methods.getPoolAge(ETH).call()
+		let roi = await poolContract.methods.getPoolROI(ETH).call()
 		let apy = await poolContract.methods.getPoolAPY(ETH).call()
 		const poolData_ = {
 			"eth": convertFromWei(poolData.asset),
@@ -44,7 +46,9 @@ export const PoolTable = () => {
 			"poolUnits": poolData.poolUnits,
 			"fees": convertFromWei(poolData.fees),
 			"txCount": poolData.txCount,
-			"apy": (+apy)
+			"age": age,
+			"roi": roi,
+			"apy": apy
 		}
 		setPoolData(poolData_)
 		context.setContext({
@@ -132,9 +136,8 @@ export const PoolTable = () => {
 								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.txCount)}</Text></Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>APY</Text></Center>
-								{/*<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{formatAPY(poolData.apy)}</Text></Center>*/}
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}><i>n/a</i></Text></Center>
+								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>ROI</Text></Center>
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{poolData.roi/100}%</Text></Center>
 							</Col>
 						</Row>
 					</div>
