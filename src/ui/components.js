@@ -104,7 +104,7 @@ export const Sublabel = (props) => {
   styles.display = "block"
   styles.clear = "both"
 
-    if (props.margin) {
+  if (props.margin) {
     styles.margin = props.margin
   }
 

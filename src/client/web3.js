@@ -5,6 +5,7 @@ import VETHERPOOLS from '../artifacts/VetherPools.json'
 import VETHERPOOLS2 from '../artifacts/VetherPools2.json'
 import UNISWAP from '../artifacts/UniswapPair.json'
 import ROUTER from '../artifacts/Router.json'
+import {BN2Str, oneBN} from "../ui/utils";
 
 const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE') ? true : false
 
@@ -76,7 +77,7 @@ export const infuraAPI = () => {
 }
 
 export const getWeb3 = () => {
-    return new Web3(Web3.givenProvider || "http://localhost:7545") 
+    return new Web3(Web3.givenProvider || "http://localhost:7545")
 }
 
 export const uniSwapAddr = () => {
@@ -106,8 +107,8 @@ export const uniSwapRouterAbi = () => {
 export const getUniswapPriceEth = async () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-    const regExp = /e-(\d+)/;
-    let valueEth;
+    const regExp = /e-(\d+)/
+    let valueEth
 
     try {
         const pool = await contract.methods.getReserves().call()
@@ -120,6 +121,21 @@ export const getUniswapPriceEth = async () => {
         console.log(err)
     }
     return (valueEth)
+}
+
+export const getVetherPrice = async () => {
+
+    const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+    const poolContract = new web3_.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
+    let price
+
+    try {
+        price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
+    } catch (err) {
+        console.log(err)
+    }
+
+    return(price)
 }
 
 export const getUniswapDetails = async () => {

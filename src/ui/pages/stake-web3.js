@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
 import {
-	ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, vetherPoolsAddr, vetherPoolsAbi, 
+	ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, vetherPoolsAddr, vetherPoolsAbi,
 	getUniswapPriceEth, getEtherscanURL, infuraAPI,
 } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
@@ -54,12 +54,8 @@ export const PoolTable = () => {
 
 	const loadMarketData = async () => {
 		const priceEtherUSD = await getETHPrice()
-		const priceVetherEth = await getUniswapPriceEth()
-		const priceVetherUSD = priceEtherUSD * priceVetherEth
 
 		const marketData = {
-			priceUSD: priceVetherUSD,
-			priceETH: priceVetherEth,
 			ethPrice: priceEtherUSD
 		}
 
@@ -634,7 +630,7 @@ export const UpgradeTable = () => {
 					<>
 						<p>Upgrade from VetherPools1 to VetherPools2</p>
 						<Button backgroundColor="transparent" onClick={upgrade}>UPGRADE >></Button>
-						
+
 					</>
 					}
 					{account.stakeUnits === "0" &&

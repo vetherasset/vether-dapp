@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, infuraAPI, getVetherPrice } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, convertToDate, prettify } from '../utils'
 
@@ -14,7 +14,6 @@ export const VetherTable = () => {
 
     const context = useContext(Context)
 
-    // const [loaded, setLoaded] = useState(null)
     const [vetherData, setVetherData] = useState(
         { name: '', symbol: '', totalSupply: '', decimals: '', genesis: '' })
     const [emissionData, setEmissionData] = useState(
@@ -83,36 +82,21 @@ export const VetherTable = () => {
 
     const loadMarketData = async () => {
         const priceEtherUSD = await getETHPrice()
-        const priceVetherEth = await getUniswapPriceEth()
-        const priceVetherUSD = priceEtherUSD * priceVetherEth
+        const priceVetherEth = await getVetherPrice()
+
+        const priceVetherUSD = convertFromWei(priceVetherEth) * priceEtherUSD
 
         const marketData = {
             priceUSD: priceVetherUSD,
             priceETH: priceVetherEth,
-            ethPrice: priceEtherUSD}
+            ethPrice: priceEtherUSD
+        }
 
         setMarketData(marketData)
         context.setContext({
             "marketData": marketData
         })
     }
-
-    function convertToETH(vether) {
-        return (vether * marketData.priceETH)
-    }
-
-    // function convertToUSD(vether) {
-    //     return (vether * marketData.priceUSD).toFixed(3)
-    // }
-
-    function convertEthtoUSD(ether, sp) {
-        return (+ether * marketData.ethPrice).toFixed(sp)
-    }
-
-    // const getLink = useCallback(() => {
-    //     const linkFull = getEtherscanURL().concat('address/').concat(vetherAddr())
-    //     return linkFull
-    // }, [])
 
     const vetherStatsStyles = {
         padding: '49px 21px',
@@ -128,18 +112,15 @@ export const VetherTable = () => {
                         <Logo/>
                     </div>
                     <div style={{textAlign: 'center'}}>
-                        <Text size={32}>${(convertEthtoUSD(marketData.priceETH, 2))}</Text>
+                        <Text size={32}>${prettify(marketData.priceUSD)}</Text>
                     </div>
                 </Col>
                 <Col xs={24} sm={16}>
                     <Row>
                         <Col xs={12}>
                             <Text size={32}>{vetherData.name}&nbsp;({vetherData.symbol})</Text>
-                            {/* <br /> */}
-                            {/* <Link to={"/stats"}><Click size={12}> MORE DATA -></Click></Link> */}
                         </Col>
                         <Col xs={12}>
-
                         </Col>
                     </Row>
 
@@ -150,8 +131,6 @@ export const VetherTable = () => {
                             <Text size={24}>{prettify(vetherData.totalSupply)}</Text>
                         </Col>
                         <Col xs={24} sm={12}>
-                            {/* <LabelGrey size={14}>TOTAL CAP: </LabelGrey><br />
-                            <Text size={24}>${prettify((convertEthtoUSD(convertToETH(vetherData.totalSupply), 0)))}</Text> */}
                         </Col>
                     </Row>
 
@@ -159,12 +138,12 @@ export const VetherTable = () => {
                         <Col xs={24} sm={12}>
                             <LabelGrey size={14}>EMITTED</LabelGrey>
                             <br />
-                            <Text size={24}>{prettify((+emissionData.totalEmitted).toFixed(0))}</Text>
+                            <Text size={24}>{prettify(emissionData.totalEmitted, 0)}</Text>
                         </Col>
                         <Col id="vetherStatsTableCircCap"xs={24} sm={12}>
                             <LabelGrey size={14}>CIRCULATING CAP</LabelGrey>
                             <br />
-                            <Text size={24}>${prettify((convertEthtoUSD(convertToETH(emissionData.totalEmitted), 0)))}</Text>
+                            <Text size={24}>${prettify(emissionData.totalEmitted * marketData.priceUSD, 0)}</Text>
                         </Col>
                     </Row>
 
