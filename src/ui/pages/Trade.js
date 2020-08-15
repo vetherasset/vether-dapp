@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { PoolStats, TradeHistory} from './trade-web3'
-import { SwapInterface } from './buysell-web3'
+import { SwapPoolsInterface } from './trade-pools-web3'
 import { LabelGrey } from '../components'
 
 import '../../App.less'
@@ -18,8 +17,7 @@ const Trade = () => {
 	return (
 		<>
 			<h1>TRADE VETHER</h1>
-			<span>Buy and Sell from Uniswap Pool.</span>
-			<PoolStats />
+			<p>Buy and Sell using the Vether liquidity pool beta V2.</p>
 			{safari &&
 				<>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
@@ -28,10 +26,9 @@ const Trade = () => {
 			}
 			{!safari &&
 				<>
-					<SwapInterface />
+					<SwapPoolsInterface />
 				</>
 			}
-			<TradeHistory />
 		</>
 	)
 }

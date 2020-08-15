@@ -56,6 +56,6 @@ export function getSecondsToGo(date) {
 }
 
 export const formatAPY = (input) =>{
-    const annual = (input - (10000*365))/100
+    let annual = input
     return `${annual}%`
 }

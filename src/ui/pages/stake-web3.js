@@ -91,7 +91,7 @@ export const PoolTable = () => {
 	return (
 		<div style={{ marginTop: '2rem' }}>
 			<Row type="flex" justify="center">
-				<Col span={16}>
+				<Col lg={16} xs={24}>
 					<div style={poolStyles}>
 						<Row>
 							<Col xs={12}>
@@ -133,7 +133,8 @@ export const PoolTable = () => {
 							</Col>
 							<Col xs={6}>
 								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>APY</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{formatAPY(poolData.apy)}</Text></Center>
+								{/*<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{formatAPY(poolData.apy)}</Text></Center>*/}
+								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}><i>n/a</i></Text></Center>
 							</Col>
 						</Row>
 					</div>
@@ -365,7 +366,7 @@ export const AddLiquidityTable = (props) => {
 			an equal proportion of both assets, Vether pools allow you to provide liquidity in unequal proportions.</LabelGrey>
 
 			<Row style={{ marginBottom: '1.33rem' }}>
-				<Col span={4}>
+				<Col lg={4} xs={10}>
 					<Label display="block" style={{marginBottom: '0.55rem'}}>Asset</Label>
 					<Select size={'large'} placeholder="Select" onChange={onAssetChange} style={{ width: 135 }}>
 						{assets.map((asset, index) => {
@@ -375,7 +376,7 @@ export const AddLiquidityTable = (props) => {
 						})}
 					</Select>
 				</Col>
-				<Col span={5}>
+				<Col lg={5} xs={9}>
 					<Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
 					{asset0
 						? <Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset0amountChange} value={amount0} suffix={asset0.symbol}/>
@@ -390,7 +391,7 @@ export const AddLiquidityTable = (props) => {
 					<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You may provide both assets in just one transaction, whilst this is not required.<br/>
 					If you don't want to add {asset1.name} just leave following amount at zero.</LabelGrey>
 					<Row style={{ marginBottom: '1.33rem' }}>
-						<Col span={5}>
+						<Col lg={6} xs={9}>
 							<Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
 							<Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset1amountChange} value={amount1} suffix={asset1.symbol}/>
 						</Col>
@@ -619,7 +620,8 @@ export const UpgradeTable = () => {
 
 	return (
 		<>
-			<h2>UPGRADE FROM A PREVIOUS CONTRACT</h2>
+			<h2>UPGRADE TO BETA 2</h2>
+			<p>Move your liquidity from the beta V1 pool.</p>
 			{loading &&
 				<LoadingOutlined style={{ mnarginBottom: 0 }} />
 			}

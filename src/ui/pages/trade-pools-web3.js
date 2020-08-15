@@ -2,14 +2,17 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 import Web3 from 'web3'
 
-import {Row, Col, Input} from 'antd'
-import {SwapOutlined, LoadingOutlined} from '@ant-design/icons';
-import {Label, Sublabel, Button, } from '../components'
+import {Row, Col, Input, Tooltip} from 'antd'
+import {SwapOutlined, QuestionCircleOutlined, LoadingOutlined} from '@ant-design/icons';
+import {Label, Sublabel, Button, Colour, LabelGrey,} from '../components'
 
-import { ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, getEtherscanURL,
-    infuraAPI } from '../../client/web3.js'
-import { totalSupply, convertToWei, BN2Str, oneBN, convertFromWei } from '../utils.js'
+import {
+    ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, getEtherscanURL,
+    infuraAPI, getVetherPrice
+} from '../../client/web3.js'
+import {totalSupply, convertToWei, BN2Str, oneBN, convertFromWei, prettify} from '../utils.js'
 import { calcSwapOutput } from '../math.js'
+import {getETHPrice} from "../../client/market";
 
 export const SwapPoolsInterface = () => {
 
@@ -38,6 +41,8 @@ export const SwapPoolsInterface = () => {
 
     const [poolData, setPoolData] = useState(
 		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "txCount": "", 'roi': "" })
+    const [marketData, setMarketData] = useState(
+        { priceUSD: '', priceETH: '', ethPrice: '' })
 
     useEffect(() => {
         connect()
@@ -53,6 +58,7 @@ export const SwapPoolsInterface = () => {
             const vetherContract = new web3.eth.Contract(vetherAbi(), vetherAddr())
             loadAccountData(vetherContract, address)
             loadPoolData()
+            loadMarketData()
             setVetherContract(vetherContract)
             checkApproval(address)
             setConnected(true)
@@ -103,6 +109,24 @@ export const SwapPoolsInterface = () => {
 		})
 	}
 
+    const loadMarketData = async () => {
+        const priceEtherUSD = await getETHPrice()
+        const priceVetherEth = await getVetherPrice()
+
+        const priceVetherUSD = convertFromWei(priceVetherEth) * priceEtherUSD
+
+        const marketData = {
+            priceUSD: priceVetherUSD,
+            priceETH: convertFromWei(priceVetherEth),
+            ethPrice: priceEtherUSD
+        }
+
+        setMarketData(marketData)
+        context.setContext({
+            "marketData": marketData
+        })
+    }
+
     const checkApproval = async (address) => {
         const accountConnected = (await window.web3.eth.getAccounts())[0];
         if(accountConnected){
@@ -142,7 +166,7 @@ export const SwapPoolsInterface = () => {
         valueInVeth = valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : convertFromWei(valueInVeth)
         setEthAmount(value.toString())
         setVethAmount("")
-        setVethAmountCalculated((+valueInVeth).toFixed(5))
+        setVethAmountCalculated((+valueInVeth).toFixed(2))
     }
 
     const onVethAmountChange = e => {
@@ -196,16 +220,24 @@ export const SwapPoolsInterface = () => {
 
     return (
         <>
-            <h2>TRADE VETHER</h2>
-            <p>Buy and Sell from Vether pool.</p>
             {connected && approved &&
                 <>
                     <Row type="flex" justify="center">
-                        <Col span={12}>
+                        <Col lg={12} xs={24}>
+                            <Label display="block" style={{ marginBottom: '1.33rem' }}>Actual Price</Label>
+                            <div style={{ textAlign: 'center' }}><span style={{ fontSize: 30 }}>${prettify(marketData.priceUSD)}</span>
+                                <Tooltip placement="right" title="Current market rate you get.">
+                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
+                                </Tooltip>
+                            </div>
+                            <LabelGrey style={{ display: 'block', marginBottom: 0, textAlign: 'center' }}>{prettify(marketData.priceETH, 6)}&nbsp;Ξ</LabelGrey>
+                        </Col>
+                    </Row>
+                    <Row type="flex" justify="center">
+                        <Col lg={12} xs={24}>
                             <Row type="flex" justify="center" align="middle">
                                 <Col span={10}>
                                     <Label display="block" style={{marginBottom: '0.55rem'}}>Buy</Label>
-                                    {/*<Label>{prettify(account.ethBalance)}</Label>*/}
                                     <Input size={'large'} style={{marginBottom: "1.3rem"}} onChange={onEthAmountChange} value={ethAmount}
                                            placeholder={ethAmountCalculated} suffix="ETH Ξ"/>
                                     {ethAmount > 0
@@ -223,7 +255,6 @@ export const SwapPoolsInterface = () => {
                                     <Row>
                                         <Col xs={24}>
                                             <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>
-                                            {/*<Label>{prettify(account.vethBalance)}</Label>*/}
                                             <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
                                                    placeholder={vethAmountCalculated} suffix="$VETH"/>
                                             {vethAmount > 0
