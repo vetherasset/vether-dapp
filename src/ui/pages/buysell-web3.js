@@ -205,7 +205,7 @@ export const SwapInterface = () => {
                         <Col span={12}>
                             <Label display="block" style={{ marginBottom: '1.33rem' }}>Actual Price</Label>
                             <div style={{ textAlign: 'center' }}><span style={{ fontSize: 30 }}>${price.vethUsd}</span>
-                                <Tooltip placement="right" title="Current market rate you get.">
+                                <Tooltip placement="right" title="Current market rate">
                                     &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
                                 </Tooltip>
                             </div>

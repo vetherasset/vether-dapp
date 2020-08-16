@@ -114,7 +114,7 @@ export const PoolTable = () => {
 								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>PRICE</Text></Center>
 								<Center>
 									<Text size={'1.9rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>${prettify(poolData.price * marketData.ethPrice)}
-										<Tooltip placement="right" title="Current market rate you get.">
+										<Tooltip placement="right" title="Current market rate">
 										&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
 										</Tooltip>
 									</Text>
