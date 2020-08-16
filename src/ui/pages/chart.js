@@ -85,7 +85,7 @@ const getChartConfig = () => {
             labels:{
                 fontFamily: 'Lato,sans-serif',
             }
-            
+
         },
         layout: {
             padding: {
@@ -119,7 +119,7 @@ const rightAxisConfig = () => {
       }
 }}
 
-export const ChartEther = (props) => {  
+export const ChartEther = (props) => {
 
     const chartContainer = useRef(null)
     // eslint-disable-next-line
@@ -145,7 +145,7 @@ export const ChartEther = (props) => {
     }
 
     const setChart = (claimArray, newChartInstance) => {
-        
+
         chartConfig.data.labels = claimArray.days
         chartConfig.data.datasets[0].data = claimArray.burns
         const dataset2 = {
@@ -203,25 +203,26 @@ export const ChartClaim = (props) => {
     const setChart = async (claimArray, newChartInstance) => {
         chartConfig.data.labels = claimArray.days
         chartConfig.data.datasets[0].data = claimArray.unclaims
-        const dataset2 = {
-            label: "Emission",
-            data:claimArray.emission,
-            backgroundColor: 'rgba(255, 206, 86, 0.2)',
-            borderColor: 'rgba(255, 206, 86, 1)',
-            borderWidth: 1
-        }
-        chartConfig.data.datasets.push(dataset2)
 
-        const dataset3 = {
-            type: "line",
-            label: "Planned Total",
-            data:claimArray.vether,
-            backgroundColor: 'rgba(255, 206, 86, 0.2)',
-            borderColor: 'rgba(255, 206, 86, 1)',
-            borderWidth: 1,
-            yAxisID: "R"
-        }
-        chartConfig.data.datasets.push(dataset3)
+        // const dataset2 = {
+        //     label: "Emission",
+        //     data:claimArray.emission,
+        //     backgroundColor: 'rgba(255, 206, 86, 0.2)',
+        //     borderColor: 'rgba(255, 206, 86, 1)',
+        //     borderWidth: 1
+        // }
+        // chartConfig.data.datasets.push(dataset2)
+        //
+        // const dataset3 = {
+        //     type: "line",
+        //     label: "Planned Total",
+        //     data:claimArray.vether,
+        //     backgroundColor: 'rgba(255, 206, 86, 0.2)',
+        //     borderColor: 'rgba(255, 206, 86, 1)',
+        //     borderWidth: 1,
+        //     yAxisID: "R"
+        // }
+        // chartConfig.data.datasets.push(dataset3)
 
         const dataset4 = {
             type: "line",
@@ -254,7 +255,7 @@ export const ChartDistro = (props) => {
     chartConfig.data.datasets[0].label = 'Member Ownership'
     chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Vether (linear)'
     chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Member'
-    
+
     const dataset3 = {
         type: "line",
         label: "Ownership",
@@ -304,7 +305,7 @@ export const ChartDistro = (props) => {
         chartConfig.data.datasets[0].data = holderShip
         chartConfig.data.datasets[1].data = holderShip
         newChartInstance.update()
-        }  
+        }
     }
 
     function convertFromWei(number) {
@@ -319,7 +320,7 @@ export const ChartDistro = (props) => {
 }
 
 export const ChartPie = (props) => {
-    
+
     var chartConfig = getChartConfig()
     chartConfig.type = "pie"
     chartConfig.options.title.text = 'Vether Ownership'
@@ -365,7 +366,7 @@ export const ChartPie = (props) => {
         chartConfig.data.labels = labels
         chartConfig.data.datasets[0].data = holderShip
         newChartInstance.update()
-        }  
+        }
     }
 
     function convertFromWei(number) {
@@ -528,7 +529,7 @@ export const ChartData = (props) =>{
     )
 }
 
-export const ChartPrice = (props) => {  
+export const ChartPrice = (props) => {
 
     const chartContainer = useRef(null)
     // eslint-disable-next-line
@@ -554,7 +555,7 @@ export const ChartPrice = (props) => {
     }
 
     const setChart = (priceData, uniswapPrices, newChartInstance) => {
-        
+
         chartConfig.data.labels = props.days
         chartConfig.data.datasets[0].data = priceData.daily
         chartConfig.data.datasets[0].type = "line"

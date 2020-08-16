@@ -1,33 +1,30 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react'
 import { Context } from '../../context'
 import axios from 'axios'
 
-import Breakpoint from 'react-socks';
+import Breakpoint from 'react-socks'
 
 import Web3 from 'web3';
-import { vetherAddr, vetherAbi, uniSwapAddr, infuraAPI } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo } from '../utils'
-import { getETHPrice } from '../../client/market.js'
 
 import emissionArray from '../../data/emissionArray.json'
 
 import '../../App.less';
 import { Row, Col } from 'antd'
 import { Click, Colour } from '../components'
-import { ChartStyles, ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie, ChartPrice } from './chart'
+import { ChartStyles, ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie } from './chart'
 import { LoadingOutlined } from '@ant-design/icons'
 
 const Stats = () => {
 
     const context = useContext(Context)
-    // eslint-disable-next-line
+
     const [loaded, setLoaded] = useState(false)
-    const [loadedPrice, setLoadedPrice] = useState(false)
     const [loadedClaims, setLoadedClaims] = useState(false)
 
     const [chartData, setChartData] = useState({ claimArray: [], holderArray: [] })
     const [claimData, setClaimData] = useState(null)
-    const [priceData, setPriceData] = useState(null)
     const [eraData, setEraData] = useState(
         { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
     const [emissionData, setEmissionData] = useState(
@@ -43,9 +40,8 @@ const Stats = () => {
     const loadData = async () => {
         context.eraData ? getEraData() : loadEraData()
         context.emissionData ? getEmissionData() : loadEmissionData()
-        const claimArray = context.claimData ? getClaimData() : await loadClaimData()
+        context.claimData ? getClaimData() : await loadClaimData()
         context.chartData ? getChartData() : loadChartData()
-        context.priceData ? getPriceData() : loadPriceData(claimArray)
     }
 
     const getClaimData = async () => {
@@ -86,35 +82,6 @@ const Stats = () => {
         setChartData(chartData)
         context.setContext({ 'chartData': chartData })
         setLoaded(true)
-    }
-
-    const getPriceData = async () => {
-        setPriceData(context.priceData)
-        setLoadedPrice(true)
-    }
-
-    const loadPriceData = async (claimArray) => {
-
-        const ethPrice = await getETHPrice()
-
-        let dailyPriceData = claimArray?.burns?.map(item => ((item * ethPrice) / 2048).toFixed(2))
-        let totalPriceData = claimArray?.totals?.map((item, i) => ((item * ethPrice) / (claimArray?.vether[i])).toFixed(2))
-
-        const baseURL3 = 'https://api.blocklytics.org/pools/v0/liquidity/'+uniSwapAddr()+'/history?key='
-        const response4 = await axios.get(baseURL3 + process.env.REACT_APP_BLOCKLYTICS_API)
-        let uniswapData = response4.data
-        let uniswapPrices = uniswapData.map((item) => ((item.eth_ending_balance / item.token_ending_balance) * ethPrice).toFixed(2))
-
-        const priceData = {
-            uniswapPrices: uniswapPrices,
-            daily: dailyPriceData,
-            totals: totalPriceData,
-            days: claimArray?.days
-        }
-
-        context.setContext({ 'priceData': priceData })
-        setPriceData(priceData)
-        setLoadedPrice(true)
     }
 
     const getEraData = async () => {
@@ -223,14 +190,26 @@ const Stats = () => {
                     </>
                 }
                 <Col xs={24} lg={15}>
-                    <ChartEmission emissionArray={emissionArray} />
+                    {!loadedClaims &&
+                    <>
+                        <Col span={24} style={ChartStyles}>
+                            <LoadingOutlined style={loadingStyles} />
+                        </Col>
+                    </>
+                    }
+                    {loadedClaims &&
+                    <>
+                        <Col span={24}>
+                            <ChartEther claimArray={claimData} />
+                        </Col>
+                    </>
+                    }
                 </Col>
             </Row>
             <Row>
                 {!loadedClaims &&
                     <>
                         <Col xs={24} xl={11} style={ChartStyles}>
-                            <LoadingOutlined style={loadingStyles} />
                         </Col>
                         <Col xs={24} xl={11} style={ChartStyles}>
                             <LoadingOutlined style={loadingStyles} />
@@ -240,7 +219,7 @@ const Stats = () => {
                 {loadedClaims &&
                     <>
                         <Col xs={24} xl={12}>
-                            <ChartEther claimArray={claimData} />
+                            <ChartEmission emissionArray={emissionArray} />
                         </Col>
                         <Col xs={24} xl={12}>
                             <ChartClaim claimArray={claimData} />
@@ -266,26 +245,6 @@ const Stats = () => {
                         </Col>
                         <Col xs={24} lg={8}>
                             <ChartPie holderArray={chartData.holderArray} />
-                        </Col>
-                    </>
-                }
-            </Row>
-            <Row>
-                {!loadedPrice &&
-                    <>
-                        {/*<Col xs={24} lg={23} style={ChartStyles}>*/}
-                        {/*    <LoadingOutlined style={loadingStyles} />*/}
-                        {/*</Col>*/}
-                    </>
-                }
-                {loadedPrice &&
-                    <>
-                        <Col xs={24} style={{ display: 'none'}}>
-                            <ChartPrice
-                                days={priceData.days}
-                                priceData={priceData}
-                                uniswapPrices={priceData.uniswapPrices}
-                            />
                         </Col>
                     </>
                 }
