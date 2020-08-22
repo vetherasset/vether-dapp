@@ -63,7 +63,7 @@ export function currency(amount, minFractionDigits = 0, maxFractionDigits = 2, c
 
     const currencyValue = new Intl.NumberFormat(locales, options)
 
-    return (cryptocurrency ? `${currencyValue.format(amount)} ${symbol}` : currencyValue.format(amount) )
+    return (cryptocurrency ? `${currencyValue.format(amount)} ${symbol}` : currencyValue.format(amount))
 }
 
 export function convertToTime(date) {
