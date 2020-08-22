@@ -105,6 +105,13 @@ export const VetherTable = () => {
         backgroundColor: Colour().black,
     }
 
+    const currency = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+    })
+
     return (
             <Row id="vetherStatsTable" style={vetherStatsStyles}>
                 <Col id="vetherStatsTableCurrentPrice" xs={24} sm={8}>
@@ -128,7 +135,7 @@ export const VetherTable = () => {
                         <Col xs={24} sm={12}>
                             <LabelGrey size={14}>TOTAL SUPPLY</LabelGrey>
                             <br />
-                            <Text size={24}>{prettify(vetherData.totalSupply)}</Text>
+                            <Text size={24}>{currency.format(vetherData.totalSupply)}</Text>
                         </Col>
                         <Col xs={24} sm={12}>
                         </Col>
@@ -138,12 +145,12 @@ export const VetherTable = () => {
                         <Col xs={24} sm={12}>
                             <LabelGrey size={14}>EMITTED</LabelGrey>
                             <br />
-                            <Text size={24}>{prettify(emissionData.totalEmitted, 0)}</Text>
+                            <Text size={24}>{currency.format(emissionData.totalEmitted)}</Text>
                         </Col>
                         <Col id="vetherStatsTableCircCap"xs={24} sm={12}>
                             <LabelGrey size={14}>CIRCULATING CAP</LabelGrey>
                             <br />
-                            <Text size={24}>${prettify(emissionData.totalEmitted * marketData.priceUSD, 0)}</Text>
+                            <Text size={24}>{currency.format((emissionData.totalEmitted * marketData.priceUSD))}</Text>
                         </Col>
                     </Row>
 
