@@ -3,7 +3,7 @@ import Chartjs from 'chart.js'
 
 import { Row, Col } from 'antd'
 import {Colour, Text, Center, LabelGrey} from '../components'
-import {convertToDate, prettify} from '../utils'
+import {convertToDate, currency } from '../utils'
 
 export const ChartStyles = {
     marginLeft: 0,
@@ -468,7 +468,7 @@ export const ChartData = (props) =>{
                          }}
                     >
                         <LabelGrey size={props.size} color="#636362">Total Burnt</LabelGrey><br />
-                        <Text size={1.25*props.size}>{prettify((+emissionData.totalBurnt).toFixed(2))} ETH</Text>
+                        <Text size={1.25*props.size}>{currency(+emissionData.totalBurnt, 0, 2, 'ETH')}</Text>
                     </Col>
                     <Col xs={12}
                          style={{
@@ -476,7 +476,7 @@ export const ChartData = (props) =>{
                          }}
                     >
                         <LabelGrey size={props.size} color="#636362">Total Fees</LabelGrey><br />
-                        <Text size={1.25*props.size}>{prettify((+emissionData.totalFees).toFixed(2))} VETH</Text>
+                        <Text size={1.25*props.size}>{currency(+emissionData.totalFees, 0, 2, 'VETH')}</Text>
                     </Col>
                     {/* <Col xs={8}>
                     </Col> */}
@@ -489,7 +489,7 @@ export const ChartData = (props) =>{
                          }}
                     >
                         <LabelGrey size={props.size} color="#636362">Current Emission</LabelGrey><br />
-                        <Text size={1.25*props.size}>{eraData.emission} VETH</Text>
+                        <Text size={1.25*props.size}>{currency(eraData.emission, 0, 2, 'VETH')}</Text>
                     </Col>
                     <Col xs={12}
                          style={{
@@ -497,7 +497,7 @@ export const ChartData = (props) =>{
                          }}
                     >
                         <LabelGrey size={props.size} color="#636362">Next Emission</LabelGrey><br />
-                        <Text size={1.25*props.size}>{eraData.emission / 2} VETH</Text>
+                        <Text size={1.25*props.size}>{currency((eraData.emission / 2), 0, 2, 'VETH')}</Text>
                     </Col>
                     {/* <Col xs={8}>
                     </Col> */}

@@ -216,7 +216,6 @@ export const SwapInterface = () => {
                     <Row type="flex" justify="center" align="middle">
                         <Col span={5}>
                             <Label display="block" style={{marginBottom: '0.55rem'}}>Buy</Label>
-                            {/*<Label>{prettify(account.ethBalance)}</Label>*/}
                             <Input size={'large'} style={{marginBottom: "1.3rem"}} onChange={onEthAmountChange} value={ethAmount}
                                    placeholder={ethAmountCalculated} suffix="ETH Ξ"/>
                             {ethAmount > 0
@@ -234,7 +233,6 @@ export const SwapInterface = () => {
                             <Row>
                                 <Col xs={24}>
                                     <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>
-                                    {/*<Label>{prettify(account.vethBalance)}</Label>*/}
                                     <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
                                            placeholder={vethAmountCalculated} suffix="$VETH"/>
                                     {vethAmount > 0

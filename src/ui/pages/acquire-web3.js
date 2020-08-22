@@ -3,7 +3,7 @@ import { Context } from '../../context'
 import Web3 from "web3"
 
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL } from '../../client/web3.js'
-import { convertFromWei, prettify } from '../utils'
+import { convertFromWei, currency } from '../utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
@@ -114,7 +114,7 @@ export const AcquireTable = () => {
 						backgroundColor="transparent"
 						onClick={setMaxAmount}
 					>
-						{spendable} Ξ
+						{currency(spendable, 0, 5, 'ETH')}
 					</Button>
 					<Tooltip placement="right" title="This is your maximum spendable Ether.
 					Hit the number to set it as amount to spend.">
@@ -142,7 +142,7 @@ export const AcquireTable = () => {
 				</Col>
 
 				<Col xs={24} sm={6} style={{ marginTop: '-3px' }}>
-					<Text size={32}>{prettify(getVethValue())}&nbsp;$VETH
+					<Text size={32}>{currency(getVethValue(), 0, 2, 'VETH')}
 						<Tooltip placement="right" title="The amount of VETH you get is&nbsp;dependent on how much you burn, compared to how much everyone else burns.">
 							&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
 						</Tooltip>
