@@ -218,7 +218,7 @@ export const SwapPoolsInterface = () => {
 
     return (
         <>
-            {connected && approved &&
+            {connected &&
                 <>
                     <Row type="flex" justify="center">
                         <Col lg={12} xs={24}>
@@ -255,11 +255,30 @@ export const SwapPoolsInterface = () => {
                                             <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>
                                             <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
                                                    placeholder={vethAmountCalculated} suffix="$VETH"/>
-                                            {vethAmount > 0
-                                                ? <Button backgroundColor="transparent" onClick={sellVether}>SELL&nbsp;VETH&nbsp;>></Button>
-                                                : <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>
+                                            { !approved &&
+                                                <>
+                                                    {!approveFlag &&
+                                                    <>
+                                                        <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE VETHER >></Button>
+                                                        <Sublabel>ALLOW VETHER FOR TRADES</Sublabel>
+                                                    </>
+                                                    }
+                                                    {approveFlag &&
+                                                    <>
+                                                        <LoadingOutlined />
+                                                    </>
+                                                    }
+                                                </>
                                             }
-                                            <Sublabel>SELL VETHER FOR ETH</Sublabel>
+                                            { approved &&
+                                                <>
+                                                    {vethAmount > 0
+                                                        ? <Button backgroundColor="transparent" onClick={sellVether}>SELL&nbsp;VETH&nbsp;>></Button>
+                                                        : <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>
+                                                    }
+                                                    <Sublabel>SELL VETHER FOR ETH</Sublabel>
+                                                </>
+                                            }
                                         </Col>
                                     </Row>
                                 </Col>
@@ -296,27 +315,6 @@ export const SwapPoolsInterface = () => {
                         </Row>
                     </>
                     }
-                </>
-            }
-
-            {connected && !approved &&
-                <>
-                    <Row type="flex" justify="center">
-                        <Col span={24} style={{ textAlign: 'left' }}>
-                            <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
-                            {!approveFlag &&
-                                <>
-                                    <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE VETHER >></Button>
-                                    <Sublabel>ALLOW VETHER FOR TRADES</Sublabel>
-                                </>
-                            }
-                            {approveFlag &&
-                                <>
-                                    <LoadingOutlined />
-                                </>
-                            }
-                        </Col>
-                    </Row>
                 </>
             }
         </>
