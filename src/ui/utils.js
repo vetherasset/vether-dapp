@@ -38,6 +38,16 @@ export function prettify(amount, fractionDigits = 2) {
     return parts.join(".");
 }
 
+export function currency(amount, minFractionDigits = 0, maxFractionDigits = 2, currency = 'USD', locales = 'en-US') {
+    const value = new Intl.NumberFormat(locales, {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: minFractionDigits,
+        maximumFractionDigits: maxFractionDigits,
+    })
+    return value.format(amount)
+}
+
 export function convertToTime(date) {
     return new Date(1000 * date).toLocaleTimeString("en-gb")
 }
