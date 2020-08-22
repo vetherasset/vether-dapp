@@ -2,17 +2,15 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 import Web3 from 'web3'
 
-import {Row, Col, Input, Tooltip} from 'antd'
-import {SwapOutlined, QuestionCircleOutlined, LoadingOutlined} from '@ant-design/icons';
-import {Label, Sublabel, Button, Colour, LabelGrey,} from '../components'
+import { Row, Col, Input, Tooltip } from 'antd'
+import { SwapOutlined, QuestionCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Label, Sublabel, Button, Colour, LabelGrey } from '../components'
 
-import {
-    ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, getEtherscanURL,
-    infuraAPI, getVetherPrice
-} from '../../client/web3.js'
-import {totalSupply, convertToWei, BN2Str, oneBN, convertFromWei, prettify} from '../utils.js'
+import { ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, getEtherscanURL,
+    infuraAPI, getVetherPrice } from '../../client/web3.js'
+import { totalSupply, convertToWei, BN2Str, oneBN, convertFromWei, currency } from '../utils.js'
 import { calcSwapOutput } from '../math.js'
-import {getETHPrice} from "../../client/market";
+import { getETHPrice } from "../../client/market";
 
 export const SwapPoolsInterface = () => {
 
@@ -225,12 +223,12 @@ export const SwapPoolsInterface = () => {
                     <Row type="flex" justify="center">
                         <Col lg={12} xs={24}>
                             <Label display="block" style={{ marginBottom: '1.33rem' }}>Actual Price</Label>
-                            <div style={{ textAlign: 'center' }}><span style={{ fontSize: 30 }}>${prettify(marketData.priceUSD)}</span>
+                            <div style={{ textAlign: 'center' }}><span style={{ fontSize: 30 }}>{currency(marketData.priceUSD)}</span>
                                 <Tooltip placement="right" title="Current market rate">
                                     &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
                                 </Tooltip>
                             </div>
-                            <LabelGrey style={{ display: 'block', marginBottom: 0, textAlign: 'center' }}>{prettify(marketData.priceETH, 6)}&nbsp;Ξ</LabelGrey>
+                            <LabelGrey style={{ display: 'block', marginBottom: 0, textAlign: 'center' }}>{currency(marketData.priceETH, 0, 6, 'ETH')}</LabelGrey>
                         </Col>
                     </Row>
                     <Row type="flex" justify="center">

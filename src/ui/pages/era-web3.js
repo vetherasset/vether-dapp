@@ -6,7 +6,7 @@ import Breakpoint from 'react-socks';
 import Web3 from 'web3';
 import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, getSecondsToGo, prettify } from '../utils'
+import { convertFromWei, getSecondsToGo, currency } from '../utils'
 
 import { Row, Col, Progress } from 'antd'
 import { LabelGrey, Center, Text, Colour } from '../components'
@@ -159,7 +159,7 @@ export const EraTable = (props) => {
                                                 textAlign: 'center'
                                             }}
                                         >
-                                            {prettify(eraData.emission)} VETH
+                                            {currency(eraData.emission, 0, 2, 'VETH')}
                                         </Text>
                                     </Center>
                                 </Breakpoint>
@@ -172,7 +172,7 @@ export const EraTable = (props) => {
                                             textAlign: 'center',
                                             fontWeight: 'bold'
                                         }}>
-                                            {prettify(eraData.emission)} VETH
+                                            {currency(eraData.emission, 0, 2, 'VETH')}
                                         </p>
                                     </Center>
                                 </Breakpoint>

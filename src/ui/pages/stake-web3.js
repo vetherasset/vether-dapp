@@ -6,7 +6,7 @@ import {
 	getUniswapPriceEth, getEtherscanURL, infuraAPI,
 } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, prettify, oneBN, BN2Str, getBN } from '../utils'
+import { convertFromWei, currency, oneBN, BN2Str, getBN } from '../utils'
 import { calcShare } from '../math'
 
 import { Row, Col, Select, Input, Tooltip } from 'antd'
@@ -100,44 +100,86 @@ export const PoolTable = () => {
 						<Row>
 							<Col xs={12}>
 								<Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>$VETH</Text>
-								<Center><Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.veth)}</Text></Center>
-								<Center><span style={{ color: '#97948e', margin: 0 }}>${prettify(poolData.veth * (poolData.price * marketData.ethPrice))}</span></Center>
+								<Center>
+									<Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>
+										{currency(poolData.veth, 0, 2, 'VETH').replace('VETH', '')}
+									</Text>
+								</Center>
+								<Center>
+									<span style={{ color: '#97948e', margin: 0 }}>
+										{currency(poolData.veth * (poolData.price * marketData.ethPrice))}
+									</span>
+								</Center>
 							</Col>
 							<Col xs={12} style={lineStyle}>
 								<Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0 0 0 15px' }}>ETH Ξ</Text>
-								<Center><Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.eth)}</Text></Center>
-								<Center><span style={{ color: '#97948e', margin: 0 }}>${prettify(marketData.ethPrice * poolData.eth)}</span></Center>
+								<Center><Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>{currency(poolData.eth, 0, 2, 'ETH').replace('Ξ', '')}</Text></Center>
+								<Center><span style={{ color: '#97948e', margin: 0 }}>{currency(marketData.ethPrice * poolData.eth)}</span></Center>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
 								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>PRICE</Text></Center>
 								<Center>
-									<Text size={'1.9rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>${prettify(poolData.price * marketData.ethPrice)}
+									<Text size={'1.9rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{currency(poolData.price * marketData.ethPrice)}
 										<Tooltip placement="right" title="Current market rate">
 										&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
 										</Tooltip>
 									</Text>
 								</Center>
-								<Center><span style={{ color: '#97948e', margin: 0 }}>{prettify(poolData.price, 5)}&nbsp;Ξ</span></Center>
+								<Center>
+									<span style={{ color: '#97948e', margin: 0 }}>
+										{currency(poolData.price, 0, 5, 'ETH')}
+									</span>
+								</Center>
 							</Col>
 						</Row>
 						<Row style={topLineStyle}>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>VOL&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span></Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.volume)}</Text></Center>
+								<Center>
+									<Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>
+										VOL&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span>
+									</Text>
+								</Center>
+								<Center>
+									<Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>
+										{currency(poolData.volume, 0, 2, 'VETH').replace('VETH', '')}
+									</Text>
+								</Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>FEES&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span></Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.fees)}</Text></Center>
+								<Center>
+									<Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>
+										FEES&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span>
+									</Text>
+								</Center>
+								<Center>
+									<Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>
+										{currency(poolData.fees, 0, 2, 'VETH').replace('VETH', '')}
+									</Text>
+								</Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>TRADES</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.txCount)}</Text></Center>
+								<Center>
+									<Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>TRADES</Text>
+								</Center>
+								<Center>
+									<Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>
+										{poolData.txCount}
+									</Text>
+								</Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>ROI</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{poolData.roi/100}%</Text></Center>
+								<Center>
+									<Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>
+										ROI
+									</Text>
+								</Center>
+								<Center>
+									<Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>
+										{poolData.roi/100}%
+									</Text>
+								</Center>
 							</Col>
 						</Row>
 					</div>
@@ -435,29 +477,29 @@ export const AddLiquidityTable = (props) => {
 							<Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '2.66rem' }}>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.vetherShare)} $VETH</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.vetherShare, 0, 2, 'VETH')}</span>
 								</Col>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.assetShare, 5)} Ξ</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.assetShare, 0, 5, 'ETH')}</span>
 								</Col>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.stakeUnits)} %</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.stakeUnits} %</span>
 								</Col>
 							</Row>
 							<Row type="flex" justify="center" style={{ textAlign: "center" }}>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>STAKED</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.vetherStaked)} $VETH</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.vetherStaked, 0, 2, 'VETH')}</span>
 								</Col>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>STAKED</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.assetStaked, 5)} Ξ</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.assetStaked, 0, 5, 'ETH')}</span>
 								</Col>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ROI</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify((account.roi/100) - 100)}%</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{((account.roi/100) - 100)}%</span>
 								</Col>
 							</Row>
 						</>

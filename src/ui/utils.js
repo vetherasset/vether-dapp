@@ -39,13 +39,38 @@ export function prettify(amount, fractionDigits = 2) {
 }
 
 export function currency(amount, minFractionDigits = 0, maxFractionDigits = 2, currency = 'USD', locales = 'en-US') {
-    const value = new Intl.NumberFormat(locales, {
+    let symbol
+    let cryptocurrency = false
+    let options = {
         style: 'currency',
         currency: currency,
         minimumFractionDigits: minFractionDigits,
-        maximumFractionDigits: maxFractionDigits,
-    })
-    return value.format(amount)
+        maximumFractionDigits: maxFractionDigits
+    }
+
+    if (currency === 'ETH') {
+        options = {
+            style: 'decimal',
+            minimumFractionDigits: minFractionDigits,
+            maximumFractionDigits: maxFractionDigits
+        }
+        symbol = 'Ξ'
+        cryptocurrency = true
+    }
+
+    if (currency === 'VETH') {
+        options = {
+            style: 'decimal',
+            minimumFractionDigits: minFractionDigits,
+            maximumFractionDigits: maxFractionDigits
+        }
+        symbol = 'VETH'
+        cryptocurrency = true
+    }
+
+    const currencyValue = new Intl.NumberFormat(locales, options)
+
+    return (cryptocurrency ? `${currencyValue.format(amount)} ${symbol}` : currencyValue.format(amount) )
 }
 
 export function convertToTime(date) {
