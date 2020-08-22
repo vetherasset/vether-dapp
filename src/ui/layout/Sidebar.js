@@ -5,6 +5,7 @@ import Breakpoint from 'react-socks'
 
 import { FireFilled, MediumOutlined } from '@ant-design/icons';
 import { Text, Icon } from '../components'
+import UniswapIcon from '../../assets/uniswap.svg'
 import DiscordIcon from '../../assets/discord.svg'
 import GithubIcon from '../../assets/github.svg'
 import TelegramIcon from '../../assets/telegram.svg'
@@ -64,7 +65,7 @@ const Sidebar = (props) => {
                 <Menu.Item key={item}>
                   <Link to={"/" + item}>
                     <Icon icon={item}/>
-                    {item === 'stake' ?
+                    {item === 'stake' || item === 'trade' ?
                           <>
                             {isSelected(item) ?
                                 <Text bold={true} color="#fff" className="beta">{item}</Text> :
@@ -86,6 +87,12 @@ const Sidebar = (props) => {
 
         <Row className="sidebar-footer" type="flex" span={24} style={{ width: '100%', justifyContent: 'center', paddingBottom: '14px' }}>
           <ul style={{ listStyle: 'none', display: 'block', width: '100%', textAlign: 'center', margin: '0 0 0 -9px' }}>
+            <li>
+              <a href="https://uniswap.exchange/swap/0x4ba6ddd7b89ed838fed25d208d4f644106e34279" style={{ fontSize: '14px', color: '#97948e' }} target="_blank" rel="noopener noreferrer">
+                <img src={UniswapIcon} alt="Uniswap Exchange Logo" style={{ margin: 0, maxWidth: '25px', marginRight: '1px', color: 'yellow' }}/>
+                Uniswap Pool
+              </a>
+            </li>
             <li>
               <Link to="/donations" style={{ fontSize: '14px', color: '#97948e' }} onClick={() => handleClick({})}>
                 <FireFilled style={{ margin: 0, maxWidth: '16px', marginRight: '5px' }}/>

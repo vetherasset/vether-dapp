@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
 import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
-import { convertFromWei, getSecondsToGo, getBN, prettify } from '../utils'
+import { convertFromWei, getSecondsToGo, getBN, currency } from '../utils'
 
 import { Row, Col, Input, Select, Tooltip } from 'antd'
 import { QuestionCircleOutlined, InfoCircleOutlined, CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons'
@@ -198,7 +198,7 @@ export const ClaimTable = () => {
 										fontSize: '32px',
 										marginTop: '7px'
 									}}>
-										{prettify(claimAmt)} $VETH
+										{currency(claimAmt, 0, 2, 'VETH')}
 										<Tooltip placement="right" title="Your total share in the Era and Day to claim.">
 										&nbsp;<QuestionCircleOutlined style={{color:Colour().grey, marginBottom: '0'}}/>
 									</Tooltip>

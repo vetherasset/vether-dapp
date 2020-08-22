@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
 import {
-	ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, vetherPoolsAddr, vetherPoolsAbi, 
+	ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, vetherPoolsAddr, vetherPoolsAbi,
 	getUniswapPriceEth, getEtherscanURL, infuraAPI,
 } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, prettify, oneBN, BN2Str, getBN, formatAPY } from '../utils'
+import { convertFromWei, currency, oneBN, BN2Str, getBN } from '../utils'
 import { calcShare } from '../math'
 
 import { Row, Col, Select, Input, Tooltip } from 'antd'
@@ -22,7 +22,7 @@ export const PoolTable = () => {
 	const [marketData, setMarketData] = useState(
 		{ priceUSD: '', priceETH: '', ethPrice: '' })
 	const [poolData, setPoolData] = useState(
-		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "poolUnits": "", "txCount": "", 'roi': "" })
+		{ "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "poolUnits": "", "txCount": "", 'age':"", 'roi': "", 'apy': "" })
 
 	useEffect(() => {
 		loadPoolData()
@@ -35,6 +35,8 @@ export const PoolTable = () => {
 		const poolContract = new web3_.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
 		let poolData = await poolContract.methods.poolData(ETH).call()
 		let price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
+		let age = await poolContract.methods.getPoolAge(ETH).call()
+		let roi = await poolContract.methods.getPoolROI(ETH).call()
 		let apy = await poolContract.methods.getPoolAPY(ETH).call()
 		const poolData_ = {
 			"eth": convertFromWei(poolData.asset),
@@ -44,7 +46,9 @@ export const PoolTable = () => {
 			"poolUnits": poolData.poolUnits,
 			"fees": convertFromWei(poolData.fees),
 			"txCount": poolData.txCount,
-			"apy": (+apy)
+			"age": age,
+			"roi": roi,
+			"apy": apy
 		}
 		setPoolData(poolData_)
 		context.setContext({
@@ -54,12 +58,8 @@ export const PoolTable = () => {
 
 	const loadMarketData = async () => {
 		const priceEtherUSD = await getETHPrice()
-		const priceVetherEth = await getUniswapPriceEth()
-		const priceVetherUSD = priceEtherUSD * priceVetherEth
 
 		const marketData = {
-			priceUSD: priceVetherUSD,
-			priceETH: priceVetherEth,
 			ethPrice: priceEtherUSD
 		}
 
@@ -95,49 +95,91 @@ export const PoolTable = () => {
 	return (
 		<div style={{ marginTop: '2rem' }}>
 			<Row type="flex" justify="center">
-				<Col span={16}>
+				<Col lg={16} xs={24}>
 					<div style={poolStyles}>
 						<Row>
 							<Col xs={12}>
 								<Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>$VETH</Text>
-								<Center><Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.veth)}</Text></Center>
-								<Center><span style={{ color: '#97948e', margin: 0 }}>${prettify(poolData.veth * (poolData.price * marketData.ethPrice))}</span></Center>
+								<Center>
+									<Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>
+										{currency(poolData.veth, 0, 2, 'VETH').replace('VETH', '')}
+									</Text>
+								</Center>
+								<Center>
+									<span style={{ color: '#97948e', margin: 0 }}>
+										{currency(poolData.veth * (poolData.price * marketData.ethPrice))}
+									</span>
+								</Center>
 							</Col>
 							<Col xs={12} style={lineStyle}>
 								<Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0 0 0 15px' }}>ETH Ξ</Text>
-								<Center><Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>{prettify(poolData.eth)}</Text></Center>
-								<Center><span style={{ color: '#97948e', margin: 0 }}>${prettify(marketData.ethPrice * poolData.eth)}</span></Center>
+								<Center><Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>{currency(poolData.eth, 0, 2, 'ETH').replace('Ξ', '')}</Text></Center>
+								<Center><span style={{ color: '#97948e', margin: 0 }}>{currency(marketData.ethPrice * poolData.eth)}</span></Center>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
 								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>PRICE</Text></Center>
 								<Center>
-									<Text size={'1.9rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>${prettify(poolData.price * marketData.ethPrice)}
-										<Tooltip placement="right" title="Current market rate you get.">
+									<Text size={'1.9rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{currency(poolData.price * marketData.ethPrice)}
+										<Tooltip placement="right" title="Current market rate">
 										&nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
 										</Tooltip>
 									</Text>
 								</Center>
-								<Center><span style={{ color: '#97948e', margin: 0 }}>{prettify(poolData.price, 5)}&nbsp;Ξ</span></Center>
+								<Center>
+									<span style={{ color: '#97948e', margin: 0 }}>
+										{currency(poolData.price, 0, 5, 'ETH')}
+									</span>
+								</Center>
 							</Col>
 						</Row>
 						<Row style={topLineStyle}>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>VOL&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span></Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.volume)}</Text></Center>
+								<Center>
+									<Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>
+										VOL&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span>
+									</Text>
+								</Center>
+								<Center>
+									<Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>
+										{currency(poolData.volume, 0, 2, 'VETH').replace('VETH', '')}
+									</Text>
+								</Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>FEES&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span></Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.fees)}</Text></Center>
+								<Center>
+									<Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>
+										FEES&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span>
+									</Text>
+								</Center>
+								<Center>
+									<Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>
+										{currency(poolData.fees, 0, 2, 'VETH').replace('VETH', '')}
+									</Text>
+								</Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>TRADES</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{prettify(poolData.txCount)}</Text></Center>
+								<Center>
+									<Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>TRADES</Text>
+								</Center>
+								<Center>
+									<Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>
+										{poolData.txCount}
+									</Text>
+								</Center>
 							</Col>
 							<Col xs={6}>
-								<Center><Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>APY</Text></Center>
-								<Center><Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>{formatAPY(poolData.apy)}</Text></Center>
+								<Center>
+									<Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>
+										ROI
+									</Text>
+								</Center>
+								<Center>
+									<Text size={'1.1rem'} color={Colour().white} margin={"5px 0px 5px 0px"}>
+										{poolData.roi/100}%
+									</Text>
+								</Center>
 							</Col>
 						</Row>
 					</div>
@@ -369,7 +411,7 @@ export const AddLiquidityTable = (props) => {
 			an equal proportion of both assets, Vether pools allow you to provide liquidity in unequal proportions.</LabelGrey>
 
 			<Row style={{ marginBottom: '1.33rem' }}>
-				<Col span={4}>
+				<Col lg={4} xs={10}>
 					<Label display="block" style={{marginBottom: '0.55rem'}}>Asset</Label>
 					<Select size={'large'} placeholder="Select" onChange={onAssetChange} style={{ width: 135 }}>
 						{assets.map((asset, index) => {
@@ -379,7 +421,7 @@ export const AddLiquidityTable = (props) => {
 						})}
 					</Select>
 				</Col>
-				<Col span={5}>
+				<Col lg={5} xs={9}>
 					<Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
 					{asset0
 						? <Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset0amountChange} value={amount0} suffix={asset0.symbol}/>
@@ -394,7 +436,7 @@ export const AddLiquidityTable = (props) => {
 					<LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You may provide both assets in just one transaction, whilst this is not required.<br/>
 					If you don't want to add {asset1.name} just leave following amount at zero.</LabelGrey>
 					<Row style={{ marginBottom: '1.33rem' }}>
-						<Col span={5}>
+						<Col lg={6} xs={9}>
 							<Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
 							<Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset1amountChange} value={amount1} suffix={asset1.symbol}/>
 						</Col>
@@ -435,29 +477,29 @@ export const AddLiquidityTable = (props) => {
 							<Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '2.66rem' }}>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.vetherShare)} $VETH</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.vetherShare, 0, 2, 'VETH')}</span>
 								</Col>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.assetShare, 5)} Ξ</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.assetShare, 0, 5, 'ETH')}</span>
 								</Col>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.stakeUnits)} %</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.stakeUnits} %</span>
 								</Col>
 							</Row>
 							<Row type="flex" justify="center" style={{ textAlign: "center" }}>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>STAKED</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.vetherStaked)} $VETH</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.vetherStaked, 0, 2, 'VETH')}</span>
 								</Col>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>STAKED</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify(account.assetStaked, 5)} Ξ</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.assetStaked, 0, 5, 'ETH')}</span>
 								</Col>
 								<Col xs={8}>
 									<span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ROI</span>
-									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{prettify((account.roi/100) - 100)}%</span>
+									<span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{((account.roi/100) - 100)}%</span>
 								</Col>
 							</Row>
 						</>
@@ -623,7 +665,8 @@ export const UpgradeTable = () => {
 
 	return (
 		<>
-			<h2>UPGRADE FROM A PREVIOUS CONTRACT</h2>
+			<h2>UPGRADE TO BETA 2</h2>
+			<p>Move your liquidity from the beta V1 pool.</p>
 			{loading &&
 				<LoadingOutlined style={{ mnarginBottom: 0 }} />
 			}
@@ -634,7 +677,7 @@ export const UpgradeTable = () => {
 					<>
 						<p>Upgrade from VetherPools1 to VetherPools2</p>
 						<Button backgroundColor="transparent" onClick={upgrade}>UPGRADE >></Button>
-						
+
 					</>
 					}
 					{account.stakeUnits === "0" &&

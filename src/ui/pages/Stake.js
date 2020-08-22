@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 
 import { LabelGrey } from '../components'
 import { PoolTable, StakeTable, UpgradeTable } from './stake-web3'
-import { SwapPoolsInterface } from './trade-pools-web3'
 import { Tabs } from 'antd';
 import '../../App.less';
 
@@ -25,7 +24,7 @@ const Stake = () => {
 	return (
 		<>
 			<h1>LIQUIDITY POOL</h1>
-			<p>Try out the beta version of Vether liquidity pool - V2.</p>
+			<p>Try out the beta V2 of Vether liquidity pool.</p>
 			<PoolTable />
 			{safari &&
 				<>
@@ -37,20 +36,11 @@ const Stake = () => {
 				<>
 					<Tabs defaultActiveKey='1' activeKey={tab} onChange={onChange} size={'large'} style={{ marginTop: 20, textAlign: "center" }}>
 						<TabPane tab="STAKE" key="1" style={{ textAlign: "left" }}>
-
 							<StakeTable />
-
 						</TabPane>
 
-						<TabPane tab="TRADE" key="2" style={{ textAlign: "left" }}>
-
-							<SwapPoolsInterface />
-
-						</TabPane>
-						<TabPane tab="UPGRADE" key="3" style={{ textAlign: "left" }}>
-
+						<TabPane tab="UPGRADE" key="2" style={{ textAlign: "left" }}>
 							<UpgradeTable />
-
 						</TabPane>
 					</Tabs>
 				</>
