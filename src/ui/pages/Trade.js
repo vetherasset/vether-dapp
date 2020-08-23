@@ -17,7 +17,7 @@ const Trade = () => {
 	return (
 		<>
 			<h1>TRADE VETHER</h1>
-			<p>Buy and Sell using the Vether liquidity pool beta V2.</p>
+			<p>Buy and Sell using the liquidity pool.</p>
 			{safari &&
 				<>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
