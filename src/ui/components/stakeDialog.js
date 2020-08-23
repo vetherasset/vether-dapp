@@ -6,7 +6,7 @@ import { ETH, getEtherscanURL, getUniswapPriceEth, infuraAPI, vetherAbi, vetherA
 import { convertFromWei, currency, getBN } from "../../common/utils"
 import { calcShare } from "../../common/clpLogic"
 import { Col, Input, Row, Select } from "antd"
-import { LoadingOutlined } from '@ant-design/icons'
+import { LoadingOutlined, CheckCircleOutlined } from '@ant-design/icons'
 import { Button, Label, LabelGrey, Sublabel } from "../components"
 
 export const StakeDialog = () => {
@@ -488,24 +488,24 @@ export const UpgradeDialog = () => {
             <h2>UPGRADE TO BETA 2</h2>
             <p>Move your liquidity from the beta V1 pool.</p>
             {loading &&
-            <LoadingOutlined style={{ mnarginBottom: 0 }} />
+                <LoadingOutlined style={{ mnarginBottom: 0 }} />
             }
-
             {connected && !loading &&
-            <>
-                {account.stakeUnits > "0" &&
                 <>
-                    <p>Upgrade from VetherPools1 to VetherPools2</p>
-                    <Button backgroundColor="transparent" onClick={upgrade}>UPGRADE >></Button>
-
+                    {account.stakeUnits > "0" &&
+                        <>
+                            <Button backgroundColor="transparent" onClick={upgrade}>UPGRADE >></Button>
+                            <Sublabel>MOVE ALL YOUR LIQUIDITY</Sublabel>
+                        </>
+                    }
+                    {!account.stakeUnits > "0" &&
+                        <>
+                            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
+                                <CheckCircleOutlined style={{ marginBottom: '0' }}/>&nbsp;There's nothing to upgrade.
+                            </LabelGrey>
+                        </>
+                    }
                 </>
-                }
-                {account.stakeUnits === "0" &&
-                <>
-                    <h3>NOTHING TO UPGRADE</h3>
-                </>
-                }
-            </>
             }
         </>
     )
