@@ -5,7 +5,7 @@ import VETHERPOOLS from '../artifacts/VetherPools.json'
 import VETHERPOOLS2 from '../artifacts/VetherPools2.json'
 import UNISWAP from '../artifacts/UniswapPair.json'
 import ROUTER from '../artifacts/Router.json'
-import {BN2Str, oneBN} from "../ui/utils";
+import { BN2Str, oneBN } from "../ui/utils";
 
 const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE') ? true : false
 
@@ -124,7 +124,6 @@ export const getUniswapPriceEth = async () => {
 }
 
 export const getVetherPrice = async () => {
-
     const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const poolContract = new web3_.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
     let price
@@ -136,15 +135,6 @@ export const getVetherPrice = async () => {
     }
 
     return(price)
-}
-
-export const getUniswapDetails = async () => {
-    const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-    const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-    const wrappedEther = new web3.eth.Contract(wetherAbi(), wetherAddr())
-    const ethBalance = convertFromWei(await wrappedEther.methods.balanceOf(uniSwapAddr()).call())
-	const vethBalance = convertFromWei(await contract.methods.balanceOf(uniSwapAddr()).call())
-    return {"eth":ethBalance, "veth":vethBalance, address:uniSwapAddr()}
 }
 
 export const getAccounts = async (i) => {
@@ -166,8 +156,4 @@ export const vetherContract = () => {
 
 export const getVethBalance = async (acc) => {
     return await vetherContract().methods.balanceOf(acc).call()
-}
-
-function convertFromWei(number) {
-    return number / 1000000000000000000
 }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Web3 from 'web3';
+import Web3 from 'web3'
 import { vetherAddr, vetherAbi, infuraAPI } from './web3.js'
 
 export const getETHPrice = async () => {
@@ -9,12 +9,10 @@ export const getETHPrice = async () => {
 
 const getContract = () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-    const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-   return contract
+    return (new web3.eth.Contract(vetherAbi(), vetherAddr()))
 }
 
 export const getVETHPriceInEth = async (contract) => {
-    // var contract
     if(!contract){
         contract = getContract()
     }
@@ -54,7 +52,6 @@ export const getVETHValueInUSD = async (veth) => {
     const contract = getContract()
     const vethPrice = getVETHPriceInEth(contract)
     const ethPrice = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
-    console.log(+vethPrice, +ethPrice, +veth)
     return +vethPrice * +ethPrice * +veth
 }
 
@@ -67,6 +64,5 @@ export const getVETHValueInETH = async (veth) => {
 export const getGasPrice = async () => {
     const response = await axios.get("https://ethgasstation.info/json/ethgasAPI.json")
     const gasValue = ((response.data.fast/10) * 10**9) * 100000
-    // console.log(response, gasValue)
     return gasValue / (10**18)
 }
