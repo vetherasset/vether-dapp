@@ -129,7 +129,7 @@ export const VetherTicker = () => {
                     <Col xs={24} sm={12}>
                         <LabelGrey size={14}>TOTAL SUPPLY</LabelGrey>
                         <br />
-                        <Text size={24}>{currency(vetherData.totalSupply, 0, 0)}</Text>
+                        <Text size={24}>{currency(vetherData.totalSupply, 0, 0, 'VETH').replace('VETH', '')}</Text>
                     </Col>
                     <Col xs={24} sm={12}>
                     </Col>
@@ -139,7 +139,7 @@ export const VetherTicker = () => {
                     <Col xs={24} sm={12}>
                         <LabelGrey size={14}>EMITTED</LabelGrey>
                         <br />
-                        <Text size={24}>{currency(emissionData.totalEmitted,0, 0)}</Text>
+                        <Text size={24}>{currency(emissionData.totalEmitted,0, 0, 'VETH').replace('VETH', '')}</Text>
                     </Col>
                     <Col id="vetherStatsTableCircCap"xs={24} sm={12}>
                         <LabelGrey size={14}>CIRCULATING CAP</LabelGrey>

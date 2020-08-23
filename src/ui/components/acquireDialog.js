@@ -147,7 +147,7 @@ export const AcquireDialog = () => {
                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                         </Tooltip>
                     </Text>
-                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Potential VETH Value</LabelGrey>
+                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Potential VETH value</LabelGrey>
                 </Col>
             </Row>
         </>

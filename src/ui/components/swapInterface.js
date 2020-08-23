@@ -3,7 +3,7 @@ import { Context } from '../../context'
 import Web3 from 'web3'
 
 import { Row, Col, Input, Tooltip } from 'antd'
-import { SwapOutlined, QuestionCircleOutlined, LoadingOutlined, WarningOutlined } from '@ant-design/icons'
+import { SwapOutlined, QuestionCircleOutlined, LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Label, Sublabel, Button, Colour, LabelGrey } from '../components'
 
 import { ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, getEtherscanURL,
@@ -334,7 +334,7 @@ export const SwapInterface = () => {
                                     {currency(trade.price, 0, 6, inCurrency)}
                                 </Col>
                                 <Col span={12}>
-                                    Slippage&nbsp;<Tooltip placement="right" title="The difference between market price and trade price due to order size.">
+                                    Slippage&nbsp;<Tooltip placement="right" title="The difference between market price and trade price due to trade size.">
                                         <QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
                                     </Tooltip>
                                 </Col>
@@ -347,7 +347,7 @@ export const SwapInterface = () => {
                     { trade.slippageWarning &&
                         <>
                             <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
-                                <WarningOutlined style={{ marginBottom: '0' }}/>&nbsp;Due to trade size your price's affected by high slippage.
+                                <ExclamationCircleOutlined style={{ marginBottom: '0' }}/>&nbsp;Due to trade size your price's affected by high slippage.
                             </LabelGrey>
                         </>
                     }
