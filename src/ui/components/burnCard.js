@@ -16,7 +16,7 @@ export const BurnCard = (props) => {
                 <Row>
                     <Col xs={24} sm={12}>
                         <Center>
-                            <Text size={32} style={{ marginBottom: 0 }}>{currency(+props.eraData.currentBurn, 0, 4, 'ETH')}</Text>
+                            <Text size={32} style={{ marginBottom: 0 }}>{currency(+props.eraData.currentBurn, 1, 4, 'ETH')}</Text>
                         </Center>
                     </Col>
                     <Col xs={24} sm={12}>
@@ -31,7 +31,7 @@ export const BurnCard = (props) => {
                 </Row>
                 <Row>
                     <Col xs={24} sm={12}>
-                        <Center><Text size={24} margin={"0px 0px"}>{currency((props.eraData.currentBurn / props.eraData.emission), 0, 6, 'ETH')}</Text></Center>
+                        <Center><Text size={24} margin={"0px 0px"}>{currency((props.eraData.currentBurn / props.eraData.emission), 1, 6, 'ETH')}</Text></Center>
                     </Col>
                     <Col xs={24} sm={12}>
                         <Center><Text size={24} margin={"0px 0px"}>{currency(convertEthtoUSD(props.eraData.currentBurn / props.eraData.emission))}</Text></Center>
