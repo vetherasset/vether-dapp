@@ -256,7 +256,7 @@ const AddLiquidityTable = (props) => {
                 <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You may provide both assets in just one transaction, whilst this is not required.<br/>
                     If you don't want to add {asset1.name} just leave following amount at zero.</LabelGrey>
                 <Row style={{ marginBottom: '1.33rem' }}>
-                    <Col lg={6} xs={9}>
+                    <Col lg={4} xs={9}>
                         <Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
                         <Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset1amountChange} value={amount1} suffix={asset1.symbol}/>
                     </Col>
@@ -305,7 +305,7 @@ const AddLiquidityTable = (props) => {
                         </Col>
                         <Col xs={8}>
                             <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
-                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.stakeUnits} %</span>
+                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.stakeUnits}%</span>
                         </Col>
                     </Row>
                     <Row type="flex" justify="center" style={{ textAlign: "center" }}>
