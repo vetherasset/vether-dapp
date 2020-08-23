@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
-import {
-	ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, vetherPoolsAddr, vetherPoolsAbi,
-	getUniswapPriceEth, getEtherscanURL, infuraAPI,
-} from '../../client/web3.js'
+import { ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, vetherPoolsAddr, vetherPoolsAbi,
+	getUniswapPriceEth, getEtherscanURL, infuraAPI } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, currency, oneBN, BN2Str, getBN } from '../utils'
 import { calcShare } from '../math'
@@ -211,7 +209,7 @@ export const StakeTable = () => {
 	const connect = async () => {
 		const accountConnected = (await window.web3.eth.getAccounts())[0]
 		if(accountConnected) {
-			window.web3 = new Web3(window.ethereum);
+			window.web3 = new Web3(window.ethereum)
 			var accounts = await window.web3.eth.getAccounts()
 			const address = await accounts[0]
 			await loadAccountData(address)
@@ -221,7 +219,7 @@ export const StakeTable = () => {
 	}
 
 	const loadAccountData = async (account) => {
-		const accountConnected = (await window.web3.eth.getAccounts())[0];
+		const accountConnected = (await window.web3.eth.getAccounts())[0]
 		if (accountConnected) {
 			const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
 			const contract = await new web3.eth.Contract(vetherAbi(), vetherAddr())
@@ -332,7 +330,7 @@ export const AddLiquidityTable = (props) => {
 	}
 
 	const checkApproval = async (address) => {
-		const accountConnected = (await window.web3.eth.getAccounts())[0];
+		const accountConnected = (await window.web3.eth.getAccounts())[0]
 		if (accountConnected){
 			const vetherContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
 			const from = address
@@ -614,7 +612,7 @@ export const UpgradeTable = () => {
 	const connect = async () => {
 		const accountConnected = (await window.web3.eth.getAccounts())[0]
 		if(accountConnected) {
-			window.web3 = new Web3(window.ethereum);
+			window.web3 = new Web3(window.ethereum)
 			var accounts = await window.web3.eth.getAccounts()
 			const address = await accounts[0]
 			await loadAccountData(address)
@@ -624,7 +622,7 @@ export const UpgradeTable = () => {
 	}
 
 	const loadAccountData = async (account) => {
-		const accountConnected = (await window.web3.eth.getAccounts())[0];
+		const accountConnected = (await window.web3.eth.getAccounts())[0]
 		if (accountConnected) {
 			const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
 			const contract = await new web3.eth.Contract(vetherAbi(), vetherAddr())

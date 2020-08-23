@@ -7,7 +7,7 @@ import UNISWAP from '../artifacts/UniswapPair.json'
 import ROUTER from '../artifacts/Router.json'
 import { BN2Str, oneBN } from "../ui/utils";
 
-const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE') ? true : false
+const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE')
 
 export const ETH = '0x0000000000000000000000000000000000000000'
 

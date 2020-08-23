@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react'
 import Chartjs from 'chart.js'
 
 import { Row, Col } from 'antd'
-import {Colour, Text, Center, LabelGrey} from '../components'
-import {convertToDate, currency } from '../utils'
+import { Colour, Text, Center, LabelGrey } from '../components'
+import { convertToDate, currency } from '../utils'
 
 export const ChartStyles = {
     marginLeft: 0,
@@ -191,7 +191,7 @@ export const ChartClaim = (props) => {
 
     const setUp = async () => {
         const timeDelay = 250;
-        const delay = ms => new Promise(res => setTimeout(res, ms));
+        const delay = ms => new Promise(res => setTimeout(res, ms))
         await delay(timeDelay)
         if(chartContainer && chartContainer.current){
             const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
@@ -282,7 +282,7 @@ export const ChartDistro = (props) => {
 
     const setUp = async () => {
         const timeDelay = 500;
-        const delay = ms => new Promise(res => setTimeout(res, ms));
+        const delay = ms => new Promise(res => setTimeout(res, ms))
         await delay(timeDelay)
         if(chartContainer && chartContainer.current){
             const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
@@ -346,9 +346,8 @@ export const ChartPie = (props) => {
 
     const setUp = async () => {
         const timeDelay = 1000;
-        const delay = ms => new Promise(res => setTimeout(res, ms));
+        const delay = ms => new Promise(res => setTimeout(res, ms))
         await delay(timeDelay)
-        // const data =  await getHolderArray()
         if(chartContainer && chartContainer.current){
             const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
             setChartInstance(newChartInstance)
@@ -478,8 +477,6 @@ export const ChartData = (props) =>{
                         <LabelGrey size={props.size} color="#636362">Total Fees</LabelGrey><br />
                         <Text size={1.25*props.size}>{currency(+emissionData.totalFees, 0, 2, 'VETH')}</Text>
                     </Col>
-                    {/* <Col xs={8}>
-                    </Col> */}
                 </Row>
 
                 <Row style={rowStyles}>
@@ -499,8 +496,6 @@ export const ChartData = (props) =>{
                         <LabelGrey size={props.size} color="#636362">Next Emission</LabelGrey><br />
                         <Text size={1.25*props.size}>{currency((eraData.emission / 2), 0, 2, 'VETH')}</Text>
                     </Col>
-                    {/* <Col xs={8}>
-                    </Col> */}
                 </Row>
                 <Row style={rowStyles}>
                     <Col xs={8}
@@ -525,75 +520,6 @@ export const ChartData = (props) =>{
                     </Col>
                 </Row>
             </div>
-        </div>
-    )
-}
-
-export const ChartPrice = (props) => {
-
-    const chartContainer = useRef(null)
-    // eslint-disable-next-line
-    const [chartInstance, setChartInstance] = useState(null)
-
-    var chartConfig = getChartConfig()
-    chartConfig.options.title.text = 'Vether Value'
-    chartConfig.data.datasets[0].label = 'Daily Value'
-    chartConfig.options.scales.yAxes[0].scaleLabel.labelString = 'Value (USD)'
-    chartConfig.options.scales.xAxes[0].scaleLabel.labelString = 'Day'
-
-    useEffect(() => {
-        setUp()
-        // eslint-disable-next-line
-    }, [chartContainer])
-
-    const setUp = async () => {
-        if(chartContainer && chartContainer.current){
-            const newChartInstance = new Chartjs(chartContainer.current, chartConfig)
-            setChartInstance(newChartInstance)
-            setChart(props.priceData, props.uniswapPrices, newChartInstance)
-        }
-    }
-
-    const setChart = (priceData, uniswapPrices, newChartInstance) => {
-
-        chartConfig.data.labels = props.days
-        chartConfig.data.datasets[0].data = priceData.daily
-        chartConfig.data.datasets[0].type = "line"
-        chartConfig.options.scales.yAxes[0].position = 'right'
-        // chartConfig.data.datasets[0].fill = false
-        const dataset2 = {
-            type: "line",
-            label: "All Time Value",
-            data:priceData.totals,
-            backgroundColor: Colour('0.2').yellow,
-            borderColor: Colour().yellow,
-            borderWidth: 1,
-            fill: false,
-            yAxisID: "L"
-        }
-        chartConfig.data.datasets.push(dataset2)
-
-        const dataset3 = {
-            type: "line",
-            label: "Uniswap Price",
-            data:uniswapPrices,
-            // backgroundColor: Colour('0.2').yellow,
-            borderColor: Colour().white,
-            borderWidth: 1,
-            fill: false,
-            yAxisID: "L"
-        }
-        chartConfig.data.datasets.push(dataset3)
-        // chartConfig.options.scales.yAxes.push(rightAxisConfig())
-        // chartConfig.options.scales.yAxes[1].scaleLabel.labelString = 'Vether Price (USD)'
-        // chartConfig.options.scales.yAxes[1].ticks.max = chartConfig.options.scales.yAxes[0].ticks.max
-        // console.log(chartConfig.options.scales.yAxes[1])
-        newChartInstance.update()
-    }
-
-    return(
-        <div style={ChartStyles}>
-            <canvas ref={chartContainer} />
         </div>
     )
 }

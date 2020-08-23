@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
 import { Row, Col, Radio, Input, Select } from 'antd'
 import { Button, Label, LabelGrey, Sublabel } from "../components"
-import {convertFromWei} from "../utils";
+import {convertFromWei} from "../utils"
 
 export const Donations = () => {
 
@@ -19,7 +19,7 @@ export const Donations = () => {
     })
 
     const connect = async () => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected) {
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
@@ -31,7 +31,7 @@ export const Donations = () => {
     }
 
     const loadAccountData = async (address) => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected) {
             const ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
             const accountData = {
@@ -77,7 +77,7 @@ export const Donations = () => {
     }
 
     const donate = async () => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected) {
             const value = sumValue.toFixed(5)
             await window.web3.eth.sendTransaction({

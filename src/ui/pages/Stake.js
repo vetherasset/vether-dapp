@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 import { LabelGrey } from '../components'
 import { PoolTable, StakeTable, UpgradeTable } from './stake-web3'
-import { Tabs } from 'antd';
-import '../../App.less';
+import { Tabs } from 'antd'
+import '../../App.less'
 
-const { TabPane } = Tabs;
+const { TabPane } = Tabs
 
 const Stake = () => {
 
@@ -13,7 +13,7 @@ const Stake = () => {
 	const [tab, setTab] = useState('1')
 
 	useEffect(() => {
-		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 		setSafari(isSafari)
 	}, [])
 

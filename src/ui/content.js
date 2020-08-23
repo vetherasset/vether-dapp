@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { Breakpoint } from 'react-socks';
+import { Breakpoint } from 'react-socks'
 
 import { P } from './components'
-import icon from '../assets/VETHER.svg';
+import icon from '../assets/VETHER.svg'
 
 export const Abstract = (props) => {
 	return (

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { Row, Menu, Layout } from 'antd'
 import Breakpoint from 'react-socks'
 
-import { FireFilled, MediumOutlined } from '@ant-design/icons';
+import { FireFilled, MediumOutlined } from '@ant-design/icons'
 import { Text, Icon } from '../components'
 import UniswapIcon from '../../assets/uniswap.svg'
 import DiscordIcon from '../../assets/discord.svg'

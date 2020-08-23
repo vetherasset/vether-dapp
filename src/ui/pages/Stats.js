@@ -4,13 +4,13 @@ import axios from 'axios'
 
 import Breakpoint from 'react-socks'
 
-import Web3 from 'web3';
+import Web3 from 'web3'
 import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo } from '../utils'
 
 import emissionArray from '../../data/emissionArray.json'
 
-import '../../App.less';
+import '../../App.less'
 import { Row, Col } from 'antd'
 import { Click, Colour } from '../components'
 import { ChartStyles, ChartEther, ChartClaim, ChartEmission, ChartData, ChartDistro, ChartPie } from './chart'

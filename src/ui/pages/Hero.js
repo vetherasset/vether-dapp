@@ -6,7 +6,7 @@ import { VetherTable } from './hero-web3'
 import Era from './Era'
 import Cards, { Links } from './Cards'
 
-import '../../App.less';
+import '../../App.less'
 
 const Hero = (props) => {
 

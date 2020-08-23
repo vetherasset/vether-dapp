@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button as AntButton } from "antd"
 import { HomeOutlined, FileTextOutlined, RightSquareOutlined, UpCircleOutlined,
-  LoginOutlined, LineChartOutlined, PieChartOutlined, CheckSquareOutlined } from '@ant-design/icons';
+  LoginOutlined, LineChartOutlined, PieChartOutlined, CheckSquareOutlined } from '@ant-design/icons'
 
 export const Font = () => {
   return "Courier"
@@ -246,7 +246,7 @@ export const Button = (props) => {
   styles.height = "20px"
   styles.padding = "0px 0px"
   styles.display = "inline-block"
-  styles.border = "none";
+  styles.border = "none"
 
   if (props.size) {
     styles.fontSize = props.size

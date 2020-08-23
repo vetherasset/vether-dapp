@@ -32,7 +32,7 @@ export const AcquireTable = () => {
 	})
 
 	const connect = async () => {
-		const accountConnected = (await window.web3.eth.getAccounts())[0];
+		const accountConnected = (await window.web3.eth.getAccounts())[0]
 		if(accountConnected){
 			const accounts = await window.web3.eth.getAccounts()
 			const address = accounts[0]

@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Context } from '../../context'
 
-import { Link } from "react-router-dom";
-import { Menu, Layout, Row, Col } from 'antd';
+import { Link } from "react-router-dom"
+import { Menu, Layout, Row, Col } from 'antd'
 import { Colour, Icon, WalletStateIndicator, WalletConnectButton } from '../components'
-import logotype from '../../assets/logotype.svg';
+import logotype from '../../assets/logotype.svg'
 
 import Web3 from 'web3'
 import { vetherAddr, vetherAbi,  } from '../../client/web3.js'
@@ -15,9 +15,6 @@ import Breakpoint from 'react-socks'
 const Header = () => {
 
     const context = useContext(Context)
-
-    // const net = (process.env.REACT_APP_TESTNET === 'TRUE') ? "TESTNET" : "MAINNET"
-    // const colour = (process.env.REACT_APP_TESTNET === 'TRUE') ? Colour().grey : Colour().black
 
     const [connected, setConnected] = useState(false)
     const [page, setPage] = useState(null)
@@ -48,7 +45,7 @@ const Header = () => {
 
     const connect = async () => {
         window.web3 = new Web3(window.ethereum);
-        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected){
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
@@ -62,32 +59,31 @@ const Header = () => {
 
     const ethConnected = async () => {
         setInterval(async function() {
-            const accountConnected = (await window.web3.eth.getAccounts())[0];
+            const accountConnected = (await window.web3.eth.getAccounts())[0]
             if(accountConnected){
                 setConnected(true)
             } else {
                 setConnected(false)
             }
-        }, 100);
+        }, 100)
     }
 
 	const ethEnabled = () => {
         console.log('connecting')
 		if (window.ethereum) {
-			window.web3 = new Web3(window.ethereum);
-			window.ethereum.enable();
+			window.web3 = new Web3(window.ethereum)
+			window.ethereum.enable()
 			ethConnected()
-			return true;
+			return true
 		}
-		return false;
+		return false
 	}
 
     const loadAccountData = async (contract_, address) => {
         const ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
 		const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
-		// const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-		const uniBalance = 0 //convertFromWei(await exchangeContract.methods.balanceOf(address).call())
-		const uniSupply = 0 //convertFromWei(await exchangeContract.methods.totalSupply().call())
+		const uniBalance = 0
+		const uniSupply = 0
 		const accountData = {
 			address: address,
 			vethBalance: vethBalance,
@@ -176,18 +172,6 @@ const Header = () => {
                                 </Menu.Item>
                             ))}
                         </Menu>
-
-                        {/* <Row>
-                    <Col>
-                        <Link to={"/overview"}><Icon icon={"overview"} style={getStyles('overview')} /></Link>&nbsp;
-                        <Link to={"/acquire"}><Icon icon={"acquire"} style={getStyles('acquire')} /></Link>&nbsp;
-                        <Link to={"/claim"}><Icon icon={"claim"} style={getStyles('claim')} /></Link>&nbsp;
-                        <Link to={"/stake"}><Icon icon={"stake"} style={getStyles('stake')} /></Link>&nbsp;
-                        <Link to={"/trade"}><Icon icon={"trade"} style={getStyles('trade')} /></Link>&nbsp;
-                        <Link to={"/stats"}><Icon icon={"stats"} style={getStyles('stats')} /></Link>&nbsp;
-                        <Link to={"/whitepaper"}><Icon icon={"whitepaper"} style={getStyles('whitepaper')} /></Link>
-                    </Col>
-                </Row> */}
                     </Breakpoint>
                 </Layout.Header>
         </ >

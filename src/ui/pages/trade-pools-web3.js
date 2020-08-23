@@ -3,14 +3,14 @@ import { Context } from '../../context'
 import Web3 from 'web3'
 
 import { Row, Col, Input, Tooltip } from 'antd'
-import { SwapOutlined, QuestionCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { SwapOutlined, QuestionCircleOutlined, LoadingOutlined } from '@ant-design/icons'
 import { Label, Sublabel, Button, Colour, LabelGrey } from '../components'
 
 import { ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, getEtherscanURL,
     infuraAPI, getVetherPrice } from '../../client/web3.js'
 import { totalSupply, convertToWei, BN2Str, oneBN, convertFromWei, currency } from '../utils.js'
 import { calcSwapOutput } from '../math.js'
-import { getETHPrice } from "../../client/market";
+import { getETHPrice } from "../../client/market"
 
 export const SwapPoolsInterface = () => {
 
@@ -66,7 +66,7 @@ export const SwapPoolsInterface = () => {
     }
 
     const loadAccountData = async (contract, address) => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected) {
             const ethBalance = Web3.utils.fromWei(await window.web3.eth.getBalance(address), 'ether')
             const vethBalance = Web3.utils.fromWei(await contract.methods.balanceOf(address).call(), 'ether')
@@ -126,7 +126,7 @@ export const SwapPoolsInterface = () => {
     }
 
     const checkApproval = async (address) => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected){
             const vetherContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
             const from = address
@@ -142,7 +142,7 @@ export const SwapPoolsInterface = () => {
     }
 
     const unlockToken = async () => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0];
+        const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected){
             setApproveFlag(true)
             const vetherContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())

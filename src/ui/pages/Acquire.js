@@ -6,10 +6,10 @@ import { AcquireTable } from './acquire-web3'
 import { ClaimTable } from './claim-web3'
 import { EraTable } from './era-web3'
 
-import '../../App.less';
-import { Tabs } from 'antd';
+import '../../App.less'
+import { Tabs } from 'antd'
 
-const { TabPane } = Tabs;
+const { TabPane } = Tabs
 
 const Acquire = () => {
 

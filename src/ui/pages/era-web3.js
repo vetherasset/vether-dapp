@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
-import Breakpoint from 'react-socks';
+import Breakpoint from 'react-socks'
 
-import Web3 from 'web3';
+import Web3 from 'web3'
 import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, getSecondsToGo, currency } from '../utils'
@@ -16,11 +16,11 @@ export const EraTable = (props) => {
 
     const context = useContext(Context)
 
-    const small = (props.size === 'small') ? true : false
+    const small = (props.size === 'small')
 
     const [loaded, setLoaded] = useState(false)
-    const [counter, setCounter] = useState(null);
-    const [timer, setTimer] = useState(null);
+    const [counter, setCounter] = useState(null)
+    const [timer, setTimer] = useState(null)
     const [eraData, setEraData] = useState(
         { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '', secondsToGo: 82400 })
     const [marketData, setMarketData] = useState(
@@ -85,21 +85,20 @@ export const EraTable = (props) => {
     }
 
     useEffect(() => {
-        counter >= 0 && setTimeout(() => updateTimer(), 1000);
+        counter >= 0 && setTimeout(() => updateTimer(), 1000)
         // eslint-disable-next-line
-    }, [counter]);
+    }, [counter])
 
     const updateTimer = () => {
-        let measuredTime = new Date(null);
-        measuredTime.setSeconds(counter);
-        let MHSTime = measuredTime.toISOString().substr(11, 8);
+        let measuredTime = new Date(null)
+        measuredTime.setSeconds(counter)
+        let MHSTime = measuredTime.toISOString().substr(11, 8)
         setCounter(counter - 1)
         setTimer(MHSTime)
     }
 
     const poolStyles = {
         borderWidth: '1px',
-        // borderStyle: 'dashed',
         borderRadius: '100px',
         paddingLeft: 50,
         paddingRight: 50,
