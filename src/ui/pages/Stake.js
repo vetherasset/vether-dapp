@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
 import { LabelGrey } from '../components'
-import { PoolTable, StakeTable, UpgradeTable } from './stake-web3'
+import { StakeDialog, UpgradeDialog } from "../components/stakeDialog"
+import { PoolTicker } from "../components/poolTicker"
 import { Tabs } from 'antd'
 import '../../App.less'
 
@@ -25,7 +26,7 @@ const Stake = () => {
 		<>
 			<h1>LIQUIDITY POOL</h1>
 			<p>Try out the beta V2 of Vether liquidity pool.</p>
-			<PoolTable />
+			<PoolTicker/>
 			{safari &&
 				<>
 					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
@@ -36,11 +37,11 @@ const Stake = () => {
 				<>
 					<Tabs defaultActiveKey='1' activeKey={tab} onChange={onChange} size={'large'} style={{ marginTop: 20, textAlign: "center" }}>
 						<TabPane tab="STAKE" key="1" style={{ textAlign: "left" }}>
-							<StakeTable />
+							<StakeDialog/>
 						</TabPane>
 
 						<TabPane tab="UPGRADE" key="2" style={{ textAlign: "left" }}>
-							<UpgradeTable />
+							<UpgradeDialog/>
 						</TabPane>
 					</Tabs>
 				</>
@@ -48,4 +49,5 @@ const Stake = () => {
 		</>
 	)
 }
+
 export default Stake

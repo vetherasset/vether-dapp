@@ -85,7 +85,11 @@ export const EraIndicator = (props) => {
     }
 
     useEffect(() => {
-        counter >= 0 && setTimeout(() => updateTimer(), 1000)
+        let timer
+        if (counter >= 0) {
+            timer = setTimeout(() => updateTimer(), 1000)
+        }
+        return () => clearTimeout(timer)
         // eslint-disable-next-line
     }, [counter])
 
