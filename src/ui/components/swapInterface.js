@@ -44,6 +44,8 @@ export const SwapInterface = () => {
 
     useEffect(() => {
         connect()
+        loadPoolData()
+        loadMarketData()
         // eslint-disable-next-line
     }, [])
 
@@ -55,8 +57,6 @@ export const SwapInterface = () => {
             const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
             const vetherContract = new web3.eth.Contract(vetherAbi(), vetherAddr())
             loadAccountData(vetherContract, address)
-            loadPoolData()
-            loadMarketData()
             setVetherContract(vetherContract)
             checkApproval(address)
             setConnected(true)
@@ -218,8 +218,6 @@ export const SwapInterface = () => {
 
     return (
         <>
-            {connected &&
-                <>
                     <Row type="flex" justify="center">
                         <Col lg={12} xs={24}>
                             <Label display="block" style={{ marginBottom: '1.33rem' }}>Actual Price</Label>
@@ -238,7 +236,7 @@ export const SwapInterface = () => {
                                     <Label display="block" style={{marginBottom: '0.55rem'}}>Buy</Label>
                                     <Input size={'large'} style={{marginBottom: "1.3rem"}} onChange={onEthAmountChange} value={ethAmount}
                                            placeholder={ethAmountCalculated} suffix="ETH Ξ"/>
-                                    {ethAmount > 0
+                                    { connected && ethAmount > 0
                                         ? <Button backgroundColor="transparent" onClick={buyVether}>BUY VETH >></Button>
                                         : <Button backgroundColor="transparent" disabled>BUY VETH >></Button>
                                     }
@@ -257,28 +255,24 @@ export const SwapInterface = () => {
                                                    placeholder={vethAmountCalculated} suffix="$VETH"/>
                                             { !approved &&
                                                 <>
-                                                    {!approveFlag &&
+                                                    {connected && !approveFlag &&
                                                     <>
                                                         <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE VETHER >></Button>
                                                         <Sublabel>ALLOW VETHER FOR TRADES</Sublabel>
                                                     </>
                                                     }
-                                                    {approveFlag &&
+                                                    {connected && approveFlag &&
                                                     <>
                                                         <LoadingOutlined />
                                                     </>
                                                     }
                                                 </>
                                             }
-                                            { approved &&
-                                                <>
-                                                    {vethAmount > 0
-                                                        ? <Button backgroundColor="transparent" onClick={sellVether}>SELL&nbsp;VETH&nbsp;>></Button>
-                                                        : <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>
-                                                    }
-                                                    <Sublabel>SELL VETHER FOR ETH</Sublabel>
-                                                </>
+                                            { connected && approved && vethAmount > 0
+                                                ? <Button backgroundColor="transparent" onClick={sellVether}>SELL&nbsp;VETH&nbsp;>></Button>
+                                                : <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>
                                             }
+                                            <Sublabel>SELL VETHER FOR ETH</Sublabel>
                                         </Col>
                                     </Row>
                                 </Col>
@@ -315,8 +309,6 @@ export const SwapInterface = () => {
                         </Row>
                     </>
                     }
-                </>
-            }
         </>
     )
 }
