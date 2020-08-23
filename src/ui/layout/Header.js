@@ -8,7 +8,7 @@ import logotype from '../../assets/logotype.svg'
 
 import Web3 from 'web3'
 import { vetherAddr, vetherAbi,  } from '../../client/web3.js'
-import { convertFromWei } from '../utils'
+import { convertFromWei } from '../../common/utils'
 
 import Breakpoint from 'react-socks'
 

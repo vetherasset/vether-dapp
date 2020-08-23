@@ -11,7 +11,9 @@ export function getBig(BN){
     return new BigNumber(BN)
 }
 
-export function BN2Str(BN) { return (new BigNumber(BN)).toFixed() }
+export function BN2Str(BN) {
+    return (new BigNumber(BN)).toFixed()
+}
 
 export const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
 

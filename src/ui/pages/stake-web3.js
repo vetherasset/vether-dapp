@@ -4,8 +4,8 @@ import { Context } from '../../context'
 import { ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, vetherPoolsAddr, vetherPoolsAbi,
 	getUniswapPriceEth, getEtherscanURL, infuraAPI } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, currency, oneBN, BN2Str, getBN } from '../utils'
-import { calcShare } from '../math'
+import { convertFromWei, currency, oneBN, BN2Str, getBN } from '../../common/utils'
+import { calcShare } from '../../common/clpLogic'
 
 import { Row, Col, Select, Input, Tooltip } from 'antd'
 import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons'

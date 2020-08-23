@@ -4,13 +4,13 @@ import { Context } from '../../context'
 import Web3 from 'web3'
 import { vetherAddr, vetherAbi, infuraAPI, getVetherPrice } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, convertToDate, currency } from '../utils'
+import { convertFromWei, convertToDate, currency } from '../../common/utils'
 
 import { Row, Col } from 'antd'
 import { LabelGrey, Colour, Text } from '../components'
-import { Logo } from '../content'
+import { Logo } from './logo'
 
-export const VetherTable = () => {
+export const VetherTicker = () => {
 
     const context = useContext(Context)
 
@@ -107,49 +107,49 @@ export const VetherTable = () => {
 
 
     return (
-            <Row id="vetherStatsTable" style={vetherStatsStyles}>
-                <Col id="vetherStatsTableCurrentPrice" xs={24} sm={8}>
-                    <div style={{marginBottom: '2rem', textAlign: 'center'}}>
-                        <Logo/>
-                    </div>
-                    <div style={{textAlign: 'center'}}>
-                        <Text size={32}>{currency(marketData.priceUSD)}</Text>
-                    </div>
-                </Col>
-                <Col xs={24} sm={16}>
-                    <Row>
-                        <Col xs={12}>
-                            <Text size={32}>{vetherData.name}&nbsp;({vetherData.symbol})</Text>
-                        </Col>
-                        <Col xs={12}>
-                        </Col>
-                    </Row>
+        <Row id="vetherStatsTable" style={vetherStatsStyles}>
+            <Col id="vetherStatsTableCurrentPrice" xs={24} sm={8}>
+                <div style={{marginBottom: '2rem', textAlign: 'center'}}>
+                    <Logo/>
+                </div>
+                <div style={{textAlign: 'center'}}>
+                    <Text size={32}>{currency(marketData.priceUSD)}</Text>
+                </div>
+            </Col>
+            <Col xs={24} sm={16}>
+                <Row>
+                    <Col xs={12}>
+                        <Text size={32}>{vetherData.name}&nbsp;({vetherData.symbol})</Text>
+                    </Col>
+                    <Col xs={12}>
+                    </Col>
+                </Row>
 
-                    <Row style={{marginTop:20}}>
-                        <Col xs={24} sm={12}>
-                            <LabelGrey size={14}>TOTAL SUPPLY</LabelGrey>
-                            <br />
-                            <Text size={24}>{currency(vetherData.totalSupply, 0, 0)}</Text>
-                        </Col>
-                        <Col xs={24} sm={12}>
-                        </Col>
-                    </Row>
+                <Row style={{marginTop:20}}>
+                    <Col xs={24} sm={12}>
+                        <LabelGrey size={14}>TOTAL SUPPLY</LabelGrey>
+                        <br />
+                        <Text size={24}>{currency(vetherData.totalSupply, 0, 0)}</Text>
+                    </Col>
+                    <Col xs={24} sm={12}>
+                    </Col>
+                </Row>
 
-                    <Row style={{marginTop:20}}>
-                        <Col xs={24} sm={12}>
-                            <LabelGrey size={14}>EMITTED</LabelGrey>
-                            <br />
-                            <Text size={24}>{currency(emissionData.totalEmitted,0, 0)}</Text>
-                        </Col>
-                        <Col id="vetherStatsTableCircCap"xs={24} sm={12}>
-                            <LabelGrey size={14}>CIRCULATING CAP</LabelGrey>
-                            <br />
-                            <Text size={24}>{currency((emissionData.totalEmitted * marketData.priceUSD), 0, 0)}</Text>
-                        </Col>
-                    </Row>
+                <Row style={{marginTop:20}}>
+                    <Col xs={24} sm={12}>
+                        <LabelGrey size={14}>EMITTED</LabelGrey>
+                        <br />
+                        <Text size={24}>{currency(emissionData.totalEmitted,0, 0)}</Text>
+                    </Col>
+                    <Col id="vetherStatsTableCircCap"xs={24} sm={12}>
+                        <LabelGrey size={14}>CIRCULATING CAP</LabelGrey>
+                        <br />
+                        <Text size={24}>{currency((emissionData.totalEmitted * marketData.priceUSD), 0, 0)}</Text>
+                    </Col>
+                </Row>
 
-                    <p id="vetherStatsTableContractAddress">{vetherAddr()}</p>
-                </Col>
-            </Row>
+                <p id="vetherStatsTableContractAddress">{vetherAddr()}</p>
+            </Col>
+        </Row>
     )
 }

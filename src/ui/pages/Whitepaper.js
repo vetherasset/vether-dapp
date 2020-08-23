@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
+import { Breakpoint } from 'react-socks'
 
-import { Breakpoint } from 'react-socks';
-
-import '../../App.less';
-import { Abstract, EmissionTable } from '../content'
+import '../../App.less'
+import { EmissionTable } from '../components/emissionTable'
+import { Abstract } from '../components/abstract'
 
 const Whitepaper = () => {
 

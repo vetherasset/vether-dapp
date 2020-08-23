@@ -1,10 +1,11 @@
 import React from 'react'
 
 import { Row, Col } from 'antd'
-import { Abstract } from '../content'
-import { VetherTable } from './hero-web3'
-import Era from './Era'
-import Cards, { Links } from './Cards'
+import { Abstract } from '../components/abstract'
+import { VetherTicker } from '../components/vetherTicker'
+import { EraIndicator } from '../components/eraIndicator'
+import { QuickNavCards } from '../components/quickNavCards'
+import { UsefulLinks } from '../components/usefulLinks'
 
 import '../../App.less'
 
@@ -32,14 +33,25 @@ const Hero = (props) => {
 					</Row>
 				</Col>
 			</Row>
-			<VetherTable/>
+			<VetherTicker/>
 			<hr />
-			<Era />
-			<Cards />
-			<hr />
+			<>
+				<h2>CURRENT ERA</h2>
+				<p>Today's emission of Vether.</p>
+				<EraIndicator/>
+				<hr />
+			</>
+			<>
+				<h2>VETHER UTILITY</h2>
+				<p>Use the Vether Asset in its ecosystem.</p>
+				<QuickNavCards/>
+				<hr />
+			</>
 			<Row>
 				<Col sm={8}>
-					<Links />
+					<h2>LINKS AND RESOURCES</h2>
+					<p>Useful links and resources</p>
+					<UsefulLinks/>
 				</Col>
 			</Row>
 		</div>

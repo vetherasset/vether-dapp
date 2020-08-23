@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { Row, Col } from 'antd'
-import { LabelGrey, Center, Text } from './components'
-import { currency } from './utils'
+import { LabelGrey, Center, Text } from '../components'
+import { currency } from '../../common/utils'
 
 export const BurnCard = (props) => {
 
@@ -42,7 +42,6 @@ export const BurnCard = (props) => {
                     <br/>
                 </Row>
             </Col>
-
         </>
     )
 }

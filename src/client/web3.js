@@ -5,7 +5,7 @@ import VETHERPOOLS from '../artifacts/VetherPools.json'
 import VETHERPOOLS2 from '../artifacts/VetherPools2.json'
 import UNISWAP from '../artifacts/UniswapPair.json'
 import ROUTER from '../artifacts/Router.json'
-import { BN2Str, oneBN } from "../ui/utils";
+import { BN2Str, oneBN } from '../common/utils'
 
 const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE')
 

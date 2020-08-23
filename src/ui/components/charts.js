@@ -3,7 +3,7 @@ import Chartjs from 'chart.js'
 
 import { Row, Col } from 'antd'
 import { Colour, Text, Center, LabelGrey } from '../components'
-import { convertToDate, currency } from '../utils'
+import { convertToDate, currency } from '../../common/utils'
 
 export const ChartStyles = {
     marginLeft: 0,

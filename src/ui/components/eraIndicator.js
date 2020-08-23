@@ -6,13 +6,13 @@ import Breakpoint from 'react-socks'
 import Web3 from 'web3'
 import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
-import { convertFromWei, getSecondsToGo, currency } from '../utils'
+import { convertFromWei, getSecondsToGo, currency } from '../../common/utils'
 
 import { Row, Col, Progress } from 'antd'
 import { LabelGrey, Center, Text, Colour } from '../components'
-import { BurnCard } from '../ui'
+import { BurnCard } from './burnCard'
 
-export const EraTable = (props) => {
+export const EraIndicator = (props) => {
 
     const context = useContext(Context)
 
@@ -108,38 +108,38 @@ export const EraTable = (props) => {
     return (
         <>
             {loaded &&
-                <>
-                    <Row type="flex" justify="center">
-                        <Col xs={24} sm={8}>
-                            <div id="vetherEraTimer">
-                                <Text size={40} margin={"0px 0px"}>{timer}</Text>
-                            </div>
-                            {!small &&
-                                <>
-                                    <Progress percent={(((82400 - eraData.secondsToGo) / 82400) * 100).toFixed(0)} strokeColor={Colour().gold} status="active" />
-                                    <Center i>
-                                        <LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey>
-                                    </Center>
-                                </>
-                            }
-                        </Col>
-                    </Row>
-                    <Row type="flex" justify="center" style={{ marginBottom: '3rem' }}>
-                        {small &&
-                            <Col xs={24} sm={12}>
-                                <Center>
+            <>
+                <Row type="flex" justify="center">
+                    <Col xs={24} sm={8}>
+                        <div id="vetherEraTimer">
+                            <Text size={40} margin={"0px 0px"}>{timer}</Text>
+                        </div>
+                        {!small &&
+                        <>
+                            <Progress percent={(((82400 - eraData.secondsToGo) / 82400) * 100).toFixed(0)} strokeColor={Colour().gold} status="active" />
+                            <Center i>
+                                <LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey>
+                            </Center>
+                        </>
+                        }
+                    </Col>
+                </Row>
+                <Row type="flex" justify="center" style={{ marginBottom: '3rem' }}>
+                    {small &&
+                    <Col xs={24} sm={12}>
+                        <Center>
                                     <span style={{
                                         margin: '0 0 0',
                                         fontWeight: 'bold'
                                     }}>
                                         ERA 1, DAY {eraData.day}
                                     </span>
-                                </Center>
-                            </Col>
-                        }
-                        {!small &&
-                            <Col xs={24} sm={12} style={poolStyles}>
-                                <Center>
+                        </Center>
+                    </Col>
+                    }
+                    {!small &&
+                    <Col xs={24} sm={12} style={poolStyles}>
+                        <Center>
                                     <span style={{
                                         margin: '20px 0px 0px',
                                         color: '#402f00',
@@ -147,35 +147,35 @@ export const EraTable = (props) => {
                                     }}>
                                         ERA 1, DAY {eraData.day}
                                     </span>
-                                </Center>
-                                <Breakpoint medium up>
-                                    <Center>
-                                        <Text
-                                            size={48}
-                                            margin={"1.3rem 0"}
-                                            style={{
-                                                lineHeight: '3rem',
-                                                textAlign: 'center'
-                                            }}
-                                        >
-                                            {currency(eraData.emission, 0, 2, 'VETH')}
-                                        </Text>
-                                    </Center>
-                                </Breakpoint>
-                                <Breakpoint small down>
-                                    <Center>
-                                        <p style={{
-                                            fontSize: '32px',
-                                            margin: '10px 0 10px',
-                                            lineHeight: '2.3rem',
-                                            textAlign: 'center',
-                                            fontWeight: 'bold'
-                                        }}>
-                                            {currency(eraData.emission, 0, 2, 'VETH')}
-                                        </p>
-                                    </Center>
-                                </Breakpoint>
-                                <Center>
+                        </Center>
+                        <Breakpoint medium up>
+                            <Center>
+                                <Text
+                                    size={48}
+                                    margin={"1.3rem 0"}
+                                    style={{
+                                        lineHeight: '3rem',
+                                        textAlign: 'center'
+                                    }}
+                                >
+                                    {currency(eraData.emission, 0, 2, 'VETH')}
+                                </Text>
+                            </Center>
+                        </Breakpoint>
+                        <Breakpoint small down>
+                            <Center>
+                                <p style={{
+                                    fontSize: '32px',
+                                    margin: '10px 0 10px',
+                                    lineHeight: '2.3rem',
+                                    textAlign: 'center',
+                                    fontWeight: 'bold'
+                                }}>
+                                    {currency(eraData.emission, 0, 2, 'VETH')}
+                                </p>
+                            </Center>
+                        </Breakpoint>
+                        <Center>
                                     <span
                                         style={{
                                             margin: '0 0 20px',
@@ -183,16 +183,16 @@ export const EraTable = (props) => {
                                             textAlign: 'center',
                                             fontWeight: 'bold'
                                         }}>TO BE EMITTED TODAY</span>
-                                </Center>
-                            </Col>
-                        }
-                    </Row>
-                    <Row type="flex" justify="center" style={{ marginTop: 20 }}>
-                        {!small &&
-                            <BurnCard marketData={marketData} eraData={eraData} />
-                        }
-                    </Row>
-                </>
+                        </Center>
+                    </Col>
+                    }
+                </Row>
+                <Row type="flex" justify="center" style={{ marginTop: 20 }}>
+                    {!small &&
+                    <BurnCard marketData={marketData} eraData={eraData} />
+                    }
+                </Row>
+            </>
             }
         </>
     )

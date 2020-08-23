@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { SwapPoolsInterface } from './trade-pools-web3'
+import { SwapInterface } from '../components/swapInterface'
 import { LabelGrey } from '../components'
 
 import '../../App.less'
@@ -10,7 +10,7 @@ const Trade = () => {
 	const [safari, setSafari] = useState(null)
 
 	useEffect(() => {
-		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 		setSafari(isSafari)
 	}, [])
 
@@ -26,7 +26,7 @@ const Trade = () => {
 			}
 			{!safari &&
 				<>
-					<SwapPoolsInterface />
+					<SwapInterface/>
 				</>
 			}
 		</>

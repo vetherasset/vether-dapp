@@ -8,11 +8,11 @@ import { Label, Sublabel, Button, Colour, LabelGrey } from '../components'
 
 import { ETH, vetherAddr, vetherAbi, vetherPools2Addr, vetherPools2Abi, getEtherscanURL,
     infuraAPI, getVetherPrice } from '../../client/web3.js'
-import { totalSupply, convertToWei, BN2Str, oneBN, convertFromWei, currency } from '../utils.js'
-import { calcSwapOutput } from '../math.js'
+import { totalSupply, convertToWei, BN2Str, oneBN, convertFromWei, currency } from '../../common/utils'
+import { calcSwapOutput } from '../../common/clpLogic'
 import { getETHPrice } from "../../client/market"
 
-export const SwapPoolsInterface = () => {
+export const SwapInterface = () => {
 
     const context = useContext(Context)
 

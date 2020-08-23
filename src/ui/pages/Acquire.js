@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 
 import { Row } from 'antd'
 import { LabelGrey } from '../components'
-import { AcquireTable } from './acquire-web3'
-import { ClaimTable } from './claim-web3'
-import { EraTable } from './era-web3'
+import { AcquireDialog } from '../components/acquireDialog'
+import { ClaimDialog } from '../components/claimDialog'
+import { EraIndicator } from '../components/eraIndicator'
 
 import '../../App.less'
 import { Tabs } from 'antd'
@@ -35,7 +35,7 @@ const Acquire = () => {
 	return (
 		<>
 			<Row style={{marginTop:50}}>
-				<EraTable size={'small'}/>
+				<EraIndicator size={'small'}/>
 			</Row>
 
 			<Tabs defaultActiveKey='1' activeKey={tab} onChange={onChange} size={'large'} style={{ marginTop: 20, textAlign: "center" }}>
@@ -51,7 +51,7 @@ const Acquire = () => {
 					}
 					{!safari &&
 						<>
-							<AcquireTable/>
+							<AcquireDialog/>
 						</>
 					}
 				</TabPane>
@@ -67,7 +67,7 @@ const Acquire = () => {
 					}
 					{!safari &&
 						<>
-							<ClaimTable/>
+							<ClaimDialog/>
 						</>
 					}
 				</TabPane>

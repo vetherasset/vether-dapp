@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
 import { Row, Col, Radio, Input, Select } from 'antd'
 import { Button, Label, LabelGrey, Sublabel } from "../components"
-import {convertFromWei} from "../utils"
+import { convertFromWei } from '../../common/utils'
 
 export const Donations = () => {
 
