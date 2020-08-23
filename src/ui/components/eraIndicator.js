@@ -116,7 +116,7 @@ export const EraIndicator = (props) => {
                         </div>
                         {!small &&
                         <>
-                            <Progress percent={(((82400 - eraData.secondsToGo) / 82400) * 100).toFixed(0)} strokeColor={Colour().gold} status="active" />
+                            <Progress percent={Number((((82400 - eraData.secondsToGo) / 82400) * 100).toFixed(0))} strokeColor={Colour().gold} status="active" />
                             <Center i>
                                 <LabelGrey margin={"10px 0px 20px"}>{dayFinish()}</LabelGrey>
                             </Center>
