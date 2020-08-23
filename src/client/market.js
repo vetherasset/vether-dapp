@@ -7,11 +7,6 @@ export const getETHPrice = async () => {
     return ethPrice.data.ethereum.usd
 }
 
-export const getETHValueInUSD = async (eth) => {
-    const ethPrice = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
-    return ethPrice.data.ethereum.usd * eth
-}
-
 const getContract = () => {
     const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
     const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
