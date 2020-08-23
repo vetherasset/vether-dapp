@@ -16,14 +16,14 @@ export function BN2Str(BN) { return (new BigNumber(BN)).toFixed() }
 export const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
 
 export function convertFromWei(number) {
-    var num = new BigNumber(number)
-    var final = num.div(10**18)
+    const num = new BigNumber(number)
+    const final = num.div(10**18)
     return final.toString()
 }
 
 export function convertToWei(number) {
-    var num = new BigNumber(number)
-    var final = num.multipliedBy(10**18)
+    const num = new BigNumber(number)
+    const final = num.multipliedBy(10**18)
     return (final).toFixed(0)
 }
 
@@ -73,14 +73,12 @@ export function convertToTime(date) {
 export function convertToMonth(date_) {
     const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
     const date = new Date(1000 * date_)
-    let formatted_date = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear()
-    return formatted_date
+    return (date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear())
 }
 
 export function getSecondsToGo(date) {
     const time = (Date.now() / 1000).toFixed()
-    const seconds = (date - time)
-    return seconds
+    return ((date - time))
 }
 
 export const formatAPY = (input) =>{
