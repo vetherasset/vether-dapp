@@ -261,128 +261,128 @@ export const SwapInterface = () => {
 
     return (
         <>
-                    <Row type="flex" justify="center">
-                        <Col lg={12} xs={24}>
-                            <Label display="block" style={{ marginBottom: '1.33rem' }}>Actual Price</Label>
-                            <div style={{ textAlign: 'center' }}><span style={{ fontSize: 30 }}>{currency(marketData.priceUSD)}</span>
-                                <Tooltip placement="right" title="Current market rate">
-                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
-                                </Tooltip>
-                            </div>
-                            <LabelGrey style={{ display: 'block', marginBottom: 0, textAlign: 'center' }}>{currency(marketData.priceETH, 0, 6, inCurrency)}</LabelGrey>
+            <Row type="flex" justify="center">
+                <Col lg={12} xs={24}>
+                    <Label display="block" style={{ marginBottom: '1.33rem' }}>Actual Price</Label>
+                    <div style={{ textAlign: 'center' }}><span style={{ fontSize: 30 }}>{currency(marketData.priceUSD)}</span>
+                        <Tooltip placement="right" title="Current market rate">
+                            &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
+                        </Tooltip>
+                    </div>
+                    <LabelGrey style={{ display: 'block', marginBottom: 0, textAlign: 'center' }}>{currency(marketData.priceETH, 0, 6, inCurrency)}</LabelGrey>
+                </Col>
+            </Row>
+            <Row type="flex" justify="center">
+                <Col lg={12} xs={24}>
+                    <Row type="flex" justify="center" align="middle">
+                        <Col span={10}>
+                            <Label display="block" style={{marginBottom: '0.55rem'}}>Buy</Label>
+                            <Input size={'large'} style={{marginBottom: "1.3rem"}} onChange={onEthAmountChange} value={ethAmount}
+                                   placeholder={ethAmountCalculated} suffix="ETH Ξ"/>
+                            { connected && ethAmount > 0
+                                ? <Button backgroundColor="transparent" onClick={buyVether}>BUY VETH >></Button>
+                                : <Button backgroundColor="transparent" disabled>BUY VETH >></Button>
+                            }
+                            <Sublabel>BUY VETHER WITH ETH</Sublabel>
+                        </Col>
+
+                        <Col span={4} style={{textAlign: 'center'}}>
+                            <SwapOutlined style={{fontSize: '19px'}}/>
+                        </Col>
+
+                        <Col span={10} style={{textAlign: "right"}}>
+                            <Row>
+                                <Col xs={24}>
+                                    <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>
+                                    <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
+                                           placeholder={vethAmountCalculated} suffix="$VETH"/>
+                                    { connected && approved && vethAmount > 0
+                                        ? <Button backgroundColor="transparent" onClick={sellVether}>SELL&nbsp;VETH&nbsp;>></Button>
+                                        : <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>
+                                    }
+
+                                    { connected && !approved && !approveFlag &&
+                                        <>
+                                            <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE VETHER >></Button>
+                                            <Sublabel>ALLOW VETHER FOR TRADES</Sublabel>
+                                        </>
+                                    }
+
+                                    {connected && !approved && !approveFlag
+                                        ? <Sublabel>ALLOW VETHER FOR TRADES</Sublabel>
+                                        : <Sublabel>SELL VETHER FOR ETH</Sublabel>
+                                    }
+
+                                    {connected && approveFlag &&
+                                        <>
+                                            <LoadingOutlined />
+                                        </>
+                                    }
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
-                    <Row type="flex" justify="center">
-                        <Col lg={12} xs={24}>
-                            <Row type="flex" justify="center" align="middle">
-                                <Col span={10}>
-                                    <Label display="block" style={{marginBottom: '0.55rem'}}>Buy</Label>
-                                    <Input size={'large'} style={{marginBottom: "1.3rem"}} onChange={onEthAmountChange} value={ethAmount}
-                                           placeholder={ethAmountCalculated} suffix="ETH Ξ"/>
-                                    { connected && ethAmount > 0
-                                        ? <Button backgroundColor="transparent" onClick={buyVether}>BUY VETH >></Button>
-                                        : <Button backgroundColor="transparent" disabled>BUY VETH >></Button>
-                                    }
-                                    <Sublabel>BUY VETHER WITH ETH</Sublabel>
-                                </Col>
-
-                                <Col span={4} style={{textAlign: 'center'}}>
-                                    <SwapOutlined style={{fontSize: '19px'}}/>
-                                </Col>
-
-                                <Col span={10} style={{textAlign: "right"}}>
-                                    <Row>
-                                        <Col xs={24}>
-                                            <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>
-                                            <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
-                                                   placeholder={vethAmountCalculated} suffix="$VETH"/>
-                                            { connected && approved && vethAmount > 0
-                                                ? <Button backgroundColor="transparent" onClick={sellVether}>SELL&nbsp;VETH&nbsp;>></Button>
-                                                : <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>
-                                            }
-
-                                            { connected && !approved && !approveFlag &&
-                                                <>
-                                                    <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE VETHER >></Button>
-                                                    <Sublabel>ALLOW VETHER FOR TRADES</Sublabel>
-                                                </>
-                                            }
-
-                                            {connected && !approved && !approveFlag
-                                                ? <Sublabel>ALLOW VETHER FOR TRADES</Sublabel>
-                                                : <Sublabel>SELL VETHER FOR ETH</Sublabel>
-                                            }
-
-                                            {connected && approveFlag &&
-                                                <>
-                                                    <LoadingOutlined />
-                                                </>
-                                            }
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </Row>
-                            <Row type="flex" justify="center" align="middle" style={{ marginBottom: '1.33rem' }}>
+                    <Row type="flex" justify="center" align="middle" style={{ marginBottom: '1.33rem' }}>
+                        <Col span={12}>
+                            <Row>
                                 <Col span={12}>
-                                    <Row>
-                                        <Col span={12}>
-                                                Trade Price&nbsp;<Tooltip placement="right" title="The price you will get when the trade gets executed.">
-                                                    <QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
-                                                </Tooltip>
-                                        </Col>
-                                        <Col span={12} style={{ textAlign: 'right' }}>
-                                            {currency(trade.price, 0, 6, inCurrency)}
-                                        </Col>
-                                        <Col span={12}>
-                                            Slippage&nbsp;<Tooltip placement="right" title="The difference between market price and trade price due to order size.">
-                                                <QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
-                                            </Tooltip>
-                                        </Col>
-                                        <Col span={12} style={{ textAlign: 'right', color: trade.slippageColor }}>
-                                            {trade.slippagePercent.toFixed(2)}%
-                                        </Col>
-                                    </Row>
+                                        Trade Price&nbsp;<Tooltip placement="right" title="The price you will get when the trade gets executed.">
+                                            <QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
+                                        </Tooltip>
+                                </Col>
+                                <Col span={12} style={{ textAlign: 'right' }}>
+                                    {currency(trade.price, 0, 6, inCurrency)}
+                                </Col>
+                                <Col span={12}>
+                                    Slippage&nbsp;<Tooltip placement="right" title="The difference between market price and trade price due to order size.">
+                                        <QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
+                                    </Tooltip>
+                                </Col>
+                                <Col span={12} style={{ textAlign: 'right', color: trade.slippageColor }}>
+                                    {trade.slippagePercent.toFixed(2)}%
                                 </Col>
                             </Row>
-                            { trade.slippageWarning &&
-                                <>
-                                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
-                                        <ExclamationCircleOutlined style={{ marginBottom: '0' }}/>&nbsp;Due to trade size your price's affected by high slippage.
-                                    </LabelGrey>
-                                </>
+                        </Col>
+                    </Row>
+                    { trade.slippageWarning &&
+                        <>
+                            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
+                                <ExclamationCircleOutlined style={{ marginBottom: '0' }}/>&nbsp;Due to trade size your price's affected by high slippage.
+                            </LabelGrey>
+                        </>
+                    }
+                </Col>
+            </Row>
+
+            { buyFlag &&
+                <>
+                    <Row type="flex" justify="center" >
+                        <Col span={12} style={{ textAlign: 'left' }}>
+                            {loadedBuy &&
+                            <>
+                                <a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link"
+                                   target="_blank">VIEW TRANSACTION -></a>
+                            </>
                             }
                         </Col>
                     </Row>
+                </>
+            }
 
-                    { buyFlag &&
-                        <>
-                            <Row type="flex" justify="center" >
-                                <Col span={12} style={{ textAlign: 'left' }}>
-                                    {loadedBuy &&
-                                    <>
-                                        <a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link"
-                                           target="_blank">VIEW TRANSACTION -></a>
-                                    </>
-                                    }
-                                </Col>
-                            </Row>
-                        </>
-                    }
-
-                    { sellFlag &&
-                    <>
-                        <Row type="flex" justify="center" >
-                            <Col span={12} style={{ textAlign: 'right' }}>
-                                {loadedSell &&
-                                <>
-                                    <a href={getLink(vethTx)} rel="noopener noreferrer" title="Transaction Link"
-                                       target="_blank">VIEW TRANSACTION -></a>
-                                </>
-                                }
-                            </Col>
-                        </Row>
-                    </>
-                    }
+            { sellFlag &&
+                <>
+                    <Row type="flex" justify="center" >
+                        <Col span={12} style={{ textAlign: 'right' }}>
+                            {loadedSell &&
+                            <>
+                                <a href={getLink(vethTx)} rel="noopener noreferrer" title="Transaction Link"
+                                   target="_blank">VIEW TRANSACTION -></a>
+                            </>
+                            }
+                        </Col>
+                    </Row>
+                </>
+            }
         </>
     )
 }
