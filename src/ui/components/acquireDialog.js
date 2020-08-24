@@ -19,7 +19,7 @@ export const AcquireDialog = () => {
     const [loaded, setLoaded] = useState(null)
     const [burnEthFlag, setBurnEthFlag] = useState(null)
     const [ethTx, setEthTx] = useState(null)
-    const [currentBurn, setCurrentBurn] = useState(1)
+    const [currentBurn, setCurrentBurn] = useState(0)
 
     const notSpendAmount = 0
     const spendable = (account.ethBalance - notSpendAmount).toPrecision(4) < 0 ?
@@ -33,15 +33,15 @@ export const AcquireDialog = () => {
 
     const connect = async () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
+        const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+        const day = await contract.methods.currentDay().call()
+        const era = 1
+        const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
+        setCurrentBurn(currentBurn)
         if(accountConnected){
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
-            const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
             context.accountData ? getAccountData() : loadAccountData(contract, address)
-            const day = await contract.methods.currentDay().call()
-            const era = 1
-            const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
-            setCurrentBurn(currentBurn)
             setConnected(true)
         }
     }
@@ -142,7 +142,7 @@ export const AcquireDialog = () => {
                 </Col>
 
                 <Col xs={24} sm={6} style={{ marginTop: '-3px' }}>
-                    <Text size={32}>{currency(getVethValue(), 0, 2, 'VETH')}
+                    <Text size={32}>{currency(getVethValue(), 0, 4, 'VETH')}
                         <Tooltip placement="right" title="The amount of VETH you get is&nbsp;dependent on how much you burn, compared to how much everyone else burns.">
                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                         </Tooltip>
