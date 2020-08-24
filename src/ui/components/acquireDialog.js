@@ -142,7 +142,7 @@ export const AcquireDialog = () => {
                 </Col>
 
                 <Col xs={24} sm={6} style={{ marginTop: '-3px' }}>
-                    <Text size={32}>{currency(getVethValue(), 0, 4, 'VETH')}
+                    <Text size={32}>{currency(getVethValue(), 0, 2, 'VETH')}
                         <Tooltip placement="right" title="The amount of VETH you get is&nbsp;dependent on how much you burn, compared to how much everyone else burns.">
                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                         </Tooltip>
