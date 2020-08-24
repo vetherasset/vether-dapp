@@ -323,7 +323,7 @@ export const SwapInterface = () => {
                         </Col>
                     </Row>
                     <Row type="flex" justify="center" align="middle" style={{ marginBottom: '1.33rem' }}>
-                        <Col span={12}>
+                        <Col xs={24} lg={12}>
                             <Row>
                                 <Col span={12}>
                                         Trade Price&nbsp;<Tooltip placement="right" title="The price you will get when the trade gets executed.">
