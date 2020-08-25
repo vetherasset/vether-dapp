@@ -3,11 +3,12 @@ import { Context } from '../../context'
 import Web3 from "web3"
 
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL } from '../../client/web3.js'
-import { convertFromWei, currency } from '../../common/utils'
+import {convertFromWei, currency } from '../../common/utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { LabelGrey, Button, Sublabel, Colour, Text } from '../components'
+import {infuraAPI} from "../../client/web3";
 
 export const AcquireDialog = () => {
 
@@ -31,19 +32,29 @@ export const AcquireDialog = () => {
         connect()
     })
 
+    useEffect(() => {
+        loadBurnData()
+        // eslint-disable-next-line
+    }, [])
+
     const connect = async () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
-        const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+        if(accountConnected){
+            const accounts = await window.web3.eth.getAccounts()
+            const address = accounts[0]
+            const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+            context.accountData ? getAccountData() : loadAccountData(contract, address)
+            setConnected(true)
+        }
+    }
+
+    const loadBurnData = async () => {
+        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
         const day = await contract.methods.currentDay().call()
         const era = 1
         const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
         setCurrentBurn(currentBurn)
-        if(accountConnected){
-            const accounts = await window.web3.eth.getAccounts()
-            const address = accounts[0]
-            context.accountData ? getAccountData() : loadAccountData(contract, address)
-            setConnected(true)
-        }
     }
 
     const getAccountData = async () => {
