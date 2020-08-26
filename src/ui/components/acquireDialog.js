@@ -3,11 +3,12 @@ import { Context } from '../../context'
 import Web3 from "web3"
 
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL } from '../../client/web3.js'
-import { convertFromWei, currency } from '../../common/utils'
+import {convertFromWei, currency } from '../../common/utils'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { LabelGrey, Button, Sublabel, Colour, Text } from '../components'
+import {infuraAPI} from "../../client/web3";
 
 export const AcquireDialog = () => {
 
@@ -19,7 +20,7 @@ export const AcquireDialog = () => {
     const [loaded, setLoaded] = useState(null)
     const [burnEthFlag, setBurnEthFlag] = useState(null)
     const [ethTx, setEthTx] = useState(null)
-    const [currentBurn, setCurrentBurn] = useState(1)
+    const [currentBurn, setCurrentBurn] = useState(0)
 
     const notSpendAmount = 0
     const spendable = (account.ethBalance - notSpendAmount).toPrecision(4) < 0 ?
@@ -31,6 +32,11 @@ export const AcquireDialog = () => {
         connect()
     })
 
+    useEffect(() => {
+        loadBurnData()
+        // eslint-disable-next-line
+    }, [])
+
     const connect = async () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected){
@@ -38,12 +44,17 @@ export const AcquireDialog = () => {
             const address = accounts[0]
             const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
             context.accountData ? getAccountData() : loadAccountData(contract, address)
-            const day = await contract.methods.currentDay().call()
-            const era = 1
-            const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
-            setCurrentBurn(currentBurn)
             setConnected(true)
         }
+    }
+
+    const loadBurnData = async () => {
+        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+        const day = await contract.methods.currentDay().call()
+        const era = 1
+        const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
+        setCurrentBurn(currentBurn)
     }
 
     const getAccountData = async () => {
@@ -147,7 +158,7 @@ export const AcquireDialog = () => {
                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                         </Tooltip>
                     </Text>
-                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Potential VETH Value</LabelGrey>
+                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Potential VETH value</LabelGrey>
                 </Col>
             </Row>
         </>

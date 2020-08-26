@@ -501,7 +501,7 @@ export const UpgradeDialog = () => {
                     {!account.stakeUnits > "0" &&
                         <>
                             <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
-                                <CheckCircleOutlined style={{ marginBottom: '0' }}/>&nbsp;There's nothing to upgrade.
+                                <CheckCircleOutlined style={{ marginBottom: '0' }}/>&nbsp;You've got nothing to upgrade.
                             </LabelGrey>
                         </>
                     }
