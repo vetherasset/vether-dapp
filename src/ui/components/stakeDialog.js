@@ -5,9 +5,9 @@ import { ETH, getEtherscanURL, getUniswapPriceEth, infuraAPI, vetherAbi, vetherA
     vetherPools2Addr, vetherPoolsAbi, vetherPoolsAddr } from "../../client/web3"
 import { convertFromWei, currency, getBN } from "../../common/utils"
 import { calcShare } from "../../common/clpLogic"
-import { Col, Input, Row, Select } from "antd"
-import { LoadingOutlined, CheckCircleOutlined } from '@ant-design/icons'
-import { Button, Label, LabelGrey, Sublabel } from "../components"
+import {Col, Slider, InputNumber, Input, Row, Select, Tooltip } from "antd"
+import { LoadingOutlined, CheckCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import {Button, Colour, Label, LabelGrey, Sublabel} from "../components"
 
 export const StakeDialog = () => {
 
@@ -226,7 +226,7 @@ const AddLiquidityTable = (props) => {
 
     return (
         <>
-            <h2 style={{ fontStyle: 'italic' }}>Select asset to provide.</h2>
+            <h2 style={{ fontStyle: 'italic' }}>Select asset to pool.</h2>
             <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Select an asset you would like to provide. Vether pool is non-proportional. Unlike Uniswap, where you need to provide<br/>
                 an equal proportion of both assets, Vether pools allow you to provide liquidity in unequal proportions.</LabelGrey>
 
@@ -297,29 +297,54 @@ const AddLiquidityTable = (props) => {
                     <Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '2.66rem' }}>
                         <Col xs={8}>
                             <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
-                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.vetherShare, 0, 2, 'VETH')}</span>
+                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.vetherShare, 0, 5, 'VETH')}
+                                <Tooltip placement="right" title="The amount of asset in pool you own at this moment.">
+                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
+                                </Tooltip>
+                            </span>
                         </Col>
                         <Col xs={8}>
                             <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
-                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.assetShare, 0, 5, 'ETH')}</span>
+                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.assetShare, 0, 5, 'ETH')}
+                                <Tooltip placement="right" title="The amount of asset in pool you own at this moment.">
+                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
+                                </Tooltip>
+                            </span>
                         </Col>
                         <Col xs={8}>
                             <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
-                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.stakeUnits}%</span>
+                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.stakeUnits.toFixed(2)}%
+                                <Tooltip placement="right" title="A percentage of pool you own.">
+                                    &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
+                                </Tooltip>
+                            </span>
                         </Col>
                     </Row>
                     <Row type="flex" justify="center" style={{ textAlign: "center" }}>
                         <Col xs={8}>
-                            <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>STAKED</span>
-                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.vetherStaked, 0, 2, 'VETH')}</span>
+                            <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>INITIAL STAKE</span>
+                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.vetherStaked, 0, 2, 'VETH')}
+                                <Tooltip placement="bottom" title="How many of asset you already provided to pool in total.">
+                                        &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
+                                </Tooltip>
+                            </span>
                         </Col>
                         <Col xs={8}>
-                            <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>STAKED</span>
-                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.assetStaked, 0, 5, 'ETH')}</span>
+                            <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>INITIAL STAKE</span>
+                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.assetStaked, 0, 5, 'ETH')}
+                                <Tooltip placement="bottom" title="How many of asset you already provided to pool in total.">
+                                        &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
+                                </Tooltip>
+                            </span>
                         </Col>
                         <Col xs={8}>
                             <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ROI</span>
-                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{((account.roi/100) - 100)}%</span>
+                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>
+                                n/a
+                                <Tooltip placement="bottom" title="Member ROI isn't available yet, but will be in next pool version.">
+                                        &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
+                                </Tooltip>
+                            </span>
                         </Col>
                     </Row>
                 </>
@@ -337,7 +362,8 @@ const RemoveLiquidityTable = (props) => {
     const [burnTknFlag, setBurnTknFlag] = useState(null)
     const [tknTx, setTknTx] = useState(null)
     const [loaded2, setLoaded2] = useState(null)
-    const [unstakeAmount, setUnstakeAmount] = useState('10000')
+    const [unstakeAmount, setUnstakeAmount] = useState(0)
+
 
     useEffect(() => {
         console.log(account.stakeUnits)
@@ -348,10 +374,6 @@ const RemoveLiquidityTable = (props) => {
         return getEtherscanURL().concat('tx/').concat(tx)
     }
 
-    const onAmountChange = e => {
-        setUnstakeAmount(e.target.value * 100)
-    }
-
     // const onUnitsChange = e => {
     // 	setUnstakeUnits(convertToWei(e.target.value))
     // }
@@ -359,10 +381,16 @@ const RemoveLiquidityTable = (props) => {
     const unstake = async () => {
         setBurnTknFlag(true)
         const poolContract = new window.web3.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
-        console.log(unstakeAmount, ETH)
-        const tx = await poolContract.methods.unstake(unstakeAmount, ETH).send({ from: account.address })
+        const tx = await poolContract.methods.unstake((unstakeAmount*100), ETH).send({ from: account.address })
         setTknTx(tx.transactionHash)
         setLoaded2(true)
+    }
+
+    const onProportionAmountChange = (value) => {
+        if (isNaN(value)) {
+            return
+        }
+        setUnstakeAmount(value)
     }
 
     // const unstakeExact = async () => {
@@ -381,11 +409,32 @@ const RemoveLiquidityTable = (props) => {
             {(account.stakeUnits > 0) &&
             <>
                 <Row>
-                    <Col xs={2}>
+                    <Col xs={24} sm={16} xl={9}>
                         <Label display="block" style={{marginBottom: '0.55rem'}}>Proportion</Label>
-                        <Input size={'large'} style={{ marginBottom: 10 }} onChange={onAmountChange} placeholder={100} suffix={'%'}/>
+                            <Col span={15} style={{ paddingLeft: 6, marginRight: 23 }}>
+                                <Slider
+                                    min={0}
+                                    max={100}
+                                    onChange={onProportionAmountChange}
+                                    value={typeof unstakeAmount === 'number' ? unstakeAmount : 0}
+                                    step={1}
+                                />
+                            </Col>
+                            <Col span={3}>
+                                <InputNumber
+                                    min={0}
+                                    max={100}
+                                    onChange={onProportionAmountChange}
+                                    style={{ marginBottom: 10 }}
+                                    step={0.1}
+                                    formatter={value => `${value}%`}
+                                    parser={value => value.replace('%', '')}
+                                    defaultValue="0"
+                                    value={unstakeAmount}
+                                />
+                            </Col>
                     </Col>
-                    <Col xs={12} sm={7} style={{ paddingLeft: 20, paddingTop: 30 }}>
+                    <Col xs={24} sm={7} style={{ paddingTop: 30 }}>
                         {unstakeAmount > 0
                             ? <Button backgroundColor="transparent" onClick={unstake}>REMOVE >></Button>
                             : <Button backgroundColor="transparent" disabled>REMOVE >></Button>
