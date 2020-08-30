@@ -481,13 +481,13 @@ const RemoveLiquidityTable = (props) => {
                                 }
                             </Col>
                         </Row>
-                    </Col>
+                    </Col>nan
                 </Row>
 
                 <Row>
                     <Col xs={24} sm={13} xl={7}>
                         <Label display="block" style={{ marginBottom: '0.55rem' }}>Equal Proportion</Label>
-                            <Col span={13} style={{ paddingLeft: 6, marginRight: 23 }}>
+                            <Col span={13} style={{ paddingLeft: 6, marginRight: 5 }}>
                                 <Slider
                                     min={0}
                                     max={100}
@@ -496,13 +496,13 @@ const RemoveLiquidityTable = (props) => {
                                     step={1}
                                 />
                             </Col>
-                            <Col span={2}>
+                            <Col span={8}>
                                 <InputNumber
                                     min={0}
                                     max={100}
                                     size="large"
                                     onChange={onProportionAmountChange}
-                                    style={{ marginBottom: 10 }}
+                                    style={{ width: '100%', marginBottom: 10 }}
                                     step={0.1}
                                     formatter={value => `${value}%`}
                                     parser={value => value.replace('%', '')}
@@ -511,6 +511,7 @@ const RemoveLiquidityTable = (props) => {
                                 />
                             </Col>
                     </Col>
+
                     <Col xs={24} sm={11} xl={17} style={{ paddingTop: 30 }}>
                         {unstakeProportionAmount > 0
                             ? <Button backgroundColor="transparent" onClick={unstakeProportion}>REMOVE >></Button>
