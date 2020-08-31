@@ -3,8 +3,10 @@ import WETHER from '../artifacts/Wether.json'
 import VETHER from '../artifacts/Vether3.json'
 import VETHERPOOLS from '../artifacts/VetherPools.json'
 import VETHERPOOLS2 from '../artifacts/VetherPools2.json'
+import VADERROUTER from '../artifacts/VaderRouter.json'
+import VADERUTILS from '../artifacts/VaderUtils.json'
 import UNISWAP from '../artifacts/UniswapPair.json'
-import ROUTER from '../artifacts/Router.json'
+import UNISWAPROUTER from '../artifacts/UniswapRouter.json'
 import { BN2Str, oneBN } from '../common/utils'
 
 const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE')
@@ -51,6 +53,22 @@ export const vetherPools2Addr = () => {
     }
 }
 
+export const vaderRouterAddr = () => {
+    if (TESTNET) {
+        return null
+    } else {
+        return '0xe16e64Da1338d8E56dFd8355Ba7642D0A79e253c'
+    }
+}
+
+export const vaderUtilsAddr = () => {
+    if (TESTNET) {
+        return null
+    } else {
+        return '0x0f216323076dfe029f01B3DeB3bC1682B1ea8A37'
+    }
+}
+
 export const wetherAbi = () => {
     return WETHER.abi
 }
@@ -65,6 +83,14 @@ export const vetherPoolsAbi = () => {
 
 export const vetherPools2Abi = () => {
 	return VETHERPOOLS2.abi
+}
+
+export const vaderRouterAbi = () => {
+    return VADERROUTER.abi
+}
+
+export const vaderUtilsAbi = () => {
+    return VADERUTILS.abi
 }
 
 export const infuraAPI = () => {
@@ -101,7 +127,7 @@ export const uniSwapRouterAddr = () => {
 }
 
 export const uniSwapRouterAbi = () => {
-	return ROUTER.abi
+	return UNISWAPROUTER.abi
 }
 
 export const getUniswapPriceEth = async () => {
