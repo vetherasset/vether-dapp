@@ -4,7 +4,7 @@ import { Context } from '../../context'
 import Breakpoint from 'react-socks'
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi, infuraAPI, getUniswapPriceEth } from '../../client/web3.js'
+import {vetherAddr, vetherAbi, infuraAPI, getVetherPrice} from '../../client/web3.js'
 import { getETHPrice } from '../../client/market.js'
 import { convertFromWei, getSecondsToGo, currency } from '../../common/utils'
 
@@ -65,7 +65,7 @@ export const EraIndicator = (props) => {
 
     const loadMarketData = async () => {
         const priceEtherUSD = await getETHPrice()
-        const priceVetherEth = await getUniswapPriceEth()
+        const priceVetherEth = await getVetherPrice()
         const priceVetherUSD = priceEtherUSD * priceVetherEth
         const marketData = {
             priceUSD: priceVetherUSD,

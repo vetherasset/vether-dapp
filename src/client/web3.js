@@ -1,12 +1,8 @@
 import Web3 from 'web3'
 import WETHER from '../artifacts/Wether.json'
 import VETHER from '../artifacts/Vether3.json'
-import VETHERPOOLS from '../artifacts/VetherPools.json'
-import VETHERPOOLS2 from '../artifacts/VetherPools2.json'
 import VADERROUTER from '../artifacts/VaderRouter.json'
 import VADERUTILS from '../artifacts/VaderUtils.json'
-import UNISWAP from '../artifacts/UniswapPair.json'
-import UNISWAPROUTER from '../artifacts/UniswapRouter.json'
 import { BN2Str, oneBN } from '../common/utils'
 
 const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE')
@@ -34,14 +30,6 @@ export const vetherAddr = () => {
         return '0x95d0c08e59bbc354ee2218da9f82a04d7cdb6fdf'
     } else {
         return '0x4ba6ddd7b89ed838fed25d208d4f644106e34279'
-    }
-}
-
-export const vetherPoolsAddr = () => {
-    if(TESTNET) {
-        return '0xFc355B3FE802CCB65dA381dE4E0F7219FDD369E6'
-    } else {
-        return '0xa806Af507d0B05714CD08EAA0039B4A829016099'
     }
 }
 
@@ -77,14 +65,6 @@ export const vetherAbi = () => {
 	return VETHER.abi
 }
 
-export const vetherPoolsAbi = () => {
-	return VETHERPOOLS.abi
-}
-
-export const vetherPools2Abi = () => {
-	return VETHERPOOLS2.abi
-}
-
 export const vaderRouterAbi = () => {
     return VADERROUTER.abi
 }
@@ -106,61 +86,16 @@ export const getWeb3 = () => {
     return new Web3(Web3.givenProvider || "http://localhost:7545")
 }
 
-export const uniSwapAddr = () => {
-    if(TESTNET) {
-        return '0x3696fa5ad6e5c74fdcbced9af74379d94c4b775a'
-    } else {
-        return '0x3696fa5ad6e5c74fdcbced9af74379d94c4b775a'
-    }
-}
-
-export const uniSwapAbi = () => {
-	return UNISWAP.abi
-}
-
-export const uniSwapRouterAddr = () => {
-    if(TESTNET) {
-        return '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
-    } else {
-        return '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
-    }
-}
-
-export const uniSwapRouterAbi = () => {
-	return UNISWAPROUTER.abi
-}
-
-export const getUniswapPriceEth = async () => {
-    const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-    const contract = new web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-    const regExp = /e-(\d+)/
-    let valueEth
-
-    try {
-        const pool = await contract.methods.getReserves().call()
-        valueEth = pool.reserve1/pool.reserve0
-        valueEth = valueEth.toString()
-        valueEth = valueEth.replace(regExp, '')
-        valueEth = Number(valueEth).toFixed(5)
-    } catch(err) {
-        valueEth = 0.00
-        console.log(err)
-    }
-    return (valueEth)
-}
-
 export const getVetherPrice = async () => {
     const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-    const poolContract = new web3_.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
+    const poolContract = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
     let price
-
     try {
-        price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
+        price = await poolContract.methods.calcValueInToken(ETH, BN2Str(oneBN)).call()
+        return(price)
     } catch (err) {
         console.log(err)
     }
-
-    return(price)
 }
 
 export const getAccounts = async (i) => {

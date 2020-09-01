@@ -3,6 +3,7 @@ import { Context } from "../../context"
 import Web3 from "web3"
 import { ETH, infuraAPI, vaderUtilsAbi, vaderUtilsAddr } from "../../client/web3"
 import { convertFromWei, currency } from "../../common/utils"
+import { getVetherPrice } from "../../client/web3"
 import { getETHPrice } from "../../client/market"
 import { Center, Colour, Text } from "../components"
 import { Col, Row, Tooltip } from "antd"
@@ -27,14 +28,14 @@ export const PoolTicker = () => {
         const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
         const utils = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
         const poolData = await utils.methods.getPoolData(ETH).call()
+        const price = await getVetherPrice()
         const age = await utils.methods.getPoolAge(ETH).call()
         const roi = await utils.methods.getPoolROI(ETH).call()
         const apy = await utils.methods.getPoolAPY(ETH).call()
-        const price = poolData.tokenAmt / poolData.baseAmt
         const poolData_ = {
             "eth": convertFromWei(poolData.tokenAmt),
             "veth": convertFromWei(poolData.baseAmt),
-            "price": price,
+            "price": convertFromWei(price),
             "volume": convertFromWei(poolData.volume),
             "poolUnits": poolData.poolUnits,
             "fees": convertFromWei(poolData.fees),
