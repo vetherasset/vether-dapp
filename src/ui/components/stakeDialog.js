@@ -1,13 +1,14 @@
 import React, {useContext, useEffect, useState} from "react"
 import { Context } from "../../context"
 import Web3 from "web3"
-import { ETH, getEtherscanURL, getUniswapPriceEth, infuraAPI, vetherAbi, vetherAddr, vetherPools2Abi,
-    vetherPools2Addr, vetherPoolsAbi, vetherPoolsAddr } from "../../client/web3"
+import {
+    ETH, getEtherscanURL, infuraAPI, vetherAbi, vetherAddr, vetherPools2Addr, vaderRouterAddr,
+    vaderRouterAbi, vaderUtilsAbi, vaderUtilsAddr
+} from "../../client/web3"
 import { convertFromWei, currency, getBN } from "../../common/utils"
-import { calcShare } from "../../common/clpLogic"
-import {Col, Slider, InputNumber, Input, Row, Select, Tooltip } from "antd"
+import { Col, Slider, InputNumber, Input, Row, Select, Tooltip } from "antd"
 import { LoadingOutlined, CheckCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons'
-import {Button, Colour, Label, LabelGrey, Sublabel} from "../components"
+import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
 
 export const StakeDialog = () => {
 
@@ -15,9 +16,8 @@ export const StakeDialog = () => {
 
     const [account, setAccount] = useState(
         {
-            address: '', vethBalance: '', ethBalance: '',
-            stakeUnits: '', vetherStaked: '', assetStaked: '',
-            vetherShare: '', assetShare: '', roi: ''
+            address: '', vethBalance: 0, ethBalance: 0,
+            isMember: false, baseAmt: 0, tokenAmt: 0
         })
 
     const [connected, setConnected ] = useState(false)
@@ -44,32 +44,25 @@ export const StakeDialog = () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if (accountConnected) {
             const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-            const contract = await new web3.eth.Contract(vetherAbi(), vetherAddr())
+            const utils = await new web3.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
+            const vether = await new web3.eth.Contract(vetherAbi(), vetherAddr())
             const ethBalance = convertFromWei(await web3.eth.getBalance(account))
-            const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
+            const vethBalance = convertFromWei(await vether.methods.balanceOf(account).call())
 
-            const poolContract = new web3.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
-            let stakeData = await poolContract.methods.getMemberStakeData(account, ETH).call()
-
-            let poolData = await poolContract.methods.poolData(ETH).call()
-            let poolShare = calcShare(getBN(stakeData.stakeUnits), getBN(poolData.poolUnits), getBN(poolData.asset), getBN(poolData.vether))
-
-            // let vetherShare = await poolContract.methods.getStakerShareVether(account, ETH).call()
-            // let assetShare = await poolContract.methods.getStakerShareAsset(account, ETH).call()
-            let memberROI = await poolContract.methods.getMemberROI(account, ETH).call()
-            console.log(memberROI)
+            let isMember = await utils.methods.isMember(ETH, account).call()
+            let poolData = await utils.methods.getPoolData(ETH).call()
+            let memberShare = await utils.methods.getMemberShare(ETH, account).call()
 
             const accountData = {
                 'address': account,
                 'vethBalance': vethBalance,
                 'ethBalance': ethBalance,
-                'stakeUnits': (stakeData.stakeUnits / poolData.poolUnits) * 100,
-                'vetherStaked': convertFromWei(stakeData.vether),
-                'assetStaked': convertFromWei(stakeData.asset),
-                'vetherShare': convertFromWei(poolShare.vether),
-                'assetShare': convertFromWei(poolShare.asset),
-                "roi": (+memberROI)
+                'isMember': isMember,
+                'baseAmt': memberShare.baseAmt,
+                'tokenAmt': memberShare.tokenAmt
             }
+            console.log(poolData)
+            console.log(accountData)
             setAccount(accountData)
             context.setContext({ "accountData": accountData })
         }
@@ -86,7 +79,7 @@ export const StakeDialog = () => {
             }
             {connected && !loading &&
             <>
-                {account.stakeUnits > "0" &&
+                {account.isMember &&
                 <>
                     <hr />
                     <RemoveLiquidityTable accountData={account} />
@@ -101,8 +94,6 @@ export const StakeDialog = () => {
 const AddLiquidityTable = (props) => {
 
     const account = props.accountData
-
-    const totalSupply = getBN(1000000 * 10 ** 18)
 
     const assets = [
         {
@@ -121,9 +112,7 @@ const AddLiquidityTable = (props) => {
     const [asset1, setAsset1] = useState(null)
     const [amount1, setAmount1] = useState(0)
 
-    const [stakeFlag, setStakeFlag] = useState(null)
     const [ethTx, setEthTx] = useState(null)
-    const [vetherPrice, setVetherPrice] = useState(null)
     const [loading, setLoading] = useState(true)
     const [approved, setApproved] = useState(true)
     const [approveFlag, setApproveFlag] = useState(null)
@@ -135,13 +124,10 @@ const AddLiquidityTable = (props) => {
 
     useEffect(() => {
         connect()
-        console.log(vetherPrice)
         // eslint-disable-next-line
     }, [])
 
     const connect = async () => {
-        const vethPrice = await getUniswapPriceEth()
-        setVetherPrice(vethPrice)
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if (accountConnected) {
             const accounts = await window.web3.eth.getAccounts()
@@ -154,26 +140,28 @@ const AddLiquidityTable = (props) => {
     const checkApproval = async (address) => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if (accountConnected){
-            const vetherContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+            const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
             const from = address
-            const spender = vetherPools2Addr()
-            const approval = await vetherContract.methods.allowance(from, spender).call()
-            const vethBalance = await vetherContract.methods.balanceOf(address).call()
+            const spender = vaderRouterAddr()
+            const approval = await vether.methods.allowance(from, spender).call()
+            const vethBalance = await vether.methods.balanceOf(address).call()
             if (+approval >= +vethBalance && +vethBalance >= 0) {
                 setApproved(true)
+                setApproveFlag(false)
             } else {
                 setApproved(false)
+                setApproveFlag(false)
             }
         }
     }
 
     const unlockToken = async () => {
         setApproveFlag(true)
-        const tokenContract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+        const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
         const fromAcc = account.address
-        const spender = vetherPools2Addr()
-        const value = totalSupply.toString()
-        await tokenContract.methods.approve(spender, value).send({ from: fromAcc })
+        const spender = vaderRouterAddr()
+        const value = getBN(1000000 * 10 ** 18).toString()
+        await vether.methods.approve(spender, value).send({ from: fromAcc })
         checkApproval(account.address)
     }
 
@@ -188,10 +176,8 @@ const AddLiquidityTable = (props) => {
             amountVeth = Web3.utils.toWei(amount1.toString())
             amountEth = Web3.utils.toWei(amount0.toString())
         }
-        setStakeFlag(true)
-        console.log(stakeFlag)
-        const poolContract = new window.web3.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
-        const tx = await poolContract.methods.stake(amountVeth, amountEth, ETH).send({
+        const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
+        const tx = await vaderRouter.methods.stake(amountVeth, amountEth, ETH).send({
             value: amountEth,
             from: fromAcc,
             gasPrice: '',
@@ -215,12 +201,16 @@ const AddLiquidityTable = (props) => {
     }
 
     const onAsset0amountChange = e => {
-        setAmount0(e.target.value)
+        let n = Number(e.target.value)
+        if(!isFinite(n)) n = 0
+        setAmount0(n)
         console.log(amount0)
     }
 
     const onAsset1amountChange = e => {
-        setAmount1(e.target.value)
+        let n = Number(e.target.value)
+        if(!isFinite(n)) n = 0
+        setAmount1(n)
         console.log(amount1)
     }
 
@@ -251,45 +241,86 @@ const AddLiquidityTable = (props) => {
             </Row>
 
             {asset1 &&
-            <>
-                <h2 style={{ fontStyle: 'italic' }}>Would you like to stake {asset1.name} as well?</h2>
-                <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You may provide both assets in just one transaction, whilst this is not required.<br/>
-                    If you don't want to add {asset1.name} just leave following amount at zero.</LabelGrey>
-                <Row style={{ marginBottom: '1.33rem' }}>
-                    <Col lg={4} xs={9}>
-                        <Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
-                        <Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset1amountChange} value={amount1} suffix={asset1.symbol}/>
-                    </Col>
-                </Row>
+                <>
+                    <h2 style={{ fontStyle: 'italic' }}>Would you like to stake {asset1.name} as well?</h2>
+                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You may provide both assets in just one transaction, whilst this is not required.<br/>
+                        If you don't want to add {asset1.name} just leave following amount at zero.</LabelGrey>
+                    <Row style={{ marginBottom: '1.33rem' }}>
+                        <Col lg={4} xs={9}>
+                            <Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
+                            <Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset1amountChange} value={amount1} suffix={asset1.symbol}/>
+                        </Col>
+                    </Row>
 
-                {amount0 > 0
-                    ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
-                    : <Button backgroundColor="transparent" disabled>ADD >></Button>
-                }
-                <Sublabel>ADD LIQUIDITY TO THE POOL</Sublabel>
-            </>
+                    { !approved && asset0.name !== 'Ether' && amount0 > 0  &&
+                        <>
+                            <Row>
+                                <Col xs={24}>
+                                    <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
+                                    <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE >></Button>
+                                    <Sublabel>ALLOW VETHER FOR STAKING</Sublabel>
+                                    {approveFlag &&
+                                    <>
+                                        {!approved &&
+                                        <LoadingOutlined style={{ marginBottom: 0 }} />
+                                        }
+                                    </>
+                                    }
+                                </Col>
+                            </Row>
+                        </>
+                    }
+                    { !approved && asset1.name !== 'Ether' && amount1 > 0  &&
+                    <>
+                        <Row>
+                            <Col xs={24}>
+                                <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
+                                <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE >></Button>
+                                <Sublabel>ALLOW VETHER FOR STAKING</Sublabel>
+                                {approveFlag &&
+                                <>
+                                    {!approved &&
+                                    <LoadingOutlined style={{ marginBottom: 0 }} />
+                                    }
+                                </>
+                                }
+                            </Col>
+                        </Row>
+                    </>
+                    }
+                    { !approved && asset0.name === 'Vether' && amount0 === 0 &&
+                        <>
+                            {amount0 > 0 || amount1 > 0
+                                ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
+                                : <Button backgroundColor="transparent" disabled>ADD >></Button>
+                            }
+                            <Sublabel>ADD LIQUIDITY TO THE POOL</Sublabel>
+                        </>
+                    }
+                    { !approved && asset1.name === 'Vether' && amount1 === 0 &&
+                        <>
+                            {amount0 > 0 || amount1 > 0
+                                ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
+                                : <Button backgroundColor="transparent" disabled>ADD >></Button>
+                            }
+                            <Sublabel>ADD LIQUIDITY TO THE POOL</Sublabel>
+                        </>
+                    }
+                    { approved &&
+                        <>
+                            {amount0 > 0 || amount1 > 0
+                                ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
+                                : <Button backgroundColor="transparent" disabled>ADD >></Button>
+                            }
+                            <Sublabel>ADD LIQUIDITY TO THE POOL</Sublabel>
+                        </>
+                    }
+                </>
             }
 
             {!loading &&
             <>
-                {!approved &&
-                <Row>
-                    <Col xs={24}>
-                        <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
-                        <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE >></Button>
-                        <Sublabel>ALLOW VETHER FOR STAKING</Sublabel>
-                        {approveFlag &&
-                        <>
-                            {!approved &&
-                            <LoadingOutlined style={{ marginBottom: 0 }} />
-                            }
-                        </>
-                        }
-                    </Col>
-                </Row>
-                }
-
-                {approved && account.stakeUnits > 0 &&
+                {approved && account.isMember &&
                 <>
                     <hr/>
                     <h2>POOLED LIQUIDITY</h2>
@@ -313,7 +344,7 @@ const AddLiquidityTable = (props) => {
                         </Col>
                         <Col xs={8}>
                             <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
-                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.stakeUnits.toFixed(2)}%
+                            <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>%
                                 <Tooltip placement="right" title="A percentage of pool you own.">
                                     &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                                 </Tooltip>
@@ -380,8 +411,8 @@ const RemoveLiquidityTable = (props) => {
 
     const unstake = async () => {
         setBurnTknFlag(true)
-        const poolContract = new window.web3.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
-        const tx = await poolContract.methods.unstake((unstakeAmount*100), ETH).send({ from: account.address })
+        const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
+        const tx = await vaderRouter.methods.unstake((unstakeAmount*100), ETH).send({ from: account.address })
         setTknTx(tx.transactionHash)
         setLoaded2(true)
     }
@@ -406,7 +437,7 @@ const RemoveLiquidityTable = (props) => {
         <>
             <h2>REMOVE LIQUIDITY</h2>
             <p>Remove your pooled assets.</p>
-            {(account.stakeUnits > 0) &&
+            {account.isMember &&
             <>
                 <Row>
                     <Col xs={24} sm={16} xl={9}>
@@ -466,9 +497,8 @@ export const UpgradeDialog = () => {
 
     const [account, setAccount] = useState(
         {
-            address: '', vethBalance: '', ethBalance: '',
-            stakeUnits: '', vetherStaked: '', assetStaked: '',
-            vetherShare: '', assetShare: '', roi: ''
+            address: '', vethBalance: 0, ethBalance: 0,
+            isMember: false, baseAmt: 0, tokenAmt: 0
         })
 
     const [connected, setConnected ] = useState(false)
@@ -476,7 +506,6 @@ export const UpgradeDialog = () => {
 
     useEffect(() => {
         connect()
-        console.log(account)
         // eslint-disable-next-line
     }, [])
 
@@ -484,7 +513,7 @@ export const UpgradeDialog = () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected) {
             window.web3 = new Web3(window.ethereum)
-            var accounts = await window.web3.eth.getAccounts()
+            const accounts = await window.web3.eth.getAccounts()
             const address = await accounts[0]
             await loadAccountData(address)
             setConnected(true)
@@ -496,31 +525,21 @@ export const UpgradeDialog = () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if (accountConnected) {
             const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-            const contract = await new web3.eth.Contract(vetherAbi(), vetherAddr())
+            const utils = await new web3.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
+            const vether = await new web3.eth.Contract(vetherAbi(), vetherAddr())
             const ethBalance = convertFromWei(await web3.eth.getBalance(account))
-            const vethBalance = convertFromWei(await contract.methods.balanceOf(account).call())
+            const vethBalance = convertFromWei(await vether.methods.balanceOf(account).call())
 
-            const poolContract = new web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
-            let stakeData = await poolContract.methods.getMemberStakeData(account, ETH).call()
-
-            let poolData = await poolContract.methods.poolData(ETH).call()
-            let poolShare = calcShare(getBN(stakeData.stakeUnits), getBN(poolData.poolUnits), getBN(poolData.asset), getBN(poolData.vether))
-
-            // let vetherShare = await poolContract.methods.getStakerShareVether(account, ETH).call()
-            // let assetShare = await poolContract.methods.getStakerShareAsset(account, ETH).call()
-            let memberROI = await poolContract.methods.getMemberROI(account, ETH).call()
-            console.log(memberROI)
+            let isMember = await utils.methods.isMember(ETH, account).call()
+            let memberShare = await utils.methods.getMemberShare(ETH, account).call()
 
             const accountData = {
                 'address': account,
                 'vethBalance': vethBalance,
                 'ethBalance': ethBalance,
-                'stakeUnits': (stakeData.stakeUnits / poolData.poolUnits) * 100,
-                'vetherStaked': convertFromWei(stakeData.vether),
-                'assetStaked': convertFromWei(stakeData.asset),
-                'vetherShare': convertFromWei(poolShare.vether),
-                'assetShare': convertFromWei(poolShare.asset),
-                "roi": (+memberROI)
+                'isMember': isMember,
+                'baseAmt': memberShare.baseAmt,
+                'tokenAmt': memberShare.tokenAmt
             }
             setAccount(accountData)
             context.setContext({ "accountData": accountData })
@@ -528,8 +547,8 @@ export const UpgradeDialog = () => {
     }
 
     const upgrade = async () => {
-        const poolContract = new window.web3.eth.Contract(vetherPoolsAbi(), vetherPoolsAddr())
-        await poolContract.methods.upgrade(vetherPools2Addr()).send({ from: account.address })
+        const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
+        await vaderRouter.methods.upgrade(vetherPools2Addr()).send({ from: account.address })
     }
 
     return (
@@ -541,13 +560,13 @@ export const UpgradeDialog = () => {
             }
             {connected && !loading &&
                 <>
-                    {account.stakeUnits > "0" &&
+                    {account.isMember &&
                         <>
                             <Button backgroundColor="transparent" onClick={upgrade}>UPGRADE >></Button>
                             <Sublabel>MOVE ALL YOUR LIQUIDITY</Sublabel>
                         </>
                     }
-                    {!account.stakeUnits > "0" &&
+                    {!account.isMember &&
                         <>
                             <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
                                 <CheckCircleOutlined style={{ marginBottom: '0' }}/>&nbsp;You've got nothing to upgrade.
