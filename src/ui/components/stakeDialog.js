@@ -3,7 +3,7 @@ import { Context } from "../../context"
 import Web3 from "web3"
 import {
     ETH, getEtherscanURL, infuraAPI, vetherAbi, vetherAddr, vetherPools2Addr, vaderRouterAddr,
-    vaderRouterAbi, vaderUtilsAbi, vaderUtilsAddr
+    vaderRouterAbi, vaderUtilsAbi, vaderUtilsAddr, getVetherPrice
 } from "../../client/web3"
 import { convertFromWei, currency, getBN } from "../../common/utils"
 import { Col, Slider, InputNumber, Row, Select, Tooltip } from "antd"
@@ -14,6 +14,9 @@ export const StakeDialog = () => {
 
     const context = useContext(Context)
 
+    const [poolData, setPoolData] = useState(
+        { "eth": "", "veth": '', 'price': "", "fees": "", "volume": "",
+            "poolUnits": "", "txCount": "", 'age':"", 'roi': "", 'apy': "" })
     const [account, setAccount] = useState(
         {
             address: '', vethBalance: 0, ethBalance: 0,
@@ -24,9 +27,36 @@ export const StakeDialog = () => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        loadPoolData()
         connect()
         // eslint-disable-next-line
     }, [])
+
+    const loadPoolData = async () => {
+        const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const utils = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
+        const poolData = await utils.methods.getPoolData(ETH).call()
+        const price = await getVetherPrice()
+        const age = await utils.methods.getPoolAge(ETH).call()
+        const roi = await utils.methods.getPoolROI(ETH).call()
+        const apy = await utils.methods.getPoolAPY(ETH).call()
+        const poolData_ = {
+            "eth": convertFromWei(poolData.tokenAmt),
+            "veth": convertFromWei(poolData.baseAmt),
+            "price": convertFromWei(price),
+            "volume": convertFromWei(poolData.volume),
+            "poolUnits": poolData.poolUnits,
+            "fees": convertFromWei(poolData.fees),
+            "txCount": poolData.txCount,
+            "age": age,
+            "roi": roi,
+            "apy": apy
+        }
+        setPoolData(poolData_)
+        context.setContext({
+            "poolData": poolData_
+        })
+    }
 
     const connect = async () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
@@ -51,6 +81,7 @@ export const StakeDialog = () => {
 
             let isMember = await utils.methods.isMember(ETH, account).call()
             let memberShare = await utils.methods.getMemberShare(ETH, account).call()
+            let memberPoolShare = ((memberShare.baseAmt + memberShare.tokenAmt)/(poolData.veth + poolData.eth)*100)
 
             const accountData = {
                 'address': account,
@@ -58,7 +89,8 @@ export const StakeDialog = () => {
                 'ethBalance': ethBalance,
                 'isMember': isMember,
                 'baseAmt': memberShare.baseAmt,
-                'tokenAmt': memberShare.tokenAmt
+                'tokenAmt': memberShare.tokenAmt,
+                'memberPoolShare': memberPoolShare
             }
             setAccount(accountData)
             context.setContext({ "accountData": accountData })
@@ -364,7 +396,7 @@ const AddLiquidityTable = (props) => {
                                 </Col>
                                 <Col xs={8}>
                                     <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
-                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>%
+                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.memberPoolShare.toFixed(2)}%
                                         <Tooltip placement="right" title="A percentage of pool you own.">
                                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                                         </Tooltip>
