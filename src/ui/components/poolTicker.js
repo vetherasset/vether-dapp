@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from "react"
 import { Context } from "../../context"
 import Web3 from "web3"
-import { ETH, infuraAPI, vetherPools2Abi, vetherPools2Addr } from "../../client/web3"
-import { BN2Str, convertFromWei, currency, oneBN } from "../../common/utils"
+import { ETH, infuraAPI, vaderUtilsAbi, vaderUtilsAddr } from "../../client/web3"
+import { convertFromWei, currency } from "../../common/utils"
 import { getETHPrice } from "../../client/market"
 import { Center, Colour, Text } from "../components"
 import { Col, Row, Tooltip } from "antd"
@@ -25,16 +25,16 @@ export const PoolTicker = () => {
 
     const loadPoolData = async () => {
         const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-        const poolContract = new web3_.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
-        let poolData = await poolContract.methods.poolData(ETH).call()
-        let price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
-        let age = await poolContract.methods.getPoolAge(ETH).call()
-        let roi = await poolContract.methods.getPoolROI(ETH).call()
-        let apy = await poolContract.methods.getPoolAPY(ETH).call()
+        const utils = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
+        const poolData = await utils.methods.getPoolData(ETH).call()
+        const age = await utils.methods.getPoolAge(ETH).call()
+        const roi = await utils.methods.getPoolROI(ETH).call()
+        const apy = await utils.methods.getPoolAPY(ETH).call()
+        const price = poolData.tokenAmt / poolData.baseAmt
         const poolData_ = {
-            "eth": convertFromWei(poolData.asset),
-            "veth": convertFromWei(poolData.vether),
-            "price": convertFromWei(price),
+            "eth": convertFromWei(poolData.tokenAmt),
+            "veth": convertFromWei(poolData.baseAmt),
+            "price": price,
             "volume": convertFromWei(poolData.volume),
             "poolUnits": poolData.poolUnits,
             "fees": convertFromWei(poolData.fees),
