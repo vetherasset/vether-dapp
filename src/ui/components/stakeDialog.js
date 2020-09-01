@@ -6,7 +6,7 @@ import {
     vaderRouterAbi, vaderUtilsAbi, vaderUtilsAddr
 } from "../../client/web3"
 import { convertFromWei, currency, getBN } from "../../common/utils"
-import { Col, Slider, InputNumber, Input, Row, Select, Tooltip } from "antd"
+import { Col, Slider, InputNumber, Row, Select, Tooltip } from "antd"
 import { LoadingOutlined, CheckCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
 
@@ -98,7 +98,7 @@ const AddLiquidityTable = (props) => {
     const assets = [
         {
             name: 'Vether',
-            symbol: '$VETH'
+            symbol: 'VETH'
         },
         {
             name: 'Ether',
@@ -200,17 +200,18 @@ const AddLiquidityTable = (props) => {
         }
     }
 
-    const onAsset0amountChange = e => {
-        let n = Number(e.target.value)
-        if(!isFinite(n)) n = 0
-        setAmount0(n)
-        console.log(amount0)
+    const onAsset0amountChange = value => {
+        if (isNaN(value)) {
+            return
+        }
+        setAmount0(value)
     }
 
-    const onAsset1amountChange = e => {
-        let n = Number(e.target.value)
-        if(!isFinite(n)) n = 0
-        setAmount1(n)
+    const onAsset1amountChange = value => {
+        if (isNaN(value)) {
+            return
+        }
+        setAmount1(value)
         console.log(amount1)
     }
 
@@ -234,11 +235,21 @@ const AddLiquidityTable = (props) => {
                 <Col lg={5} xs={9}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
                     {asset0
-                        ? <Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset0amountChange} value={amount0} suffix={asset0.symbol}/>
-                        : <Input size={'large'} style={{ marginBottom: 10 }} disabled/>
+                        ? <InputNumber min={0}
+                                       step={0.1}
+                                       formatter={value => `${value} ${asset0.symbol}`}
+                                       parser={value => value.replace(` ${asset0.symbol}`, '')}
+                                       defaultValue="0"
+                                       size={'large'}
+                                       style={{ marginBottom: 10, width: '100%' }}
+                                       onChange={onAsset0amountChange}
+                                       value={amount0}/>
+                        : <InputNumber size={'large'} style={{ marginBottom: 10 ,width: '100%' }} disabled/>
                     }
                 </Col>
             </Row>
+
+
 
             {asset1 &&
                 <>
@@ -248,7 +259,16 @@ const AddLiquidityTable = (props) => {
                     <Row style={{ marginBottom: '1.33rem' }}>
                         <Col lg={4} xs={9}>
                             <Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
-                            <Input size={'large'} style={{ marginBottom: 10 }} onChange={onAsset1amountChange} value={amount1} suffix={asset1.symbol}/>
+                            <InputNumber min={0}
+                                         step={0.1}
+                                         formatter={value => `${value} ${asset1.symbol}`}
+                                         parser={value => value.replace(` ${asset1.symbol}`, '')}
+                                         defaultValue="0"
+                                         size={'large'}
+                                         style={{ marginBottom: 10, width: '100%' }}
+                                         onChange={onAsset1amountChange}
+                                         value={amount1}
+                            />
                         </Col>
                     </Row>
 
@@ -553,8 +573,8 @@ export const UpgradeDialog = () => {
 
     return (
         <>
-            <h2>UPGRADE TO BETA 2</h2>
-            <p>Move your liquidity from the beta V1 pool.</p>
+            <h2>UPGRADE TO BETA 3</h2>
+            <p>Move your liquidity from beta V2 pool.</p>
             {loading &&
                 <LoadingOutlined style={{ mnarginBottom: 0 }} />
             }

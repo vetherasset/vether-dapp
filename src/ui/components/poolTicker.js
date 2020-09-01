@@ -92,7 +92,7 @@ export const PoolTicker = () => {
                     <div style={poolStyles}>
                         <Row>
                             <Col xs={12}>
-                                <Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>$VETH</Text>
+                                <Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>VETH</Text>
                                 <Center>
                                     <Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>
                                         {currency(poolData.veth, 0, 2, 'VETH').replace('VETH', '')}
@@ -131,7 +131,7 @@ export const PoolTicker = () => {
                             <Col xs={6}>
                                 <Center>
                                     <Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>
-                                        VOL&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span>
+                                        VOL&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>VETH</span>
                                     </Text>
                                 </Center>
                                 <Center>
@@ -143,7 +143,7 @@ export const PoolTicker = () => {
                             <Col xs={6}>
                                 <Center>
                                     <Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>
-                                        FEES&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span>
+                                        FEES&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>VETH</span>
                                     </Text>
                                 </Center>
                                 <Center>

@@ -4,8 +4,8 @@ import { Context } from '../../context'
 import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo, getBN, currency } from '../../common/utils'
 
-import { Row, Col, Input, Select, Tooltip } from 'antd'
-import { QuestionCircleOutlined, InfoCircleOutlined, CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons'
+import { Row, Col, Input, ConfigProvider, Select, Tooltip } from 'antd'
+import { QuestionCircleOutlined, InfoCircleOutlined, CheckCircleOutlined, LoadingOutlined, FireFilled } from '@ant-design/icons'
 import { Sublabel, Button, Colour, LabelGrey } from '../components'
 
 export const ClaimDialog = () => {
@@ -165,6 +165,16 @@ export const ClaimDialog = () => {
         return getEtherscanURL().concat('tx/').concat(txHash)
     }
 
+    const customizeRenderEmpty = () => (
+        <>
+            <div className="ant-empty ant-empty-normal ant-empty-small">
+                <div className="ant-empty-image">
+                    <FireFilled style={{ fontSize: 32, color: '#fff' }} />
+                </div>
+                <p className="ant-empty-description">No Shares</p></div>
+        </>
+    )
+
     return (
         <>
             <Row>
@@ -172,10 +182,17 @@ export const ClaimDialog = () => {
                     <Input size={'large'} disabled={true} onChange={onEraChange} value={userData.era} placeholder={'1'} suffix={'Era'}/>
                 </Col>
                 <Col xs={6} sm={4} style={{ marginLeft: 10, marginRight: 20 }}>
-                    {daysLoaded
-                        ? <Select size={'large'} style={{ width: '100%' }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
-                        : <Select onDropdownVisibleChange={reloadDays} size={'large'} style={{ width: '100%' }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
-                    }
+                    <ConfigProvider renderEmpty={customizeRenderEmpty}>
+                        {daysLoaded
+                            ? <Select size={'large'} style={{ width: '100%' }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
+                            : <Select onDropdownVisibleChange={reloadDays}
+                                      size={'large'}
+                                      style={{ width: '100%' }}
+                                      placeholder="Select a day"
+                                      onChange={onDayChange}
+                            >{daysAsOptions}</Select>
+                        }
+                    </ConfigProvider>
                 </Col>
 
                 <Col xs={8} sm={8} style={{ marginTop: '-3px' }}>

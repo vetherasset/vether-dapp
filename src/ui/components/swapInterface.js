@@ -295,7 +295,7 @@ export const SwapInterface = () => {
                                 <Col xs={24}>
                                     <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>
                                     <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
-                                           placeholder={vethAmountCalculated} suffix="$VETH"/>
+                                           placeholder={vethAmountCalculated} suffix="VETH"/>
                                     { connected && approved && vethAmount > 0
                                         ? <Button backgroundColor="transparent" onClick={sellVether}>SELL&nbsp;VETH&nbsp;>></Button>
                                         : <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>

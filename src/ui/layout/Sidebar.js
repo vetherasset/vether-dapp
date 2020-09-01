@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import { Row, Menu, Layout } from 'antd'
 import Breakpoint from 'react-socks'
 
-import { FireFilled, MediumOutlined } from '@ant-design/icons'
+import { HeartFilled, MediumOutlined } from '@ant-design/icons'
 import { Text, Icon } from '../components'
 import UniswapIcon from '../../assets/uniswap.svg'
 import DiscordIcon from '../../assets/discord.svg'
@@ -89,13 +89,13 @@ const Sidebar = (props) => {
           <ul style={{ listStyle: 'none', display: 'block', width: '100%', textAlign: 'center', margin: '0 0 0 -9px' }}>
             <li>
               <a href="https://uniswap.exchange/swap/0x4ba6ddd7b89ed838fed25d208d4f644106e34279" style={{ fontSize: '14px', color: '#97948e' }} target="_blank" rel="noopener noreferrer">
-                <img src={UniswapIcon} alt="Uniswap Exchange Logo" style={{ margin: 0, maxWidth: '25px', marginRight: '1px', color: 'yellow' }}/>
+                <img src={UniswapIcon} alt="Uniswap Exchange Logo" style={{ margin: '0 0 3px 0', maxWidth: '29px', color: 'yellow' }}/>
                 Uniswap Pool
               </a>
             </li>
             <li>
               <Link to="/donations" style={{ fontSize: '14px', color: '#97948e' }} onClick={() => handleClick({})}>
-                <FireFilled style={{ margin: 0, maxWidth: '16px', marginRight: '5px' }}/>
+                <HeartFilled style={{ margin: 0, maxWidth: '16px', marginRight: '5px' }}/>
                 Donations
               </Link>
             </li>

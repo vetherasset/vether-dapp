@@ -5,7 +5,7 @@ import Web3 from "web3"
 import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL } from '../../client/web3.js'
 import {convertFromWei, currency } from '../../common/utils'
 
-import { Row, Col, Input, Tooltip } from 'antd'
+import { Row, Col, InputNumber, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { LabelGrey, Button, Sublabel, Colour, Text } from '../components'
 import {infuraAPI} from "../../client/web3";
@@ -89,8 +89,11 @@ export const AcquireDialog = () => {
         setAmount({ toSpend: spendable })
     }
 
-    const onInputAmountChange = e => {
-        setAmount({ toSpend: e.target.value })
+    const onInputAmountChange = value => {
+        if (isNaN(value)) {
+            return
+        }
+        setAmount({toSpend: value})
     }
 
     const getVethValue = () => {
@@ -119,7 +122,17 @@ export const AcquireDialog = () => {
         <>
             <Row>
                 <Col xs={11} sm={4}>
-                    <Input size={'large'} style={{ marginBottom: 10 }} onChange={onInputAmountChange} value={amount.toSpend} placeholder={amount.toSpend} suffix={'Ξ'}/>
+                    <InputNumber min={0}
+                                 step={0.1}
+                                 size={'large'}
+                                 formatter={value => `${value} Ξ`}
+                                 parser={value => value.replace(' Ξ', '')}
+                                 defaultValue={spendable}
+                                 style={{ marginBottom: 10, width: '100%' }}
+                                 onChange={onInputAmountChange}
+                                 value={amount.toSpend}
+                                 placeholder={amount.toSpend}
+                    />
                     <br/>
                     <Button
                         backgroundColor="transparent"
