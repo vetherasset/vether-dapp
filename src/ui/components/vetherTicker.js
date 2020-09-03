@@ -105,7 +105,6 @@ export const VetherTicker = () => {
         backgroundColor: Colour().black,
     }
 
-
     return (
         <Row id="vetherStatsTable" style={vetherStatsStyles}>
             <Col id="vetherStatsTableCurrentPrice" xs={24} sm={8}>

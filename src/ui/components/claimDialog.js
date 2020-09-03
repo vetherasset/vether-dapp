@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 
-import { vetherAddr, vetherAbi, uniSwapAbi, uniSwapAddr, getEtherscanURL } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo, getBN, currency } from '../../common/utils'
 
-import { Row, Col, Input, Select, Tooltip } from 'antd'
-import { QuestionCircleOutlined, InfoCircleOutlined, CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons'
+import { Row, Col, Input, ConfigProvider, Select, Tooltip } from 'antd'
+import { QuestionCircleOutlined, InfoCircleOutlined, CheckCircleOutlined, LoadingOutlined, FireFilled } from '@ant-design/icons'
 import { Sublabel, Button, Colour, LabelGrey } from '../components'
 
 export const ClaimDialog = () => {
@@ -23,7 +23,6 @@ export const ClaimDialog = () => {
     const [userData, setUserData] = useState(
         { era: 1, day: 0 })
 
-    const [contract, setContract] = useState(null)
     const [claimAmt, setClaimAmt] = useState(null)
     const [txHash, setTxHash] = useState(null)
 
@@ -42,11 +41,10 @@ export const ClaimDialog = () => {
         if(accountConnected){
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
-            const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-            setContract(contract)
-            context.accountData ? getAccountData() : loadAccountData(contract, address)
-            const eraData = await context.eraData ? await getEraData() : await loadEraData(contract)
-            getDays(eraData, contract, address)
+            const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+            context.accountData ? getAccountData() : loadAccountData(vether, address)
+            const eraData = await context.eraData ? await getEraData() : await loadEraData(vether)
+            getDays(eraData, vether, address)
             setDaysLoaded(true)
         }
     }
@@ -55,18 +53,13 @@ export const ClaimDialog = () => {
         setAccount(context.accountData)
     }
 
-    const loadAccountData = async (contract_, address) => {
+    const loadAccountData = async (contract, address) => {
         const ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
-        const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
-        const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-        const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(address).call())
-        const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
+        const vethBalance = convertFromWei(await contract.methods.balanceOf(address).call())
         const accountData = {
             address: address,
             vethBalance: vethBalance,
-            ethBalance: ethBalance,
-            uniBalance: uniBalance,
-            uniSupply: uniSupply
+            ethBalance: ethBalance
         }
         setAccount(accountData)
         context.setContext({'accountData':accountData})
@@ -77,14 +70,14 @@ export const ClaimDialog = () => {
         return context.eraData
     }
 
-    const loadEraData = async (contract_) => {
-        const emission = convertFromWei(await contract_.methods.emission().call())
-        const day = await contract_.methods.currentDay().call()
-        const era = await contract_.methods.currentEra().call()
-        const nextDay = await contract_.methods.nextDayTime().call()
-        const nextEra = await contract_.methods.nextEraTime().call()
-        const nextEmission = convertFromWei(await contract_.methods.getNextEraEmission().call())
-        const currentBurn = convertFromWei(await contract_.methods.mapEraDay_UnitsRemaining(era, day).call())
+    const loadEraData = async (contract) => {
+        const emission = convertFromWei(await contract.methods.emission().call())
+        const day = await contract.methods.currentDay().call()
+        const era = await contract.methods.currentEra().call()
+        const nextDay = await contract.methods.nextDayTime().call()
+        const nextEra = await contract.methods.nextEraTime().call()
+        const nextEmission = convertFromWei(await contract.methods.getNextEraEmission().call())
+        const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
         const secondsToGo = getSecondsToGo(nextDay)
 
         const eraData = {
@@ -126,11 +119,10 @@ export const ClaimDialog = () => {
         if(accountConnected) {
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
-            const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-            setContract(contract)
-            context.accountData ? getAccountData() : loadAccountData(contract, address)
-            const eraData = await context.eraData ? await getEraData() : await loadEraData(contract)
-            getDays(eraData, contract, context.accountData.address)
+            const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+            context.accountData ? getAccountData() : loadAccountData(vether, address)
+            const eraData = await context.eraData ? await getEraData() : await loadEraData(vether)
+            getDays(eraData, vether, context.accountData.address)
             setDaysLoaded(true)
         }
     }
@@ -145,17 +137,16 @@ export const ClaimDialog = () => {
     }
 
     const checkShare = async () => {
-        const share = getBN(await contract.methods.getEmissionShare(userData.era, userData.day, account.address).call())
+        const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+        const share = getBN(await vether.methods.getEmissionShare(userData.era, userData.day, account.address).call())
         setClaimAmt(convertFromWei(share))
         setCheckFlag(true)
-        const currentTime = Math.round((new Date()) / 1000)
-        console.log(currentTime, +eraData.nextDay, eraData)
-        console.log(userData)
     }
 
     const claimShare = async () => {
         setClaimFlag(true)
-        const tx = await contract.methods.withdrawShare(userData.era, userData.day).send({ from: account.address })
+        const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+        const tx = await vether.methods.withdrawShare(userData.era, userData.day).send({ from: account.address })
         setLoaded(true)
         setTxHash(tx.transactionHash)
         setClaimAmt(0)
@@ -165,6 +156,16 @@ export const ClaimDialog = () => {
         return getEtherscanURL().concat('tx/').concat(txHash)
     }
 
+    const customizeRenderEmpty = () => (
+        <>
+            <div className="ant-empty ant-empty-normal ant-empty-small">
+                <div className="ant-empty-image">
+                    <FireFilled style={{ fontSize: 32, color: '#fff' }} />
+                </div>
+                <p className="ant-empty-description">No Shares</p></div>
+        </>
+    )
+
     return (
         <>
             <Row>
@@ -172,10 +173,17 @@ export const ClaimDialog = () => {
                     <Input size={'large'} disabled={true} onChange={onEraChange} value={userData.era} placeholder={'1'} suffix={'Era'}/>
                 </Col>
                 <Col xs={6} sm={4} style={{ marginLeft: 10, marginRight: 20 }}>
-                    {daysLoaded
-                        ? <Select size={'large'} style={{ width: '100%' }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
-                        : <Select onDropdownVisibleChange={reloadDays} size={'large'} style={{ width: '100%' }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
-                    }
+                    <ConfigProvider renderEmpty={customizeRenderEmpty}>
+                        {daysLoaded
+                            ? <Select size={'large'} style={{ width: '100%' }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
+                            : <Select onDropdownVisibleChange={reloadDays}
+                                      size={'large'}
+                                      style={{ width: '100%' }}
+                                      placeholder="Select a day"
+                                      onChange={onDayChange}
+                            >{daysAsOptions}</Select>
+                        }
+                    </ConfigProvider>
                 </Col>
 
                 <Col xs={8} sm={8} style={{ marginTop: '-3px' }}>

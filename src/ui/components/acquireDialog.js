@@ -2,10 +2,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 import Web3 from "web3"
 
-import { vetherAddr, vetherAbi, uniSwapAddr, uniSwapAbi, getEtherscanURL } from '../../client/web3.js'
+import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
 import {convertFromWei, currency } from '../../common/utils'
 
-import { Row, Col, Input, Tooltip } from 'antd'
+import { Row, Col, InputNumber, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { LabelGrey, Button, Sublabel, Colour, Text } from '../components'
 import {infuraAPI} from "../../client/web3";
@@ -42,18 +42,17 @@ export const AcquireDialog = () => {
         if(accountConnected){
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
-            const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-            context.accountData ? getAccountData() : loadAccountData(contract, address)
+            context.accountData ? getAccountData() : loadAccountData(address)
             setConnected(true)
         }
     }
 
     const loadBurnData = async () => {
         const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-        const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-        const day = await contract.methods.currentDay().call()
+        const vether = new web3.eth.Contract(vetherAbi(), vetherAddr())
+        const day = await vether.methods.currentDay().call()
         const era = 1
-        const currentBurn = convertFromWei(await contract.methods.mapEraDay_UnitsRemaining(era, day).call())
+        const currentBurn = convertFromWei(await vether.methods.mapEraDay_UnitsRemaining(era, day).call())
         setCurrentBurn(currentBurn)
     }
 
@@ -61,18 +60,15 @@ export const AcquireDialog = () => {
         setAccount(context.accountData)
     }
 
-    const loadAccountData = async (contract_, address) => {
+    const loadAccountData = async (address) => {
+        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const vether = new web3.eth.Contract(vetherAbi(), vetherAddr())
         const ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
-        const vethBalance = convertFromWei(await contract_.methods.balanceOf(address).call())
-        const exchangeContract = new window.web3.eth.Contract(uniSwapAbi(), uniSwapAddr())
-        const uniBalance = convertFromWei(await exchangeContract.methods.balanceOf(address).call())
-        const uniSupply = convertFromWei(await exchangeContract.methods.totalSupply().call())
+        const vethBalance = convertFromWei(await vether.methods.balanceOf(address).call())
         const accountData = {
             address: address,
             vethBalance: vethBalance,
-            ethBalance: ethBalance,
-            uniBalance: uniBalance,
-            uniSupply: uniSupply
+            ethBalance: ethBalance
         }
 
         let spendable = ethBalance - notSpendAmount
@@ -89,8 +85,11 @@ export const AcquireDialog = () => {
         setAmount({ toSpend: spendable })
     }
 
-    const onInputAmountChange = e => {
-        setAmount({ toSpend: e.target.value })
+    const onInputAmountChange = value => {
+        if (isNaN(value)) {
+            return
+        }
+        setAmount({toSpend: value})
     }
 
     const getVethValue = () => {
@@ -119,7 +118,17 @@ export const AcquireDialog = () => {
         <>
             <Row>
                 <Col xs={11} sm={4}>
-                    <Input size={'large'} style={{ marginBottom: 10 }} onChange={onInputAmountChange} value={amount.toSpend} placeholder={amount.toSpend} suffix={'Ξ'}/>
+                    <InputNumber min={0}
+                                 step={0.1}
+                                 size={'large'}
+                                 formatter={value => `${value}Ξ`}
+                                 parser={value => value.replace('Ξ', '')}
+                                 defaultValue={spendable}
+                                 style={{ marginBottom: 10, width: '100%' }}
+                                 onChange={onInputAmountChange}
+                                 value={amount.toSpend}
+                                 placeholder={amount.toSpend}
+                    />
                     <br/>
                     <Button
                         backgroundColor="transparent"
