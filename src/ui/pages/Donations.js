@@ -79,11 +79,10 @@ export const Donations = () => {
     const donate = async () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected) {
-            const value = sumValue.toFixed(5)
             await window.web3.eth.sendTransaction({
                 from: accountData.address,
                 to: devData.address,
-                value: Web3.utils.toWei(value, 'ether')
+                value: Web3.utils.toWei(String(sumValue), 'ether')
             })
         }
     }
