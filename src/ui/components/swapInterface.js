@@ -10,7 +10,7 @@ import {
     ETH, vetherAddr, vetherAbi, getEtherscanURL,
     infuraAPI, getVetherPrice, vaderUtilsAbi, vaderUtilsAddr, vaderRouterAddr, vaderRouterAbi
 } from '../../client/web3.js'
-import {totalSupply, convertToWei, BN2Str, convertFromWei, currency, getBN} from '../../common/utils'
+import { convertToWei, BN2Str, convertFromWei, currency, getBN } from '../../common/utils'
 import { calcSwapOutput } from '../../common/clpLogic'
 import { getETHPrice } from "../../client/market"
 

@@ -1,126 +1,16 @@
-import React, {useContext, useEffect, useState} from "react"
-import { Context } from "../../context"
+import React, { useEffect, useState} from "react"
 import Web3 from "web3"
 import {
-    ETH, getEtherscanURL, infuraAPI, vetherAbi, vetherAddr, vetherPools2Addr, vaderRouterAddr,
-    vaderRouterAbi, vaderUtilsAbi, vaderUtilsAddr, getVetherPrice
+    ETH, getEtherscanURL, vetherAbi, vetherAddr, vaderRouterAddr,
+    vaderRouterAbi,
 } from "../../client/web3"
-import { convertFromWei, currency, getBN } from "../../common/utils"
+import { currency, getBN } from "../../common/utils"
 import { Col, Slider, InputNumber, Row, Select, Tooltip } from "antd"
-import { LoadingOutlined, CheckCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
 
-export const StakeDialog = () => {
 
-    const context = useContext(Context)
-
-    const [poolData, setPoolData] = useState(
-        { "eth": "", "veth": '', 'price': "", "fees": "", "volume": "",
-            "poolUnits": "", "txCount": "", 'age':"", 'roi': "", 'apy': "" })
-    const [account, setAccount] = useState(
-        {
-            address: '', vethBalance: 0, ethBalance: 0,
-            isMember: false, baseAmt: 0, tokenAmt: 0
-        })
-
-    const [connected, setConnected ] = useState(false)
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        loadPoolData()
-        connect()
-        // eslint-disable-next-line
-    }, [])
-
-    const loadPoolData = async () => {
-        const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-        const utils = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
-        const poolData = await utils.methods.getPoolData(ETH).call()
-        const price = await getVetherPrice()
-        const age = await utils.methods.getPoolAge(ETH).call()
-        const roi = await utils.methods.getPoolROI(ETH).call()
-        const apy = await utils.methods.getPoolAPY(ETH).call()
-        const poolData_ = {
-            "eth": convertFromWei(poolData.tokenAmt),
-            "veth": convertFromWei(poolData.baseAmt),
-            "price": convertFromWei(price),
-            "volume": convertFromWei(poolData.volume),
-            "poolUnits": poolData.poolUnits,
-            "fees": convertFromWei(poolData.fees),
-            "txCount": poolData.txCount,
-            "age": age,
-            "roi": roi,
-            "apy": apy
-        }
-        setPoolData(poolData_)
-        context.setContext({
-            "poolData": poolData_
-        })
-    }
-
-    const connect = async () => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if(accountConnected) {
-            window.web3 = new Web3(window.ethereum)
-            var accounts = await window.web3.eth.getAccounts()
-            const address = await accounts[0]
-            await loadAccountData(address)
-            setConnected(true)
-            setLoading(false)
-        }
-    }
-
-    const loadAccountData = async (account) => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if (accountConnected) {
-            const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-            const utils = await new web3.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
-            const vether = await new web3.eth.Contract(vetherAbi(), vetherAddr())
-            const ethBalance = convertFromWei(await web3.eth.getBalance(account))
-            const vethBalance = convertFromWei(await vether.methods.balanceOf(account).call())
-
-            let isMember = await utils.methods.isMember(ETH, account).call()
-            let memberShare = await utils.methods.getMemberShare(ETH, account).call()
-            let memberPoolShare = ((memberShare.baseAmt + memberShare.tokenAmt)/(poolData.veth + poolData.eth)*100)
-
-            const accountData = {
-                'address': account,
-                'vethBalance': vethBalance,
-                'ethBalance': ethBalance,
-                'isMember': isMember,
-                'baseAmt': memberShare.baseAmt,
-                'tokenAmt': memberShare.tokenAmt,
-                'memberPoolShare': memberPoolShare
-            }
-            setAccount(accountData)
-            context.setContext({ "accountData": accountData })
-        }
-    }
-
-    return (
-        <>
-            <h2>ADD LIQUIDITY</h2>
-            {loading &&
-                <LoadingOutlined style={{ mnarginBottom: 0 }} />
-            }
-            {connected && !loading &&
-                <AddLiquidityTable accountData={account}/>
-            }
-            {connected && !loading &&
-            <>
-                {account.isMember &&
-                <>
-                    <hr />
-                    <RemoveLiquidityTable accountData={account} />
-                </>
-                }
-            </>
-            }
-        </>
-    )
-}
-
-const AddLiquidityTable = (props) => {
+export const AddLiquidityTable = (props) => {
 
     const account = props.accountData
 
@@ -142,7 +32,6 @@ const AddLiquidityTable = (props) => {
     const [amount1, setAmount1] = useState(0)
 
     const [ethTx, setEthTx] = useState(null)
-    const [loading, setLoading] = useState(true)
     const [approved, setApproved] = useState(true)
     const [approveFlag, setApproveFlag] = useState(null)
 
@@ -162,7 +51,6 @@ const AddLiquidityTable = (props) => {
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
             checkApproval(address)
-            setLoading(false)
         }
     }
 
@@ -244,7 +132,7 @@ const AddLiquidityTable = (props) => {
 
     return (
         <>
-            <h2 style={{ fontStyle: 'italic' }}>Select asset to pool.</h2>
+            <h2 style={{ fontStyle: 'italic' }}>Select asset to provide.</h2>
             <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Select an asset you would like to provide. Vether pool is non-proportional. Unlike Uniswap, where you need to provide<br/>
                 an equal proportion of both assets, Vether pools allow you to provide liquidity in unequal proportions.</LabelGrey>
 
@@ -368,49 +256,49 @@ const AddLiquidityTable = (props) => {
                     }
                 </>
             }
-
-            {!loading &&
-                <>
-                    { account.isMember &&
-                        <>
-                            <hr/>
-                            <h2>POOLED LIQUIDITY</h2>
-                            <p>Assets you have pooled.</p>
-                            <Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '2.66rem' }}>
-                                <Col xs={8}>
-                                    <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
-                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.baseAmt, 0, 3, 'VETH')}
-                                        <Tooltip placement="right" title="The amount of asset in pool you own at this moment.">
-                                            &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
-                                        </Tooltip>
-                                    </span>
-                                </Col>
-                                <Col xs={8}>
-                                    <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
-                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.tokenAmt, 0, 3, 'ETH')}
-                                        <Tooltip placement="right" title="The amount of asset in pool you own at this moment.">
-                                            &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
-                                        </Tooltip>
-                                    </span>
-                                </Col>
-                                <Col xs={8}>
-                                    <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
-                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.memberPoolShare.toFixed(2)}%
-                                        <Tooltip placement="right" title="A percentage of pool you own.">
-                                            &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
-                                        </Tooltip>
-                                    </span>
-                                </Col>
-                            </Row>
-                        </>
-                    }
-                </>
-            }
         </>
     )
 }
 
-const RemoveLiquidityTable = (props) => {
+export const ProvidedLiquidityTable = (props)  => {
+
+    const account = props.accountData
+
+    return (
+        <>
+            <h2>LIQUIDITY SHARES</h2>
+            <p>Assets in pool you own.</p>
+            <Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '2.66rem' }}>
+                <Col xs={8}>
+                    <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
+                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.baseAmt, 0, 3, 'VETH')}
+                        <Tooltip placement="right" title="The amount of asset in pool you own at this moment. Based on liqudity you have provided.">
+                            &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
+                        </Tooltip>
+                    </span>
+                </Col>
+                <Col xs={8}>
+                    <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
+                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.tokenAmt, 0, 3, 'ETH')}
+                        <Tooltip placement="right" title="The amount of asset in pool you own at this moment. Based on liqudity you have provided.">
+                            &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
+                        </Tooltip>
+                    </span>
+                </Col>
+                <Col xs={8}>
+                    <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
+                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.memberPoolShare.toFixed(2)}%
+                        <Tooltip placement="right" title="A percentage of pool you own.">
+                            &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
+                        </Tooltip>
+                    </span>
+                </Col>
+            </Row>
+        </>
+    )
+}
+
+export const RemoveLiquidityTable = (props) => {
 
     const account = props.accountData
 
@@ -441,7 +329,7 @@ const RemoveLiquidityTable = (props) => {
     return (
         <>
             <h2>REMOVE LIQUIDITY</h2>
-            <p>Remove your pooled assets.</p>
+            <p>Remove your asset shares.</p>
             <Row>
                 <Col xs={24} sm={16} xl={9}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Proportion</Label>
@@ -488,94 +376,6 @@ const RemoveLiquidityTable = (props) => {
                     }
                 </Col>
             </Row>
-        </>
-    )
-}
-
-export const UpgradeDialog = () => {
-
-    const context = useContext(Context)
-
-    const [account, setAccount] = useState(
-        {
-            address: '', vethBalance: 0, ethBalance: 0,
-            isMember: false, baseAmt: 0, tokenAmt: 0
-        })
-
-    const [connected, setConnected ] = useState(false)
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        connect()
-        // eslint-disable-next-line
-    }, [])
-
-    const connect = async () => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if(accountConnected) {
-            window.web3 = new Web3(window.ethereum)
-            const accounts = await window.web3.eth.getAccounts()
-            const address = await accounts[0]
-            await loadAccountData(address)
-            setConnected(true)
-            setLoading(false)
-        }
-    }
-
-    const loadAccountData = async (account) => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if (accountConnected) {
-            const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-            const utils = await new web3.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
-            const vether = await new web3.eth.Contract(vetherAbi(), vetherAddr())
-            const ethBalance = convertFromWei(await web3.eth.getBalance(account))
-            const vethBalance = convertFromWei(await vether.methods.balanceOf(account).call())
-
-            let isMember = await utils.methods.isMember(ETH, account).call()
-            let memberShare = await utils.methods.getMemberShare(ETH, account).call()
-
-            const accountData = {
-                'address': account,
-                'vethBalance': vethBalance,
-                'ethBalance': ethBalance,
-                'isMember': isMember,
-                'baseAmt': memberShare.baseAmt,
-                'tokenAmt': memberShare.tokenAmt
-            }
-            setAccount(accountData)
-            context.setContext({ "accountData": accountData })
-        }
-    }
-
-    const upgrade = async () => {
-        const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
-        await vaderRouter.methods.upgrade(vetherPools2Addr()).send({ from: account.address })
-    }
-
-    return (
-        <>
-            <h2>UPGRADE TO BETA 3</h2>
-            <p>Move your liquidity from beta V2 pool.</p>
-            {loading &&
-                <LoadingOutlined style={{ mnarginBottom: 0 }} />
-            }
-            {connected && !loading &&
-                <>
-                    {account.isMember &&
-                        <>
-                            <Button backgroundColor="transparent" onClick={upgrade}>UPGRADE >></Button>
-                            <Sublabel>MOVE ALL YOUR LIQUIDITY</Sublabel>
-                        </>
-                    }
-                    {!account.isMember &&
-                        <>
-                            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
-                                <CheckCircleOutlined style={{ marginBottom: '0' }}/>&nbsp;You've got nothing to upgrade.
-                            </LabelGrey>
-                        </>
-                    }
-                </>
-            }
         </>
     )
 }
