@@ -379,7 +379,7 @@ const AddLiquidityTable = (props) => {
                             <Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '2.66rem' }}>
                                 <Col xs={8}>
                                     <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
-                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.baseAmt, 0, 5, 'VETH')}
+                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.baseAmt, 0, 3, 'VETH')}
                                         <Tooltip placement="right" title="The amount of asset in pool you own at this moment.">
                                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                                         </Tooltip>
@@ -387,7 +387,7 @@ const AddLiquidityTable = (props) => {
                                 </Col>
                                 <Col xs={8}>
                                     <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
-                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.tokenAmt, 0, 5, 'ETH')}
+                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.tokenAmt, 0, 3, 'ETH')}
                                         <Tooltip placement="right" title="The amount of asset in pool you own at this moment.">
                                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                                         </Tooltip>
@@ -398,33 +398,6 @@ const AddLiquidityTable = (props) => {
                                     <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.memberPoolShare.toFixed(2)}%
                                         <Tooltip placement="right" title="A percentage of pool you own.">
                                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
-                                        </Tooltip>
-                                    </span>
-                                </Col>
-                            </Row>
-                            <Row type="flex" justify="center" style={{ textAlign: "center" }}>
-                                <Col xs={8}>
-                                    <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>INITIAL STAKE</span>
-                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.vetherStaked, 0, 2, 'VETH')}
-                                        <Tooltip placement="bottom" title="How many of asset you already provided to pool in total.">
-                                                &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
-                                        </Tooltip>
-                                    </span>
-                                </Col>
-                                <Col xs={8}>
-                                    <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>INITIAL STAKE</span>
-                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.assetStaked, 0, 5, 'ETH')}
-                                        <Tooltip placement="bottom" title="How many of asset you already provided to pool in total.">
-                                                &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
-                                        </Tooltip>
-                                    </span>
-                                </Col>
-                                <Col xs={8}>
-                                    <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ROI</span>
-                                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>
-                                        n/a
-                                        <Tooltip placement="bottom" title="Member ROI isn't available yet, but will be in next pool version.">
-                                                &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                                         </Tooltip>
                                     </span>
                                 </Col>
