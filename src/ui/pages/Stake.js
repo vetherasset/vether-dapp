@@ -117,15 +117,17 @@ const Stake = () => {
 							<AddLiquidityTable accountData={account}/>
 						</TabPane>
 
-						{!account.isMember &&
-							<TabPane tab="SHARES" key="2" style={{ textAlign: "left" }}>
-								<ProvidedLiquidityTable accountData={account}/>
-							</TabPane>
-						}
+						{account.isMember &&
+							<>
+								<TabPane tab="SHARES" key="2" style={{ textAlign: "left" }}>
+									<ProvidedLiquidityTable accountData={account}/>
+								</TabPane>
 
-						<TabPane tab="UNSTAKE" key="3" style={{ textAlign: "left" }}>
-							<RemoveLiquidityTable/>
-						</TabPane>
+								<TabPane tab="UNSTAKE" key="3" style={{ textAlign: "left" }}>
+									<RemoveLiquidityTable/>
+								</TabPane>
+							</>
+						}
 					</Tabs>
 				</>
 			}

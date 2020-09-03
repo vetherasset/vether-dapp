@@ -121,8 +121,8 @@ export const AcquireDialog = () => {
                     <InputNumber min={0}
                                  step={0.1}
                                  size={'large'}
-                                 formatter={value => `${value} Ξ`}
-                                 parser={value => value.replace(' Ξ', '')}
+                                 formatter={value => `${value}Ξ`}
+                                 parser={value => value.replace('Ξ', '')}
                                  defaultValue={spendable}
                                  style={{ marginBottom: 10, width: '100%' }}
                                  onChange={onInputAmountChange}

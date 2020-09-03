@@ -116,17 +116,19 @@ export const AddLiquidityTable = (props) => {
         }
     }
 
-    const onAsset0amountChange = value => {
+    const onAsset0amountChange = (value) => {
         if (isNaN(value)) {
             return
         }
+        console.log(value)
         setAmount0(value)
     }
 
-    const onAsset1amountChange = value => {
+    const onAsset1amountChange = (value) => {
         if (isNaN(value)) {
             return
         }
+        console.log(value)
         setAmount1(value)
     }
 
@@ -152,8 +154,6 @@ export const AddLiquidityTable = (props) => {
                     {asset0
                         ? <InputNumber min={0}
                                        step={0.1}
-                                       formatter={value => `${value} ${asset0.symbol}`}
-                                       parser={value => value.replace(` ${asset0.symbol}`, '')}
                                        defaultValue="0"
                                        size={'large'}
                                        style={{ marginBottom: 10, width: '100%' }}
@@ -176,8 +176,6 @@ export const AddLiquidityTable = (props) => {
                             <Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
                             <InputNumber min={0}
                                          step={0.1}
-                                         formatter={value => `${value} ${asset1.symbol}`}
-                                         parser={value => value.replace(` ${asset1.symbol}`, '')}
                                          defaultValue="0"
                                          size={'large'}
                                          style={{ marginBottom: 10, width: '100%' }}
@@ -365,7 +363,7 @@ export const RemoveLiquidityTable = (props) => {
                     {burnTknFlag &&
                     <>
                         {!loaded2 &&
-                        <LoadingOutlined style={{ marginLeft: 20, fontSize: 15 }} />
+                        <LoadingOutlined style={{ fontSize: 15 }} />
                         }
                         {loaded2 &&
                         <>

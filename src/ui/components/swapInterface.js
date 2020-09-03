@@ -171,7 +171,7 @@ export const SwapInterface = () => {
         valueInVeth = +valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : convertFromWei(valueInVeth)
         setEthAmount(value.toString())
         setVethAmount("")
-        setVethAmountCalculated((+valueInVeth).toFixed(2))
+        setVethAmountCalculated((+valueInVeth).toFixed(5))
         calcTrade(value, valueInVeth)
     }
 
