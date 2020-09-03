@@ -176,10 +176,9 @@ const AddLiquidityTable = (props) => {
             const vethBalance = await vether.methods.balanceOf(address).call()
             if (+approval >= +vethBalance && +vethBalance >= 0) {
                 setApproved(true)
-                setApproveFlag(false)
+                if(approveFlag) setApproveFlag(false)
             } else {
                 setApproved(false)
-                setApproveFlag(false)
             }
         }
     }

@@ -10,7 +10,7 @@ import {
     ETH, vetherAddr, vetherAbi, getEtherscanURL,
     infuraAPI, getVetherPrice, vaderUtilsAbi, vaderUtilsAddr, vaderRouterAddr, vaderRouterAbi
 } from '../../client/web3.js'
-import { totalSupply, convertToWei, BN2Str, convertFromWei, currency } from '../../common/utils'
+import {totalSupply, convertToWei, BN2Str, convertFromWei, currency, getBN} from '../../common/utils'
 import { calcSwapOutput } from '../../common/clpLogic'
 import { getETHPrice } from "../../client/market"
 
@@ -141,6 +141,7 @@ export const SwapInterface = () => {
             const vethBalance = await vether.methods.balanceOf(address).call()
             if (+approval >= +vethBalance && +vethBalance >= 0) {
                 setApproved(true)
+                if(approveFlag) setApproveFlag(false)
             } else {
                 setApproved(false)
             }
@@ -154,7 +155,7 @@ export const SwapInterface = () => {
             const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
             const from = account.address
             const spender = vaderRouterAddr()
-            const value = totalSupply.toString()
+            const value = getBN(1000000 * 10 ** 18).toString()
             await vether.methods.approve(spender, value)
                 .send({
                     from: from
