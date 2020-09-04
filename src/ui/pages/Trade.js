@@ -11,7 +11,7 @@ const Trade = () => {
 		<>
 			<h1>TRADE VETHER</h1>
 			<p>Buy and Sell using the liquidity pool.</p>
-				<SwapInterface/>
+			<SwapInterface/>
 		</>
 	)
 }
