@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
 import { Row } from 'antd'
-import { LabelGrey } from '../components'
 import { AcquireDialog } from '../components/acquireDialog'
 import { ClaimDialog } from '../components/claimDialog'
 import { EraIndicator } from '../components/eraIndicator'

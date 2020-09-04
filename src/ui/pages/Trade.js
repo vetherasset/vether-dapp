@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { SwapInterface } from '../components/swapInterface'
-import { LabelGrey } from '../components'
 
 import '../../App.less'
 
@@ -13,7 +12,6 @@ const Trade = () => {
 			<h1>TRADE VETHER</h1>
 			<p>Buy and Sell using the liquidity pool.</p>
 				<SwapInterface/>
-			}
 		</>
 	)
 }

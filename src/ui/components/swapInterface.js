@@ -169,7 +169,7 @@ export const SwapInterface = () => {
         const value = e.target.value
         let valueInVeth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.eth), convertToWei(poolData.veth)))
         valueInVeth = +valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : convertFromWei(valueInVeth)
-        setEthAmount(value.toString())
+        setEthAmount(value)
         setVethAmount("")
         setVethAmountCalculated((+valueInVeth).toFixed(5))
         calcTrade(value, valueInVeth)
@@ -180,7 +180,7 @@ export const SwapInterface = () => {
         const value = e.target.value
         let valueInEth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.veth), convertToWei(poolData.eth)))
         valueInEth = +valueInEth === Infinity || isNaN(+valueInEth) ? 0 : convertFromWei(valueInEth)
-        setVethAmount(value.toString())
+        setVethAmount(value)
         setEthAmount("")
         setEthAmountCalculated((+valueInEth).toFixed(5))
         calcTrade(valueInEth, value)
@@ -229,8 +229,8 @@ export const SwapInterface = () => {
         setBuyFlag(true)
         setLoadedBuy(false)
         const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
-		const amountEth = (convertToWei(ethAmount)).toString()
-        const tx = await vaderRouter.methods.swap(amountEth, ETH, vetherAddr())
+		const amountEth = Web3.utils.toWei(String(ethAmount), 'ether')
+        const tx = await vaderRouter.methods.buy(amountEth, vetherAddr())
             .send({
                 from: account.address,
                 gasPrice: '',
@@ -246,8 +246,8 @@ export const SwapInterface = () => {
         setLoadedSell(false)
         setSellFlag(true)
         const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
-        const amountVeth = (convertToWei(vethAmount)).toString()
-        const tx = await vaderRouter.methods.swap(amountVeth, vetherAddr(), ETH)
+        const amountVeth = Web3.utils.toWei(String(vethAmount))
+        const tx = await vaderRouter.methods.sell(amountVeth, ETH)
             .send({
                 from: account.address,
                 gasPrice: '',
