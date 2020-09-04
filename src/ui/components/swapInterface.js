@@ -226,16 +226,16 @@ export const SwapInterface = () => {
     }
 
     const buyVether = async () => {
-        setBuyFlag(true)
         setLoadedBuy(false)
+        setBuyFlag(true)
         const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
-		const amountEth = Web3.utils.toWei(String(ethAmount), 'ether')
-        const tx = await vaderRouter.methods.buy(amountEth, ETH)
+        const amount = Web3.utils.toWei(String(ethAmount))
+        const tx = await vaderRouter.methods.sell(amount, ETH)
             .send({
                 from: account.address,
                 gasPrice: '',
                 gas: '240085',
-                value: Web3.utils.toWei(ethAmount, 'ether')
+                value: amount
             })
         setEthTx(tx.transactionHash)
         loadAccountData(vetherContract, account.address)
@@ -243,16 +243,15 @@ export const SwapInterface = () => {
     }
 
     const sellVether = async () => {
-        setLoadedSell(false)
         setSellFlag(true)
+        setLoadedSell(false)
         const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
-        const amountVeth = Web3.utils.toWei(String(vethAmount))
-        const tx = await vaderRouter.methods.sell(amountVeth, ETH)
+        const amount = Web3.utils.toWei(String(vethAmount))
+        const tx = await vaderRouter.methods.buy(amount, ETH)
             .send({
                 from: account.address,
                 gasPrice: '',
-                gas: '240085',
-                value: ''
+                gas: '240085'
             })
         setVethTx(tx.transactionHash)
         loadAccountData(vetherContract, account.address)
