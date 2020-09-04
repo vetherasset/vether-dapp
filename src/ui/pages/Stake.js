@@ -106,7 +106,7 @@ const Stake = () => {
 	return (
 		<>
 			<h1>LIQUIDITY POOL</h1>
-			<p>Try out the beta V2 of Vether liquidity pool.</p>
+			<p>Try out the beta V3 of Vether liquidity pool.</p>
 			<PoolTicker/>
 
 			{connected &&

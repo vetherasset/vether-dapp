@@ -13,13 +13,10 @@ const { TabPane } = Tabs
 
 const Acquire = () => {
 
-	const [safari, setSafari] = useState(null)
 	const [tab, setTab] = useState('1')
 	const [loaded, setLoaded] = useState(false)
 
 	useEffect(() => {
-		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-		setSafari(isSafari)
 		let pathname = window.location.pathname.split("/")[1]
 		if (pathname === 'claim' && !loaded) {
 			setLoaded(true)
@@ -42,34 +39,13 @@ const Acquire = () => {
 				<TabPane tab="BURN ETHER" key="1" style={{ textAlign: "left" }}>
 					<h2>ACQUIRE VETHER</h2>
 					<p>Acquire a share of today’s emission by burning Ether.</p>
-					{safari &&
-						<>
-							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
-							<br />
-							<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
-						</>
-					}
-					{!safari &&
-						<>
-							<AcquireDialog/>
-						</>
-					}
+						<AcquireDialog/>
 				</TabPane>
 
 				<TabPane tab="CLAIM SHARE" key="2" style={{ textAlign: "left" }}>
 					<h2>CLAIM VETHER</h2>
 					<p>Claim your share of a previous day’s emission. </p>
-					{safari &&
-						<>
-							<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
-							<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
-						</>
-					}
-					{!safari &&
-						<>
-							<ClaimDialog/>
-						</>
-					}
+						<ClaimDialog/>
 				</TabPane>
 			</Tabs>
 		</>

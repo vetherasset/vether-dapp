@@ -102,7 +102,11 @@ export const AcquireDialog = () => {
     const burnEther = async () => {
         const burnAmount = Web3.utils.toWei(amount.toSpend, 'ether')
         setBurnEthFlag('TRUE')
-        const tx = await window.web3.eth.sendTransaction({ from: account.address, to: vetherAddr(), value: burnAmount })
+        const tx = await window.web3.eth.sendTransaction({
+            from: account.address,
+            to: vetherAddr(),
+            value: String(burnAmount)
+        })
         setEthTx(tx.transactionHash)
         setLoaded(true)
         const contract = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
