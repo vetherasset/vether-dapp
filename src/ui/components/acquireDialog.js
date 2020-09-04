@@ -100,7 +100,7 @@ export const AcquireDialog = () => {
     }
 
     const burnEther = async () => {
-        const burnAmount = Web3.utils.toWei(amount.toSpend, 'ether')
+        const burnAmount = Web3.utils.toWei(String(amount.toSpend), 'ether')
         setBurnEthFlag('TRUE')
         const tx = await window.web3.eth.sendTransaction({
             from: account.address,
