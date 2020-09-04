@@ -104,7 +104,7 @@ export const Donations = () => {
                             })}
                         </Radio.Group>
                         <span style={{ fontSize: '1rem', display: 'block', paddingLeft: '55px' }}>or enter any amount</span>
-                        <Input size={'medium'} style={{ marginBottom: 10, maxWidth: '247px' }} value={sumInputValue} placeholder={'Your custom amount'} onChange={onSumInputChange} suffix={ currency === 'Eth' ? 'Ξ' : currency } />
+                        <Input size={'medium'} style={{ marginBottom: 10, maxWidth: '249.69px' }} value={sumInputValue} placeholder={'Your custom amount'} onChange={onSumInputChange} suffix={ currency === 'Eth' ? 'Ξ' : currency } />
                     </Col>
                     <Label display="block" style={{ marginBottom: '0' }}>Developer</Label>
                     <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Choose a developer you wish to donate to.</LabelGrey>
