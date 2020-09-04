@@ -230,7 +230,7 @@ export const SwapInterface = () => {
         setLoadedBuy(false)
         const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
 		const amountEth = Web3.utils.toWei(String(ethAmount), 'ether')
-        const tx = await vaderRouter.methods.buy(amountEth, vetherAddr())
+        const tx = await vaderRouter.methods.buy(amountEth, ETH)
             .send({
                 from: account.address,
                 gasPrice: '',
