@@ -24,6 +24,7 @@ export const VetherTicker = () => {
     useEffect(() => {
         context.vetherData ? getVetherData() : loadVetherData()
         loadEmissionData()
+        console.log(emissionData)
         loadMarketData()
         // eslint-disable-next-line
     }, [])

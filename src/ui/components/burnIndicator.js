@@ -1,15 +1,97 @@
-import React, { createRef, useEffect } from "react"
+import React, { useRef, useEffect, memo, useState } from "react"
 import defaults from "../../common/defaults"
+import Web3 from "web3"
 import { Progress } from 'antd'
+import { getSecondsToGo } from "../../common/utils"
 
-export const BurnIndicator = (props) => {
+const Clock = memo((props) => {
+    const [countdown, setCountdown] = useState(0)
+    const time = new Date(countdown * 1000).toISOString().substr(11, 8)
 
-    const fireCanvas = createRef()
+    useEffect(() => {
+        const loadData = async () => {
+            const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+            const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+            try {
+                const seconds = getSecondsToGo(await vether.methods.nextDayTime().call())
+                setCountdown(seconds)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        const ticker = countdown > 0 && setInterval(() => setCountdown(countdown - 1),
+            1000)
+        if (countdown <= 0) {
+            setCountdown(0)
+            loadData()
+        }
+        return () => clearInterval(ticker)
+    }, [countdown])
+
+
+    let style = {...props.style || {}}
+    style.textAlign = 'center'
+    style.marginBottom = "2.99rem"
+    if (props.fontSize) style.fontSize = props.fontSize
+
+    return (
+        <p style={style}>{time}</p>
+    )
+})
+
+const ProgressBar = () => {
+    const [countdown, setCountdown] = useState(0)
+    const [distribution, setDistribution] = useState({ era: 0, day: 0 })
+    const percent = Number((((defaults.vether.secondsPerDay - countdown) / defaults.vether.secondsPerDay) * 100).toFixed(0))
+
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+                const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+                const seconds = getSecondsToGo(await vether.methods.nextDayTime().call())
+                setCountdown(seconds)
+
+                const day = await vether.methods.currentDay().call()
+                const era = await vether.methods.currentEra().call()
+                setDistribution({
+                    era: era,
+                    day: day
+                })
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        const ticker = countdown > 0 && setInterval(() => setCountdown(countdown - 1),
+            1000)
+        if (countdown <= 0) {
+            setCountdown(0)
+            loadData()
+        }
+        return () => clearInterval(ticker)
+    }, [countdown])
+
+
+    return (
+        <>
+            <div style={{ marginTop: '97px', padding: '0 15px' }}>
+                <span>Era {distribution.era}, Day {distribution.day}</span>
+                <Progress percent={percent} strokeColor={defaults.color.accent} status="active" />
+            </div>
+        </>
+    )
+}
+
+export const BurnIndicator = memo((props) => {
+
+    const fireCanvas = useRef()
 
     const Canvas = () => {
         return (
             <>
-                <canvas ref={fireCanvas} style={{ display: 'block', margin: '0 auto' }}>
+                <canvas ref={fireCanvas} style={{ display: 'block', margin: '0 auto', minHeight: 480 }}>
                     Your browser does not support Canvas.
                 </canvas>
             </>
@@ -219,32 +301,11 @@ export const BurnIndicator = (props) => {
         // eslint-disable-next-line
     }, [])
 
-    const Clock = () => {
-        let style = {...props.style || {}}
-        style.textAlign = 'center'
-        style.marginBottom = "2.99rem"
-        if (props.fontSize) style.fontSize = props.fontSize
-        return (
-            <p style={style}>1:30:01</p>
-        )
-    }
-
-    const ProgressBar = () => {
-        return (
-            <>
-                <div style={{ marginTop: '97px', padding: '0 15px' }}>
-                    <span>Era 1, Day 167</span>
-                    <Progress percent={50} strokeColor={defaults.color.accent} status="active" />
-                </div>
-            </>
-        )
-    }
-
     return (
         <>
-            <Clock/>
+            <Clock fontSize={props.fontSize} />
             <Canvas scale={props.scale} />
             <ProgressBar/>
         </>
     )
-}
+})

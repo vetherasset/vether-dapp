@@ -4,7 +4,7 @@ import { vetherAddr, vetherAbi, infuraAPI } from './web3.js'
 
 export const getETHPrice = async () => {
     const ethPrice = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
-    return ethPrice.data.ethereum.usd
+    return Number(ethPrice.data.ethereum.usd)
 }
 
 const getContract = () => {
