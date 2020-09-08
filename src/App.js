@@ -49,7 +49,7 @@ const App = () => {
 
 					<main>
 						<Sidebar />
-						<Content style={{ background: Colour().dgrey, color: Colour().white}}>
+						<Content style={{ color: Colour().white }}>
 							<div className="ant-wrapper">
 								<Switch>
 									<Route path="/" exact component={Hero} />
