@@ -87,10 +87,10 @@ export const getWeb3 = () => {
 }
 
 export const getVetherPrice = async () => {
-    const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-    const poolContract = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
     try {
-        return(Number(Web3.utils.fromWei(await poolContract.methods.calcValueInToken(ETH, BN2Str(oneBN)).call())))
+        const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const poolContract = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
+        return (Web3.utils.fromWei(await poolContract.methods.calcValueInToken(ETH, BN2Str(oneBN)).call()))
     } catch (err) {
         console.log(err)
     }

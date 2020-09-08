@@ -100,7 +100,7 @@ export const SwapInterface = () => {
 		const poolData_ = {
 			"eth": convertFromWei(poolData.tokenAmt),
 			"veth": convertFromWei(poolData.baseAmt),
-			"price": convertFromWei(price),
+			"price": price,
 			"volume": convertFromWei(poolData.volume),
 			"fees": convertFromWei(poolData.fees),
 			"txCount": poolData.txCount,
@@ -117,11 +117,11 @@ export const SwapInterface = () => {
         const priceEtherUSD = await getETHPrice()
         const priceVetherEth = await getVetherPrice()
 
-        const priceVetherUSD = convertFromWei(priceVetherEth) * priceEtherUSD
+        const priceVetherUSD = priceVetherEth * priceEtherUSD
 
         const marketData = {
             priceUSD: priceVetherUSD,
-            priceETH: convertFromWei(priceVetherEth),
+            priceETH: priceVetherEth,
             ethPrice: priceEtherUSD
         }
 

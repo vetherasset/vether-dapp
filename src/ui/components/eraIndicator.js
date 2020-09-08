@@ -4,13 +4,11 @@ import { Context } from '../../context'
 import Breakpoint from 'react-socks'
 
 import Web3 from 'web3'
-import {vetherAddr, vetherAbi, infuraAPI, getVetherPrice} from '../../client/web3.js'
-import { getETHPrice } from '../../client/market.js'
+import {vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo, currency } from '../../common/utils'
 
 import { Row, Col, Progress } from 'antd'
 import { LabelGrey, Center, Text, Colour } from '../components'
-import { BurnCard } from './burnCard'
 
 export const EraIndicator = (props) => {
 
@@ -23,8 +21,6 @@ export const EraIndicator = (props) => {
     const [timer, setTimer] = useState(null)
     const [eraData, setEraData] = useState(
         { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '', secondsToGo: 82400 })
-    const [marketData, setMarketData] = useState(
-        { priceUSD: '', priceETH: '', ethPrice: '' })
 
     useEffect(() => {
         if (!loaded) {
@@ -36,7 +32,6 @@ export const EraIndicator = (props) => {
 
     const loadBlockchainData = async () => {
         loadEraData()
-        loadMarketData()
     }
 
     const loadEraData = async () => {
@@ -61,19 +56,6 @@ export const EraIndicator = (props) => {
 
         setEraData(eraData)
         context.setContext({ "eraData": eraData })
-    }
-
-    const loadMarketData = async () => {
-        const priceEtherUSD = await getETHPrice()
-        const priceVetherEth = await getVetherPrice()
-        const priceVetherUSD = priceEtherUSD * priceVetherEth
-        const marketData = {
-            priceUSD: priceVetherUSD,
-            priceETH: priceVetherEth,
-            ethPrice: priceEtherUSD
-        }
-        setMarketData(marketData)
-        context.setContext({ "marketData": marketData })
     }
 
     const dayFinish = () => {
@@ -187,11 +169,6 @@ export const EraIndicator = (props) => {
                                         }}>TO BE EMITTED TODAY</span>
                         </Center>
                     </Col>
-                    }
-                </Row>
-                <Row type="flex" justify="center" style={{ marginTop: 20 }}>
-                    {!small &&
-                    <BurnCard marketData={marketData} eraData={eraData} />
                     }
                 </Row>
             </>

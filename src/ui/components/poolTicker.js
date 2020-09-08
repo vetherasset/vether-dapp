@@ -35,7 +35,7 @@ export const PoolTicker = () => {
         const poolData_ = {
             "eth": convertFromWei(poolData.tokenAmt),
             "veth": convertFromWei(poolData.baseAmt),
-            "price": convertFromWei(price),
+            "price": price,
             "volume": convertFromWei(poolData.volume),
             "poolUnits": poolData.poolUnits,
             "fees": convertFromWei(poolData.fees),
