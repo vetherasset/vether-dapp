@@ -64,7 +64,7 @@ const Stake = () => {
 	return (
 		<>
 			<h1>LIQUIDITY POOL</h1>
-			<p>Try out the beta V3 of Vether liquidity pool.</p>
+			<p>Try out the beta of Vether liquidity pool.</p>
 			<PoolTicker/>
 					<Tabs defaultActiveKey='1' activeKey={tab} onChange={onChange} size={'large'} style={{ marginTop: 20, textAlign: "center" }}>
 						<TabPane tab="STAKE" key="1" style={{ textAlign: "left" }}>
