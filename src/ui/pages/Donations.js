@@ -109,7 +109,7 @@ export const Donations = () => {
                     <Label display="block" style={{ marginBottom: '0' }}>Developer</Label>
                     <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Choose a developer you wish to donate to.</LabelGrey>
                     <Row>
-                        <Col xl={12} style={{paddingRight: '21px'}}>
+                        <Col sm={12} style={{paddingRight: '21px'}}>
                             <Select size={'large'} style={{ width: '100%', marginBottom: '1.33rem' }} placeholder="Select a developer" onChange={onDevDataInputChange}>
                                 {devs.map((dev, index) => {
                                     return(
