@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
+import defaults from "../../common/defaults"
 import Web3 from 'web3'
 
 import { Row, Col, Input, Tooltip } from 'antd'
 import { SwapOutlined, QuestionCircleOutlined, LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Label, Sublabel, Button, Colour, LabelGrey } from '../components'
 
-import {
-    ETH, vetherAddr, vetherAbi, getEtherscanURL,
-    infuraAPI, getVetherPrice, vaderUtilsAbi, vaderUtilsAddr, vaderRouterAddr, vaderRouterAbi
-} from '../../client/web3.js'
-import { convertToWei, BN2Str, convertFromWei, currency, getBN } from '../../common/utils'
+import { getVetherPrice } from '../../client/web3.js'
+import { BN2Str, currency, getBN } from '../../common/utils'
 import { calcSwapOutput } from '../../common/clpLogic'
 import { getETHPrice } from "../../client/market"
 
@@ -59,8 +57,8 @@ export const SwapInterface = () => {
         if(accountConnected) {
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
-            const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-            const vetherContract = new web3.eth.Contract(vetherAbi(), vetherAddr())
+            const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+            const vetherContract = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
             loadAccountData(vetherContract, address)
             setVetherContract(vetherContract)
             checkApproval(address)
@@ -91,18 +89,18 @@ export const SwapInterface = () => {
     }
 
 	const loadPoolData = async () => {
-		const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-        const utils = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
-        const poolData = await utils.methods.getPoolData(ETH).call()
+		const web3_ = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+        const utils = new web3_.eth.Contract(defaults.vader.utils.abi, defaults.vader.utils.address)
+        const poolData = await utils.methods.getPoolData(defaults.vader.pools.eth).call()
         const price = await getVetherPrice()
-        const roi = await utils.methods.getPoolROI(ETH).call()
-        const apy = await utils.methods.getPoolAPY(ETH).call()
+        const roi = await utils.methods.getPoolROI(defaults.vader.pools.eth).call()
+        const apy = await utils.methods.getPoolAPY(defaults.vader.pools.eth).call()
 		const poolData_ = {
-			"eth": convertFromWei(poolData.tokenAmt),
-			"veth": convertFromWei(poolData.baseAmt),
+			"eth": Web3.utils.fromWei(poolData.tokenAmt),
+			"veth": Web3.utils.fromWei(poolData.baseAmt),
 			"price": price,
-			"volume": convertFromWei(poolData.volume),
-			"fees": convertFromWei(poolData.fees),
+			"volume": Web3.utils.fromWei(poolData.volume),
+			"fees": Web3.utils.fromWei(poolData.fees),
 			"txCount": poolData.txCount,
 			"roi": roi,
             "apy": apy
@@ -134,9 +132,9 @@ export const SwapInterface = () => {
     const checkApproval = async (address) => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected){
-            const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+            const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
             const from = address
-            const spender = vaderRouterAddr()
+            const spender = defaults.vader.router.address
             const approval = await vether.methods.allowance(from, spender).call()
             const vethBalance = await vether.methods.balanceOf(address).call()
             if (+approval >= +vethBalance && +vethBalance >= 0) {
@@ -152,9 +150,9 @@ export const SwapInterface = () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected){
             setApproveFlag(true)
-            const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+            const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
             const from = account.address
-            const spender = vaderRouterAddr()
+            const spender = defaults.vader.router.address
             const value = getBN(1000000 * 10 ** 18).toString()
             await vether.methods.approve(spender, value)
                 .send({
@@ -167,8 +165,8 @@ export const SwapInterface = () => {
     const onEthAmountChange = e => {
         loadPoolData()
         const value = e.target.value
-        let valueInVeth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.eth), convertToWei(poolData.veth)))
-        valueInVeth = +valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : convertFromWei(valueInVeth)
+        let valueInVeth = BN2Str(calcSwapOutput(Web3.utils.toWei(value), Web3.utils.toWei(poolData.eth), Web3.utils.toWei(poolData.veth)))
+        valueInVeth = +valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : Web3.utils.fromWei(valueInVeth)
         setEthAmount(value)
         setVethAmount("")
         setVethAmountCalculated((+valueInVeth).toFixed(5))
@@ -178,8 +176,8 @@ export const SwapInterface = () => {
     const onVethAmountChange = e => {
         loadPoolData()
         const value = e.target.value
-        let valueInEth = BN2Str(calcSwapOutput(convertToWei(value), convertToWei(poolData.veth), convertToWei(poolData.eth)))
-        valueInEth = +valueInEth === Infinity || isNaN(+valueInEth) ? 0 : convertFromWei(valueInEth)
+        let valueInEth = BN2Str(calcSwapOutput(Web3.utils.toWei(value), Web3.utils.toWei(poolData.veth), Web3.utils.toWei(poolData.eth)))
+        valueInEth = +valueInEth === Infinity || isNaN(+valueInEth) ? 0 : Web3.utils.fromWei(valueInEth)
         setVethAmount(value)
         setEthAmount("")
         setEthAmountCalculated((+valueInEth).toFixed(5))
@@ -228,9 +226,9 @@ export const SwapInterface = () => {
     const buyVether = async () => {
         setLoadedBuy(false)
         setBuyFlag(true)
-        const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
+        const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
         const amount = Web3.utils.toWei(String(ethAmount))
-        const tx = await vaderRouter.methods.sell(amount, ETH)
+        const tx = await vaderRouter.methods.sell(amount, defaults.vader.pools.eth)
             .send({
                 from: account.address,
                 gasPrice: '',
@@ -245,9 +243,9 @@ export const SwapInterface = () => {
     const sellVether = async () => {
         setSellFlag(true)
         setLoadedSell(false)
-        const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
+        const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
         const amount = Web3.utils.toWei(String(vethAmount))
-        const tx = await vaderRouter.methods.buy(amount, ETH)
+        const tx = await vaderRouter.methods.buy(amount, defaults.vader.pools.eth)
             .send({
                 from: account.address,
                 gasPrice: '',
@@ -259,7 +257,7 @@ export const SwapInterface = () => {
     }
 
     const getLink = (tx) => {
-        return getEtherscanURL().concat('tx/').concat(tx)
+        return defaults.etherscan.url.concat('tx/').concat(tx)
     }
 
     return (
@@ -365,10 +363,10 @@ export const SwapInterface = () => {
                     <Row type="flex" justify="center" >
                         <Col span={12} style={{ textAlign: 'left' }}>
                             {loadedBuy &&
-                            <>
-                                <a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link"
-                                   target="_blank">VIEW TRANSACTION -></a>
-                            </>
+                                <>
+                                    <a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link"
+                                       target="_blank">VIEW TRANSACTION -></a>
+                                </>
                             }
                         </Col>
                     </Row>
@@ -380,10 +378,10 @@ export const SwapInterface = () => {
                     <Row type="flex" justify="center" >
                         <Col span={12} style={{ textAlign: 'right' }}>
                             {loadedSell &&
-                            <>
-                                <a href={getLink(vethTx)} rel="noopener noreferrer" title="Transaction Link"
-                                   target="_blank">VIEW TRANSACTION -></a>
-                            </>
+                                <>
+                                    <a href={getLink(vethTx)} rel="noopener noreferrer" title="Transaction Link"
+                                       target="_blank">VIEW TRANSACTION -></a>
+                                </>
                             }
                         </Col>
                     </Row>
