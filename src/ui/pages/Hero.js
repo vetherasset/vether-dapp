@@ -168,7 +168,7 @@ const Hero = () => {
 						<p style={{ fontSize: '7rem', lineHeight: '2.28rem', marginLeft: '13px', }}>
 							{currency(price.veth.usd).replace('$', '')}
 						</p>
-						<span style={{ marginLeft: '3px', fontSize: '1rem', display: 'block' }}>
+						<span style={{ marginLeft: '2px', fontSize: '1rem', display: 'block' }}>
 							{currency(price.veth.eth, 0, 5, 'ETH')}
 						</span>
 						<NumberBottom value={currency(price.veth.cap, 0, 0)} alt={'MARKET CAP'} />
