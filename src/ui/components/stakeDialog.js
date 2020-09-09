@@ -1,14 +1,10 @@
 import React, { useEffect, useState} from "react"
+import defaults from "../../common/defaults"
 import Web3 from "web3"
-import {
-    ETH, getEtherscanURL, vetherAbi, vetherAddr, vaderRouterAddr,
-    vaderRouterAbi,
-} from "../../client/web3"
 import { currency, getBN } from "../../common/utils"
 import { Col, Slider, InputNumber, Row, Select, Tooltip } from "antd"
-import { LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
 import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
-
 
 export const AddLiquidityTable = (props) => {
 
@@ -31,7 +27,6 @@ export const AddLiquidityTable = (props) => {
     const [asset1, setAsset1] = useState(null)
     const [amount1, setAmount1] = useState(0)
 
-    const [ethTx, setEthTx] = useState(null)
     const [approved, setApproved] = useState(true)
     const [approveFlag, setApproveFlag] = useState(null)
 
@@ -57,9 +52,9 @@ export const AddLiquidityTable = (props) => {
     const checkApproval = async (address) => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if (accountConnected){
-            const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+            const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
             const from = address
-            const spender = vaderRouterAddr()
+            const spender = defaults.vader.router.address
             const approval = await vether.methods.allowance(from, spender).call()
             const vethBalance = await vether.methods.balanceOf(address).call()
             if (+approval >= +vethBalance && +vethBalance >= 0) {
@@ -73,9 +68,9 @@ export const AddLiquidityTable = (props) => {
 
     const unlockToken = async () => {
         setApproveFlag(true)
-        const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+        const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
         const fromAcc = account.address
-        const spender = vaderRouterAddr()
+        const spender = defaults.vader.router.address
         const value = getBN(1000000 * 10 ** 18).toString()
         await vether.methods.approve(spender, value).send({ from: fromAcc })
         checkApproval(account.address)
@@ -92,15 +87,13 @@ export const AddLiquidityTable = (props) => {
             amountVeth = Web3.utils.toWei(amount1.toString())
             amountEth = Web3.utils.toWei(amount0.toString())
         }
-        const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
-        const tx = await vaderRouter.methods.stake(amountVeth, amountEth, ETH).send({
+        const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
+        await vaderRouter.methods.stake(amountVeth, amountEth, defaults.vader.pools.eth).send({
             value: amountEth,
             from: fromAcc,
             gasPrice: '',
             gas: ''
         })
-        setEthTx(tx.transactionHash)
-        console.log(ethTx)
     }
 
     const onAssetChange = (value) => {
@@ -120,7 +113,6 @@ export const AddLiquidityTable = (props) => {
         if (isNaN(value)) {
             return
         }
-        console.log(value)
         setAmount0(value)
     }
 
@@ -128,7 +120,6 @@ export const AddLiquidityTable = (props) => {
         if (isNaN(value)) {
             return
         }
-        console.log(value)
         setAmount1(value)
     }
 
@@ -306,13 +297,13 @@ export const RemoveLiquidityTable = (props) => {
     const [unstakeAmount, setUnstakeAmount] = useState(0)
 
     const getLink = (tx) => {
-        return getEtherscanURL().concat('tx/').concat(tx)
+        return defaults.etherscan.url.concat('tx/').concat(tx)
     }
 
     const unstake = async () => {
         setBurnTknFlag(true)
-        const vaderRouter = new window.web3.eth.Contract(vaderRouterAbi(), vaderRouterAddr())
-        const tx = await vaderRouter.methods.unstake((unstakeAmount*100), ETH).send({ from: account.address })
+        const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
+        const tx = await vaderRouter.methods.unstake((unstakeAmount*100), defaults.vader.pools.eth).send({ from: account.address })
         setTknTx(tx.transactionHash)
         setLoaded2(true)
     }
@@ -361,16 +352,17 @@ export const RemoveLiquidityTable = (props) => {
                     }
                     <Sublabel margin={0}>REMOVE LIQUIDITY FROM THE POOL</Sublabel>
                     {burnTknFlag &&
-                    <>
-                        {!loaded2 &&
-                        <LoadingOutlined style={{ fontSize: 15 }} />
-                        }
-                        {loaded2 &&
                         <>
-                            <a href={getLink(tknTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>VIEW TRANSACTION -></a>
+                            {!loaded2 &&
+                                <LoadingOutlined style={{ fontSize: 15 }} />
+                            }
+                            {loaded2 &&
+                                <>
+                                    <CheckCircleOutlined style={{ fontSize: 15, marginRight: 7, color: defaults.color.gray, display: 'inline-block' }} />
+                                    <a href={getLink(tknTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: defaults.color.accent, fontSize: 12 }}>VIEW TRANSACTION -></a>
+                                </>
+                            }
                         </>
-                        }
-                    </>
                     }
                 </Col>
             </Row>
