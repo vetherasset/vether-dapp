@@ -21,6 +21,11 @@ const Footer = (props) => {
                           </a>
                       </li>
                       <li>
+                          <a href="https://vether.gitbook.io/vether-asset/" target="_blank" rel="noopener noreferrer">
+                              Docs
+                          </a>
+                      </li>
+                      <li>
                           <a href="https://github.com/vetherasset/vether-dapp" target="_blank" rel="noopener noreferrer">
                               Sources
                           </a>

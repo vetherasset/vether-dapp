@@ -1,8 +1,9 @@
 import React, {useContext, useEffect, useState} from "react"
 import { Context } from "../../context"
 import Web3 from "web3"
-import { ETH, infuraAPI, vetherPools2Abi, vetherPools2Addr } from "../../client/web3"
-import { BN2Str, convertFromWei, currency, oneBN } from "../../common/utils"
+import { ETH, infuraAPI, vaderUtilsAbi, vaderUtilsAddr } from "../../client/web3"
+import { convertFromWei, currency } from "../../common/utils"
+import { getVetherPrice } from "../../client/web3"
 import { getETHPrice } from "../../client/market"
 import { Center, Colour, Text } from "../components"
 import { Col, Row, Tooltip } from "antd"
@@ -25,16 +26,16 @@ export const PoolTicker = () => {
 
     const loadPoolData = async () => {
         const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
-        const poolContract = new web3_.eth.Contract(vetherPools2Abi(), vetherPools2Addr())
-        let poolData = await poolContract.methods.poolData(ETH).call()
-        let price = await poolContract.methods.calcValueInAsset(BN2Str(oneBN), ETH).call()
-        let age = await poolContract.methods.getPoolAge(ETH).call()
-        let roi = await poolContract.methods.getPoolROI(ETH).call()
-        let apy = await poolContract.methods.getPoolAPY(ETH).call()
+        const utils = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
+        const poolData = await utils.methods.getPoolData(ETH).call()
+        const price = await getVetherPrice()
+        const age = await utils.methods.getPoolAge(ETH).call()
+        const roi = await utils.methods.getPoolROI(ETH).call()
+        const apy = await utils.methods.getPoolAPY(ETH).call()
         const poolData_ = {
-            "eth": convertFromWei(poolData.asset),
-            "veth": convertFromWei(poolData.vether),
-            "price": convertFromWei(price),
+            "eth": convertFromWei(poolData.tokenAmt),
+            "veth": convertFromWei(poolData.baseAmt),
+            "price": price,
             "volume": convertFromWei(poolData.volume),
             "poolUnits": poolData.poolUnits,
             "fees": convertFromWei(poolData.fees),
@@ -92,7 +93,7 @@ export const PoolTicker = () => {
                     <div style={poolStyles}>
                         <Row>
                             <Col xs={12}>
-                                <Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>$VETH</Text>
+                                <Text size={20} style={{ textAlign: 'left', display: 'block', margin: '0' }}>VETH</Text>
                                 <Center>
                                     <Text size={'1.9rem'} color={Colour().white} margin={"20px 0px 5px 0px"}>
                                         {currency(poolData.veth, 0, 2, 'VETH').replace('VETH', '')}
@@ -131,7 +132,7 @@ export const PoolTicker = () => {
                             <Col xs={6}>
                                 <Center>
                                     <Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>
-                                        VOL&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span>
+                                        VOL&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>VETH</span>
                                     </Text>
                                 </Center>
                                 <Center>
@@ -143,7 +144,7 @@ export const PoolTicker = () => {
                             <Col xs={6}>
                                 <Center>
                                     <Text size={'0.8rem'} style={{ textAlign: 'center', display: 'block', margin: '0' }}>
-                                        FEES&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>$VETH</span>
+                                        FEES&nbsp;<span style={{ fontSize: '0.7rem', fontStyle: 'italic', color: '#97948e', margin: 0 }}>VETH</span>
                                     </Text>
                                 </Center>
                                 <Center>

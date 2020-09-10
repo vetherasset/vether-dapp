@@ -26,7 +26,7 @@ const App = () => {
 
 	const betaWarning = () => { return  (
 			<>
-				This feature is beta <b>V2</b>, so there is a <b>risk involved</b>. Pool size is capped to <b>10,000 VETH</b>.
+				This feature is beta <b>V3</b>, so there is a <b>risk involved</b>.
 			</>
 		)
 	}
@@ -39,7 +39,7 @@ const App = () => {
 						<Route path="/stake">
 							<Notification message={betaWarning()} pathname={'stake'}/>
 						</Route>
-						
+
 						<Route path="/trade">
 							<Notification message={betaWarning()} pathname={'trade'}/>
 						</Route>
@@ -49,7 +49,7 @@ const App = () => {
 
 					<main>
 						<Sidebar />
-						<Content style={{ background: Colour().dgrey, color: Colour().white}}>
+						<Content style={{ color: Colour().white }}>
 							<div className="ant-wrapper">
 								<Switch>
 									<Route path="/" exact component={Hero} />

@@ -80,7 +80,7 @@ export function convertToMonth(date_) {
 
 export function getSecondsToGo(date) {
     const time = (Date.now() / 1000).toFixed()
-    return ((date - time))
+    return (Number((date - time)))
 }
 
 export const formatAPY = (input) =>{

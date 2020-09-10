@@ -3,8 +3,20 @@ body {
   padding: 0;
   margin: 0;
   font: 1em/1.5 -apple-system, Lato, sans-serif;
-  background-color: #2B2515;
   color: #ffffff;
+}
+
+body {
+  background-color: #2B2515;
+  &.dark {
+    background-color: #110d01;
+    header{
+      border-bottom: 1px solid #000;
+    }
+    .ant-layout-sider-children {
+      border-right: 1px solid #000;
+    }
+  }
 }
 
 h1, h2, h3, h4, h5, h6, ul {

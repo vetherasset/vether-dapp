@@ -79,11 +79,10 @@ export const Donations = () => {
     const donate = async () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
         if(accountConnected) {
-            const value = sumValue.toFixed(5)
             await window.web3.eth.sendTransaction({
                 from: accountData.address,
                 to: devData.address,
-                value: Web3.utils.toWei(value, 'ether')
+                value: Web3.utils.toWei(String(sumValue), 'ether')
             })
         }
     }
@@ -105,12 +104,12 @@ export const Donations = () => {
                             })}
                         </Radio.Group>
                         <span style={{ fontSize: '1rem', display: 'block', paddingLeft: '55px' }}>or enter any amount</span>
-                        <Input size={'medium'} style={{ marginBottom: 10, maxWidth: '247px' }} value={sumInputValue} placeholder={'Your custom amount'} onChange={onSumInputChange} suffix={ currency === 'Eth' ? 'Ξ' : currency } />
+                        <Input size={'medium'} style={{ marginBottom: 10, maxWidth: '249.69px' }} value={sumInputValue} placeholder={'Your custom amount'} onChange={onSumInputChange} suffix={ currency === 'Eth' ? 'Ξ' : currency } />
                     </Col>
                     <Label display="block" style={{ marginBottom: '0' }}>Developer</Label>
                     <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Choose a developer you wish to donate to.</LabelGrey>
                     <Row>
-                        <Col xl={12} style={{paddingRight: '21px'}}>
+                        <Col sm={12} style={{paddingRight: '21px'}}>
                             <Select size={'large'} style={{ width: '100%', marginBottom: '1.33rem' }} placeholder="Select a developer" onChange={onDevDataInputChange}>
                                 {devs.map((dev, index) => {
                                     return(

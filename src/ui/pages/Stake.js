@@ -1,22 +1,61 @@
-import React, { useEffect, useState } from 'react'
-
-import { LabelGrey } from '../components'
-import { StakeDialog, UpgradeDialog } from "../components/stakeDialog"
-import { PoolTicker } from "../components/poolTicker"
+import React, { useEffect, useState} from 'react'
+import defaults from "../../common/defaults"
+import Web3 from "web3"
 import { Tabs } from 'antd'
 import '../../App.less'
-
-const { TabPane } = Tabs
+import { AddLiquidityTable, ProvidedLiquidityTable, RemoveLiquidityTable } from "../components/stakeDialog"
+import { PoolTicker } from "../components/poolTicker"
+import { ETH } from "../../client/web3"
 
 const Stake = () => {
 
-	const [safari, setSafari] = useState(null)
+	const { TabPane } = Tabs
 	const [tab, setTab] = useState('1')
 
+	const [account, setAccount] = useState(
+		{
+			address: '', vethBalance: 0, ethBalance: 0,
+			isMember: false, baseAmt: 0, tokenAmt: 0
+		})
+
 	useEffect(() => {
-		var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-		setSafari(isSafari)
+		loadData()
+		// eslint-disable-next-line
 	}, [])
+
+	const loadData = async () => {
+		const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+		const utils = new web3.eth.Contract(defaults.vader.utils.abi, defaults.vader.utils.address)
+
+		const accountConnected = (await window.web3.eth.getAccounts())[0]
+		if (accountConnected) {
+			const accounts = await window.web3.eth.getAccounts()
+			const address = accounts[0]
+			const isMember = await utils.methods.isMember(ETH, address).call()
+			const vether = await new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+			const poolData = await utils.methods.getPoolData(ETH).call()
+			const memberShare = await utils.methods.getMemberShare(ETH, address).call()
+
+			const baseAmt = Web3.utils.fromWei(memberShare.baseAmt)
+			const tokenAmt = Web3.utils.fromWei(memberShare.tokenAmt)
+			const memberTotal = Number(baseAmt) + Number(tokenAmt)
+			const poolTotal = Number(Web3.utils.fromWei(poolData.baseAmt)) + Number(Web3.utils.fromWei(poolData.tokenAmt))
+			const memberPoolShare = memberTotal / poolTotal * 100
+			const ethBalance = Web3.utils.fromWei(await web3.eth.getBalance(address))
+			const vethBalance = Web3.utils.fromWei(await vether.methods.balanceOf(address).call())
+
+			const accountData = {
+				'address': address,
+				'vethBalance': vethBalance,
+				'ethBalance': ethBalance,
+				'isMember': isMember,
+				'baseAmt': Web3.utils.fromWei(memberShare.baseAmt),
+				'tokenAmt': Web3.utils.fromWei(memberShare.tokenAmt),
+				'memberPoolShare': memberPoolShare
+			}
+			setAccount(accountData)
+		}
+	}
 
 	const onChange = key => {
 		setTab(key)
@@ -25,28 +64,25 @@ const Stake = () => {
 	return (
 		<>
 			<h1>LIQUIDITY POOL</h1>
-			<p>Try out the beta V2 of Vether liquidity pool.</p>
+			<p>Try out the beta of Vether liquidity pool.</p>
 			<PoolTicker/>
-			{safari &&
-				<>
-					<LabelGrey>Sending Ethereum transactions requires Chrome and Metamask</LabelGrey>
-					<a href='https://metamask.io' rel="noopener noreferrer" title="Metamask Link" target="_blank" style={{ color: "#D09800", fontSize: 12 }}>Download Metamask</a>
-				</>
-			}
-			{!safari &&
-				<>
 					<Tabs defaultActiveKey='1' activeKey={tab} onChange={onChange} size={'large'} style={{ marginTop: 20, textAlign: "center" }}>
 						<TabPane tab="STAKE" key="1" style={{ textAlign: "left" }}>
-							<StakeDialog/>
+							<h2>ADD LIQUIDITY</h2>
+							<AddLiquidityTable id={1} accountData={account} />
 						</TabPane>
-
-						<TabPane tab="UPGRADE" key="2" style={{ textAlign: "left" }}>
-							<UpgradeDialog/>
-						</TabPane>
+						{account.isMember &&
+							<TabPane tab="SHARES" key="2" style={{ textAlign: "left" }}>
+								<ProvidedLiquidityTable id={2} accountData={account} />
+							</TabPane>
+						}
+						{account.isMember &&
+							<TabPane tab="UNSTAKE" key="3" style={{ textAlign: "left" }}>
+								<RemoveLiquidityTable id={3} accountData={account} />
+							</TabPane>
+						}
 					</Tabs>
 				</>
-			}
-		</>
 	)
 }
 
