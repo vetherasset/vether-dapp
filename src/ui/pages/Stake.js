@@ -5,7 +5,6 @@ import { Tabs } from 'antd'
 import '../../App.less'
 import { AddLiquidityTable, ProvidedLiquidityTable, RemoveLiquidityTable } from "../components/stakeDialog"
 import { PoolTicker } from "../components/poolTicker"
-import { ETH } from "../../client/web3"
 
 const Stake = () => {
 
@@ -31,10 +30,10 @@ const Stake = () => {
 		if (accountConnected) {
 			const accounts = await window.web3.eth.getAccounts()
 			const address = accounts[0]
-			const isMember = await utils.methods.isMember(ETH, address).call()
+			const isMember = await utils.methods.isMember(defaults.vader.pools.eth, address).call()
 			const vether = await new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-			const poolData = await utils.methods.getPoolData(ETH).call()
-			const memberShare = await utils.methods.getMemberShare(ETH, address).call()
+			const poolData = await utils.methods.getPoolData(defaults.vader.pools.eth).call()
+			const memberShare = await utils.methods.getMemberShare(defaults.vader.pools.eth, address).call()
 
 			const baseAmt = Web3.utils.fromWei(memberShare.baseAmt)
 			const tokenAmt = Web3.utils.fromWei(memberShare.tokenAmt)
