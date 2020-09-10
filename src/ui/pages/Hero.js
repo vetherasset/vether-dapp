@@ -165,7 +165,7 @@ const Hero = () => {
 
 						<p style={{ color: defaults.color.gray, marginBottom: '0.9rem' }}>Price</p>
 						<span style={{ fontSize: '1.66rem' }}>$</span>
-						<p style={{ fontSize: '7rem', lineHeight: '2.28rem', marginLeft: '13px', }}>
+						<p style={{ fontSize: '7rem', lineHeight: '2.28rem', marginLeft: '13px', marginBottom: '1.9rem' }}>
 							{currency(price.veth.usd).replace('$', '')}
 						</p>
 						<span style={{ marginLeft: '2px', fontSize: '1rem', display: 'block' }}>
