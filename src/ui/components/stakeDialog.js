@@ -3,8 +3,8 @@ import defaults from "../../common/defaults"
 import Web3 from "web3"
 
 import { currency, getBN } from "../../common/utils"
-import { Col, Slider, InputNumber, Row, Select, Tooltip } from "antd"
-import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { Col, Slider, Switch, InputNumber, Row, Select, Tooltip } from "antd"
+import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined, PlusOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons'
 import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
 
 export const AddLiquidityTable = (props) => {
@@ -27,6 +27,9 @@ export const AddLiquidityTable = (props) => {
 
     const [asset1, setAsset1] = useState(null)
     const [amount1, setAmount1] = useState(0)
+
+    const [customPriceImpactEnabled, setCustomPriceImpactEnabled] = useState(false)
+    const [priceImpact, setPriceImpact] = useState(0)
 
     const [approved, setApproved] = useState(true)
     const [approveFlag, setApproveFlag] = useState(null)
@@ -112,15 +115,38 @@ export const AddLiquidityTable = (props) => {
         setAmount1(value)
     }
 
+    const ratio = {
+        '-100': {
+            style: {
+                color: '#fff'
+            },
+            label: <strong>-100%</strong>
+        },
+        '0': {
+            style: {
+                color: '#fff'
+            },
+            label: <strong>0%</strong>
+        },
+        '100': {
+            style: {
+                color: '#fff'
+            },
+            label: <strong>100%</strong>
+        }
+    }
+
     console.log(asset0)
     console.log(asset1)
+    console.log(customPriceImpactEnabled)
+    console.log(priceImpact)
 
     return (
         <>
             <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Select an asset you would like to provide. Vether pool gives you different options to do so. Unlike traditional AMM pools,<br/>where you can provide only
                 an equal proportion of both assets, Vether pool optionally allows you to provide liquidity<br/> in unequal proportions. The default and recommended method is to provide both assets proportionally.</LabelGrey>
 
-            <Row style={{ marginBottom: '1.33rem' }}>
+            <Row style={{ marginBottom: '0.7rem' }}>
                 <Col lg={3} md={4} xs={7}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Asset</Label>
                     <Select size={'large'} placeholder="Select" onChange={(value => setAsset0(value))} style={{ width: '100%' }}>
@@ -146,7 +172,7 @@ export const AddLiquidityTable = (props) => {
                 </Col>
             </Row>
 
-            <Row style={{ marginBottom: '1.33rem' }}>
+            <Row>
                 <Col lg={3} md={4} xs={7} style={{ textAlign: 'right', marginLeft: '22.5px' }}>
                     <PlusOutlined style={{ margin: 0, fontSize: '0.8rem' }}/>
                 </Col>
@@ -178,13 +204,44 @@ export const AddLiquidityTable = (props) => {
                 </Col>
             </Row>
 
+            <Row style={{ marginBottom: '1.33rem' }}>
+                <Col lg={24}>
+                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Set custom price impact if you want stake non-proportionally. Otherwise leave following without change.</LabelGrey>
+                </Col>
+                <Col lg={9}>
+                    <Label display="block" style={{marginBottom: '0.55rem'}}>Price Impact</Label>
+                    <Col style={{ padding: '0 17px' }}>
+                        <Slider marks={ratio}
+                                included={false}
+                                min={-100}
+                                max={100}
+                                value={priceImpact}
+                                onChange={(value) => setPriceImpact(value)}
+                                {...(customPriceImpactEnabled === false && { disabled: true })} />
+                    </Col>
+                </Col>
+            </Row>
 
+            <Row style={{ paddingLeft: '5px', marginBottom: '1.66rem' }}>
+                <Switch checkedChildren={'I'}
+                        unCheckedChildren={'O'}
+                        defaultChecked={false}
+                        style={{ marginBottom: '5px', marginRight: '7px'  }}
+                        onChange={() => {{ if(customPriceImpactEnabled) {
+                                    setCustomPriceImpactEnabled(false)
+                                    setPriceImpact(0)
+                                } else {
+                                    setCustomPriceImpactEnabled(true)
+                                }}}
+                        } />
+                <span className={'antd-switch-desc'}> Use custom price impact</span>
+            </Row>
 
             {asset1 &&
                 <>
                     { !approved && asset0.name !== 'Ether' && amount0 > 0  &&
                         <>
-                            <Row>
+                            <Row style={{ marginBottom: '1.33rem' }}>
                                 <Col xs={24}>
                                     <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
                                     <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE >></Button>

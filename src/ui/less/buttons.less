@@ -39,3 +39,24 @@
 .ant-btn-disabled.active, .ant-btn.disabled.active, .ant-btn[disabled].active {
   color: rgba(208, 152, 0, 0.45);
 }
+
+.ant-switch {
+  background: #000;
+  .ant-switch-inner {
+    margin-bottom: 0;
+    line-height: 0;
+  }
+  &::after {
+    background: #fff;
+  }
+  &.ant-switch-checked {
+    background: #d09800;
+    &::after {
+      background: #000;
+    }
+  }
+}
+
+.antd-switch-desc {
+  font-size: 1rem;
+}

@@ -126,6 +126,23 @@ span.ant-radio + * {
   border: solid 2px #D09800;
 }
 
+.ant-slider-disabled {
+ .ant-slider-rail {
+    background-color: #000;
+  }
+  .ant-slider-handle {
+    background-color: #D09800;
+  }
+  &:hover .ant-slider-rail {
+    background-color: #000;
+  }
+}
+
+.ant-slider-disabled .ant-slider-rail,
+.ant-slider-disabled .ant-slider:hover .ant-slider-rail {
+  background-color: #000;
+}
+
 .ant-input-number {
   border: 1px solid #D09800;
   color: #bfbfbf;
