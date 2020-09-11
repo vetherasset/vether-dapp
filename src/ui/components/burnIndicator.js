@@ -4,7 +4,7 @@ import Web3 from "web3"
 import { Progress } from 'antd'
 import { getSecondsToGo } from "../../common/utils"
 
-const Clock = memo((props) => {
+const Clock = (props) => {
     const [countdown, setCountdown] = useState(0)
     const time = new Date(countdown * 1000).toISOString().substr(11, 8)
 
@@ -30,15 +30,25 @@ const Clock = memo((props) => {
     }, [countdown])
 
 
-    let style = {...props.style || {}}
-    style.textAlign = 'center'
-    style.marginBottom = "2.99rem"
-    if (props.fontSize) style.fontSize = props.fontSize
+    let title = {...props.title || {}}
+    title.textAlign = 'center'
+    title.marginBottom = "2.99rem"
+    if (props.titleFontSize) title.fontSize = props.titleFontSize
+
+    let alt = {...props.alt || {}}
+    alt.textAlign = 'right'
+    alt.display = 'block'
+    alt.marginRight = '101px'
+    alt.color = defaults.color.gray
+    if (props.altFontSize) alt.fontSize = props.altFontSize
 
     return (
-        <p style={style}>{time}</p>
+        <>
+            <span style={alt}>Remaining Time</span>
+            <p style={title}>{time}</p>
+        </>
     )
-})
+}
 
 const ProgressBar = () => {
     const [countdown, setCountdown] = useState(0)
@@ -303,7 +313,7 @@ export const BurnIndicator = memo((props) => {
 
     return (
         <>
-            <Clock fontSize={props.fontSize} />
+            <Clock titleFontSize={props.titleFontSize} />
             <Canvas scale={props.scale} />
             <ProgressBar/>
         </>
