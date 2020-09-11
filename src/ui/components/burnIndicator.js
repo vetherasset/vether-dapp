@@ -287,7 +287,7 @@ export const BurnIndicator = memo((props) => {
         return new Fire(fireCanvas.current, {
             backgroundColor: defaults.color.dark,
             scale: props.scale,
-            colorStopSetName: "purple"
+            colorStopSetName: "original"
         })
     }
 
