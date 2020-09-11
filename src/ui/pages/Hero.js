@@ -159,7 +159,7 @@ const Hero = () => {
 								<NumberTop value={currency(price.veth.implied.usd)} alt={'implied value today'} />
 							</Col>
 							<Col sm={8}>
-								<NumberTop value={distribution.emission} alt={'current emission'} />
+								<NumberTop value={distribution.emission} alt={'current daily emission'} />
 							</Col>
 						</Row>
 
