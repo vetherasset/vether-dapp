@@ -4,7 +4,7 @@ import Web3 from "web3"
 
 import { currency, getBN } from "../../common/utils"
 import { Col, Slider, InputNumber, Row, Select, Tooltip } from "antd"
-import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined } from '@ant-design/icons'
+import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
 
 export const AddLiquidityTable = (props) => {
@@ -37,78 +37,66 @@ export const AddLiquidityTable = (props) => {
     const { Option } = Select
 
     useEffect(() => {
-        connect()
+        approve()
         // eslint-disable-next-line
     }, [])
 
-    const connect = async () => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if (accountConnected) {
-            const accounts = await window.web3.eth.getAccounts()
-            const address = accounts[0]
-            checkApproval(address)
-        }
-    }
-
-    const checkApproval = async (address) => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if (accountConnected){
-            const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-            const from = address
-            const spender = defaults.vader.router.address
-            const approval = await vether.methods.allowance(from, spender).call()
-            const vethBalance = await vether.methods.balanceOf(address).call()
-            if (+approval >= +vethBalance && +vethBalance >= 0) {
-                setApproved(true)
-                if(approveFlag) setApproveFlag(false)
-            } else {
-                setApproved(false)
+    const approve = async () => {
+        try {
+            if (account.address) {
+                const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+                const spender = defaults.vader.router.address
+                const approval = await vether.methods.allowance(account.address, spender).call()
+                const vethBalance = await vether.methods.balanceOf(account.address).call()
+                if (+approval >= +vethBalance && +vethBalance >= 0) {
+                    setApproved(true)
+                    if(approveFlag) setApproveFlag(false)
+                } else {
+                    setApproved(false)
+                }
             }
+        } catch (err) {
+            console.log(err)
         }
     }
 
     const unlockToken = async () => {
-        setApproveFlag(true)
-        const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-        const fromAcc = account.address
-        const spender = defaults.vader.router.address
-        const value = getBN(1000000 * 10 ** 18).toString()
-        await vether.methods.approve(spender, value).send({ from: fromAcc })
-        checkApproval(account.address)
+        try {
+            setApproveFlag(true)
+            const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+            const value = getBN(defaults.vether.supply * 10 ** 18).toString()
+            await vether.methods.approve(defaults.vader.router.address, value).send({ from: account.address })
+            approve(account.address)
+        } catch (err) {
+            if(approveFlag) setApproveFlag(false)
+            console.log(err)
+        }
     }
 
     const stake = async () => {
-        const fromAcc = account.address
-        let amountVeth
-        let amountEth
-        if (asset0.name === 'Vether') {
-            amountVeth = Web3.utils.toWei(amount0.toString())
-            amountEth = Web3.utils.toWei(amount1.toString())
-        } else {
-            amountVeth = Web3.utils.toWei(amount1.toString())
-            amountEth = Web3.utils.toWei(amount0.toString())
-        }
-        const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
-        await vaderRouter.methods.stake(amountVeth, amountEth, defaults.vader.pools.eth).send({
-            value: amountEth,
-            from: fromAcc,
-            gasPrice: '',
-            gas: ''
-        })
-    }
-
-    const onAssetChange = (value) => {
-        setAsset0(assets[value])
-        addAnotherAsset(value)
-    }
-
-    const addAnotherAsset = (value) => {
-        if(value === 0) {
-            setAsset1(assets[1])
-        } else {
-            setAsset1(assets[0])
+        try {
+            const fromAcc = account.address
+            let amountVeth
+            let amountEth
+            if (asset0.name === 'Vether') {
+                amountVeth = Web3.utils.toWei(amount0.toString())
+                amountEth = Web3.utils.toWei(amount1.toString())
+            } else {
+                amountVeth = Web3.utils.toWei(amount1.toString())
+                amountEth = Web3.utils.toWei(amount0.toString())
+            }
+            const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
+            await vaderRouter.methods.stake(amountVeth, amountEth, defaults.vader.pools.eth).send({
+                value: amountEth,
+                from: fromAcc,
+                gasPrice: '',
+                gas: ''
+            })
+        } catch (err) {
+            console.log(err)
         }
     }
+
 
     const onAsset0amountChange = (value) => {
         if (isNaN(value)) {
@@ -124,24 +112,26 @@ export const AddLiquidityTable = (props) => {
         setAmount1(value)
     }
 
+    console.log(asset0)
+    console.log(asset1)
+
     return (
         <>
-            <h2 style={{ fontStyle: 'italic' }}>Select asset to provide.</h2>
-            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Select an asset you would like to provide. Vether pool is non-proportional. Unlike Uniswap, where you need to provide<br/>
-                an equal proportion of both assets, Vether pools allow you to provide liquidity in unequal proportions.</LabelGrey>
+            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Select an asset you would like to provide. Vether pool gives you different options to do so. Unlike traditional AMM pools,<br/>where you can provide only
+                an equal proportion of both assets, Vether pool optionally allows you to provide liquidity<br/> in unequal proportions. The default and recommended method is to provide both assets proportionally.</LabelGrey>
 
             <Row style={{ marginBottom: '1.33rem' }}>
-                <Col lg={4} xs={10}>
+                <Col lg={3} md={4} xs={7}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Asset</Label>
-                    <Select size={'large'} placeholder="Select" onChange={onAssetChange} style={{ width: 135 }}>
+                    <Select size={'large'} placeholder="Select" onChange={(value => setAsset0(value))} style={{ width: '100%' }}>
                         {assets.map((asset, index) => {
                             return(
-                                <Option value={index} key={index}>{asset.name}</Option>
+                                <Option value={asset.name} key={index}>{asset.name}</Option>
                             )
                         })}
                     </Select>
                 </Col>
-                <Col lg={5} xs={9}>
+                <Col lg={6} md={7} xs={12} style={{ paddingLeft: '31px'}}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
                     {asset0
                         ? <InputNumber min={0}
@@ -156,27 +146,42 @@ export const AddLiquidityTable = (props) => {
                 </Col>
             </Row>
 
+            <Row style={{ marginBottom: '1.33rem' }}>
+                <Col lg={3} md={4} xs={7} style={{ textAlign: 'right', marginLeft: '22.5px' }}>
+                    <PlusOutlined style={{ margin: 0, fontSize: '0.8rem' }}/>
+                </Col>
+            </Row>
+
+            <Row style={{ marginBottom: '1.33rem' }}>
+                <Col lg={3} md={4} xs={7}>
+                    <Label display="block" style={{marginBottom: '0.55rem'}}>Asset</Label>
+                    <Select size={'large'} placeholder="Select" onChange={(value => setAsset1(value))} style={{ width: '100%' }}>
+                        {assets.map((asset, index) => {
+                            return(
+                                <Option value={asset.name} key={index}>{asset.name}</Option>
+                            )
+                        })}
+                    </Select>
+                </Col>
+                <Col lg={6} md={7} xs={12} style={{ paddingLeft: '31px'}}>
+                    <Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
+                    {asset1
+                        ? <InputNumber min={0}
+                                       step={0.1}
+                                       defaultValue="0"
+                                       size={'large'}
+                                       style={{ marginBottom: 10, width: '100%' }}
+                                       onChange={onAsset1amountChange}
+                                       value={amount1}/>
+                        : <InputNumber size={'large'} style={{ marginBottom: 10 ,width: '100%' }} disabled/>
+                    }
+                </Col>
+            </Row>
+
 
 
             {asset1 &&
                 <>
-                    <h2 style={{ fontStyle: 'italic' }}>Would you like to stake {asset1.name} as well?</h2>
-                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You may provide both assets in just one transaction, whilst this is not required.<br/>
-                        If you don't want to add {asset1.name} just leave following amount at zero.</LabelGrey>
-                    <Row style={{ marginBottom: '1.33rem' }}>
-                        <Col lg={4} xs={9}>
-                            <Label display="block" style={{marginBottom: '0.55rem'}}>Amount</Label>
-                            <InputNumber min={0}
-                                         step={0.1}
-                                         defaultValue="0"
-                                         size={'large'}
-                                         style={{ marginBottom: 10, width: '100%' }}
-                                         onChange={onAsset1amountChange}
-                                         value={amount1}
-                            />
-                        </Col>
-                    </Row>
-
                     { !approved && asset0.name !== 'Ether' && amount0 > 0  &&
                         <>
                             <Row>

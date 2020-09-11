@@ -159,7 +159,7 @@ const Hero = () => {
 								<NumberTop value={currency(price.veth.implied.usd)} alt={'implied value today'} />
 							</Col>
 							<Col sm={8}>
-								<NumberTop value={distribution.emission} alt={'current emission'} />
+								<NumberTop value={distribution.emission} alt={'current daily emission'} />
 							</Col>
 						</Row>
 
@@ -177,8 +177,8 @@ const Hero = () => {
 						<NumberBottom value={'1,000,000'} alt={'TOTAL SUPPLY'} />
 					</Col>
 
-					<Col lg={9} style={{ paddingTop: '36px' }}>
-						<BurnIndicator scale={8} fontSize={'3.33rem'} />
+					<Col lg={9}>
+						<BurnIndicator scale={8} titleFontSize={'3.33rem'} />
 					</Col>
 				</Row>
 		</>
