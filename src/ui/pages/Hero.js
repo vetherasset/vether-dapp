@@ -148,7 +148,7 @@ const Hero = () => {
 							<Col sm={8}>
 								<NumberTop
 									value={currency(distribution.currentBurn, 0, 2, 'ETH')}
-									alt={'value burnt today'} />
+									alt={'total value burnt today'} />
 							</Col>
 							<Col sm={8}>
 								<NumberTop value={currency(price.veth.implied.usd)} alt={'implied value today'} />
