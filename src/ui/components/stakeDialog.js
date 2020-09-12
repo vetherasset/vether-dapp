@@ -4,7 +4,13 @@ import Web3 from "web3"
 
 import { currency, getBN } from "../../common/utils"
 import { Col, Slider, Switch, InputNumber, Row, Select, Tooltip } from "antd"
-import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import {
+    LoadingOutlined,
+    QuestionCircleOutlined,
+    CheckCircleOutlined,
+    PlusOutlined,
+    ExclamationCircleOutlined
+} from '@ant-design/icons'
 import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
 import { getETHPrice } from "../../client/market"
 import { getVetherPrice } from "../../client/web3"
@@ -13,11 +19,12 @@ export const AddLiquidityTable = (props) => {
 
     const account = props.accountData
 
+    const base = {
+        name: 'Vether',
+        symbol: 'VETH'
+    }
+
     const assets = [
-        {
-            name: 'Vether',
-            symbol: 'VETH',
-        },
         {
             name: 'Ether',
             symbol: 'Ξ'
@@ -33,14 +40,16 @@ export const AddLiquidityTable = (props) => {
         }
     })
 
-    const [asset0, setAsset0] = useState("")
+    const [asset0, setAsset0] = useState(base.name)
     const [amount0, setAmount0] = useState(0)
 
-    const [asset1, setAsset1] = useState("")
+    const [asset1, setAsset1] = useState('Ether')
     const [amount1, setAmount1] = useState(0)
 
     const [customPriceImpactEnabled, setCustomPriceImpactEnabled] = useState(false)
     const [priceImpact, setPriceImpact] = useState(0)
+    const orderPrice = isFinite((amount1+poolData.tokenAmt) / (amount0+poolData.baseAmt))
+        ? (amount1+poolData.tokenAmt) / (amount0+poolData.baseAmt) : price.veth.eth
 
     const [approved, setApproved] = useState(true)
     const [approveFlag, setApproveFlag] = useState(null)
@@ -164,18 +173,10 @@ export const AddLiquidityTable = (props) => {
         if(asset0 === 'Vether') {
             if (p > 0) {
                 p = Number(price.veth.eth) + Number(p)
-                setAmount1(p * (poolData.baseAmt + amount0))
+                setAmount1((p * (poolData.baseAmt + amount0)) - poolData.tokenAmt)
             } else if (p < 0) {
                 p = Number(price.veth.eth) + Number(p)
-                setAmount0((poolData.tokenAmt + amount1) / p)
-            }
-        } else {
-            if (p > 0) {
-                p = Number(price.veth.eth) + Number(p)
-                setAmount0(p * (poolData.baseAmt + amount1))
-            } else if (p < 0) {
-                p = Number(price.veth.eth) + Number(p)
-                setAmount1((poolData.tokenAmt + amount0) / p)
+                setAmount0(((poolData.tokenAmt + amount1) / p) - poolData.baseAmt)
             }
         }
     }
@@ -210,24 +211,18 @@ export const AddLiquidityTable = (props) => {
 
     return (
         <>
-            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Select an asset you would like to provide. Vether pool gives you different options to do so. Unlike traditional AMM pools,<br/>where you can provide only
-                an equal proportion of both assets, Vether pool optionally allows you to provide liquidity<br/> in unequal proportions. The default and recommended method is to provide both assets proportionally.</LabelGrey>
+            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Vether pool gives you different options to provide liquidity. The default and recommended method is to provide both assets proportionally.<br/>
+            Unlike traditional AMM pools, Vether pool optionally allows you to provide in unequal proportions.</LabelGrey>
 
             <Row style={{ marginBottom: '0.7rem' }}>
                 <Col lg={3} md={4} xs={7}>
-                    <Label display="block" style={{marginBottom: '0.55rem'}}>Asset</Label>
-                    <Select size={'large'} placeholder="Select" onChange={(value) => setAsset0(value)} style={{ width: '100%' }}>
-                        {assets.filter((asset) => {
-                            if(asset1) {
-                                return (asset.name !== asset1)
-                            } else {
-                                return (asset)
-                            }
-                        }).map((asset, index) => {
-                            return (
-                                <Option value={asset.name} key={index}>{asset.name}</Option>
-                            )
-                        })}
+                    <Label display="block" style={{marginBottom: '0.55rem'}}>Base Asset</Label>
+                    <Select size={'large'}
+                            placeholder="Select"
+                            defaultValue={base.name}
+                            onChange={(value) => setAsset0(value)}
+                            style={{ width: '100%' }}>
+                                <Option value={base.name} key={1}>{base.name}</Option>
                     </Select>
                 </Col>
                 <Col lg={6} md={7} xs={12} style={{ paddingLeft: '31px'}}>
@@ -254,7 +249,7 @@ export const AddLiquidityTable = (props) => {
             <Row style={{ marginBottom: '1.33rem' }}>
                 <Col lg={3} md={4} xs={7}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Asset</Label>
-                    <Select size={'large'} placeholder="Select" onChange={(value) => setAsset1(value)} style={{ width: '100%' }}>
+                    <Select size={'large'} placeholder="Select" defaultValue={'Ether'} onChange={(value) => setAsset1(value)} style={{ width: '100%' }}>
                         {assets.filter((asset) => {
                             if(asset0) {
                                 return (asset.name !== asset0)
@@ -283,38 +278,75 @@ export const AddLiquidityTable = (props) => {
                 </Col>
             </Row>
 
-            <Row style={{ marginBottom: '1.33rem' }}>
-                <Col lg={24}>
-                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Set custom price impact if you want stake non-proportionally. Otherwise leave following without change.</LabelGrey>
-                </Col>
-                <Col lg={9}>
-                    <Label display="block" style={{marginBottom: '0.55rem'}}>Price Impact</Label>
-                    <Col style={{ padding: '0 17px' }}>
-                        <Slider marks={rail}
-                                included={false}
-                                min={-99}
-                                max={100}
-                                value={priceImpact}
-                                onChange={onPriceImpactChange}
-                                {...(customPriceImpactEnabled === false && { disabled: true })} />
-                    </Col>
-                </Col>
-            </Row>
-
             <Row style={{ paddingLeft: '5px', marginBottom: '1.66rem' }}>
                 <Switch checkedChildren={'I'}
                         unCheckedChildren={'O'}
                         defaultChecked={false}
                         style={{ marginBottom: '5px', marginRight: '7px'  }}
                         onChange={() => { if(customPriceImpactEnabled) {
-                                    setCustomPriceImpactEnabled(false)
-                                    setPriceImpact(0)
-                                } else {
-                                    setCustomPriceImpactEnabled(true)
-                                }}
+                            setCustomPriceImpactEnabled(false)
+                        } else {
+                            setCustomPriceImpactEnabled(true)
+                        }}
                         } />
-                <span className={'antd-switch-desc'}> Use custom price impact</span>
+                <span className={'antd-switch-desc'}>Allow custom proportion</span>
             </Row>
+
+            {customPriceImpactEnabled &&
+                <>
+                    <Row style={{ marginBottom: '1.66rem' }}>
+                        <Col lg={24}>
+                            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You're now able to enter custom sizes. Your input can be adjusted by desired price impact.</LabelGrey>
+                        </Col>
+                        <Col lg={9}>
+                            <Label display="block" style={{marginBottom: '0.55rem'}}>Price Impact</Label>
+                            <Col style={{ padding: '0 17px' }}>
+                                <Slider marks={rail}
+                                        included={false}
+                                        min={-99}
+                                        max={100}
+                                        step={0.1}
+                                        value={priceImpact}
+                                        onChange={onPriceImpactChange}
+                                        {...(customPriceImpactEnabled === false && { disabled: true })} />
+                            </Col>
+                        </Col>
+                    </Row>
+                </>
+            }
+
+            <Row style={{ marginBottom: '1.66rem' }}>
+                <Col lg={9}>
+                    <Label display="block" style={{marginBottom: '0.55rem'}}>Summary</Label>
+                    <Row>
+                        <Col span={12}>
+                            Final Price&nbsp;<Tooltip placement="right" title="By providing such liquidity size, the price will change to this ratio.">
+                            <QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
+                        </Tooltip>
+                        </Col>
+                        <Col span={12} style={{ textAlign: 'right' }}>
+                            {currency(orderPrice, 0, 5, 'ETH')}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            Price Impact&nbsp;<Tooltip placement="right" title="How much will the price change by providing entered size of liquidity.">
+                            <QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
+                        </Tooltip>
+                        </Col>
+                        <Col span={12} style={{ textAlign: 'right' }}>
+                            {(((orderPrice-price.veth.eth)/price.veth.eth)*100).toFixed(2)}%
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
+            { (Number(orderPrice)).toFixed(5) !== (Number(price.veth.eth)).toFixed(5) &&
+            <>
+                <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
+                    <ExclamationCircleOutlined style={{ marginBottom: '0' }}/>&nbsp; You've set a custom ratio. Double check your final impact.
+                </LabelGrey>
+            </>
+            }
 
             {asset1 &&
                 <>
