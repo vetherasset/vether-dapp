@@ -45,7 +45,6 @@ export const AddLiquidityTable = (props) => {
     const orderPrice = isFinite((amount1+poolData.tokenAmt) / (amount0+poolData.baseAmt))
         ? (amount1+poolData.tokenAmt) / (amount0+poolData.baseAmt) : price.veth.eth
 
-    const [provider, setProvider] = useState(false)
     const [approved, setApproved] = useState(true)
     const [approveFlag, setApproveFlag] = useState(null)
 
@@ -77,9 +76,7 @@ export const AddLiquidityTable = (props) => {
 
     const approve = async () => {
         try {
-            const account = (await window.web3.eth.getAccounts())[0]
-            if (account) {
-                setProvider(true)
+            if (account.address) {
                 const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
                 const spender = defaults.vader.router.address
                 const approval = await vether.methods.allowance(account.address, spender).call()
@@ -329,7 +326,7 @@ export const AddLiquidityTable = (props) => {
                         </Tooltip>
                         </Col>
                         <Col span={12} style={{ textAlign: 'right' }}>
-                            {isFinite((((orderPrice - price.veth.eth)/price.veth.eth)*100)) ? (((orderPrice - price.veth.eth)/price.veth.eth)*100) : 0}%
+                            {isFinite((((orderPrice - price.veth.eth)/price.veth.eth)*100)) ? (((orderPrice - price.veth.eth)/price.veth.eth)*100).toFixed(2) : 0}%
                         </Col>
                     </Row>
                 </Col>
@@ -343,7 +340,7 @@ export const AddLiquidityTable = (props) => {
                 </>
             }
 
-            { provider && !approved && amount0 > 0  &&
+            { !approved && amount0 > 0  &&
                 <>
                     <Row style={{ marginBottom: '1.33rem' }}>
                         <Col xs={24}>
@@ -362,7 +359,7 @@ export const AddLiquidityTable = (props) => {
                 </>
             }
 
-            { provider && approved &&
+            { approved &&
                 <>
                     { amount0 > 0 || amount1 > 0
                         ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
