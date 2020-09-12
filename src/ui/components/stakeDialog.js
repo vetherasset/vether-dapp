@@ -171,7 +171,6 @@ export const AddLiquidityTable = (props) => {
         '-99': {
             style: {
                 color: '#fff',
-                background: defaults.color.accent,
                 borderRadius: '50%',
                 marginTop: 8,
                 width: 24,
@@ -183,7 +182,6 @@ export const AddLiquidityTable = (props) => {
         '100': {
             style: {
                 color: '#fff',
-                background: defaults.color.accent,
                 borderRadius: '50%',
                 marginTop: 8,
                 width: 24,
@@ -306,7 +304,7 @@ export const AddLiquidityTable = (props) => {
                 </>
             }
 
-            <Row style={{ marginBottom: '1.66rem' }}>
+            <Row style={{ marginBottom: '1.66rem', padding: '0 3px' }}>
                 <Col lg={9}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Summary</Label>
                     <Row>
