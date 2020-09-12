@@ -134,12 +134,7 @@ const Hero = () => {
 	}
 
 	useEffect(() => {
-		const body = document.getElementsByTagName('body')[0]
-		body.classList.add('dark')
 		loadData()
-		return () => {
-			body.classList.remove('dark')
-		}
 		// eslint-disable-next-line
 	}, [])
 

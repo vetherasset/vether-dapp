@@ -119,7 +119,8 @@ export const BurnIndicator = memo((props) => {
         })(Direction || (Direction = {}))
         function Fire(canvas, options) {
             this.COLOR_STOP_SETS = {
-                "original": ["#ffffff", "#ffff00", "#ffd700", "#ff69b4", "#ff6633", "#483d8b"],
+                "original": ["#97948e", "#ffffff", '#ffba00', "#d09800", "#d09600", "#000"],
+                "yellow": ["#ffffff", "#ffff00", "#ffd700", "#ff69b4", "#ff6633", "#483d8b"],
                 "magical": ["#ffffff", "#d7191c", "#fdae61", "#ffffbf", "#abd9e9", "#2c7bb6"],
                 "magical2": ["#ffffff", "#d53e4f", "#fc8d59", "#fee08b", "#ffffbf", "#e6f598", "#99d594", "#3288bd"],
                 "reddish": ["#ffffff", "#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
@@ -285,9 +286,9 @@ export const BurnIndicator = memo((props) => {
 
     const fireplace = () => {
         return new Fire(fireCanvas.current, {
-            backgroundColor: defaults.color.dark,
+            backgroundColor: defaults.color.background,
             scale: props.scale,
-            colorStopSetName: "purple"
+            colorStopSetName: "original"
         })
     }
 
