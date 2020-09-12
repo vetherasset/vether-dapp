@@ -4,8 +4,10 @@ import Web3 from "web3"
 
 import { currency, getBN } from "../../common/utils"
 import { Col, Slider, Switch, InputNumber, Row, Select, Tooltip } from "antd"
-import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined, PlusOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons'
+import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
+import { getETHPrice } from "../../client/market"
+import { getVetherPrice } from "../../client/web3"
 
 export const AddLiquidityTable = (props) => {
 
@@ -14,7 +16,7 @@ export const AddLiquidityTable = (props) => {
     const assets = [
         {
             name: 'Vether',
-            symbol: 'VETH'
+            symbol: 'VETH',
         },
         {
             name: 'Ether',
@@ -22,10 +24,19 @@ export const AddLiquidityTable = (props) => {
         }
     ]
 
-    const [asset0, setAsset0] = useState(null)
+    const [poolData, setPoolData] = useState({ baseAmt: 0, tokenAmt: 0 })
+    const [price, setPrice] = useState({
+        eth: { usd: 0 },
+        veth: {
+            eth: 0,
+            usd: 0
+        }
+    })
+
+    const [asset0, setAsset0] = useState("")
     const [amount0, setAmount0] = useState(0)
 
-    const [asset1, setAsset1] = useState(null)
+    const [asset1, setAsset1] = useState("")
     const [amount1, setAmount1] = useState(0)
 
     const [customPriceImpactEnabled, setCustomPriceImpactEnabled] = useState(false)
@@ -39,10 +50,26 @@ export const AddLiquidityTable = (props) => {
 
     const { Option } = Select
 
-    useEffect(() => {
-        approve()
-        // eslint-disable-next-line
-    }, [])
+    const loadData = async () => {
+        const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+        const utils = new web3.eth.Contract(defaults.vader.utils.abi, defaults.vader.utils.address)
+        const poolData = await utils.methods.getPoolData(defaults.vader.pools.eth).call()
+        setPoolData({
+            baseAmt: Number(Web3.utils.fromWei(poolData.baseAmt)),
+            tokenAmt: Number(Web3.utils.fromWei(poolData.tokenAmt))
+        })
+        const ethUsd = await getETHPrice()
+        const vethEth = await getVetherPrice()
+        const vethUsd = vethEth * ethUsd
+        const priceData = {
+            eth: { usd: ethUsd },
+            veth: {
+                eth: vethEth,
+                usd: vethUsd
+            }
+        }
+        setPrice(priceData)
+    }
 
     const approve = async () => {
         try {
@@ -81,7 +108,7 @@ export const AddLiquidityTable = (props) => {
             const fromAcc = account.address
             let amountVeth
             let amountEth
-            if (asset0.name === 'Vether') {
+            if (asset0 === 'Vether') {
                 amountVeth = Web3.utils.toWei(amount0.toString())
                 amountEth = Web3.utils.toWei(amount1.toString())
             } else {
@@ -100,10 +127,14 @@ export const AddLiquidityTable = (props) => {
         }
     }
 
-
     const onAsset0amountChange = (value) => {
-        if (isNaN(value)) {
-            return
+        if (isNaN(value)) return
+        if(!customPriceImpactEnabled){
+            if(asset0 === 'Vether') {
+                setAmount1(value * price.veth.eth)
+            } else {
+                setAmount1(value / price.veth.eth)
+            }
         }
         setAmount0(value)
     }
@@ -112,15 +143,49 @@ export const AddLiquidityTable = (props) => {
         if (isNaN(value)) {
             return
         }
+        if(!customPriceImpactEnabled){
+            if(asset1 === 'Vether') {
+                setAmount0(value * price.veth.eth)
+            } else {
+                setAmount0(value / price.veth.eth)
+            }
+        }
         setAmount1(value)
     }
 
-    const ratio = {
-        '-100': {
+    const onPriceImpactChange = (value) => {
+        if (isNaN(value)) {
+            return
+        }
+        loadData()
+        setPriceImpact(value)
+        let p = price.veth.eth
+        p = (p * value) / 100
+        if(asset0 === 'Vether') {
+            if (p > 0) {
+                p = Number(price.veth.eth) + Number(p)
+                setAmount1(p * (poolData.baseAmt + amount0))
+            } else if (p < 0) {
+                p = Number(price.veth.eth) + Number(p)
+                setAmount0((poolData.tokenAmt + amount1) / p)
+            }
+        } else {
+            if (p > 0) {
+                p = Number(price.veth.eth) + Number(p)
+                setAmount0(p * (poolData.baseAmt + amount1))
+            } else if (p < 0) {
+                p = Number(price.veth.eth) + Number(p)
+                setAmount1((poolData.tokenAmt + amount0) / p)
+            }
+        }
+    }
+
+    const rail = {
+        '-99': {
             style: {
                 color: '#fff'
             },
-            label: <strong>-100%</strong>
+            label: <strong>-99%</strong>
         },
         '0': {
             style: {
@@ -136,10 +201,12 @@ export const AddLiquidityTable = (props) => {
         }
     }
 
-    console.log(asset0)
-    console.log(asset1)
-    console.log(customPriceImpactEnabled)
-    console.log(priceImpact)
+    useEffect(() => {
+        loadData()
+        approve()
+        // eslint-disable-next-line
+    }, [])
+
 
     return (
         <>
@@ -149,9 +216,15 @@ export const AddLiquidityTable = (props) => {
             <Row style={{ marginBottom: '0.7rem' }}>
                 <Col lg={3} md={4} xs={7}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Asset</Label>
-                    <Select size={'large'} placeholder="Select" onChange={(value => setAsset0(value))} style={{ width: '100%' }}>
-                        {assets.map((asset, index) => {
-                            return(
+                    <Select size={'large'} placeholder="Select" onChange={(value) => setAsset0(value)} style={{ width: '100%' }}>
+                        {assets.filter((asset) => {
+                            if(asset1) {
+                                return (asset.name !== asset1)
+                            } else {
+                                return (asset)
+                            }
+                        }).map((asset, index) => {
+                            return (
                                 <Option value={asset.name} key={index}>{asset.name}</Option>
                             )
                         })}
@@ -166,8 +239,8 @@ export const AddLiquidityTable = (props) => {
                                        size={'large'}
                                        style={{ marginBottom: 10, width: '100%' }}
                                        onChange={onAsset0amountChange}
-                                       value={amount0}/>
-                        : <InputNumber size={'large'} style={{ marginBottom: 10 ,width: '100%' }} disabled/>
+                                       value={amount0} />
+                        : <InputNumber size={'large'} style={{ marginBottom: 10 ,width: '100%' }} disabled />
                     }
                 </Col>
             </Row>
@@ -181,9 +254,15 @@ export const AddLiquidityTable = (props) => {
             <Row style={{ marginBottom: '1.33rem' }}>
                 <Col lg={3} md={4} xs={7}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Asset</Label>
-                    <Select size={'large'} placeholder="Select" onChange={(value => setAsset1(value))} style={{ width: '100%' }}>
-                        {assets.map((asset, index) => {
-                            return(
+                    <Select size={'large'} placeholder="Select" onChange={(value) => setAsset1(value)} style={{ width: '100%' }}>
+                        {assets.filter((asset) => {
+                            if(asset0) {
+                                return (asset.name !== asset0)
+                            } else {
+                                return (asset)
+                            }
+                        }).map((asset, index) => {
+                            return (
                                 <Option value={asset.name} key={index}>{asset.name}</Option>
                             )
                         })}
@@ -199,7 +278,7 @@ export const AddLiquidityTable = (props) => {
                                        style={{ marginBottom: 10, width: '100%' }}
                                        onChange={onAsset1amountChange}
                                        value={amount1}/>
-                        : <InputNumber size={'large'} style={{ marginBottom: 10 ,width: '100%' }} disabled/>
+                        : <InputNumber size={'large'} style={{ marginBottom: 10 ,width: '100%' }} disabled />
                     }
                 </Col>
             </Row>
@@ -211,12 +290,12 @@ export const AddLiquidityTable = (props) => {
                 <Col lg={9}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Price Impact</Label>
                     <Col style={{ padding: '0 17px' }}>
-                        <Slider marks={ratio}
+                        <Slider marks={rail}
                                 included={false}
-                                min={-100}
+                                min={-99}
                                 max={100}
                                 value={priceImpact}
-                                onChange={(value) => setPriceImpact(value)}
+                                onChange={onPriceImpactChange}
                                 {...(customPriceImpactEnabled === false && { disabled: true })} />
                     </Col>
                 </Col>
@@ -227,19 +306,19 @@ export const AddLiquidityTable = (props) => {
                         unCheckedChildren={'O'}
                         defaultChecked={false}
                         style={{ marginBottom: '5px', marginRight: '7px'  }}
-                        onChange={() => {{ if(customPriceImpactEnabled) {
+                        onChange={() => { if(customPriceImpactEnabled) {
                                     setCustomPriceImpactEnabled(false)
                                     setPriceImpact(0)
                                 } else {
                                     setCustomPriceImpactEnabled(true)
-                                }}}
+                                }}
                         } />
                 <span className={'antd-switch-desc'}> Use custom price impact</span>
             </Row>
 
             {asset1 &&
                 <>
-                    { !approved && asset0.name !== 'Ether' && amount0 > 0  &&
+                    { !approved && asset0 !== 'Ether' && amount0 > 0  &&
                         <>
                             <Row style={{ marginBottom: '1.33rem' }}>
                                 <Col xs={24}>
@@ -258,7 +337,7 @@ export const AddLiquidityTable = (props) => {
                         </>
                     }
 
-                    { !approved && asset1.name !== 'Ether' && amount1 > 0  &&
+                    { !approved && asset1 !== 'Ether' && amount1 > 0  &&
                         <>
                             <Row>
                                 <Col xs={24}>
@@ -277,9 +356,9 @@ export const AddLiquidityTable = (props) => {
                         </>
                     }
 
-                    { !approved && asset0.name === 'Vether' && amount0 === 0 &&
+                    { !approved && asset0 === 'Vether' && amount0 === 0 &&
                         <>
-                            {amount0 > 0 || amount1 > 0
+                            { amount0 > 0 || amount1 > 0
                                 ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
                                 : <Button backgroundColor="transparent" disabled>ADD >></Button>
                             }
@@ -287,7 +366,7 @@ export const AddLiquidityTable = (props) => {
                         </>
                     }
 
-                    { !approved && asset1.name === 'Vether' && amount1 === 0 &&
+                    { !approved && asset1 === 'Vether' && amount1 === 0 &&
                         <>
                             {amount0 > 0 || amount1 > 0
                                 ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
