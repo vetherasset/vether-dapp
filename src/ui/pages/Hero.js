@@ -21,6 +21,7 @@ const NumberTop = (props) => {
 		border: '1px solid',
 		borderRadius: 21,
 		borderColor: defaults.color.accent,
+		background: '#000'
 	}
 
 	const alt = {
