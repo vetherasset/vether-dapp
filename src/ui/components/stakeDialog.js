@@ -45,6 +45,7 @@ export const AddLiquidityTable = (props) => {
     const orderPrice = isFinite((amount1+poolData.tokenAmt) / (amount0+poolData.baseAmt))
         ? (amount1+poolData.tokenAmt) / (amount0+poolData.baseAmt) : price.veth.eth
 
+    const [provider, setProvider] = useState(false)
     const [approved, setApproved] = useState(true)
     const [approveFlag, setApproveFlag] = useState(null)
 
@@ -76,7 +77,9 @@ export const AddLiquidityTable = (props) => {
 
     const approve = async () => {
         try {
-            if (account.address) {
+            const account = (await window.web3.eth.getAccounts())[0]
+            if (account) {
+                setProvider(true)
                 const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
                 const spender = defaults.vader.router.address
                 const approval = await vether.methods.allowance(account.address, spender).call()
@@ -170,21 +173,26 @@ export const AddLiquidityTable = (props) => {
     const rail = {
         '-99': {
             style: {
-                color: '#fff'
+                color: '#fff',
+                background: defaults.color.accent,
+                borderRadius: '50%',
+                marginTop: 8,
+                width: 24,
+                height: 24
             },
-            label: <strong>-99%</strong>
+            label: <strong>-</strong>
         },
-        '0': {
-            style: {
-                color: '#fff'
-            },
-            label: <strong>0%</strong>
-        },
+        '0': {},
         '100': {
             style: {
-                color: '#fff'
+                color: '#fff',
+                background: defaults.color.accent,
+                borderRadius: '50%',
+                marginTop: 8,
+                width: 24,
+                height: 24
             },
-            label: <strong>100%</strong>
+            label: <strong>+</strong>
         }
     }
 
@@ -290,6 +298,7 @@ export const AddLiquidityTable = (props) => {
                                         included={false}
                                         min={-99}
                                         max={100}
+                                        tipFormatter={value => value + '%'}
                                         step={0.1}
                                         value={priceImpact}
                                         onChange={onPriceImpactChange}
@@ -320,88 +329,46 @@ export const AddLiquidityTable = (props) => {
                         </Tooltip>
                         </Col>
                         <Col span={12} style={{ textAlign: 'right' }}>
-                            {(((orderPrice-price.veth.eth)/price.veth.eth)*100).toFixed(2)}%
+                            {isFinite((((orderPrice - price.veth.eth)/price.veth.eth)*100)) ? (((orderPrice - price.veth.eth)/price.veth.eth)*100) : 0}%
                         </Col>
                     </Row>
                 </Col>
             </Row>
-            { (Number(orderPrice)).toFixed(5) !== (Number(price.veth.eth)).toFixed(5) &&
-            <>
-                <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
-                    <ExclamationCircleOutlined style={{ marginBottom: '0' }}/>&nbsp; You've set a custom ratio. Double check your final impact.
-                </LabelGrey>
-            </>
+            { (Number(orderPrice)).toFixed(5) !== (Number(isFinite(price.veth.eth) &&
+            price.veth.eth !== 0 ? price.veth.eth : Number(orderPrice))).toFixed(5) &&
+                <>
+                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
+                        <ExclamationCircleOutlined style={{ marginBottom: '0' }}/>&nbsp; You've set a custom ratio. Double check your final impact.
+                    </LabelGrey>
+                </>
             }
 
-            {asset1 &&
+            { provider && !approved && amount0 > 0  &&
                 <>
-                    { !approved && asset0 !== 'Ether' && amount0 > 0  &&
-                        <>
-                            <Row style={{ marginBottom: '1.33rem' }}>
-                                <Col xs={24}>
-                                    <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
-                                    <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE >></Button>
-                                    <Sublabel>ALLOW VETHER FOR STAKING</Sublabel>
-                                    {approveFlag &&
-                                    <>
-                                        {!approved &&
-                                        <LoadingOutlined style={{ marginBottom: 0 }} />
-                                        }
-                                    </>
-                                    }
-                                </Col>
-                            </Row>
-                        </>
-                    }
-
-                    { !approved && asset1 !== 'Ether' && amount1 > 0  &&
-                        <>
-                            <Row>
-                                <Col xs={24}>
-                                    <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
-                                    <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE >></Button>
-                                    <Sublabel>ALLOW VETHER FOR STAKING</Sublabel>
-                                    {approveFlag &&
-                                    <>
-                                        {!approved &&
-                                        <LoadingOutlined style={{ marginBottom: 0 }} />
-                                        }
-                                    </>
-                                    }
-                                </Col>
-                            </Row>
-                        </>
-                    }
-
-                    { !approved && asset0 === 'Vether' && amount0 === 0 &&
-                        <>
-                            { amount0 > 0 || amount1 > 0
-                                ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
-                                : <Button backgroundColor="transparent" disabled>ADD >></Button>
+                    <Row style={{ marginBottom: '1.33rem' }}>
+                        <Col xs={24}>
+                            <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
+                            <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE >></Button>
+                            <Sublabel>ALLOW VETHER FOR STAKING</Sublabel>
+                            {approveFlag &&
+                            <>
+                                {!approved &&
+                                <LoadingOutlined style={{ marginBottom: 0 }} />
+                                }
+                            </>
                             }
-                            <Sublabel>ADD LIQUIDITY TO THE POOL</Sublabel>
-                        </>
-                    }
+                        </Col>
+                    </Row>
+                </>
+            }
 
-                    { !approved && asset1 === 'Vether' && amount1 === 0 &&
-                        <>
-                            {amount0 > 0 || amount1 > 0
-                                ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
-                                : <Button backgroundColor="transparent" disabled>ADD >></Button>
-                            }
-                            <Sublabel>ADD LIQUIDITY TO THE POOL</Sublabel>
-                        </>
+            { provider && approved &&
+                <>
+                    { amount0 > 0 || amount1 > 0
+                        ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
+                        : <Button backgroundColor="transparent" disabled>ADD >></Button>
                     }
-
-                    { approved &&
-                        <>
-                            {amount0 > 0 || amount1 > 0
-                                ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
-                                : <Button backgroundColor="transparent" disabled>ADD >></Button>
-                            }
-                            <Sublabel>ADD LIQUIDITY TO THE POOL</Sublabel>
-                        </>
-                    }
+                    <Sublabel>ADD LIQUIDITY TO THE POOL</Sublabel>
                 </>
             }
         </>
