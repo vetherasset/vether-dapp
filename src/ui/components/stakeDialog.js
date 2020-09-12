@@ -4,13 +4,7 @@ import Web3 from "web3"
 
 import { currency, getBN } from "../../common/utils"
 import { Col, Slider, Switch, InputNumber, Row, Select, Tooltip } from "antd"
-import {
-    LoadingOutlined,
-    QuestionCircleOutlined,
-    CheckCircleOutlined,
-    PlusOutlined,
-    ExclamationCircleOutlined
-} from '@ant-design/icons'
+import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined, PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
 import { getETHPrice } from "../../client/market"
 import { getVetherPrice } from "../../client/web3"
@@ -114,20 +108,12 @@ export const AddLiquidityTable = (props) => {
 
     const stake = async () => {
         try {
-            const fromAcc = account.address
-            let amountVeth
-            let amountEth
-            if (asset0 === 'Vether') {
-                amountVeth = Web3.utils.toWei(amount0.toString())
-                amountEth = Web3.utils.toWei(amount1.toString())
-            } else {
-                amountVeth = Web3.utils.toWei(amount1.toString())
-                amountEth = Web3.utils.toWei(amount0.toString())
-            }
+            const amountVeth = Web3.utils.toWei(amount0.toString())
+            const amountEth = Web3.utils.toWei(amount1.toString())
             const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
             await vaderRouter.methods.stake(amountVeth, amountEth, defaults.vader.pools.eth).send({
                 value: amountEth,
-                from: fromAcc,
+                from: account.address,
                 gasPrice: '',
                 gas: ''
             })
@@ -211,8 +197,7 @@ export const AddLiquidityTable = (props) => {
 
     return (
         <>
-            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Vether pool gives you different options to provide liquidity. The default and recommended method is to provide both assets proportionally.<br/>
-            Unlike traditional AMM pools, Vether pool optionally allows you to provide in unequal proportions.</LabelGrey>
+            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Vether pool gives you different options to provide liquidity. Unlike traditional AMM pools, Vether pool optionally allows you<br/>to provide liquidity in unequal proportions. The default and recommended method is to provide both assets proportionally.</LabelGrey>
 
             <Row style={{ marginBottom: '0.7rem' }}>
                 <Col lg={3} md={4} xs={7}>
@@ -296,7 +281,7 @@ export const AddLiquidityTable = (props) => {
                 <>
                     <Row style={{ marginBottom: '1.66rem' }}>
                         <Col lg={24}>
-                            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You're now able to enter custom sizes. Your input can be adjusted by desired price impact.</LabelGrey>
+                            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>You're now able to enter custom size on each side. Your input can be adjusted by desired price impact.</LabelGrey>
                         </Col>
                         <Col lg={9}>
                             <Label display="block" style={{marginBottom: '0.55rem'}}>Price Impact</Label>
