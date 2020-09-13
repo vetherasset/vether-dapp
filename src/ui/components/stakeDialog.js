@@ -2,7 +2,7 @@ import React, { useEffect, useState} from "react"
 import defaults from "../../common/defaults"
 import Web3 from "web3"
 
-import { currency, getBN } from "../../common/utils"
+import {currency, getBN, percent} from "../../common/utils"
 import { Col, Slider, Switch, InputNumber, Row, Select, Tooltip } from "antd"
 import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined, PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
@@ -44,6 +44,9 @@ export const AddLiquidityTable = (props) => {
     const [priceImpact, setPriceImpact] = useState(0)
     const orderPrice = isFinite((amount1+poolData.tokenAmt) / (amount0+poolData.baseAmt))
         ? (amount1+poolData.tokenAmt) / (amount0+poolData.baseAmt) : price.veth.eth
+    let orderPriceImpact = isFinite((((orderPrice - price.veth.eth)/price.veth.eth)))
+        ? percent((orderPrice - price.veth.eth)/price.veth.eth) : 0
+    orderPriceImpact = orderPriceImpact === '-0.00%' ? '0.00%' : orderPriceImpact
 
     const [approved, setApproved] = useState(true)
     const [approveFlag, setApproveFlag] = useState(null)
@@ -324,7 +327,7 @@ export const AddLiquidityTable = (props) => {
                         </Tooltip>
                         </Col>
                         <Col span={12} style={{ textAlign: 'right' }}>
-                            {isFinite((((orderPrice - price.veth.eth)/price.veth.eth)*100)) ? (((orderPrice - price.veth.eth)/price.veth.eth)*100).toFixed(2) : 0}%
+                            {orderPriceImpact}
                         </Col>
                     </Row>
                 </Col>

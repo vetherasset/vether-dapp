@@ -68,6 +68,15 @@ export function currency(amount, minFractionDigits = 0, maxFractionDigits = 2, c
     return (cryptocurrency ? `${currencyValue.format(amount)}${String.fromCharCode(160)}${symbol}` : currencyValue.format(amount))
 }
 
+export function percent(amount, minFractionDigits = 0, maxFractionDigits = 2, locales = 'en-US') {
+    const options = {
+        style: 'percent',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }
+    return (new Intl.NumberFormat(locales, options).format(amount))
+}
+
 export function convertToTime(date) {
     return new Date(1000 * date).toLocaleTimeString("en-gb")
 }
