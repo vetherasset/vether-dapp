@@ -4,7 +4,7 @@ import defaults from "../../common/defaults"
 import Web3 from 'web3'
 
 import { Row, Col, Input, Tooltip } from 'antd'
-import { SwapOutlined, QuestionCircleOutlined, LoadingOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
+import { SwapOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Label, Sublabel, Button, Colour, LabelGrey } from '../components'
 
 import { getVetherPrice } from '../../client/web3.js'
@@ -53,15 +53,13 @@ export const SwapInterface = () => {
     }, [])
 
     const connect = async () => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if(accountConnected) {
-            const accounts = await window.web3.eth.getAccounts()
-            const address = accounts[0]
+        const account = (await window.web3.eth.getAccounts())[0]
+        if(account) {
             const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
-            const vetherContract = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-            loadAccountData(vetherContract, address)
-            setVetherContract(vetherContract)
-            checkApproval(address)
+            const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+            loadAccountData(vether, account)
+            setVetherContract(vether)
+            checkApproval(account)
             setConnected(true)
         } else {
             setConnected(false)
@@ -129,58 +127,59 @@ export const SwapInterface = () => {
         })
     }
 
-    const checkApproval = async (address) => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if(accountConnected){
-            const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-            const from = address
-            const spender = defaults.vader.router.address
-            const approval = await vether.methods.allowance(from, spender).call()
-            const vethBalance = await vether.methods.balanceOf(address).call()
-            if (+approval >= +vethBalance && +vethBalance >= 0) {
-                setApproved(true)
-                if(approveFlag) setApproveFlag(false)
-            } else {
-                setApproved(false)
+    const checkApproval = async () => {
+        try {
+            const account = (await window.web3.eth.getAccounts())[0]
+            if (account){
+                const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+                const approval = await vether.methods.allowance(account, defaults.vader.router.address).call()
+                const vethBalance = await vether.methods.balanceOf(account).call()
+                if (+approval >= +vethBalance && +vethBalance > 0) {
+                    setApproved(true)
+                } else {
+                    setApproved(false)
+                }
             }
+        } catch (err) {
+            console.log(err)
         }
     }
 
     const unlockToken = async () => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if(accountConnected){
-            setApproveFlag(true)
-            const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-            const from = account.address
-            const spender = defaults.vader.router.address
-            const value = getBN(1000000 * 10 ** 18).toString()
-            await vether.methods.approve(spender, value)
-                .send({
-                    from: from
-                })
-            checkApproval(account.address)
+        try {
+            const account = (await window.web3.eth.getAccounts())[0]
+            if (account) {
+                setApproveFlag(true)
+                const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+                const value = getBN(defaults.vether.supply * 10 ** 18).toString()
+                await vether.methods.approve(defaults.vader.router.address, value).send({ from: account })
+                checkApproval()
+            }
+        } catch (err) {
+            if(approveFlag) setApproveFlag(false)
+            console.log(err)
         }
     }
 
     const onEthAmountChange = e => {
         loadPoolData()
         const value = e.target.value
-        let valueInVeth = BN2Str(calcSwapOutput(Web3.utils.toWei(value), Web3.utils.toWei(poolData.eth), Web3.utils.toWei(poolData.veth)))
-        valueInVeth = +valueInVeth === Infinity || isNaN(valueInVeth) ? 0 : Web3.utils.fromWei(valueInVeth)
+        let valueInVeth = calcSwapOutput(Web3.utils.toWei(value), Web3.utils.toWei(poolData.eth), Web3.utils.toWei(poolData.veth))
+            valueInVeth = isFinite(+valueInVeth) ? Web3.utils.fromWei(BN2Str(valueInVeth)) : 0
         setEthAmount(value)
         setVethAmount("")
-        setVethAmountCalculated((+valueInVeth).toFixed(5))
+        setVethAmountCalculated(currency(valueInVeth, 0, 5, 'VETH').replace('VETH',''))
         calcTrade(value, valueInVeth)
     }
 
     const onVethAmountChange = e => {
         loadPoolData()
         const value = e.target.value
-        let valueInEth = BN2Str(calcSwapOutput(Web3.utils.toWei(value), Web3.utils.toWei(poolData.veth), Web3.utils.toWei(poolData.eth)))
-        valueInEth = +valueInEth === Infinity || isNaN(+valueInEth) ? 0 : Web3.utils.fromWei(valueInEth)
+        let valueInEth = calcSwapOutput(Web3.utils.toWei(value), Web3.utils.toWei(poolData.veth), Web3.utils.toWei(poolData.eth))
+            valueInEth = isFinite(+valueInEth) ? Web3.utils.fromWei(BN2Str(valueInEth)) : 0
         setVethAmount(value)
         setEthAmount("")
-        setEthAmountCalculated((+valueInEth).toFixed(5))
+        setEthAmountCalculated(currency(valueInEth, 0, 5, 'ETH').replace('Ξ',''))
         calcTrade(valueInEth, value)
     }
 
@@ -297,6 +296,14 @@ export const SwapInterface = () => {
                                     <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>
                                     <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
                                            placeholder={vethAmountCalculated} suffix="VETH"/>
+
+
+                                    { !approved && Number(vethAmount) === 0 &&
+                                        <>
+                                            <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>
+                                        </>
+                                    }
+
                                     { approved &&
                                         <>
                                             { vethAmount > 0
@@ -306,21 +313,15 @@ export const SwapInterface = () => {
                                         </>
                                     }
 
-                                    { connected && !approved && !approveFlag &&
+                                    { connected && !approved && vethAmount > 0 &&
                                         <>
                                             <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE VETHER >></Button>
                                         </>
                                     }
 
-                                    {connected && !approved && !approveFlag
+                                    {connected && !approved && vethAmount > 0
                                         ? <Sublabel>ALLOW VETHER FOR TRADES</Sublabel>
                                         : <Sublabel>SELL VETHER FOR ETH</Sublabel>
-                                    }
-
-                                    {connected && approveFlag &&
-                                        <>
-                                            <LoadingOutlined />
-                                        </>
                                     }
                                 </Col>
                             </Row>
