@@ -66,7 +66,7 @@ const Stake = () => {
 						  size={'large'} style={{ marginTop: 20, textAlign: "center" }}>
 						<TabPane tab="STAKE" key="1" style={{ textAlign: "left" }}>
 							<h2>ADD LIQUIDITY</h2>
-							<AddLiquidityTable id={1} accountData={account} />
+							<AddLiquidityTable id={1} />
 						</TabPane>
 						{account.isMember &&
 							<TabPane tab="SHARES" key="2" style={{ textAlign: "left" }}>

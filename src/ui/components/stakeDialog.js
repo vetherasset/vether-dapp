@@ -9,9 +9,7 @@ import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
 import { getETHPrice } from "../../client/market"
 import { getVetherPrice } from "../../client/web3"
 
-export const AddLiquidityTable = (props) => {
-
-    const account = props.accountData
+export const AddLiquidityTable = () => {
 
     const base = {
         name: 'Vether',
@@ -48,8 +46,8 @@ export const AddLiquidityTable = (props) => {
         ? percent((orderPrice - price.veth.eth)/price.veth.eth) : 0
     orderPriceImpact = orderPriceImpact === '-0.00%' ? '0.00%' : orderPriceImpact
 
-    const [approved, setApproved] = useState(true)
-    const [approveFlag, setApproveFlag] = useState(null)
+    const [approved, setApproved] = useState(false)
+    const [approveFlag, setApproveFlag] = useState(false)
 
     // const ethBalanceSpendable = (account.ethBalance - 0.1).toFixed(4) < 0 ?
     // 	0 : (account.ethBalance - 0.1).toFixed(4)
@@ -77,16 +75,15 @@ export const AddLiquidityTable = (props) => {
         setPrice(priceData)
     }
 
-    const approve = async () => {
+    const isApproved = async () => {
         try {
-            if (account.address) {
+            const account = (await window.web3.eth.getAccounts())[0]
+            if (account){
                 const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-                const spender = defaults.vader.router.address
-                const approval = await vether.methods.allowance(account.address, spender).call()
-                const vethBalance = await vether.methods.balanceOf(account.address).call()
-                if (+approval >= +vethBalance && +vethBalance >= 0) {
+                const approval = await vether.methods.allowance(account, defaults.vader.router.address).call()
+                const vethBalance = await vether.methods.balanceOf(account).call()
+                if (+approval >= +vethBalance && +vethBalance > 0) {
                     setApproved(true)
-                    if(approveFlag) setApproveFlag(false)
                 } else {
                     setApproved(false)
                 }
@@ -96,13 +93,16 @@ export const AddLiquidityTable = (props) => {
         }
     }
 
-    const unlockToken = async () => {
+    const approve = async () => {
         try {
-            setApproveFlag(true)
-            const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-            const value = getBN(defaults.vether.supply * 10 ** 18).toString()
-            await vether.methods.approve(defaults.vader.router.address, value).send({ from: account.address })
-            approve(account.address)
+            const account = (await window.web3.eth.getAccounts())[0]
+            if (account) {
+                setApproveFlag(true)
+                const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+                const value = getBN(defaults.vether.supply * 10 ** 18).toString()
+                await vether.methods.approve(defaults.vader.router.address, value).send({ from: account })
+                approve()
+            }
         } catch (err) {
             if(approveFlag) setApproveFlag(false)
             console.log(err)
@@ -111,15 +111,18 @@ export const AddLiquidityTable = (props) => {
 
     const stake = async () => {
         try {
-            const amountVeth = Web3.utils.toWei(amount0.toString())
-            const amountEth = Web3.utils.toWei(amount1.toString())
-            const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
-            await vaderRouter.methods.stake(amountVeth, amountEth, defaults.vader.pools.eth).send({
-                value: amountEth,
-                from: account.address,
-                gasPrice: '',
-                gas: ''
-            })
+            const account = (await window.web3.eth.getAccounts())[0]
+            if(account) {
+                const amountVeth = Web3.utils.toWei(amount0.toString())
+                const amountEth = Web3.utils.toWei(amount1.toString())
+                const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
+                await vaderRouter.methods.stake(amountVeth, amountEth, defaults.vader.pools.eth).send({
+                    value: amountEth,
+                    from: account,
+                    gasPrice: '',
+                    gas: ''
+                })
+            }
         } catch (err) {
             console.log(err)
         }
@@ -196,10 +199,9 @@ export const AddLiquidityTable = (props) => {
 
     useEffect(() => {
         loadData()
-        approve()
+        isApproved()
         // eslint-disable-next-line
     }, [])
-
 
     return (
         <>
@@ -346,7 +348,7 @@ export const AddLiquidityTable = (props) => {
                     <Row style={{ marginBottom: '1.33rem' }}>
                         <Col xs={24}>
                             <Label display="block" style={{marginBottom: '0.55rem'}}>Token Approval</Label>
-                            <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE >></Button>
+                            <Button backgroundColor="transparent" onClick={approve}>APPROVE >></Button>
                             <Sublabel>ALLOW VETHER FOR STAKING</Sublabel>
                             {approveFlag &&
                             <>
@@ -360,7 +362,7 @@ export const AddLiquidityTable = (props) => {
                 </>
             }
 
-            { approved &&
+            { ((approved) || (!approved && amount0 === 0)) &&
                 <>
                     { amount0 > 0 || amount1 > 0
                         ? <Button backgroundColor="transparent" onClick={stake}>ADD >></Button>
