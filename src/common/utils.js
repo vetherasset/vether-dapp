@@ -15,8 +15,6 @@ export function BN2Str(BN) {
     return (new BigNumber(BN)).toFixed()
 }
 
-export const totalSupply = (new BigNumber(1000000*10**18)).toFixed(0)
-
 export function convertFromWei(number) {
     const num = new BigNumber(number)
     const final = num.div(10**18)
