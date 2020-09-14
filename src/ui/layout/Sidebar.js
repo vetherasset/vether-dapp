@@ -15,8 +15,8 @@ const Sidebar = (props) => {
   const menu_items = [
     "overview",
     "acquire",
-    "stake",
     "trade",
+    "pool",
     "stats",
     "whitepaper"
   ]
@@ -65,7 +65,7 @@ const Sidebar = (props) => {
                 <Menu.Item key={item}>
                   <Link to={"/" + item}>
                     <Icon icon={item}/>
-                    {item === 'stake' || item === 'trade' ?
+                    {item === 'pool' || item === 'trade' ?
                           <>
                             {isSelected(item) ?
                                 <Text bold={true} color="#fff" className="beta">{item}</Text> :

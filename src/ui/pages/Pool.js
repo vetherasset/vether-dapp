@@ -3,10 +3,10 @@ import defaults from "../../common/defaults"
 import Web3 from "web3"
 import { Tabs } from 'antd'
 import '../../App.less'
-import { AddLiquidityTable, ProvidedLiquidityTable, RemoveLiquidityTable } from "../components/stakeDialog"
+import { AddLiquidityTable, ProvidedLiquidityTable, RemoveLiquidityTable } from "../components/liquidityDialog"
 import { PoolTicker } from "../components/poolTicker"
 
-const Stake = () => {
+const Pool = () => {
 
 	const { TabPane } = Tabs
 	const [tab, setTab] = useState('1')
@@ -45,7 +45,7 @@ const Stake = () => {
 						'isMember': isMember,
 						'baseAmt': Web3.utils.fromWei(memberShare.baseAmt),
 						'tokenAmt': Web3.utils.fromWei(memberShare.tokenAmt),
-						'memberPoolShare': memberPoolShare
+						'memberPoolShare': memberPoolShare ? memberPoolShare : 0
 					}
 					setAccount(accountData)
 				}
@@ -60,27 +60,28 @@ const Stake = () => {
 	return (
 		<>
 			<h1>LIQUIDITY POOL</h1>
-			<p>Try out the beta of Vether liquidity pool.</p>
+			<p>Try out the beta of Vether's liquidity pool.</p>
 			<PoolTicker/>
 					<Tabs defaultActiveKey='1' activeKey={tab} onChange={(key) => { setTab(key) }}
 						  size={'large'} style={{ marginTop: 20, textAlign: "center" }}>
-						<TabPane tab="STAKE" key="1" style={{ textAlign: "left" }}>
+						<TabPane tab="ADD" key="1" style={{ textAlign: "left" }}>
 							<h2>ADD LIQUIDITY</h2>
+							<p>Provide liquidity to earn share.</p>
 							<AddLiquidityTable id={1} />
 						</TabPane>
-						{account.isMember &&
-							<TabPane tab="SHARES" key="2" style={{ textAlign: "left" }}>
-								<ProvidedLiquidityTable id={2} accountData={account} />
-							</TabPane>
-						}
-						{account.isMember &&
-							<TabPane tab="UNSTAKE" key="3" style={{ textAlign: "left" }}>
-								<RemoveLiquidityTable id={3} accountData={account} />
-							</TabPane>
-						}
+						<TabPane tab="SHARE" key="2" style={{ textAlign: "left" }}>
+							<h2>LIQUIDITY SHARE</h2>
+							<p>Value of assets you’ve pooled.</p>
+							<ProvidedLiquidityTable id={2} accountData={account} />
+						</TabPane>
+						<TabPane tab="REMOVE" key="3" style={{ textAlign: "left" }}>
+							<h2>REMOVE LIQUIDITY</h2>
+							<p>Withdraw pooled assets.</p>
+							<RemoveLiquidityTable id={3} accountData={account} />
+						</TabPane>
 					</Tabs>
 				</>
 	)
 }
 
-export default Stake
+export default Pool
