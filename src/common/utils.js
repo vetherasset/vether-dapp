@@ -72,7 +72,8 @@ export function percent(amount, minFractionDigits = 0, maxFractionDigits = 2, lo
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     }
-    return (new Intl.NumberFormat(locales, options).format(amount))
+    const value = isFinite(amount) ? amount : 0
+    return (new Intl.NumberFormat(locales, options).format(value))
 }
 
 export function convertToTime(date) {
