@@ -4,8 +4,7 @@ import Web3 from "web3"
 
 import {currency, getBN, percent} from "../../common/utils"
 import { Col, Slider, Switch, InputNumber, Row, Select, Tooltip } from "antd"
-import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined, PlusOutlined,
-    ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { LoadingOutlined, QuestionCircleOutlined, CheckCircleOutlined, PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Button, Colour, Label, LabelGrey, Sublabel } from "../components"
 import { getETHPrice } from "../../client/market"
 import { getVetherPrice } from "../../client/web3"
@@ -382,6 +381,8 @@ export const ProvidedLiquidityTable = (props)  => {
 
     return (
         <>
+            <h2>LIQUIDITY SHARES</h2>
+            <p>Assets in pool you own.</p>
             <Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '2.66rem' }}>
                 <Col xs={8}>
                     <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
@@ -401,18 +402,13 @@ export const ProvidedLiquidityTable = (props)  => {
                 </Col>
                 <Col xs={8}>
                     <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>POOL SHARE</span>
-                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{percent(account.memberPoolShare)}
+                    <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{account.memberPoolShare.toFixed(2)}%
                         <Tooltip placement="right" title="A percentage of pool you own.">
                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                         </Tooltip>
                     </span>
                 </Col>
             </Row>
-            {!account.isMember &&
-                <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
-                    <InfoCircleOutlined />&nbsp; You currently don't provide any liquidity.
-                </LabelGrey>
-            }
         </>
     )
 }
@@ -447,6 +443,8 @@ export const RemoveLiquidityTable = (props) => {
 
     return (
         <>
+            <h2>REMOVE LIQUIDITY</h2>
+            <p>Remove your asset shares.</p>
             <Row>
                 <Col xs={24} sm={16} xl={9}>
                     <Label display="block" style={{marginBottom: '0.55rem'}}>Proportion</Label>
@@ -474,7 +472,7 @@ export const RemoveLiquidityTable = (props) => {
                         </Col>
                 </Col>
                 <Col xs={24} sm={7} style={{ paddingTop: 30 }}>
-                    {account.isMember && (unstakeAmount > 0)
+                    {unstakeAmount > 0
                         ? <Button backgroundColor="transparent" onClick={unstake}>REMOVE >></Button>
                         : <Button backgroundColor="transparent" disabled>REMOVE >></Button>
                     }
