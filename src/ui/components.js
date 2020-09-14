@@ -306,7 +306,7 @@ export const Icon = (props) => {
       </CheckSquareOutlined>
     )
   }
-  if(props.icon === "stake"){
+  if(props.icon === "pool"){
     return (
       <LoginOutlined>
         {props.children}

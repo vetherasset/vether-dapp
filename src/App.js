@@ -9,7 +9,7 @@ import Footer from './ui/layout/Footer'
 import Sidebar from './ui/layout/Sidebar'
 import Hero from './ui/pages/Hero'
 import Acquire from './ui/pages/Acquire'
-import Stake from './ui/pages/Stake'
+import Pool from './ui/pages/Pool'
 import Trade from './ui/pages/Trade'
 import Stats from './ui/pages/Stats'
 import Whitepaper from './ui/pages/Whitepaper'
@@ -36,8 +36,8 @@ const App = () => {
 			<ContextProvider>
 				<BreakpointProvider>
 					<Switch>
-						<Route path="/stake">
-							<Notification message={betaWarning()} pathname={'stake'}/>
+						<Route path="/pool">
+							<Notification message={betaWarning()} pathname={'pool'}/>
 						</Route>
 
 						<Route path="/trade">
@@ -56,7 +56,7 @@ const App = () => {
 									<Route path="/overview" exact component={Hero} />
 									<Route path="/acquire" exact component={Acquire} />
 									<Route path="/claim" exact component={Acquire} />
-									<Route path="/stake" exact component={Stake} />
+									<Route path="/pool" exact component={Pool} />
 									<Route path="/trade" exact component={Trade} />
 									<Route path="/stats" exact component={Stats} />
 									<Route path="/whitepaper" exact component={Whitepaper} />
