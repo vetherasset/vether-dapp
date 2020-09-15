@@ -283,7 +283,7 @@ export const AddLiquidityTable = () => {
                             setCustomPriceImpactEnabled(true)
                         }}
                         } />
-                <span className={'antd-switch-desc'}>Allow custom proportion</span>
+                <span className={'antd-switch-desc'}>Asymmetric pooling</span>
             </Row>
 
             {customPriceImpactEnabled &&
@@ -382,7 +382,7 @@ export const ProvidedLiquidityTable = (props)  => {
 
     return (
         <>
-            <Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '2.66rem' }}>
+            <Row type="flex" justify="center" style={{ textAlign: "center", marginBottom: '1.66rem' }}>
                 <Col xs={8}>
                     <span style={{ fontSize: '0.8rem', display: 'block', margin: '0 0 0.5rem 0', color: '#97948e' }}>ASSET SHARE</span>
                     <span style={{ fontSize: '1.2rem', display: 'block', margin: '0' }}>{currency(account.baseAmt, 0, 3, 'VETH')}
