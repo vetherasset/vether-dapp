@@ -34,7 +34,7 @@ const Pool = () => {
 					const tokenAmt = Web3.utils.fromWei(memberShare.tokenAmt)
 					const memberTotal = Number(baseAmt) + Number(tokenAmt)
 					const poolTotal = Number(Web3.utils.fromWei(poolData.baseAmt)) + Number(Web3.utils.fromWei(poolData.tokenAmt))
-					const memberPoolShare = memberTotal / poolTotal * 100
+					const memberPoolShare = memberTotal / poolTotal
 					const ethBalance = Web3.utils.fromWei(await web3.eth.getBalance(account))
 					const vethBalance = Web3.utils.fromWei(await vether.methods.balanceOf(account).call())
 
