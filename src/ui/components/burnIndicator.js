@@ -5,28 +5,42 @@ import { Progress } from 'antd'
 import { getSecondsToGo } from "../../common/utils"
 
 const Clock = (props) => {
-    const [countdown, setCountdown] = useState(0)
+    const [countdown, setCountdown] = useState(null)
     const time = new Date(countdown * 1000).toISOString().substr(11, 8)
 
     useEffect(() => {
+        let ticker
+        let call
+
         const loadData = async () => {
-            const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
-            const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
             try {
+                const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+                const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
                 const seconds = getSecondsToGo(await vether.methods.nextDayTime().call())
                 setCountdown(seconds)
+                if (countdown < 0 && ticker) clearInterval(ticker)
+                if (countdown > 0) clearInterval(call)
             } catch (err) {
                 console.log(err)
             }
         }
 
-        const ticker = countdown > 0 && setInterval(() => setCountdown(countdown - 1),
-            1000)
+        if(countdown === null) loadData()
+
+        if (countdown > 0) {
+            ticker = setInterval(() => setCountdown(countdown - 1),
+                1000)
+        }
+
         if (countdown <= 0) {
             setCountdown(0)
-            loadData()
+            call = setInterval(() => loadData(), defaults.infura.callRate)
         }
-        return () => clearInterval(ticker)
+
+        return () => {
+            if (ticker) clearInterval(ticker)
+            if (call) clearInterval(call)
+        }
     }, [countdown])
 
 
@@ -51,17 +65,22 @@ const Clock = (props) => {
 }
 
 const ProgressBar = () => {
-    const [countdown, setCountdown] = useState(0)
+    const [countdown, setCountdown] = useState(null)
     const [distribution, setDistribution] = useState({ era: 0, day: 0 })
     const percent = Number((((defaults.vether.secondsPerDay - countdown) / defaults.vether.secondsPerDay) * 100).toFixed(0))
 
     useEffect(() => {
+        let ticker
+        let call
+
         const loadData = async () => {
             try {
                 const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
                 const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
                 const seconds = getSecondsToGo(await vether.methods.nextDayTime().call())
                 setCountdown(seconds)
+                if (countdown < 0 && ticker) clearInterval(ticker)
+                if (countdown > 0) clearInterval(call)
 
                 const day = await vether.methods.currentDay().call()
                 const era = await vether.methods.currentEra().call()
@@ -74,15 +93,23 @@ const ProgressBar = () => {
             }
         }
 
-        const ticker = countdown > 0 && setInterval(() => setCountdown(countdown - 1),
-            1000)
+        if(countdown === null) loadData()
+
+        if (countdown > 0) {
+            ticker = setInterval(() => setCountdown(countdown - 1),
+                1000)
+        }
+
         if (countdown <= 0) {
             setCountdown(0)
-            loadData()
+            call = setInterval(() => loadData(), defaults.infura.callRate)
         }
-        return () => clearInterval(ticker)
-    }, [countdown])
 
+        return () => {
+            if (ticker) clearInterval(ticker)
+            if (call) clearInterval(call)
+        }
+    }, [countdown])
 
     return (
         <>

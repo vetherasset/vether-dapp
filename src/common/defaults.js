@@ -41,6 +41,7 @@ defaults.wrappedEther.abi = WETHER.abi
 
 defaults.infura = {}
 defaults.infura.api = testnet ? 'https://rinkeby.infura.io/v3/' + apikey : 'https://mainnet.infura.io/v3/' + apikey
+defaults.infura.callRate = 210000
 
 defaults.etherscan = {}
 defaults.etherscan.url = testnet ? 'https://rinkeby.etherscan.io/' : 'https://etherscan.io/'
