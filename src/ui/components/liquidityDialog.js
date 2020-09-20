@@ -498,6 +498,15 @@ export const RemoveLiquidityTable = (props) => {
                     }
                 </Col>
             </Row>
+            {!account.isMember &&
+                <>
+                    <Row>
+                        <LabelGrey display={'block'} style={{fontStyle: 'italic'}}>
+                            <InfoCircleOutlined/>&nbsp; You currently don't provide any liquidity.
+                        </LabelGrey>
+                    </Row>
+                </>
+            }
         </>
     )
 }
