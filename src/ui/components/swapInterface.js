@@ -9,7 +9,7 @@ import { Label, Button, Colour, LabelGrey } from '../components'
 
 import { getVetherPrice } from '../../client/web3.js'
 import { BN2Str, currency, getBN } from '../../common/utils'
-import { calcSwapOutput } from '../../common/clpLogic'
+import { calcSwapOutput, calcSwapInput } from '../../common/clpLogic'
 import { getETHPrice } from "../../client/market"
 
 export const SwapInterface = () => {
@@ -38,7 +38,7 @@ export const SwapInterface = () => {
     const [loadedSell, setLoadedSell] = useState(null)
 
     const [poolData, setPoolData] = useState(
-        { "eth": "", "veth": '', 'price': "", "fees": "", "volume": "", "txCount": "", 'roi': "", 'apy': "" })
+        { "tokenAmt": "", "baseAmt": '', 'price': "", "fees": "", "volume": "", "txCount": "", 'roi': "", 'apy': "" })
     const [marketData, setMarketData] = useState(
         { priceUSD: '', priceETH: '', ethPrice: '' })
 
@@ -92,8 +92,8 @@ export const SwapInterface = () => {
         const roi = await utils.methods.getPoolROI(defaults.vader.pools.eth).call()
         const apy = await utils.methods.getPoolAPY(defaults.vader.pools.eth).call()
 		const poolData_ = {
-			"eth": Web3.utils.fromWei(poolData.tokenAmt),
-			"veth": Web3.utils.fromWei(poolData.baseAmt),
+			"tokenAmt": Web3.utils.fromWei(poolData.tokenAmt),
+			"baseAmt": Web3.utils.fromWei(poolData.baseAmt),
 			"price": price,
 			"volume": Web3.utils.fromWei(poolData.volume),
 			"fees": Web3.utils.fromWei(poolData.fees),
@@ -159,22 +159,50 @@ export const SwapInterface = () => {
         }
     }
 
-    const onEthAmountChange = (value) => {
-        loadPoolData()
-        let baseAmount = calcSwapOutput(Web3.utils.toWei(String(value)), Web3.utils.toWei(poolData.eth), Web3.utils.toWei(poolData.veth))
-        baseAmount = isFinite(+baseAmount) ? Web3.utils.fromWei(BN2Str(baseAmount)) : 0
-        setTokenAmount(value)
-        setBaseAmount(currency(baseAmount, 0, 5, 'VETH').replace('VETH',''))
-        calcTrade(value, baseAmount)
+    const onTokenAmountChange = (value) => {
+        if(Number.isInteger(value) && isFinite(value) && value >= 0) {
+            loadPoolData()
+            let baseAmount = calcSwapInput(
+                true,
+                Web3.utils.toWei(poolData.baseAmt),
+                Web3.utils.toWei(poolData.tokenAmt),
+                Web3.utils.toWei(String(value))
+            )
+            if(!isFinite(baseAmount) || baseAmount < 0) baseAmount = 0
+            setTokenAmount(value)
+            setBaseAmount(currency(
+                Web3.utils.fromWei(String(baseAmount)),
+                0,
+                5, 'VETH')
+                .replace('VETH', '')
+            )
+            calcTrade(value, Web3.utils.fromWei(String(baseAmount)))
+        } else {
+            setTokenAmount(0)
+        }
     }
 
     const onBaseAmountChange = (value) => {
-        loadPoolData()
-        let tokenAmount = calcSwapOutput(Web3.utils.toWei(String(value)), Web3.utils.toWei(poolData.veth), Web3.utils.toWei(poolData.eth))
-        tokenAmount = isFinite(+tokenAmount) ? Web3.utils.fromWei(BN2Str(tokenAmount)) : 0
-        setBaseAmount(value)
-        setTokenAmount(currency(tokenAmount, 0, 5, 'ETH').replace('Ξ',''))
-        calcTrade(tokenAmount, value)
+        if(Number.isInteger(value) && isFinite(value) && value >= 0) {
+            loadPoolData()
+            let tokenAmount = calcSwapOutput(
+                Web3.utils.toWei(String(value)),
+                Web3.utils.toWei(poolData.baseAmt),
+                Web3.utils.toWei(poolData.tokenAmt)
+            )
+            if(!isFinite(+tokenAmount) || tokenAmount < 0) tokenAmount = 0
+            setBaseAmount(value)
+            setTokenAmount(currency(
+                Web3.utils.fromWei(BN2Str(tokenAmount)),
+                0,
+                5,
+                'ETH')
+                .replace('Ξ','')
+            )
+            calcTrade(Web3.utils.fromWei(BN2Str(tokenAmount)), value)
+        } else {
+            setBaseAmount(0)
+        }
     }
 
     const calcTrade = (size0, size1) => {
@@ -287,7 +315,7 @@ export const SwapInterface = () => {
                                         <InputNumber size={'large'}
                                                      style={{ marginBottom: "1.3rem", width: '100%' }}
                                                      value={tokenAmount}
-                                                     onChange={onEthAmountChange}
+                                                     onChange={onTokenAmountChange}
                                         />
                                     </Col>
                                     <Col span={8}>
@@ -308,8 +336,7 @@ export const SwapInterface = () => {
                                         </Tooltip>
                                 </Col>
                                 <Col span={12} style={{ textAlign: 'right' }}>
-                                    {currency(trade.price, 0, 6, inCurrency)}
-
+                                    {currency(trade.price, 0, 5, inCurrency)}
                                 </Col>
                             </Row>
                             <Row>
@@ -324,7 +351,7 @@ export const SwapInterface = () => {
                             </Row>
                         </Col>
                     </Row>
-                    <Row type="flex" justify="center" align="middle">
+                    <Row type="flex" justify="center" align="middle" style={{ marginBottom: '1.33rem' }}>
                         <Col span={24}>
                             <Button type="primary" shape="round" size={'large'} style={{ width: '100%', minHeight: "43px" }}>
                                 Swap

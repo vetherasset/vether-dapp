@@ -18,6 +18,16 @@ function calcSwapOutput(x, X, Y) {
     return ((new BigNumber(_y)).integerValue(1))
 }
 
+function calcSwapInput(toBase, baseAmt, tokenAmt, outputAmount) {
+    // formula: (((X*Y)/y - 2*X) - sqrt(((X*Y)/y - 2*X)^2 - 4*X^2))/2
+    // (part1 - sqrt(part1 - part2))/2
+    const X = toBase ? new BigNumber(baseAmt) : new BigNumber(tokenAmt) // input is asset if toBase
+    const Y = toBase ? new BigNumber(tokenAmt) : new BigNumber(baseAmt)  // output is base if toBase
+    const part1 = X.times(Y).div(outputAmount).minus(X.times(2)) // outputAmount is y
+    const part2 = X.pow(2).times(4)
+    return (part1.minus(part1.pow(2).minus(part2).sqrt()).div(2)).integerValue(1)
+}
+
 function calcSwapFee(x, X, Y) {
     // y = (x * Y * x) / (x + X)^2
     const _x = new BigNumber(x)
@@ -81,6 +91,9 @@ function calcShare(s, T, A, V) {
 module.exports = {
     calcSwapOutput: function(x, X, Y) {
       return calcSwapOutput(x, X, Y)
+    },
+    calcSwapInput: function (toBase, baseAmt, tokenAmt, outputAmount) {
+      return calcSwapInput(toBase, baseAmt, tokenAmt, outputAmount)
     },
     calcSwapFee: function(x, X, Y) {
       return calcSwapFee(x, X, Y)
