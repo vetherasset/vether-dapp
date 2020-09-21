@@ -284,7 +284,11 @@ export const SwapInterface = () => {
     return (
         <>
             <Row type="flex" justify="center">
-                <Col lg={9} xs={24}>
+                <Col lg={9} xs={24} style={{
+                    background: '#000000',
+                    padding: '30px',
+                    borderRadius: '25px'
+                }}>
                     <Row type="flex" justify="center" align="middle">
                             <Col span={24}>
                                 <Label display="block" style={{marginBottom: '0.55rem'}}>From</Label>
