@@ -10,7 +10,7 @@ import Sidebar from './ui/layout/Sidebar'
 import Hero from './ui/pages/Hero'
 import Acquire from './ui/pages/Acquire'
 import Pool from './ui/pages/Pool'
-import Trade from './ui/pages/Trade'
+import Swap from './ui/pages/Swap'
 import Stats from './ui/pages/Stats'
 import Whitepaper from './ui/pages/Whitepaper'
 import Donations from './ui/pages/Donations'
@@ -26,7 +26,7 @@ const App = () => {
 
 	const betaWarning = () => { return  (
 			<>
-				This feature is beta <b>V3</b>, so there is a <b>risk involved</b>.
+				This feature is beta, so there is a <b>risk involved</b>.
 			</>
 		)
 	}
@@ -40,8 +40,8 @@ const App = () => {
 							<Notification message={betaWarning()} pathname={'pool'}/>
 						</Route>
 
-						<Route path="/trade">
-							<Notification message={betaWarning()} pathname={'trade'}/>
+						<Route path="/swap">
+							<Notification message={betaWarning()} pathname={'swap'}/>
 						</Route>
 					</Switch>
 
@@ -56,8 +56,8 @@ const App = () => {
 									<Route path="/overview" exact component={Hero} />
 									<Route path="/acquire" exact component={Acquire} />
 									<Route path="/claim" exact component={Acquire} />
+									<Route path="/swap" exact component={Swap} />
 									<Route path="/pool" exact component={Pool} />
-									<Route path="/trade" exact component={Trade} />
 									<Route path="/stats" exact component={Stats} />
 									<Route path="/whitepaper" exact component={Whitepaper} />
 									<Route path="/donations" exact component={Donations} />

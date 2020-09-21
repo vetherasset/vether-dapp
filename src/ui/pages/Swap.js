@@ -4,16 +4,15 @@ import { SwapInterface } from '../components/swapInterface'
 
 import '../../App.less'
 
-const Trade = () => {
-
+const Swap = () => {
 
 	return (
 		<>
-			<h1>TRADE VETHER</h1>
-			<p>Buy and Sell using the liquidity pool.</p>
+			<h1>SWAP VETHER</h1>
+			<p>Easily exchange your tokens.</p>
 			<SwapInterface/>
 		</>
 	)
 }
 
-export default Trade
+export default Swap

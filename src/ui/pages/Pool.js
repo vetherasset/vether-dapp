@@ -60,7 +60,7 @@ const Pool = () => {
 	return (
 		<>
 			<h1>LIQUIDITY POOL</h1>
-			<p>Try out the beta of Vether's liquidity pool.</p>
+			<p>Try out the beta liquidity pool.</p>
 			<PoolTicker/>
 					<Tabs defaultActiveKey='1' activeKey={tab} onChange={(key) => { setTab(key) }}
 						  size={'large'} style={{ marginTop: 20, textAlign: "center" }}>

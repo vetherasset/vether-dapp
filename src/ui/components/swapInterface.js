@@ -3,9 +3,9 @@ import { Context } from '../../context'
 import defaults from "../../common/defaults"
 import Web3 from 'web3'
 
-import { Row, Col, Input, Tooltip } from 'antd'
+import { Row, Col, InputNumber, Tooltip, Select } from 'antd'
 import { SwapOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
-import { Label, Sublabel, Button, Colour, LabelGrey } from '../components'
+import { Label, Button, Colour, LabelGrey } from '../components'
 
 import { getVetherPrice } from '../../client/web3.js'
 import { BN2Str, currency, getBN } from '../../common/utils'
@@ -15,25 +15,22 @@ import { getETHPrice } from "../../client/market"
 export const SwapInterface = () => {
 
     const context = useContext(Context)
+    const {Option} = Select
 
-    const [connected, setConnected] = useState(false)
     const [account, setAccount] = useState(
         { address: '', vethBalance: '', ethBalance: '' })
 
     const [approved, setApproved] = useState(true)
     const [approveFlag, setApproveFlag] = useState(false)
 
+    const [vethTx, setVethTx] = useState(null)
+    const [baseAmount, setBaseAmount] = useState(0)
+
     const [ethTx, setEthTx] = useState(null)
-    const [ethAmount, setEthAmount] = useState(0)
-    const [ethAmountCalculated, setEthAmountCalculated] = useState(0)
+    const [tokenAmount, setTokenAmount] = useState(0)
 
     const [trade, setTrade] = useState({ price: 0, slippage: 0, slippagePercent: 0, slippageColor: '', slippageWarning: false })
     const inCurrency = 'ETH'
-
-    const [vetherContract, setVetherContract] = useState(null)
-    const [vethTx, setVethTx] = useState(null)
-    const [vethAmount, setVethAmount] = useState(0)
-    const [vethAmountCalculated, setVethAmountCalculated] = useState(0)
 
     const [buyFlag, setBuyFlag] = useState(false)
     const [loadedBuy, setLoadedBuy] = useState(null)
@@ -45,40 +42,41 @@ export const SwapInterface = () => {
     const [marketData, setMarketData] = useState(
         { priceUSD: '', priceETH: '', ethPrice: '' })
 
+    const base = {
+        name: 'Vether',
+        symbol: 'VETH'
+    }
+
+    const assets = [
+        {
+            name: 'Ether',
+            symbol: 'Ξ'
+        }
+    ]
+
     useEffect(() => {
-        connect()
+        loadAccountData()
+        checkApproval()
         loadPoolData()
         loadMarketData()
         // eslint-disable-next-line
     }, [])
 
-    const connect = async () => {
+    const loadAccountData = async () => {
         const account = (await window.web3.eth.getAccounts())[0]
         if(account) {
             const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
             const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-            loadAccountData(vether, account)
-            setVetherContract(vether)
-            checkApproval(account)
-            setConnected(true)
-        } else {
-            setConnected(false)
-        }
-    }
-
-    const loadAccountData = async (contract, address) => {
-        const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if(accountConnected) {
-            const ethBalance = Web3.utils.fromWei(await window.web3.eth.getBalance(address), 'ether')
-            const vethBalance = Web3.utils.fromWei(await contract.methods.balanceOf(address).call(), 'ether')
+            const ethBalance = Web3.utils.fromWei(await window.web3.eth.getBalance(account), 'ether')
+            const vethBalance = Web3.utils.fromWei(await vether.methods.balanceOf(account).call(), 'ether')
             setAccount({
-                address: address,
+                address: account,
                 vethBalance: vethBalance,
                 ethBalance: ethBalance
             })
             context.setContext({
                 "accountData": {
-                    'address': address,
+                    'address': account,
                     'vethBalance': vethBalance,
                     'ethBalance': ethBalance
                 }
@@ -161,26 +159,22 @@ export const SwapInterface = () => {
         }
     }
 
-    const onEthAmountChange = e => {
+    const onEthAmountChange = (value) => {
         loadPoolData()
-        const value = e.target.value
-        let valueInVeth = calcSwapOutput(Web3.utils.toWei(value), Web3.utils.toWei(poolData.eth), Web3.utils.toWei(poolData.veth))
-            valueInVeth = isFinite(+valueInVeth) ? Web3.utils.fromWei(BN2Str(valueInVeth)) : 0
-        setEthAmount(value)
-        setVethAmount("")
-        setVethAmountCalculated(currency(valueInVeth, 0, 5, 'VETH').replace('VETH',''))
-        calcTrade(value, valueInVeth)
+        let baseAmount = calcSwapOutput(Web3.utils.toWei(String(value)), Web3.utils.toWei(poolData.eth), Web3.utils.toWei(poolData.veth))
+        baseAmount = isFinite(+baseAmount) ? Web3.utils.fromWei(BN2Str(baseAmount)) : 0
+        setTokenAmount(value)
+        setBaseAmount(currency(baseAmount, 0, 5, 'VETH').replace('VETH',''))
+        calcTrade(value, baseAmount)
     }
 
-    const onVethAmountChange = e => {
+    const onBaseAmountChange = (value) => {
         loadPoolData()
-        const value = e.target.value
-        let valueInEth = calcSwapOutput(Web3.utils.toWei(value), Web3.utils.toWei(poolData.veth), Web3.utils.toWei(poolData.eth))
-            valueInEth = isFinite(+valueInEth) ? Web3.utils.fromWei(BN2Str(valueInEth)) : 0
-        setVethAmount(value)
-        setEthAmount("")
-        setEthAmountCalculated(currency(valueInEth, 0, 5, 'ETH').replace('Ξ',''))
-        calcTrade(valueInEth, value)
+        let tokenAmount = calcSwapOutput(Web3.utils.toWei(String(value)), Web3.utils.toWei(poolData.veth), Web3.utils.toWei(poolData.eth))
+        tokenAmount = isFinite(+tokenAmount) ? Web3.utils.fromWei(BN2Str(tokenAmount)) : 0
+        setBaseAmount(value)
+        setTokenAmount(currency(tokenAmount, 0, 5, 'ETH').replace('Ξ',''))
+        calcTrade(tokenAmount, value)
     }
 
     const calcTrade = (size0, size1) => {
@@ -226,7 +220,7 @@ export const SwapInterface = () => {
         setLoadedBuy(false)
         setBuyFlag(true)
         const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
-        const amount = Web3.utils.toWei(String(ethAmount))
+        const amount = Web3.utils.toWei(String(tokenAmount))
         const tx = await vaderRouter.methods.sell(amount, defaults.vader.pools.eth)
             .send({
                 from: account.address,
@@ -235,7 +229,7 @@ export const SwapInterface = () => {
                 value: amount
             })
         setEthTx(tx.transactionHash)
-        loadAccountData(vetherContract, account.address)
+        loadAccountData()
         setLoadedBuy(true)
     }
 
@@ -243,7 +237,7 @@ export const SwapInterface = () => {
         setSellFlag(true)
         setLoadedSell(false)
         const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
-        const amount = Web3.utils.toWei(String(vethAmount))
+        const amount = Web3.utils.toWei(String(baseAmount))
         const tx = await vaderRouter.methods.buy(amount, defaults.vader.pools.eth)
             .send({
                 from: account.address,
@@ -251,7 +245,7 @@ export const SwapInterface = () => {
                 gas: '240085'
             })
         setVethTx(tx.transactionHash)
-        loadAccountData(vetherContract, account.address)
+        loadAccountData()
         setLoadedSell(true)
     }
 
@@ -262,73 +256,51 @@ export const SwapInterface = () => {
     return (
         <>
             <Row type="flex" justify="center">
-                <Col lg={12} xs={24}>
-                    <Label display="block" style={{ marginBottom: '1.33rem' }}>Actual Price</Label>
-                    <div style={{ textAlign: 'center' }}><span style={{ fontSize: 30 }}>{currency(marketData.priceUSD)}</span>
-                        <Tooltip placement="right" title="Current market rate">
-                            &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
-                        </Tooltip>
-                    </div>
-                    <LabelGrey style={{ display: 'block', marginBottom: 0, textAlign: 'center' }}>{currency(marketData.priceETH, 0, 6, inCurrency)}</LabelGrey>
-                </Col>
-            </Row>
-            <Row type="flex" justify="center">
-                <Col lg={12} xs={24}>
+                <Col lg={9} xs={24}>
                     <Row type="flex" justify="center" align="middle">
-                        <Col span={10}>
-                            <Label display="block" style={{marginBottom: '0.55rem'}}>Buy</Label>
-                            <Input size={'large'} style={{marginBottom: "1.3rem"}} onChange={onEthAmountChange} value={ethAmount}
-                                   placeholder={ethAmountCalculated} suffix="ETH Ξ"/>
-                            { connected && ethAmount > 0
-                                ? <Button backgroundColor="transparent" onClick={buyVether}>BUY VETH >></Button>
-                                : <Button backgroundColor="transparent" disabled>BUY VETH >></Button>
-                            }
-                            <Sublabel>BUY VETHER WITH ETH</Sublabel>
-                        </Col>
+                            <Col span={24}>
+                                <Label display="block" style={{marginBottom: '0.55rem'}}>From</Label>
+                                <Row>
+                                    <Col span={16} style={{ paddingRight: '21px' }}>
+                                        <InputNumber size={'large'}
+                                                     style={{ marginBottom: "1.3rem", width: '100%' }}
+                                                     value={baseAmount}
+                                                     onChange={onBaseAmountChange}
+                                        />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Select defaultValue="Veth" style={{ width: '100%' }} bordered={false} size={'large'}>
+                                            <Option value="veth">Veth</Option>
+                                        </Select>
+                                    </Col>
+                                </Row>
+                            </Col>
 
-                        <Col span={4} style={{textAlign: 'center'}}>
-                            <SwapOutlined style={{fontSize: '19px'}}/>
-                        </Col>
+                            <Col span={24} style={{ textAlign: 'center' }}>
+                                <SwapOutlined style={{ margin: 0, transform: 'rotate(90deg)', fontSize: '1.1rem' }} />
+                            </Col>
 
-                        <Col span={10} style={{textAlign: "right"}}>
-                            <Row>
-                                <Col xs={24}>
-                                    <Label display="block" style={{marginBottom: '0.55rem'}}>Sell</Label>
-                                    <Input size={'large'} style={{marginBottom: '1.3rem'}} onChange={onVethAmountChange} value={vethAmount}
-                                           placeholder={vethAmountCalculated} suffix="VETH"/>
-
-
-                                    { !approved && Number(vethAmount) === 0 &&
-                                        <>
-                                            <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>
-                                        </>
-                                    }
-
-                                    { approved &&
-                                        <>
-                                            { vethAmount > 0
-                                                ? <Button backgroundColor="transparent" onClick={sellVether}>SELL&nbsp;VETH&nbsp;>></Button>
-                                                : <Button backgroundColor="transparent" disabled>SELL&nbsp;VETH&nbsp;>></Button>
-                                            }
-                                        </>
-                                    }
-
-                                    { connected && !approved && vethAmount > 0 &&
-                                        <>
-                                            <Button backgroundColor="transparent" onClick={unlockToken}>APPROVE VETHER >></Button>
-                                        </>
-                                    }
-
-                                    {connected && !approved && vethAmount > 0
-                                        ? <Sublabel>ALLOW VETHER FOR TRADES</Sublabel>
-                                        : <Sublabel>SELL VETHER FOR ETH</Sublabel>
-                                    }
-                                </Col>
-                            </Row>
-                        </Col>
+                            <Col span={24}>
+                                <Label display="block" style={{marginBottom: '0.55rem'}}>To</Label>
+                                <Row>
+                                    <Col span={16} style={{ paddingRight: '21px' }}>
+                                        <InputNumber size={'large'}
+                                                     style={{ marginBottom: "1.3rem", width: '100%' }}
+                                                     value={tokenAmount}
+                                                     onChange={onEthAmountChange}
+                                        />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Select defaultValue="Eth" style={{ width: '100%' }} bordered={false} size={'large'}>
+                                            <Option value="eth">Eth</Option>
+                                        </Select>
+                                    </Col>
+                                </Row>
+                            </Col>
                     </Row>
+
                     <Row type="flex" justify="center" align="middle" style={{ marginBottom: '1.33rem' }}>
-                        <Col xs={24} xl={12}>
+                        <Col lg={18} xs={24}>
                             <Row>
                                 <Col span={12}>
                                         Trade Price&nbsp;<Tooltip placement="right" title="The price you will get when the trade gets executed.">
@@ -337,7 +309,10 @@ export const SwapInterface = () => {
                                 </Col>
                                 <Col span={12} style={{ textAlign: 'right' }}>
                                     {currency(trade.price, 0, 6, inCurrency)}
+
                                 </Col>
+                            </Row>
+                            <Row>
                                 <Col span={12}>
                                     Slippage&nbsp;<Tooltip placement="right" title="The difference between market price and trade price due to trade size.">
                                         <QuestionCircleOutlined style={{ color: Colour().grey, margin: 0 }} />
@@ -347,6 +322,13 @@ export const SwapInterface = () => {
                                     {trade.slippagePercent.toFixed(2)}%
                                 </Col>
                             </Row>
+                        </Col>
+                    </Row>
+                    <Row type="flex" justify="center" align="middle">
+                        <Col span={24}>
+                            <Button type="primary" shape="round" size={'large'} style={{ width: '100%', minHeight: "43px" }}>
+                                Swap
+                            </Button>
                         </Col>
                     </Row>
                     { trade.slippageWarning &&
