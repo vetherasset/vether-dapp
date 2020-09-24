@@ -1,7 +1,8 @@
 import BigNumber from 'bignumber.js'
+import defaults from "./defaults";
 
-export const one = 1 * 10 ** 18;
-export const oneBN = new BigNumber(1 * 10 ** 18)
+export const one = 10 ** 18;
+export const oneBN = new BigNumber(10 ** 18)
 
 export function getBN(BN){
     return (new BigNumber(BN)).toFixed()
@@ -94,4 +95,8 @@ export function getSecondsToGo(date) {
 export const formatAPY = (input) =>{
     let annual = ((input - (10000*365)/100))
     return `${annual}%`
+}
+
+export const getTxLink = (tx) => {
+    return defaults.etherscan.url.concat('tx/').concat(tx)
 }

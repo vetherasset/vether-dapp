@@ -17,42 +17,48 @@ export const SwapInterface = () => {
     const context = useContext(Context)
     const {Option} = Select
 
-    const [account, setAccount] = useState(
-        { address: '', vethBalance: '', ethBalance: '' })
+    const assets = [
+        {
+            id: 0,
+            name: 'Vether',
+            ticker: 'VETH',
+            symbol: 'VETH',
+            address: '0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279',
+            pool: null
+        },
+        {
+            id: 1,
+            name: 'Ether',
+            ticker: 'ETH',
+            symbol: 'Ξ',
+            address: '0x0000000000000000000000000000000000000000',
+            pool: '0x0000000000000000000000000000000000000000'
+        }
+    ]
+
+    const [account, setAccount] = useState({ address: '', vethBalance: '', ethBalance: '' })
 
     const [approved, setApproved] = useState(true)
     const [approveFlag, setApproveFlag] = useState(false)
 
     const [vethTx, setVethTx] = useState(null)
+    const [base, setBase] = useState(assets[1])
     const [baseAmount, setBaseAmount] = useState(0)
 
-    const [ethTx, setEthTx] = useState(null)
+    const [token, setToken] = useState(assets[0])
     const [tokenAmount, setTokenAmount] = useState(0)
 
     const [trade, setTrade] = useState({ price: 0, slippage: 0, slippagePercent: 0, slippageColor: '', slippageWarning: false })
+
     const inCurrency = 'ETH'
+    const [directionSwaped, setDirectionSwaped] = useState(false)
 
     const [buyFlag, setBuyFlag] = useState(false)
     const [loadedBuy, setLoadedBuy] = useState(null)
-    const [sellFlag, setSellFlag] = useState(false)
-    const [loadedSell, setLoadedSell] = useState(null)
 
-    const [poolData, setPoolData] = useState(
-        { "tokenAmt": "", "baseAmt": '', 'price': "", "fees": "", "volume": "", "txCount": "", 'roi': "", 'apy': "" })
+    const [poolData, setPoolData] = useState({ "tokenAmt": "", "baseAmt": '' })
     const [marketData, setMarketData] = useState(
         { priceUSD: '', priceETH: '', ethPrice: '' })
-
-    const base = {
-        name: 'Vether',
-        symbol: 'VETH'
-    }
-
-    const assets = [
-        {
-            name: 'Ether',
-            symbol: 'Ξ'
-        }
-    ]
 
     useEffect(() => {
         loadAccountData()
@@ -84,26 +90,40 @@ export const SwapInterface = () => {
         }
     }
 
+    const checkApproval = async () => {
+        try {
+            const account = (await window.web3.eth.getAccounts())[0]
+            if (account){
+                const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+                const approval = await vether.methods.allowance(account, defaults.vader.router.address).call()
+                const vethBalance = await vether.methods.balanceOf(account).call()
+                if (+approval >= +vethBalance && +vethBalance > 0) {
+                    setApproved(true)
+                } else {
+                    setApproved(false)
+                }
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
 	const loadPoolData = async () => {
 		const web3_ = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
         const utils = new web3_.eth.Contract(defaults.vader.utils.abi, defaults.vader.utils.address)
-        const poolData = await utils.methods.getPoolData(defaults.vader.pools.eth).call()
-        const price = await getVetherPrice()
-        const roi = await utils.methods.getPoolROI(defaults.vader.pools.eth).call()
-        const apy = await utils.methods.getPoolAPY(defaults.vader.pools.eth).call()
-		const poolData_ = {
-			"tokenAmt": Web3.utils.fromWei(poolData.tokenAmt),
-			"baseAmt": Web3.utils.fromWei(poolData.baseAmt),
-			"price": price,
-			"volume": Web3.utils.fromWei(poolData.volume),
-			"fees": Web3.utils.fromWei(poolData.fees),
-			"txCount": poolData.txCount,
-			"roi": roi,
-            "apy": apy
+
+        const addr = String(assets.filter(asset => {
+            if (asset.pool !== null) return (asset.name === base.name || token.name)
+        }).map(asset => asset.pool))
+
+        const pool = await utils.methods.getPoolData(addr).call()
+		const data = {
+			"tokenAmt": Web3.utils.fromWei(pool.tokenAmt),
+			"baseAmt": Web3.utils.fromWei(pool.baseAmt)
 		}
-		setPoolData(poolData_)
+		setPoolData(data)
 		context.setContext({
-			"poolData": poolData_
+			"poolData": data
 		})
 	}
 
@@ -125,24 +145,6 @@ export const SwapInterface = () => {
         })
     }
 
-    const checkApproval = async () => {
-        try {
-            const account = (await window.web3.eth.getAccounts())[0]
-            if (account){
-                const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-                const approval = await vether.methods.allowance(account, defaults.vader.router.address).call()
-                const vethBalance = await vether.methods.balanceOf(account).call()
-                if (+approval >= +vethBalance && +vethBalance > 0) {
-                    setApproved(true)
-                } else {
-                    setApproved(false)
-                }
-            }
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
     const unlockToken = async () => {
         try {
             const account = (await window.web3.eth.getAccounts())[0]
@@ -159,47 +161,54 @@ export const SwapInterface = () => {
         }
     }
 
-    const onTokenAmountChange = (value) => {
-        if(Number.isInteger(value) && isFinite(value) && value >= 0) {
+    const onTokenAmountChange = (value, toBase = base.name === 'Vether') => {
+        if(typeof (value) === 'number') {
             loadPoolData()
-            let baseAmount = calcSwapInput(
-                true,
+            let inputAmt = calcSwapInput(
+                toBase,
                 Web3.utils.toWei(poolData.baseAmt),
                 Web3.utils.toWei(poolData.tokenAmt),
                 Web3.utils.toWei(String(value))
             )
-            if(!isFinite(baseAmount) || baseAmount < 0) baseAmount = 0
-            setTokenAmount(value)
-            setBaseAmount(currency(
-                Web3.utils.fromWei(String(baseAmount)),
+            if(!isFinite(inputAmt) || inputAmt < 0) inputAmt = 0
+            setTokenAmount(Number(value))
+            setBaseAmount(Number(currency(
+                Web3.utils.fromWei(String(inputAmt)),
                 0,
                 5, 'VETH')
                 .replace('VETH', '')
+            ))
+            calcTrade(
+                toBase ? value : Web3.utils.fromWei(String(inputAmt)),
+                toBase ? Web3.utils.fromWei(String(inputAmt)) : value
             )
-            calcTrade(value, Web3.utils.fromWei(String(baseAmount)))
         } else {
             setTokenAmount(0)
         }
     }
 
-    const onBaseAmountChange = (value) => {
-        if(Number.isInteger(value) && isFinite(value) && value >= 0) {
+    const onBaseAmountChange = (value, toBase = false) => {
+        if(typeof (value) === 'number') {
             loadPoolData()
+            if (base.name !== 'Vether') toBase = true
             let tokenAmount = calcSwapOutput(
                 Web3.utils.toWei(String(value)),
-                Web3.utils.toWei(poolData.baseAmt),
-                Web3.utils.toWei(poolData.tokenAmt)
+                Web3.utils.toWei(toBase ? poolData.tokenAmt : poolData.baseAmt),
+                Web3.utils.toWei(toBase ? poolData.baseAmt : poolData.tokenAmt)
             )
             if(!isFinite(+tokenAmount) || tokenAmount < 0) tokenAmount = 0
-            setBaseAmount(value)
-            setTokenAmount(currency(
+            setBaseAmount(Number(value))
+            setTokenAmount(Number(currency(
                 Web3.utils.fromWei(BN2Str(tokenAmount)),
                 0,
                 5,
                 'ETH')
                 .replace('Ξ','')
+            ))
+            calcTrade(
+                !toBase ? Web3.utils.fromWei(BN2Str(tokenAmount)) : value,
+                !toBase ? value : Web3.utils.fromWei(BN2Str(tokenAmount))
             )
-            calcTrade(Web3.utils.fromWei(BN2Str(tokenAmount)), value)
         } else {
             setBaseAmount(0)
         }
@@ -256,14 +265,11 @@ export const SwapInterface = () => {
                 gas: '240085',
                 value: amount
             })
-        setEthTx(tx.transactionHash)
         loadAccountData()
         setLoadedBuy(true)
     }
 
     const sellVether = async () => {
-        setSellFlag(true)
-        setLoadedSell(false)
         const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
         const amount = Web3.utils.toWei(String(baseAmount))
         const tx = await vaderRouter.methods.buy(amount, defaults.vader.pools.eth)
@@ -274,11 +280,6 @@ export const SwapInterface = () => {
             })
         setVethTx(tx.transactionHash)
         loadAccountData()
-        setLoadedSell(true)
-    }
-
-    const getLink = (tx) => {
-        return defaults.etherscan.url.concat('tx/').concat(tx)
     }
 
     return (
@@ -297,15 +298,39 @@ export const SwapInterface = () => {
                                         />
                                     </Col>
                                     <Col span={8}>
-                                        <Select defaultValue="Veth" style={{ width: '100%' }} bordered={false} size={'large'}>
-                                            <Option value="veth">Veth</Option>
+                                        <Select style={{ width: '100%' }}
+                                                bordered={false}
+                                                size={'large'}
+                                                value={base.id}
+                                                onChange={value => {
+                                                    setBase(assets[value])
+                                                    loadPoolData()
+                                                }}>
+                                            {assets.filter(asset => asset.name !== token.name).map((asset, n) => {
+                                                return (
+                                                    <Option key={n} value={asset.id}>{asset.ticker}</Option>
+                                                )
+                                            })}
                                         </Select>
                                     </Col>
                                 </Row>
                             </Col>
 
                             <Col span={24} style={{ textAlign: 'center' }}>
-                                <SwapOutlined style={{ margin: 0, transform: 'rotate(90deg)', fontSize: '1.1rem' }} />
+                                <SwapOutlined style={{ margin: 0, transform: 'rotate(90deg)', fontSize: '1.1rem' }}
+                                              onClick={() => {
+                                                  setToken(base)
+                                                  setBase(token)
+                                                  if (!directionSwaped) {
+                                                      setTokenAmount(Number(baseAmount))
+                                                      onTokenAmountChange(Number(baseAmount), true)
+                                                      setDirectionSwaped(true)
+                                                  } else {
+                                                      onBaseAmountChange(Number(tokenAmount), true)
+                                                      setDirectionSwaped(false)
+                                                  }
+                                              }}
+                                />
                             </Col>
 
                             <Col span={24}>
@@ -319,8 +344,20 @@ export const SwapInterface = () => {
                                         />
                                     </Col>
                                     <Col span={8}>
-                                        <Select defaultValue="Eth" style={{ width: '100%' }} bordered={false} size={'large'}>
-                                            <Option value="eth">Eth</Option>
+                                        <Select style={{ width: '100%' }}
+                                                bordered={false}
+                                                size={'large'}
+                                                value={token.id}
+                                                onChange={value => {
+                                                    setToken(assets[value])
+                                                    loadPoolData()
+                                                }}
+                                        >
+                                            {assets.filter(asset => asset.name !== base.name).map((asset, n) => {
+                                                return (
+                                                    <Option key={n} value={asset.id}>{asset.ticker}</Option>
+                                                )
+                                            })}
                                         </Select>
                                     </Col>
                                 </Row>
@@ -361,7 +398,7 @@ export const SwapInterface = () => {
                     { trade.slippageWarning &&
                         <>
                             <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
-                                <ExclamationCircleOutlined style={{ marginBottom: '0' }}/>&nbsp;Due to trade size your price's affected by high slippage.
+                                <ExclamationCircleOutlined style={{ marginBottom: '0', marginRight: 5 }}/><b>High slippage warning:</b> Price will be affected due to your trade size.
                             </LabelGrey>
                         </>
                     }
@@ -374,22 +411,7 @@ export const SwapInterface = () => {
                         <Col span={12} style={{ textAlign: 'left' }}>
                             {loadedBuy &&
                                 <>
-                                    <a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link"
-                                       target="_blank">VIEW TRANSACTION -></a>
-                                </>
-                            }
-                        </Col>
-                    </Row>
-                </>
-            }
-
-            { sellFlag &&
-                <>
-                    <Row type="flex" justify="center" >
-                        <Col span={12} style={{ textAlign: 'right' }}>
-                            {loadedSell &&
-                                <>
-                                    <a href={getLink(vethTx)} rel="noopener noreferrer" title="Transaction Link"
+                                    <a href='#' rel="noopener noreferrer" title="Transaction Link"
                                        target="_blank">VIEW TRANSACTION -></a>
                                 </>
                             }
