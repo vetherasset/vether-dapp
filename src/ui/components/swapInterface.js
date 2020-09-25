@@ -5,6 +5,7 @@ import Web3 from 'web3'
 
 import { Row, Col, InputNumber, Tooltip, Select } from 'antd'
 import { SwapOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
+import animate from '../less/animate.less'
 import { Label, Button, Colour, LabelGrey } from '../components'
 
 import { getVetherPrice } from '../../client/web3.js'
@@ -317,7 +318,13 @@ export const SwapInterface = () => {
                             </Col>
 
                             <Col span={24} style={{ textAlign: 'center' }}>
-                                <SwapOutlined style={{ margin: 0, transform: 'rotate(90deg)', fontSize: '1.1rem' }}
+                                <SwapOutlined className={`${animate.wiggle} ${animate.easeinout}`}
+                                              style={{ margin: 0,
+                                                  '--initial-deg': '79deg',
+                                                  '--final-deg': '98deg',
+                                                  fontSize: '1.1rem',
+                                                  animation: 'wiggle 3s infinite'
+                                              }}
                                               onClick={() => {
                                                   setToken(base)
                                                   setBase(token)

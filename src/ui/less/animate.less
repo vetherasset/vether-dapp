@@ -1,0 +1,20 @@
+.easeinout {
+  animation-timing-function: cubic-bezier(.17,.67,.83,.67);
+}
+
+.wiggle {
+  @keyframes wiggle {
+    0% {
+      -webkit-transform: rotate(var(--initial-deg));
+      transform: rotate(var(--initial-deg));
+    }
+    50% {
+      -webkit-transform: scale(1.1) rotate(var(--final-deg));
+      transform: scale(1.2) rotate(var(--final-deg));
+    }
+    100% {
+      -webkit-transform: rotate(var(--initial-deg));
+      transform: rotate(var(--initial-deg));
+    }
+  }
+}
