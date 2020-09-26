@@ -11,12 +11,25 @@ export const Donations = () => {
     const [ currency ] = useState('Eth')
     const [ devData, setDevData ] = useState(null)
 
+    const sums = [ 0.2, 0.5, 1, 3 ]
+    const [sumValue, setSumValue] = useState(sums[1])
+    const [sumRadioValue, setSumRadioValue] = useState(sums[1])
+    const [sumInputValue, setSumInputValue] = useState("")
+
     const { Option } = Select
 
-    useEffect(() => {
-        connect()
-        // eslint-disable-next-line
-    })
+    const devs = [
+        {
+            name: 'strictly_scarce',
+            address: '0x109ab1440fCEEAdbb1c49fbD29f0d3eF653eD0ec',
+            about: 'Author, contract developer, dapp developer'
+        },
+        {
+            name: 'ylwghst',
+            address: '0x05c111014A6FAFca2714CeE52e7f3a6c1c246073',
+            about: 'Dapp developer, infrastructure maintainer'
+        }
+    ]
 
     const connect = async () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
@@ -42,35 +55,17 @@ export const Donations = () => {
         }
     }
 
-    const devs = [
-        {
-            name: 'strictly_scarce',
-            address: '0x109ab1440fCEEAdbb1c49fbD29f0d3eF653eD0ec',
-            about: 'Author, contract developer and deployer, dapp developer'
-        },
-        {
-            name: 'ylwghst',
-            address: '0x05c111014A6FAFca2714CeE52e7f3a6c1c246073',
-            about: 'Dapp developer, front-end dev, infrastructure maintainer'
-        }
-    ]
-
     const onDevDataInputChange = (value) => {
         setDevData(devs[value])
     }
 
-    const sums = [ 0.2, 0.5, 1, 3 ]
-    const [sumValue, setSumValue] = useState(sums[1])
-    const [sumRadioValue, setSumRadioValue] = useState(sums[1])
-    const [sumInputValue, setSumInputValue] = useState("")
-
-    const onSumRadioChange = e => {
+    const onSumRadioChange = (e) => {
         setSumInputValue("")
         setSumValue(e.target.value)
         setSumRadioValue(e.target.value)
     }
 
-    const onSumInputChange = e => {
+    const onSumInputChange = (e) => {
         setSumRadioValue(null)
         setSumValue(e.target.value)
         setSumInputValue(e.target.value)
@@ -86,6 +81,11 @@ export const Donations = () => {
             })
         }
     }
+
+    useEffect(() => {
+        connect()
+        // eslint-disable-next-line
+    })
 
     return (
         <>
