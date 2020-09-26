@@ -9,7 +9,7 @@ const Swap = () => {
 	return (
 		<>
 			<h1>SWAP VETHER</h1>
-			<p>Easily exchange your tokens.</p>
+			<p>Easily exchange your assets.</p>
 			<SwapInterface/>
 		</>
 	)

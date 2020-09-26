@@ -1,7 +1,6 @@
 import Web3 from 'web3'
 import WETHER from '../artifacts/Wether.json'
 import VETHER from '../artifacts/Vether3.json'
-import VADERROUTER from '../artifacts/VaderRouter.json'
 import VADERUTILS from '../artifacts/VaderUtils.json'
 import { BN2Str, oneBN } from '../common/utils'
 
@@ -65,10 +64,6 @@ export const vetherAbi = () => {
 	return VETHER.abi
 }
 
-export const vaderRouterAbi = () => {
-    return VADERROUTER.abi
-}
-
 export const vaderUtilsAbi = () => {
     return VADERUTILS.abi
 }
@@ -97,8 +92,8 @@ export const getVetherPrice = async () => {
 }
 
 export const getAccounts = async (i) => {
-    let web3_ = getWeb3()
-    let accounts = await web3_.eth.getAccounts()
+    const web3_ = getWeb3()
+    const accounts = await web3_.eth.getAccounts()
     return accounts[i]
 }
 
@@ -107,9 +102,9 @@ export const getBalance = async (acc) => {
 }
 
 export const vetherContract = () => {
-    let abi_ = vetherAbi()
-    let addr_ = vetherAddr()
-    let web3_ = getWeb3()
+    const abi_ = vetherAbi()
+    const addr_ = vetherAddr()
+    const web3_ = getWeb3()
     return new web3_.eth.Contract(abi_, addr_)
 }
 

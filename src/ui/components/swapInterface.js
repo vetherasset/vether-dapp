@@ -9,7 +9,7 @@ import animate from '../less/animate.less'
 import { Label, Button, Colour, LabelGrey } from '../components'
 
 import { getVetherPrice } from '../../client/web3.js'
-import { BN2Str, currency, getBN } from '../../common/utils'
+import { BN2Str, currency, getBN, getTxLink } from '../../common/utils'
 import { calcSwapOutput, calcSwapInput } from '../../common/clpLogic'
 import { getETHPrice } from "../../client/market"
 
@@ -39,23 +39,21 @@ export const SwapInterface = () => {
 
     const [account, setAccount] = useState({ address: '', vethBalance: '', ethBalance: '' })
 
-    const [approved, setApproved] = useState(true)
-    const [approveFlag, setApproveFlag] = useState(false)
-
-    const [vethTx, setVethTx] = useState(null)
     const [base, setBase] = useState(assets[1])
     const [baseAmount, setBaseAmount] = useState(0)
 
     const [token, setToken] = useState(assets[0])
     const [tokenAmount, setTokenAmount] = useState(0)
 
+    const [approved, setApproved] = useState(true)
+
     const [trade, setTrade] = useState({ price: 0, slippage: 0, slippagePercent: 0, slippageColor: '', slippageWarning: false })
 
     const inCurrency = 'ETH'
     const [directionSwaped, setDirectionSwaped] = useState(false)
 
-    const [buyFlag, setBuyFlag] = useState(false)
-    const [loadedBuy, setLoadedBuy] = useState(null)
+    const [swapFlag, setSwapFlag] = useState(false)
+    const [transaction, setTransaction] = useState(null)
 
     const [poolData, setPoolData] = useState({ "tokenAmt": "", "baseAmt": '' })
     const [marketData, setMarketData] = useState(
@@ -70,24 +68,28 @@ export const SwapInterface = () => {
     }, [])
 
     const loadAccountData = async () => {
-        const account = (await window.web3.eth.getAccounts())[0]
-        if(account) {
-            const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
-            const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
-            const ethBalance = Web3.utils.fromWei(await window.web3.eth.getBalance(account), 'ether')
-            const vethBalance = Web3.utils.fromWei(await vether.methods.balanceOf(account).call(), 'ether')
-            setAccount({
-                address: account,
-                vethBalance: vethBalance,
-                ethBalance: ethBalance
-            })
-            context.setContext({
-                "accountData": {
-                    'address': account,
-                    'vethBalance': vethBalance,
-                    'ethBalance': ethBalance
-                }
-            })
+        try {
+            const account = (await window.web3.eth.getAccounts())[0]
+            if(account) {
+                const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+                const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
+                const ethBalance = Web3.utils.fromWei(await window.web3.eth.getBalance(account), 'ether')
+                const vethBalance = Web3.utils.fromWei(await vether.methods.balanceOf(account).call(), 'ether')
+                setAccount({
+                    address: account,
+                    vethBalance: vethBalance,
+                    ethBalance: ethBalance
+                })
+                context.setContext({
+                    "accountData": {
+                        'address': account,
+                        'vethBalance': vethBalance,
+                        'ethBalance': ethBalance
+                    }
+                })
+            }
+        } catch (err) {
+            console.log(err)
         }
     }
 
@@ -114,7 +116,7 @@ export const SwapInterface = () => {
         const utils = new web3_.eth.Contract(defaults.vader.utils.abi, defaults.vader.utils.address)
 
         const addr = String(assets.filter(asset => {
-            if (asset.pool !== null) return (asset.name === base.name || token.name)
+                return ((asset.pool !== null) && (asset.name === base.name || token.name))
         }).map(asset => asset.pool))
 
         const pool = await utils.methods.getPoolData(addr).call()
@@ -146,18 +148,16 @@ export const SwapInterface = () => {
         })
     }
 
-    const unlockToken = async () => {
+    const approveToken = async () => {
         try {
             const account = (await window.web3.eth.getAccounts())[0]
             if (account) {
-                setApproveFlag(true)
                 const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
                 const value = getBN(defaults.vether.supply * 10 ** 18).toString()
                 await vether.methods.approve(defaults.vader.router.address, value).send({ from: account })
                 checkApproval()
             }
         } catch (err) {
-            if(approveFlag) setApproveFlag(false)
             console.log(err)
         }
     }
@@ -254,11 +254,9 @@ export const SwapInterface = () => {
         })
     }
 
-    const buyVether = async () => {
-        setLoadedBuy(false)
-        setBuyFlag(true)
+    const buy = async () => {
         const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
-        const amount = Web3.utils.toWei(String(tokenAmount))
+        const amount = Web3.utils.toWei(String(baseAmount))
         const tx = await vaderRouter.methods.sell(amount, defaults.vader.pools.eth)
             .send({
                 from: account.address,
@@ -266,21 +264,22 @@ export const SwapInterface = () => {
                 gas: '240085',
                 value: amount
             })
-        loadAccountData()
-        setLoadedBuy(true)
+        setTransaction(tx.transactionHash)
+        setSwapFlag(true)
     }
 
-    const sellVether = async () => {
+    const sell = async () => {
         const vaderRouter = new window.web3.eth.Contract(defaults.vader.router.abi, defaults.vader.router.address)
         const amount = Web3.utils.toWei(String(baseAmount))
         const tx = await vaderRouter.methods.buy(amount, defaults.vader.pools.eth)
             .send({
                 from: account.address,
                 gasPrice: '',
-                gas: '240085'
+                gas: '240085',
+                value: ''
             })
-        setVethTx(tx.transactionHash)
-        loadAccountData()
+        setTransaction(tx.transactionHash)
+        setSwapFlag(true)
     }
 
     return (
@@ -320,10 +319,10 @@ export const SwapInterface = () => {
                             <Col span={24} style={{ textAlign: 'center' }}>
                                 <SwapOutlined className={`${animate.wiggle} ${animate.easeinout}`}
                                               style={{ margin: 0,
-                                                  '--initial-deg': '79deg',
-                                                  '--final-deg': '98deg',
+                                                  '--initial-deg': '90deg',
+                                                  '--final-deg': '90deg',
                                                   fontSize: '1.1rem',
-                                                  animation: 'wiggle 3s infinite'
+                                                  animation: 'wiggle 2.7s infinite'
                                               }}
                                               onClick={() => {
                                                   setToken(base)
@@ -371,7 +370,7 @@ export const SwapInterface = () => {
                             </Col>
                     </Row>
 
-                    <Row type="flex" justify="center" align="middle" style={{ marginBottom: '1.33rem' }}>
+                    <Row type="flex" justify="center" align="middle" style={{ marginBottom: '1.33rem', fontSize: 14 }}>
                         <Col lg={18} xs={24}>
                             <Row>
                                 <Col span={12}>
@@ -397,9 +396,15 @@ export const SwapInterface = () => {
                     </Row>
                     <Row type="flex" justify="center" align="middle" style={{ marginBottom: '1.33rem' }}>
                         <Col span={24}>
-                            <Button type="primary" shape="round" size={'large'} style={{ width: '100%', minHeight: "43px" }}>
-                                Swap
-                            </Button>
+                                <Button type="primary"
+                                        shape="round"
+                                        size={'large'}
+                                        style={{ width: '100%', minHeight: "43px" }}
+                                        {...(!approved && base.id === 0 ? { onClick: approveToken}
+                                        : { onClick: base.id === 0 ? sell : buy  })}
+                                >
+                                    { !approved && base.id === 0 ? 'Approve Token' : 'Swap' }
+                                </Button>
                         </Col>
                     </Row>
                     { trade.slippageWarning &&
@@ -412,16 +417,14 @@ export const SwapInterface = () => {
                 </Col>
             </Row>
 
-            { buyFlag &&
+            { swapFlag && transaction &&
                 <>
                     <Row type="flex" justify="center" >
                         <Col span={12} style={{ textAlign: 'left' }}>
-                            {loadedBuy &&
-                                <>
-                                    <a href='#' rel="noopener noreferrer" title="Transaction Link"
-                                       target="_blank">VIEW TRANSACTION -></a>
-                                </>
-                            }
+                            <>
+                                <a href={getTxLink(transaction)} rel="noopener noreferrer" title="Transaction Link"
+                                   target="_blank">VIEW TRANSACTION -></a>
+                            </>
                         </Col>
                     </Row>
                 </>
