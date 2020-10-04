@@ -44,7 +44,7 @@ export const vaderRouterAddr = () => {
     if (TESTNET) {
         return null
     } else {
-        return '0xe16e64Da1338d8E56dFd8355Ba7642D0A79e253c'
+        return '0xAa5CCD27Aba925F6885D7A9AdeB54dFf22185d1C'
     }
 }
 
@@ -52,7 +52,7 @@ export const vaderUtilsAddr = () => {
     if (TESTNET) {
         return null
     } else {
-        return '0x0f216323076dfe029f01B3DeB3bC1682B1ea8A37'
+        return '0x2E74525c491954BE67E8847B087ed1c3C988635d'
     }
 }
 
