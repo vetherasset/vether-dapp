@@ -28,10 +28,10 @@ defaults.vether.abi = VETHER.abi
 
 defaults.vader = {}
 defaults.vader.router = {}
-defaults.vader.router.address = '0xe16e64Da1338d8E56dFd8355Ba7642D0A79e253c'
+defaults.vader.router.address = '0xAa5CCD27Aba925F6885D7A9AdeB54dFf22185d1C'
 defaults.vader.router.abi = VADERROUTER.abi
 defaults.vader.utils = {}
-defaults.vader.utils.address = '0x0f216323076dfe029f01B3DeB3bC1682B1ea8A37'
+defaults.vader.utils.address = '0x2E74525c491954BE67E8847B087ed1c3C988635d'
 defaults.vader.utils.abi = VADERUTILS.abi
 defaults.vader.pools = {}
 defaults.vader.pools.eth = '0x0000000000000000000000000000000000000000'
