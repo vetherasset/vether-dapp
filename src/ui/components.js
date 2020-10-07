@@ -243,14 +243,30 @@ export const WalletConnectButton = (props) => {
 
 export const Button = (props) => {
   let styles = {...props.style || {}}
-  styles.height = "20px"
-  styles.padding = "0px 0px"
   styles.display = "inline-block"
-  styles.border = "none"
+
+  if (props.height) {
+    styles.height = props.height
+  } else {
+    styles.height = "20px"
+  }
+
+  if (props.padding) {
+    styles.padding = props.padding
+  } else {
+    styles.padding = "0px 0px"
+  }
+
+  if(props.border) {
+    styles.border = props.border
+  } else {
+    styles.border = "none"
+  }
 
   if (props.size) {
     styles.fontSize = props.size
   }
+
   if (props.backgroundColor) {
     styles.backgroundColor = props.backgroundColor
     styles.borderColor = props.backgroundColor

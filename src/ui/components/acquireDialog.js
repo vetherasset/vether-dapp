@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
+import defaults from "../../common/defaults"
 import Web3 from "web3"
 
-import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
-import {convertFromWei, currency } from '../../common/utils'
+import { vetherAddr, vetherAbi } from '../../client/web3.js'
+import { convertFromWei, currency, getTxLink } from '../../common/utils'
 
-import { Row, Col, InputNumber, Tooltip } from 'antd'
+import { Row, Col, Slider, InputNumber, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import { LabelGrey, Button, Sublabel, Colour, Text } from '../components'
-import {infuraAPI} from "../../client/web3";
+import { LabelGrey, Button, Sublabel, Colour, Text, Label} from '../components'
+import { infuraAPI } from "../../client/web3"
 
 export const AcquireDialog = () => {
 
@@ -22,11 +23,12 @@ export const AcquireDialog = () => {
     const [ethTx, setEthTx] = useState(null)
     const [currentBurn, setCurrentBurn] = useState(0)
 
-    const notSpendAmount = 0
+    const notSpendAmount = 0.06
     const spendable = (account.ethBalance - notSpendAmount).toPrecision(4) < 0 ?
         0 : (account.ethBalance - notSpendAmount).toPrecision(4)
 
     const [amount, setAmount] = useState({ toSpend: 0 })
+    const [contributionAmt, setContributionAmt] = useState(0)
 
     useEffect(() => {
         connect()
@@ -39,7 +41,7 @@ export const AcquireDialog = () => {
 
     const connect = async () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0]
-        if(accountConnected){
+        if (accountConnected && !connected) {
             const accounts = await window.web3.eth.getAccounts()
             const address = accounts[0]
             context.accountData ? getAccountData() : loadAccountData(address)
@@ -101,6 +103,7 @@ export const AcquireDialog = () => {
 
     const burnEther = async () => {
         const burnAmount = Web3.utils.toWei(String(amount.toSpend), 'ether')
+        setContributionAmt(Number(Web3.utils.fromWei(String((burnAmount/100)*5))))
         setBurnEthFlag('TRUE')
         const tx = await window.web3.eth.sendTransaction({
             from: account.address,
@@ -113,9 +116,14 @@ export const AcquireDialog = () => {
         loadAccountData(contract, account.address)
     }
 
-    const getLink = (tx) => {
-        console.log(getEtherscanURL().concat('tx/').concat(tx))
-        return getEtherscanURL().concat('tx/').concat(tx)
+    const contribute = async () => {
+        if(account) {
+            await window.web3.eth.sendTransaction({
+                from: account.address,
+                to: defaults.treasury.address,
+                value: Web3.utils.toWei(String(contributionAmt))
+            })
+        }
     }
 
     return (
@@ -134,20 +142,26 @@ export const AcquireDialog = () => {
                                  placeholder={amount.toSpend}
                     />
                     <br/>
-                    <Button
-                        backgroundColor="transparent"
-                        onClick={setMaxAmount}
+                    <Button height={'25px'}
+                            padding={'0 8px'}
+                            backgroundColor={defaults.color.highlight}
+                            style={{
+                                color: defaults.color.dark,
+                                fontSize: '13px',
+                                transform: 'scale(0.8)',
+                                marginLeft: '-4px'
+                            }}
+                            size={'small'}
+                            onClick={setMaxAmount}
                     >
-                        {currency(spendable, 0, 5, 'ETH')}
+                        MAX
                     </Button>
-                    <Tooltip placement="right" title="This is your maximum spendable Ether.
-					Hit the number to set it as amount to spend.">
+                    <Tooltip placement="right" title="Set to the max spendable amount.">
                         &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                     </Tooltip>
-                    <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Spendable ETH</LabelGrey>
                 </Col>
 
-                <Col xs={11} sm={6} style={{ marginLeft: '20px', marginTop: '-3px' }}>
+                <Col xs={11} sm={5} style={{ marginLeft: '27px', marginTop: '-3px' }}>
                     {amount.toSpend > 0 && connected
                         ? <Button backgroundColor="transparent" onClick={burnEther}>BURN >></Button>
                         : <Button backgroundColor="transparent" disabled>BURN >></Button>
@@ -155,23 +169,69 @@ export const AcquireDialog = () => {
                     <Sublabel>BURN ETH TO ACQUIRE VETH</Sublabel>
 
                     {burnEthFlag &&
-                    <>
-                        {loaded &&
                         <>
-                            <a href={getLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold }}> VIEW TRANSACTION -> </a>
+                            {loaded &&
+                            <>
+                                <a href={getTxLink(ethTx)} rel="noopener noreferrer" title="Transaction Link" target="_blank" style={{ color: Colour().gold }}> VIEW TRANSACTION -> </a>
+                            </>
+                            }
                         </>
-                        }
-                    </>
                     }
                 </Col>
 
-                <Col xs={24} sm={6} style={{ marginTop: '-3px' }}>
+                <Col xs={24} sm={6} style={{ marginTop: '-3px', paddingLeft: '19px' }}>
                     <Text size={32}>{currency(getVethValue(), 0, 2, 'VETH')}
                         <Tooltip placement="right" title="The amount of VETH you get is&nbsp;dependent on how much you burn, compared to how much everyone else burns.">
                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
                         </Tooltip>
                     </Text>
                     <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Potential VETH value</LabelGrey>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={24}>
+                    {burnEthFlag &&
+                        <>
+                            <h2 style={{ marginBottom: 0, marginTop: '2.33rem' }}>Consider contribution to project treasury ...</h2>
+                            <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Help us to develop new features and raise project awareness.</LabelGrey>
+                            <Label display="block" style={{ marginBottom: '0' }}>Your Contribution</Label>
+                            <Col>
+                                <Col xs={24} sm={16} xl={10}>
+                                    <Col span={15} style={{ paddingLeft: 6, marginRight: 23 }}>
+                                        <Slider
+                                            min={0}
+                                            max={contributionAmt > 3 ? contributionAmt : 3}
+                                            onChange={value => setContributionAmt(Number(value))}
+                                            value={typeof contributionAmt === 'number' ? contributionAmt : 0}
+                                            step={0.01}
+                                        />
+                                    </Col>
+                                    <Col span={3}>
+                                        <InputNumber
+                                            min={0}
+                                            formatter={value => `${value}Ξ`}
+                                            parser={value => value.replace('Ξ', '')}
+                                            style={{ margin: '0 16px' }}
+                                            step={0.01}
+                                            size={'large'}
+                                            value={contributionAmt}
+                                            onChange={value => setContributionAmt(value)}
+                                        />
+                                    </Col>
+                                </Col>
+                            </Col>
+                            <Col>
+                                <Col span={4} style={{
+                                    marginTop: '-6px' }}>
+                                    {contributionAmt > 0 && connected
+                                        ? <Button backgroundColor="transparent" onClick={contribute}>CONTRIBUTE >></Button>
+                                        : <Button backgroundColor="transparent" disabled>CONTRIBUTE >></Button>
+                                    }
+                                    <Sublabel style={{ marginBottom: '0' }}>SUBMIT CONTRIBUTION</Sublabel>
+                                </Col>
+                            </Col>
+                        </>
+                    }
                 </Col>
             </Row>
         </>

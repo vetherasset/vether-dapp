@@ -26,12 +26,15 @@ defaults.vether.secondsPerDay = 84200
 defaults.vether.address = testnet ? '0x95d0c08e59bbc354ee2218da9f82a04d7cdb6fdf' : '0x4ba6ddd7b89ed838fed25d208d4f644106e34279'
 defaults.vether.abi = VETHER.abi
 
+defaults.treasury = {}
+defaults.treasury.address = '0x0c00DE096F93B3A5A15aaa87895f6964785362Ec'
+
 defaults.vader = {}
 defaults.vader.router = {}
-defaults.vader.router.address = '0xAa5CCD27Aba925F6885D7A9AdeB54dFf22185d1C'
+defaults.vader.router.address = '0xe16e64Da1338d8E56dFd8355Ba7642D0A79e253c'
 defaults.vader.router.abi = VADERROUTER.abi
 defaults.vader.utils = {}
-defaults.vader.utils.address = '0x2E74525c491954BE67E8847B087ed1c3C988635d'
+defaults.vader.utils.address = '0x0f216323076dfe029f01B3DeB3bC1682B1ea8A37'
 defaults.vader.utils.abi = VADERUTILS.abi
 defaults.vader.pools = {}
 defaults.vader.pools.eth = '0x0000000000000000000000000000000000000000'
