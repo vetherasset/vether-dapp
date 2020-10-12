@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
+import { CSSTransitionGroup } from 'react-transition-group'
 import defaults from "../../common/defaults"
 import Web3 from "web3"
 
@@ -179,7 +180,7 @@ export const AcquireDialog = () => {
                     }
                 </Col>
 
-                <Col xs={24} sm={6} style={{ marginTop: '-3px', paddingLeft: '19px' }}>
+                <Col xs={24} sm={6} style={{ marginTop: '-3px' }}>
                     <Text size={32}>{currency(getVethValue(), 0, 2, 'VETH')}
                         <Tooltip placement="right" title="The amount of VETH you get is&nbsp;dependent on how much you burn, compared to how much everyone else burns.">
                             &nbsp;<QuestionCircleOutlined style={{ color: Colour().grey, marginBottom: 0 }} />
@@ -188,10 +189,16 @@ export const AcquireDialog = () => {
                     <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Potential VETH value</LabelGrey>
                 </Col>
             </Row>
-            <Row>
-                <Col span={24}>
-                    {burnEthFlag &&
-                        <>
+
+            {burnEthFlag &&
+                <CSSTransitionGroup
+                    transitionName="easeIn"
+                    transitionAppear={true}
+                    transitionAppearTimeout={300}
+                    transitionEnter={false}
+                    transitionLeave={false}>
+                    <Row>
+                        <Col xl={24} style={{ transition: 'display 0.6s cubic-bezier(0.85, 0, 0.15, 1)' }}>
                             <h2 style={{ marginBottom: 0, marginTop: '2.33rem' }}>Consider contribution to project treasury ...</h2>
                             <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>Help us to develop new features and raise project awareness.</LabelGrey>
                             <Label display="block" style={{ marginBottom: '0' }}>Your Contribution</Label>
@@ -221,7 +228,7 @@ export const AcquireDialog = () => {
                                 </Col>
                             </Col>
                             <Col>
-                                <Col span={4} style={{
+                                <Col xs={24} xl={4} style={{
                                     marginTop: '-6px' }}>
                                     {contributionAmt > 0 && connected
                                         ? <Button backgroundColor="transparent" onClick={contribute}>CONTRIBUTE >></Button>
@@ -230,10 +237,10 @@ export const AcquireDialog = () => {
                                     <Sublabel style={{ marginBottom: '0' }}>SUBMIT CONTRIBUTION</Sublabel>
                                 </Col>
                             </Col>
-                        </>
-                    }
-                </Col>
-            </Row>
+                        </Col>
+                    </Row>
+                </CSSTransitionGroup>
+            }
         </>
     )
 }

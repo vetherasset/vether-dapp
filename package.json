@@ -21,6 +21,7 @@
     "react-scripts": "^3.4.1",
     "react-socks": "^2.1.0",
     "react-timeago": "^4.4.0",
+    "react-transition-group": "1.x",
     "web3": "^1.2.6"
   },
   "devDependencies": {
