@@ -150,7 +150,8 @@ export const AcquireDialog = () => {
                                 color: defaults.color.dark,
                                 fontSize: '13px',
                                 transform: 'scale(0.8)',
-                                marginLeft: '-4px'
+                                marginLeft: '-4px',
+                                marginBottom: '1.33rem'
                             }}
                             size={'small'}
                             onClick={setMaxAmount}
