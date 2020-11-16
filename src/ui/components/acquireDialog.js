@@ -3,6 +3,7 @@ import { Context } from '../../context'
 import { CSSTransitionGroup } from 'react-transition-group'
 import defaults from "../../common/defaults"
 import Web3 from "web3"
+import '@metamask/legacy-web3'
 
 import { vetherAddr, vetherAbi } from '../../client/web3.js'
 import { convertFromWei, currency, getTxLink } from '../../common/utils'

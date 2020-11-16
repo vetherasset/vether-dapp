@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
-
+import '@metamask/legacy-web3'
 import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo, getBN, currency } from '../../common/utils'
 

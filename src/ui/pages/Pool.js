@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from 'react'
 import defaults from "../../common/defaults"
 import Web3 from "web3"
+import '@metamask/legacy-web3'
 import {Row, Tabs} from 'antd'
 import '../../App.less'
 import { AddLiquidityTable, ProvidedLiquidityTable, RemoveLiquidityTable } from "../components/liquidityDialog"

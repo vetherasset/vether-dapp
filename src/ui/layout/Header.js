@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Context } from '../../context'
+import '@metamask/legacy-web3'
 
 import { Link } from "react-router-dom"
 import { Menu, Layout, Row, Col } from 'antd'

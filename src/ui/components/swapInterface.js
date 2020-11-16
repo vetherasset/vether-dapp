@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
 import defaults from "../../common/defaults"
 import Web3 from 'web3'
+import '@metamask/legacy-web3'
 
 import { Row, Col, InputNumber, Tooltip, Select } from 'antd'
 import { SwapOutlined, QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'

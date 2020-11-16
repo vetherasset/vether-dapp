@@ -1,6 +1,7 @@
 import React, { useEffect, useState} from "react"
 import defaults from "../../common/defaults"
 import Web3 from "web3"
+import '@metamask/legacy-web3'
 
 import {currency, getBN, percent} from "../../common/utils"
 import { Col, Slider, Switch, InputNumber, Row, Select, Tooltip } from "antd"

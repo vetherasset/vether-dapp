@@ -1486,6 +1486,11 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
+"@metamask/legacy-web3@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@metamask/legacy-web3/-/legacy-web3-1.0.2.tgz#ec575670e9e90fa5f0a2a16401359606f855ecb0"
+  integrity sha512-9VG32YfM3wlZC54G6C4xbKI+hs+xJmw0YutG+dtljsawgdFr8FocY/iFWLLp9mldLeWQ6zLroBo2CeAgLJw/og==
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
