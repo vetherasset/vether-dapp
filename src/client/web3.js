@@ -81,6 +81,11 @@ export const getWeb3 = () => {
     return new Web3(Web3.givenProvider || "http://localhost:7545")
 }
 
+export const getUtilsContract = () => {
+    var web3 = getWeb3()
+    return new web3.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
+}
+
 export const getVetherPrice = async () => {
     try {
         const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))

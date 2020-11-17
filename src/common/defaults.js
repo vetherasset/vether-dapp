@@ -31,7 +31,7 @@ defaults.treasury.address = '0x0c00DE096F93B3A5A15aaa87895f6964785362Ec'
 
 defaults.vader = {}
 defaults.vader.router = {}
-defaults.vader.router.address = '0xAa5CCD27Aba925F6885D7A9AdeB54dFf22185d1C'
+defaults.vader.router.address = '0x6d337AD624A327146665e5f515ce964A4D3F0043'
 defaults.vader.router.abi = VADERROUTER.abi
 defaults.vader.utils = {}
 defaults.vader.utils.address = '0x2E74525c491954BE67E8847B087ed1c3C988635d'
