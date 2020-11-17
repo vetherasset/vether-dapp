@@ -421,7 +421,7 @@ export const SwapInterface = () => {
             { swapFlag && transaction &&
                 <>
                     <Row type="flex" justify="center" >
-                        <Col span={12} style={{ textAlign: 'left' }}>
+                        <Col span={9} style={{ textAlign: 'left' }}>
                             <>
                                 <a href={getTxLink(transaction)} rel="noopener noreferrer" title="Transaction Link"
                                    target="_blank">VIEW TRANSACTION -></a>

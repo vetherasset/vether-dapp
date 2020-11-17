@@ -506,10 +506,7 @@ export const RemoveLiquidityTable = (props) => {
         <> {!approvedLP && account.isMember &&
                 <Row>
                     <Col xs={24} sm={16} xl={9}>
-                        {(unstakeAmount > 0)
-                            ? <Button backgroundColor="transparent" onClick={approveLP}>APPROVE TOKEN >></Button>
-                            : <Button backgroundColor="transparent" disabled>APPROVE TOKEN >></Button>
-                        }
+                        <Button backgroundColor="transparent" onClick={approveLP}>APPROVE TOKEN >></Button>
                         <Sublabel margin={0}>APPROVE POOL TOKEN FOR TRANSFERS</Sublabel>
                     </Col>
                 </Row>
