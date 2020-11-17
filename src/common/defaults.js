@@ -1,4 +1,3 @@
-// 2do: This should be dispatched with Redux instead
 import VETHER from '../artifacts/Vether3.json'
 import WETHER from "../artifacts/Wether.json"
 import VADERROUTER from "../artifacts/VaderRouter.json"
