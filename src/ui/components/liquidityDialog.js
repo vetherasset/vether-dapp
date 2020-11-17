@@ -113,8 +113,6 @@ export const AddLiquidityTable = () => {
         }
     }
 
-
-
     const stake = async () => {
         try {
             const account = (await window.web3.eth.getAccounts())[0]
@@ -430,7 +428,7 @@ export const ProvidedLiquidityTable = (props) => {
 
 export const RemoveLiquidityTable = (props) => {
 
-    // const account = props.accountData
+    const account = props.accountData
 
     const [burnTknFlag, setBurnTknFlag] = useState(null)
     const [tknTx, setTknTx] = useState(null)
@@ -457,7 +455,6 @@ export const RemoveLiquidityTable = (props) => {
                 const poolAddress = await util.methods.getPool(defaults.vader.pools.eth).call()
                 const pool = new window.web3.eth.Contract(defaults.vether.abi, poolAddress)
                 const approval = await pool.methods.allowance(account, defaults.vader.router.address).call()
-                console.log(approval)
                 const poolBalance = await pool.methods.balanceOf(account).call()
                 if (+approval >= +poolBalance && +poolBalance > 0) {
                     setApprovedLP(true)
@@ -506,17 +503,19 @@ export const RemoveLiquidityTable = (props) => {
     }
 
     return (
-        <> {!approvedLP &&
+        <> {!approvedLP && account.isMember &&
+                <Row>
+                    <Col xs={24} sm={16} xl={9}>
+                        {(unstakeAmount > 0)
+                            ? <Button backgroundColor="transparent" onClick={approveLP}>APPROVE TOKEN >></Button>
+                            : <Button backgroundColor="transparent" disabled>APPROVE TOKEN >></Button>
+                        }
+                        <Sublabel margin={0}>APPROVE POOL TOKEN FOR TRANSFERS</Sublabel>
+                    </Col>
+                </Row>
+            }
 
-            <Row>
-                <Col xs={24} sm={16} xl={9}>
-                    <Button backgroundColor="transparent" onClick={approveLP}>APPROVE</Button>
-                </Col>
-            </Row>
-
-        }
             {approvedLP &&
-
                 <Row>
                     <Col xs={24} sm={16} xl={9}>
                         <Label display="block" style={{ marginBottom: '0.55rem' }}>Proportion</Label>
@@ -544,13 +543,10 @@ export const RemoveLiquidityTable = (props) => {
                         </Col>
                     </Col>
                     <Col xs={24} sm={7} style={{ paddingTop: 30 }}>
-                    {(unstakeAmount > 0) &&
-                            <Button backgroundColor="transparent" onClick={unstake}>REMOVE >></Button>
-                        }
-                        {/* {account.isMember && (unstakeAmount > 0)
+                    {(unstakeAmount > 0)
                             ? <Button backgroundColor="transparent" onClick={unstake}>REMOVE >></Button>
                             : <Button backgroundColor="transparent" disabled>REMOVE >></Button>
-                        } */}
+                        }
                         <Sublabel margin={0}>REMOVE LIQUIDITY FROM THE POOL</Sublabel>
                         {burnTknFlag &&
                             <>
@@ -567,10 +563,9 @@ export const RemoveLiquidityTable = (props) => {
                         }
                     </Col>
                 </Row>
-
             }
 
-            {/* {!account.isMember &&
+            {!account.isMember &&
                 <>
                     <Row>
                         <LabelGrey display={'block'} style={{ fontStyle: 'italic' }}>
@@ -578,7 +573,7 @@ export const RemoveLiquidityTable = (props) => {
                         </LabelGrey>
                     </Row>
                 </>
-            } */}
+            }
         </>
     )
 }
