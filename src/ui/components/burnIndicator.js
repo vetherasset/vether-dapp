@@ -14,7 +14,7 @@ const Clock = (props) => {
 
         const loadData = async () => {
             try {
-                const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+                const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
                 const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
                 const seconds = getSecondsToGo(await vether.methods.nextDayTime().call())
                 setCountdown(seconds)
@@ -34,7 +34,7 @@ const Clock = (props) => {
 
         if (countdown <= 0) {
             setCountdown(0)
-            call = setInterval(() => loadData(), defaults.infura.callRate)
+            call = setInterval(() => loadData(), defaults.api.callRate)
         }
 
         return () => {
@@ -75,7 +75,7 @@ const ProgressBar = () => {
 
         const loadData = async () => {
             try {
-                const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+                const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
                 const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
                 const seconds = getSecondsToGo(await vether.methods.nextDayTime().call())
                 setCountdown(seconds)
@@ -102,7 +102,7 @@ const ProgressBar = () => {
 
         if (countdown <= 0) {
             setCountdown(0)
-            call = setInterval(() => loadData(), defaults.infura.callRate)
+            call = setInterval(() => loadData(), defaults.api.callRate)
         }
 
         return () => {

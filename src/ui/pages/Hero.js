@@ -69,7 +69,7 @@ const NumberBottom = (props) => {
 
 const Hero = () => {
 
-	const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+	const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
 	const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
 	const [distribution, setDistribution] = useState(
 		{ era: 0, day: 0, emission: 0, currentBurn: 0, nextDay: 0, nextEra: 0, nextEmission: 0,

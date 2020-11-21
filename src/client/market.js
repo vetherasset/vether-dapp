@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi, infuraAPI } from './web3.js'
+import defaults from "../common/defaults"
+import { vetherAddr, vetherAbi } from './web3.js'
 
 export const getETHPrice = async () => {
     const ethPrice = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
@@ -8,7 +9,7 @@ export const getETHPrice = async () => {
 }
 
 const getContract = () => {
-    const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+    const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
     return (new web3.eth.Contract(vetherAbi(), vetherAddr()))
 }
 

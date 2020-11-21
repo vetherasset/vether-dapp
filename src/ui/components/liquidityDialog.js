@@ -59,7 +59,7 @@ export const AddLiquidityTable = () => {
     const { Option } = Select
 
     const loadData = async () => {
-        const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+        const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const utils = new web3.eth.Contract(defaults.vader.utils.abi, defaults.vader.utils.address)
         const poolData = await utils.methods.getPoolData(defaults.vader.pools.eth).call()
         setPoolData({
