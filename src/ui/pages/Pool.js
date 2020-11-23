@@ -19,7 +19,7 @@ const Pool = () => {
 		})
 
 	useEffect(() => {
-		const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+		const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
 		const utils = new web3.eth.Contract(defaults.vader.utils.abi, defaults.vader.utils.address)
 
 		const loadData = async () => {

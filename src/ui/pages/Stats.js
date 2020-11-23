@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Context } from '../../context'
 import axios from 'axios'
-
+import defaults from "../../common/defaults"
 import Breakpoint from 'react-socks'
 
 import Web3 from 'web3'
-import { vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
+import { vetherAddr, vetherAbi } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo } from '../../common/utils'
 
 import emissionArray from '../../data/emissionArray.json'
@@ -89,7 +89,7 @@ const Stats = () => {
     }
 
     const loadEraData = async () => {
-        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
         const emission = convertFromWei(await contract.methods.emission().call())
         const day = await contract.methods.currentDay().call()
@@ -122,7 +122,7 @@ const Stats = () => {
         setEmissionData(context.emissionData)
     }
     const loadEmissionData = async () => {
-        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
         const totalSupply = 1000000
         const balance = convertFromWei(await contract.methods.balanceOf(vetherAddr()).call())

@@ -11,7 +11,6 @@ import { convertFromWei, currency, getTxLink } from '../../common/utils'
 import { Row, Col, Slider, InputNumber, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { LabelGrey, Button, Sublabel, Colour, Text, Label} from '../components'
-import { infuraAPI } from "../../client/web3"
 
 export const AcquireDialog = () => {
 
@@ -52,7 +51,7 @@ export const AcquireDialog = () => {
     }
 
     const loadBurnData = async () => {
-        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const vether = new web3.eth.Contract(vetherAbi(), vetherAddr())
         const day = await vether.methods.currentDay().call()
         const era = 1
@@ -65,7 +64,7 @@ export const AcquireDialog = () => {
     }
 
     const loadAccountData = async (address) => {
-        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const vether = new web3.eth.Contract(vetherAbi(), vetherAddr())
         const ethBalance = convertFromWei(await window.web3.eth.getBalance(address))
         const vethBalance = convertFromWei(await vether.methods.balanceOf(address).call())

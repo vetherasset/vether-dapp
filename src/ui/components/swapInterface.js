@@ -72,7 +72,7 @@ export const SwapInterface = () => {
         try {
             const account = (await window.web3.eth.getAccounts())[0]
             if(account) {
-                const web3 = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+                const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
                 const vether = new web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
                 const ethBalance = Web3.utils.fromWei(await window.web3.eth.getBalance(account), 'ether')
                 const vethBalance = Web3.utils.fromWei(await vether.methods.balanceOf(account).call(), 'ether')
@@ -113,7 +113,7 @@ export const SwapInterface = () => {
     }
 
 	const loadPoolData = async () => {
-		const web3_ = new Web3(new Web3.providers.HttpProvider(defaults.infura.api))
+		const web3_ = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const utils = new web3_.eth.Contract(defaults.vader.utils.abi, defaults.vader.utils.address)
 
         const addr = String(assets.filter(asset => {

@@ -1,4 +1,5 @@
 import Web3 from 'web3'
+import defaults from "../common/defaults"
 import WETHER from '../artifacts/Wether.json'
 import VETHER from '../artifacts/Vether3.json'
 import VADERUTILS from '../artifacts/VaderUtils.json'
@@ -68,15 +69,6 @@ export const vaderUtilsAbi = () => {
     return VADERUTILS.abi
 }
 
-export const infuraAPI = () => {
-    const apiKey = process.env.REACT_APP_INFURA_API
-    if(TESTNET) {
-        return ('https://rinkeby.infura.io/v3/' + apiKey)
-    } else {
-        return ('https://mainnet.infura.io/v3/' + apiKey)
-    }
-}
-
 export const getWeb3 = () => {
     return new Web3(Web3.givenProvider || "http://localhost:7545")
 }
@@ -88,7 +80,7 @@ export const getUtilsContract = () => {
 
 export const getVetherPrice = async () => {
     try {
-        const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const web3_ = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const poolContract = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
         return (Web3.utils.fromWei(await poolContract.methods.calcValueInToken(ETH, BN2Str(oneBN)).call()))
     } catch (err) {

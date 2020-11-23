@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Context } from '../../context'
-
+import defaults from "../../common/defaults"
 import Breakpoint from 'react-socks'
 
 import Web3 from 'web3'
-import {vetherAddr, vetherAbi, infuraAPI } from '../../client/web3.js'
+import {vetherAddr, vetherAbi } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo, currency } from '../../common/utils'
 
 import { Row, Col, Progress } from 'antd'
@@ -35,7 +35,7 @@ export const EraIndicator = (props) => {
     }
 
     const loadEraData = async () => {
-        const web3 = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
         const emission = 2048
         const day = await contract.methods.currentDay().call()

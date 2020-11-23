@@ -1,7 +1,8 @@
 import React, {useContext, useEffect, useState} from "react"
 import { Context } from "../../context"
 import Web3 from "web3"
-import { ETH, infuraAPI, vaderUtilsAbi, vaderUtilsAddr } from "../../client/web3"
+import defaults from "../../common/defaults"
+import { ETH, vaderUtilsAbi, vaderUtilsAddr } from "../../client/web3"
 import { convertFromWei, currency } from "../../common/utils"
 import { getVetherPrice } from "../../client/web3"
 import { getETHPrice } from "../../client/market"
@@ -25,7 +26,7 @@ export const PoolTicker = () => {
     }, [])
 
     const loadPoolData = async () => {
-        const web3_ = new Web3(new Web3.providers.HttpProvider(infuraAPI()))
+        const web3_ = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const utils = new web3_.eth.Contract(vaderUtilsAbi(), vaderUtilsAddr())
         const poolData = await utils.methods.getPoolData(ETH).call()
         const price = await getVetherPrice()

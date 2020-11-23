@@ -6,7 +6,8 @@ import VADERUTILS from "../artifacts/VaderUtils.json"
 const defaults = {}
 
 const testnet = (process.env.REACT_APP_TESTNET === 'TRUE')
-const apikey = process.env.REACT_APP_INFURA_API
+const api = 'https://eth-mainnet.alchemyapi.io/v2/PW8dClFJzk12tP2elGQZWznAV2P5xcg0'
+const apiTestnet = ''
 
 defaults.color= {}
 defaults.color.background = '#2b2515'
@@ -41,9 +42,9 @@ defaults.vader.pools.eth = '0x0000000000000000000000000000000000000000'
 defaults.wrappedEther = {}
 defaults.wrappedEther.abi = WETHER.abi
 
-defaults.infura = {}
-defaults.infura.api = testnet ? 'https://rinkeby.infura.io/v3/' + apikey : 'https://mainnet.infura.io/v3/' + apikey
-defaults.infura.callRate = 210000
+defaults.api = {}
+defaults.api.url = testnet ? apiTestnet : api
+defaults.api.callRate = 210000
 
 defaults.etherscan = {}
 defaults.etherscan.url = testnet ? 'https://rinkeby.etherscan.io/' : 'https://etherscan.io/'
