@@ -85,8 +85,7 @@ export const AddLiquidityTable = () => {
             if (account) {
                 const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
                 const approval = await vether.methods.allowance(account, defaults.vader.router.address).call()
-                const vethBalance = await vether.methods.balanceOf(account).call()
-                if (+approval >= +vethBalance && +vethBalance > 0) {
+                if (+approval > 0) {
                     setApproved(true)
                 } else {
                     setApproved(false)
@@ -105,7 +104,6 @@ export const AddLiquidityTable = () => {
                 const vether = new window.web3.eth.Contract(defaults.vether.abi, defaults.vether.address)
                 const value = getBN(defaults.vether.supply * 10 ** 18).toString()
                 await vether.methods.approve(defaults.vader.router.address, value).send({ from: account })
-                approve()
             }
         } catch (err) {
             if (approveFlag) setApproveFlag(false)
