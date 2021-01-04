@@ -424,7 +424,7 @@ export const ChartData = (props) =>{
     const eraData = props.eraData
     const emissionData = props.emissionData
     const genesis = convertToDate(1589271741)
-    const halving = convertToDate(eraData.nextEra)
+    //const halving = convertToDate(eraData.nextEra)
     const end = convertToDate(1589271741 + 315360000)
 
     const paneStyles = {
@@ -498,7 +498,7 @@ export const ChartData = (props) =>{
                     </Col>
                 </Row>
                 <Row style={rowStyles}>
-                    <Col xs={8}
+                    <Col xs={12}
                          style={{
                              padding: '0 1rem'
                          }}
@@ -506,11 +506,11 @@ export const ChartData = (props) =>{
                         <LabelGrey size={props.size} color="#636362">Genesis</LabelGrey><br />
                         <Text size={1.25*props.size}>{genesis}</Text>
                     </Col>
-                    <Col xs={8}>
-                        <LabelGrey size={props.size} color="#636362">Halving</LabelGrey><br />
-                        <Text size={1.25*props.size}>{halving}</Text>
-                    </Col>
-                    <Col xs={8}
+                    {/*<Col xs={8}>*/}
+                    {/*    <LabelGrey size={props.size} color="#636362">Halving</LabelGrey><br />*/}
+                    {/*    <Text size={1.25*props.size}>{halving}</Text>*/}
+                    {/*</Col>*/}
+                    <Col xs={12}
                          style={{
                              padding: '0 1rem'
                          }}

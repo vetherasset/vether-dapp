@@ -37,9 +37,9 @@ export const EraIndicator = (props) => {
     const loadEraData = async () => {
         const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const contract = new web3.eth.Contract(vetherAbi(), vetherAddr())
-        const emission = 2048
+        const emission = Web3.utils.fromWei(await contract.methods.emission().call())
         const day = await contract.methods.currentDay().call()
-        const era = 1
+        const era = await contract.methods.currentEra().call()
         const nextDay = await contract.methods.nextDayTime().call()
         const nextEra = await contract.methods.nextEraTime().call()
         const nextEmission = convertFromWei(await contract.methods.getNextEraEmission().call())
