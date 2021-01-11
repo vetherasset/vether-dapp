@@ -116,7 +116,7 @@ export const EraIndicator = (props) => {
                                         margin: '0 0 0',
                                         fontWeight: 'bold'
                                     }}>
-                                        ERA 1, DAY {eraData.day}
+                                        ERA {eraData.era}, DAY {eraData.day}
                                     </span>
                         </Center>
                     </Col>
@@ -129,7 +129,7 @@ export const EraIndicator = (props) => {
                                         color: '#402f00',
                                         fontWeight: 'bold'
                                     }}>
-                                        ERA 1, DAY {eraData.day}
+                                        ERA {eraData.era}, DAY {eraData.day}
                                     </span>
                         </Center>
                         <Breakpoint medium up>
