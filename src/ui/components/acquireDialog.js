@@ -54,7 +54,7 @@ export const AcquireDialog = () => {
         const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
         const vether = new web3.eth.Contract(vetherAbi(), vetherAddr())
         const day = await vether.methods.currentDay().call()
-        const era = 1
+        const era = 2
         const currentBurn = convertFromWei(await vether.methods.mapEraDay_UnitsRemaining(era, day).call())
         setCurrentBurn(currentBurn)
     }
@@ -97,7 +97,7 @@ export const AcquireDialog = () => {
 
     const getVethValue = () => {
         let ethAmount = amount.toSpend < 0 ? 0 : amount.toSpend
-        let value = (+ethAmount / (+ethAmount + +currentBurn)) * 2048
+        let value = (+ethAmount / (+ethAmount + +currentBurn)) * 1024
         value = value < 0 || isNaN(value) ? 0 : value
         return value
     }
