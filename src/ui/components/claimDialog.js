@@ -4,7 +4,7 @@ import '@metamask/legacy-web3'
 import { vetherAddr, vetherAbi, getEtherscanURL } from '../../client/web3.js'
 import { convertFromWei, getSecondsToGo, getBN, currency } from '../../common/utils'
 
-import { Row, Col, Input, ConfigProvider, Select, Tooltip } from 'antd'
+import { Row, Col, ConfigProvider, Select, Tooltip } from 'antd'
 import { QuestionCircleOutlined, InfoCircleOutlined, CheckCircleOutlined, LoadingOutlined, FireFilled } from '@ant-design/icons'
 import { Sublabel, Button, Colour, LabelGrey } from '../components'
 
@@ -21,7 +21,7 @@ export const ClaimDialog = () => {
     const [daysAsOptions, setDaysAsOptions] = useState(null)
     const [daysLoaded, setDaysLoaded] = useState(false)
     const [userData, setUserData] = useState(
-        { era: 1, day: 0 })
+        { era: 1, day: undefined })
 
     const [claimAmt, setClaimAmt] = useState(null)
     const [txHash, setTxHash] = useState(null)
@@ -95,18 +95,17 @@ export const ClaimDialog = () => {
     }
 
     const getDays = async (eraData_, contract_, account_) => {
-        let era = 1
+        let era = userData.era
         let days = []
         let options = []
-        let daysContributed = await contract_.methods.getDaysContributedForEra(account_, era).call()
-
+        let daysContributed = await contract_.methods.getDaysContributedForEra(account_, userData.era).call()
         for (let j = daysContributed-1; j >= 0; j--) {
-            let day = +(await contract_.methods.mapMemberEra_Days(account_, era, j).call())
+            let day = +(await contract_.methods.mapMemberEra_Days(account_, userData.era, j).call())
             if (era < +eraData_.era || (era >= +eraData_.era && day <= +eraData_.day)) {
                 const share = getBN(await contract_.methods.getEmissionShare(era, day, account_).call())
                 if (share > 0) {
                     days.push(day)
-                    options.push(<Option value={day}>{day}</Option>)
+                    options.push(<Option key={j} value={day}>{day}</Option>)
                     setDaysAsOptions(options)
                 }
             }
@@ -117,18 +116,23 @@ export const ClaimDialog = () => {
     const reloadDays = async () => {
         const accountConnected = (await window.web3.eth.getAccounts())[0];
         if(accountConnected) {
-            const accounts = await window.web3.eth.getAccounts()
-            const address = accounts[0]
-            const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
-            context.accountData ? getAccountData() : loadAccountData(vether, address)
-            const eraData = await context.eraData ? await getEraData() : await loadEraData(vether)
-            getDays(eraData, vether, context.accountData.address)
-            setDaysLoaded(true)
+            if (!daysLoaded) {
+                const accounts = await window.web3.eth.getAccounts()
+                const address = accounts[0]
+                const vether = new window.web3.eth.Contract(vetherAbi(), vetherAddr())
+                context.accountData ? getAccountData() : loadAccountData(vether, address)
+                const eraData = await context.eraData ? await getEraData() : await loadEraData(vether)
+                getDays(eraData, vether, context.accountData.address)
+                setDaysLoaded(true)
+            }
         }
     }
 
-    const onEraChange = e => {
-        setUserData({ era: e.target.value, day: userData.day })
+    const onEraChange = era => {
+        setUserData({ era: era, day: undefined })
+        setDaysLoaded(false)
+        setDaysAsOptions(null)
+        setCheckFlag(false)
     }
 
     const onDayChange = day => {
@@ -170,19 +174,20 @@ export const ClaimDialog = () => {
         <>
             <Row>
                 <Col xs={6} sm={4}>
-                    <Input size={'large'} disabled={true} onChange={onEraChange} value={userData.era} placeholder={'1'} suffix={'Era'}/>
+                    <Select size={'large'} style={{ width: '100%' }} placeholder="Select era" onChange={onEraChange} value={userData.era} suffix={'Era'}>
+                        <Option value='1'>1</Option>
+                        <Option value='2'>2</Option>
+                    </Select>
                 </Col>
                 <Col xs={6} sm={4} style={{ marginLeft: 10, marginRight: 20 }}>
                     <ConfigProvider renderEmpty={customizeRenderEmpty}>
-                        {daysLoaded
-                            ? <Select size={'large'} style={{ width: '100%' }} placeholder="Select a day" onChange={onDayChange}>{daysAsOptions}</Select>
-                            : <Select onDropdownVisibleChange={reloadDays}
+                            <Select onDropdownVisibleChange={reloadDays}
                                       size={'large'}
                                       style={{ width: '100%' }}
                                       placeholder="Select a day"
                                       onChange={onDayChange}
+                                      value={userData.day}
                             >{daysAsOptions}</Select>
-                        }
                     </ConfigProvider>
                 </Col>
 
