@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Web3 from 'web3'
 import defaults from "../common/defaults"
-import { vetherAddr, vetherAbi } from './web3.js'
+import { vetherAddr, vetherAbi, uniSwapAbi } from './web3.js'
 
 export const getETHPrice = async () => {
     const ethPrice = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
@@ -28,6 +28,21 @@ export const getVETHPriceInEth = async (contract) => {
     const currentBurn = await contract.methods.mapEraDay_UnitsRemaining(era, day).call()
     const totalBurnt = await contract.methods.totalBurnt().call()
     return ((totalBurnt - currentBurn) / totalEmitted)
+}
+
+export const getUniVETHPriceInEth = async () => {
+    const web3 = new Web3(new Web3.providers.HttpProvider(defaults.api.url))
+    const contract = new web3.eth.Contract(uniSwapAbi(), defaults.vether.uniPool)
+    let valueEth;
+    try {
+        const reserves = await contract.methods.getReserves().call()
+        const vether = reserves.reserve0
+        const ether = reserves.reserve1
+        valueEth = ether/vether
+    } catch(err) {
+        console.log(err)
+    }
+    return (valueEth)
 }
 
 export const getShare = async (part) => {

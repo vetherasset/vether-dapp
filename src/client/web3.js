@@ -3,6 +3,7 @@ import defaults from "../common/defaults"
 import WETHER from '../artifacts/Wether.json'
 import VETHER from '../artifacts/Vether3.json'
 import VADERUTILS from '../artifacts/VaderUtils.json'
+import UNISWAPPAIR from '../artifacts/UniswapPair.json'
 import { BN2Str, oneBN } from '../common/utils'
 
 const TESTNET = (process.env.REACT_APP_TESTNET === 'TRUE')
@@ -55,6 +56,10 @@ export const vaderUtilsAddr = () => {
     } else {
         return '0x2E74525c491954BE67E8847B087ed1c3C988635d'
     }
+}
+
+export const uniSwapAbi = () => {
+    return UNISWAPPAIR.abi
 }
 
 export const wetherAbi = () => {

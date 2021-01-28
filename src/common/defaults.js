@@ -6,8 +6,7 @@ import VADERUTILS from "../artifacts/VaderUtils.json"
 const defaults = {}
 
 const testnet = (process.env.REACT_APP_TESTNET === 'TRUE')
-// const api = 'https://eth-mainnet.alchemyapi.io/v2/PW8dClFJzk12tP2elGQZWznAV2P5xcg0'
-const api = 'https://eth-mainnet.alchemyapi.io/v2/2E8AeYgetEpQC8aWn5vpekzMM-HhMW6H'
+const api = 'https://eth-mainnet.alchemyapi.io/v2/PW8dClFJzk12tP2elGQZWznAV2P5xcg0'
 const apiTestnet = ''
 
 defaults.color= {}
@@ -25,6 +24,7 @@ defaults.vether.decimals = 18
 defaults.vether.genesis = 1589271741
 defaults.vether.secondsPerDay = 84200
 defaults.vether.address = testnet ? '0x95d0c08e59bbc354ee2218da9f82a04d7cdb6fdf' : '0x4ba6ddd7b89ed838fed25d208d4f644106e34279'
+defaults.vether.uniPool = '0x3696Fa5Ad6e5C74fdcBCEd9aF74379D94C4B775A'
 defaults.vether.abi = VETHER.abi
 
 defaults.treasury = {}

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import defaults from "../../common/defaults"
 
 import Web3 from 'web3'
-import { getVetherPrice } from '../../client/web3.js'
-import { getETHPrice } from '../../client/market.js'
+import {getETHPrice, getUniVETHPriceInEth} from '../../client/market.js'
 import { currency } from '../../common/utils'
 
 import { Row, Col } from 'antd'
@@ -111,7 +110,7 @@ const Hero = () => {
 			setDistribution(distributionData)
 
 			const ethUsd = await getETHPrice()
-			const vethEth = await getVetherPrice()
+			const vethEth = await getUniVETHPriceInEth()
 			const vethUsd = vethEth * ethUsd
 			const vethCap = totalEmitted * vethUsd
 			const impliedEth = currentBurn / emission
