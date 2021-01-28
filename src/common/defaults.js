@@ -6,7 +6,8 @@ import VADERUTILS from "../artifacts/VaderUtils.json"
 const defaults = {}
 
 const testnet = (process.env.REACT_APP_TESTNET === 'TRUE')
-const api = 'https://eth-mainnet.alchemyapi.io/v2/PW8dClFJzk12tP2elGQZWznAV2P5xcg0'
+// const api = 'https://eth-mainnet.alchemyapi.io/v2/PW8dClFJzk12tP2elGQZWznAV2P5xcg0'
+const api = 'https://eth-mainnet.alchemyapi.io/v2/2E8AeYgetEpQC8aWn5vpekzMM-HhMW6H'
 const apiTestnet = ''
 
 defaults.color= {}

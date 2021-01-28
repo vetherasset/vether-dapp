@@ -15,8 +15,8 @@ const Sidebar = (props) => {
   const menu_items = [
     "overview",
     "acquire",
-    "swap",
-    "pool",
+    // "swap",
+    // "pool",
     "stats",
     "whitepaper"
   ]
