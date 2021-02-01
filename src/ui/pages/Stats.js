@@ -51,7 +51,7 @@ const Stats = () => {
     }
 
     const loadClaimData = async () => {
-        const response = await axios.get('https://vether-stats-helper.herokuapp.com/')
+        const response = await axios.get('https://vether-stats-helper-dev.herokuapp.com/')
         let claimData = response.data
         context.setContext({ 'claimData': claimData })
         setClaimData(claimData)
