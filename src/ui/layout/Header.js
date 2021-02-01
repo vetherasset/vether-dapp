@@ -23,8 +23,8 @@ const Header = () => {
     const menu_items = [
         "overview",
         "acquire",
-        "swap",
-        "pool",
+        // "swap",
+        // "pool",
         "stats",
         "whitepaper"
     ]
