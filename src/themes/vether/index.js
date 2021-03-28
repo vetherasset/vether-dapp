@@ -1,6 +1,7 @@
 import { mode } from '@chakra-ui/theme-tools'
 import typography from './typography'
 import colors from './colors'
+import badge from './badge'
 import button from './button'
 import input from './input'
 import { extendTheme } from '@chakra-ui/react'
@@ -29,16 +30,17 @@ const overrides = {
 	components: {
 		Button: button,
 		Input: input,
+		Badge: badge,
 	},
 	layerStyles: {
 		overview: {
 			bg: 'black',
-			border: '1px solid #ffc300',
+			border: '1px solid #ffc300ce',
 			borderRadius: '19px',
 			marginBottom: '15px',
 			p: '19px',
 			minHeight: '95px',
-			boxShadow: '0px 0px 32px -16px #ffffff9c',
+			boxShadow: '0px 0px 32px -20px #ffffff9c',
 		},
 	},
 }

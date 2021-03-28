@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import {
 	Flex, Container, Box, Heading, Badge,
+	Progress,
 } from '@chakra-ui/react'
 import defaults from '../common/defaults'
 import {
-	getNextDayTime, getCurrentBurn, getUniswapAssetPrice, getEmission,
-	getEmitted,
+	getNextDayTime, getCurrentBurn, getUniswapAssetPrice, getEmissionDay, getEmission,
+	getEmissionEra, getEmitted,
 } from '../common/ethereum'
 import { prettifyCurrency } from '../common/utils'
 import Countdown from 'react-countdown'
@@ -19,6 +20,8 @@ export const Overview = (props) => {
 	const [price, setPrice] = useState(undefined)
 	const [ethPrice, setEthPrice] = useState(undefined)
 	const [emission, setEmission] = useState(undefined)
+	const [emissionDay, setEmissionDay] = useState(undefined)
+	const [emissionEra, setEmissionEra] = useState(undefined)
 	const [emitted, setEmitted] = useState(undefined)
 
 
@@ -60,10 +63,24 @@ export const Overview = (props) => {
 	}, [])
 
 	useEffect(() => {
+		getEmissionDay(
+			defaults.network.provider,
+		)
+			.then(n => setEmissionDay(n))
+	}, [])
+
+	useEffect(() => {
 		getEmission(
 			defaults.network.provider,
 		)
 			.then(n => setEmission(n))
+	}, [])
+
+	useEffect(() => {
+		getEmissionEra(
+			defaults.network.provider,
+		)
+			.then(n => setEmissionEra(n))
 	}, [])
 
 	useEffect(() => {
@@ -76,13 +93,13 @@ export const Overview = (props) => {
 	return (
 		<>
 			<Box>
-				<Container mb='23px'>
+				<Container mb='23px' p='0'>
 					<Heading as='h1' size='md'>Overview</Heading>
 				</Container>
 			</Box>
 
 			<Flex maxWidth='60ch' m='23px auto 9px auto' minH={{ lg: '103.167' }}>
-				<Container>
+				<Container p='0'>
 					<Box textAlign='left'><Badge>Price</Badge></Box>
 					<Heading as='h2' fontSize={{ base: '1.1rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='19px' textAlign='left'>
 						{price && ethPrice &&
@@ -92,7 +109,9 @@ export const Overview = (props) => {
 				</Container>
 
 				<Container>
-					<Box textAlign='left'><Badge>MCAP</Badge></Box>
+					<Box textAlign='left'>
+						<Badge layerStyle='badge'>MCAP</Badge>
+					</Box>
 					<Heading as='h2' fontSize={{ base: '1.1rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
 						{price && emitted &&
 							'$' + numabbr(emitted * (price * ethPrice))
@@ -100,13 +119,29 @@ export const Overview = (props) => {
 					</Heading>
 				</Container>
 
-				<Container>
-					<Box textAlign='left'><Badge>EMITTED</Badge></Box>
+				<Container p='0'>
+					<Box textAlign='left'>
+						<Badge layerStyle='badge'>EMITTED</Badge>
+					</Box>
 					<Heading as='h2' fontSize={{ base: '1.1rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
 						{emitted &&
 							numabbr(emitted)
 						}
 					</Heading>
+				</Container>
+			</Flex>
+
+			<Flex maxWidth='60ch' m='0px auto' minH='103.167px'>
+				<Container padding='0 6px' mb='19px' >
+					<Box textAlign='left' mb='5px' minH='24px'>
+						{emissionDay &&
+							<Badge layerStyle='badge'>DAY {emissionDay.toString()}</Badge>
+						}
+						{emissionEra &&
+							<Badge ml='5px' layerStyle='badge'>ERA {emissionEra.toString()}</Badge>
+						}
+					</Box>
+					<Progress colorScheme='green' height='32px' value={20} borderRadius='13px' hasStripe isAnimated/>
 				</Container>
 			</Flex>
 
