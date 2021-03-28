@@ -8,7 +8,7 @@ const Index = () => {
 
 	return (
 		<Box maxW={defaults.layout.width} m='0 auto'>
-			<Overview />
+			<Overview flexFlow='row wrap' />
 		</Box>
 	)
 }

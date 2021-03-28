@@ -1,4 +1,5 @@
 export default {
+	accent: '#ffba00',
 	green: {
 		200: '#ffba00',
 		500: '#ffba00',

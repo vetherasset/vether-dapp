@@ -24,10 +24,21 @@ const prettifyCurrency = (amount, minFractionDigits = 0, maxFractionDigits = 2, 
 		cryptocurrency = true
 	}
 
+	if (currency === 'VETH') {
+		options = {
+			style: 'decimal',
+			minimumFractionDigits: minFractionDigits,
+			maximumFractionDigits: maxFractionDigits,
+		}
+		symbol = 'VETH'
+		symbolPrepended = false
+		cryptocurrency = true
+	}
+
 	const currencyValue = new Intl.NumberFormat(locales, options)
 
 	return (
-		cryptocurrency ? `${symbolPrepended ? symbol + '\u00A0' : ''}${currencyValue.format(amount)}${String.fromCharCode(160)}${symbolPrepended ? '' : '\u00A0' + symbol}`
+		cryptocurrency ? `${symbolPrepended ? symbol + '\u00A0' : ''}${currencyValue.format(amount)}${symbolPrepended ? '' : '\u00A0' + symbol}`
 			: currencyValue.format(amount)
 	)
 }

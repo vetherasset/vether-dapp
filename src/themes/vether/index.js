@@ -30,6 +30,17 @@ const overrides = {
 		Button: button,
 		Input: input,
 	},
+	layerStyles: {
+		overview: {
+			bg: 'black',
+			border: '1px solid #ffc300',
+			borderRadius: '19px',
+			minHeight: '125px',
+			marginBottom: '35px',
+			p: '30px',
+			boxShadow: '0px 0px 32px -16px #ffffff9c',
+		},
+	},
 }
 
 export default extendTheme(overrides)

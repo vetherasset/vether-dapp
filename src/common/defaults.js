@@ -10,6 +10,7 @@ defaults.network.provider = ethers.getDefaultProvider(
 	})
 defaults.network.address = {}
 defaults.network.address.vether = '0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279'
+defaults.network.address.uniswapPool = '0x3696Fa5Ad6e5C74fdcBCEd9aF74379D94C4B775A'
 
 defaults.layout = {}
 defaults.layout.width = '768px'
