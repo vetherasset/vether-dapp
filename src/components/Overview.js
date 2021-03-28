@@ -125,7 +125,7 @@ export const Overview = (props) => {
 					</Box>
 					<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
 						{emitted &&
-							numabbr(emitted)
+							numabbr(emitted, { precision: 3 })
 						}
 					</Heading>
 				</Container>
