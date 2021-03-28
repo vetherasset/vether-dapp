@@ -62,4 +62,9 @@ const getPercentage = (amount, minFractionDigits = 0, maxFractionDigits = 2, loc
 	return (new Intl.NumberFormat(locales, options).format(value))
 }
 
-export { prettifyAddress, prettifyCurrency, prettifyNumber, getPercentage }
+const getSecondsToGo = (date) => {
+	const time = (Date.now() / 1000).toFixed()
+	return (Number((date - time)))
+}
+
+export { prettifyAddress, prettifyCurrency, prettifyNumber, getPercentage, getSecondsToGo }

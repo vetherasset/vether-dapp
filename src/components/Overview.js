@@ -8,7 +8,7 @@ import {
 	getNextDayTime, getCurrentBurn, getUniswapAssetPrice, getEmissionDay, getEmission,
 	getEmissionEra, getEmitted,
 } from '../common/ethereum'
-import { prettifyCurrency } from '../common/utils'
+import { prettifyCurrency, getSecondsToGo } from '../common/utils'
 import Countdown from 'react-countdown'
 import { ethers } from 'ethers'
 import numabbr from 'numabbr'
@@ -141,7 +141,11 @@ export const Overview = (props) => {
 							<Badge ml='5px' layerStyle='badge'>ERA {emissionEra.toString()}</Badge>
 						}
 					</Box>
-					<Progress colorScheme='green' height='32px' value={20} borderRadius='13px' hasStripe isAnimated/>
+					<Progress colorScheme='green'
+						height='32px'
+						borderRadius='13px'
+						value={nextDayTime ? (((82400 - getSecondsToGo(nextDayTime)) / 82400) * 100) : 0}
+						hasStripe isAnimated/>
 				</Container>
 			</Flex>
 
