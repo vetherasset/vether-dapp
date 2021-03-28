@@ -80,26 +80,29 @@ export const Overview = (props) => {
 					<Heading as='h1' size='md'>Overview</Heading>
 				</Container>
 			</Box>
-			<Flex maxWidth='60ch' m='0 auto'>
+
+			<Flex maxWidth='60ch' m='23px auto 9px auto' minH={{ lg: '103.167' }}>
 				<Container>
 					<Box textAlign='left'><Badge>Price</Badge></Box>
-					<Heading as='h2' fontSize={{ base: '2x1', md: '3x1', lg: 'md' }} fontWeight='normal' mb='19px' textAlign='left'>
-						{prettifyCurrency(price * ethPrice)}
+					<Heading as='h2' fontSize={{ base: '1.1rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='19px' textAlign='left'>
+						{price && ethPrice &&
+							prettifyCurrency(price * ethPrice, 0, 2)
+						}
 					</Heading>
 				</Container>
 
 				<Container>
 					<Box textAlign='left'><Badge>MCAP</Badge></Box>
-					<Heading as='h2' fontSize={{ base: '2x1', md: '3x1', lg: '4xl' }} fontWeight='normal' mb='35px' textAlign='left'>
-						${price && emitted &&
-							numabbr(emitted * (price * ethPrice))
+					<Heading as='h2' fontSize={{ base: '1.1rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
+						{price && emitted &&
+							'$' + numabbr(emitted * (price * ethPrice))
 						}
 					</Heading>
 				</Container>
 
 				<Container>
 					<Box textAlign='left'><Badge>EMITTED</Badge></Box>
-					<Heading as='h2' fontSize={{ base: '2x1', md: '3x1', lg: '4xl' }} fontWeight='normal' mb='35px' textAlign='left'>
+					<Heading as='h2' fontSize={{ base: '1.1rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
 						{emitted &&
 							numabbr(emitted)
 						}
