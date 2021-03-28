@@ -108,7 +108,7 @@ export const Overview = (props) => {
 					</Heading>
 				</Container>
 
-				<Container>
+				<Container p='0' ml='51px'>
 					<Box textAlign='left'>
 						<Badge layerStyle='badge'>MCAP</Badge>
 					</Box>
@@ -119,13 +119,13 @@ export const Overview = (props) => {
 					</Heading>
 				</Container>
 
-				<Container p='0'>
+				<Container p='0' ml='70px'>
 					<Box textAlign='left'>
 						<Badge layerStyle='badge'>EMITTED</Badge>
 					</Box>
 					<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
 						{emitted &&
-							numabbr(emitted, { precision: 3 })
+							numabbr(emitted, { precision: 2 })
 						}
 					</Heading>
 				</Container>
