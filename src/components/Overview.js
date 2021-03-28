@@ -12,6 +12,7 @@ export const Overview = (props) => {
 	const [nextDayTime, setNextDayTime] = useState(undefined)
 	const [currentBurn, setCurrentBurn] = useState(undefined)
 	const [price, setPrice] = useState(undefined)
+	const [ethPrice, setEthPrice] = useState(undefined)
 	const [emission, setEmission] = useState(undefined)
 
 	useEffect(() => {
@@ -31,10 +32,24 @@ export const Overview = (props) => {
 
 	useEffect(() => {
 		getUniswapAssetPrice(
-			defaults.network.address.uniswapPool,
+			defaults.network.address.uniswap.veth,
+			18,
+			18,
+			false,
 			defaults.network.provider,
 		)
 			.then(n => setPrice(n))
+	}, [])
+
+	useEffect(() => {
+		getUniswapAssetPrice(
+			defaults.network.address.uniswap.usdc,
+			6,
+			18,
+			true,
+			defaults.network.provider,
+		)
+			.then(n => setEthPrice(n))
 	}, [])
 
 	useEffect(() => {
@@ -43,6 +58,7 @@ export const Overview = (props) => {
 		)
 			.then(n => setEmission(n))
 	}, [])
+
 
 	return (
 		<>
@@ -55,7 +71,7 @@ export const Overview = (props) => {
 				<Container>
 					<Box textAlign='left'><Badge>Price</Badge></Box>
 					<Heading as='h2' size='xl' fontWeight='normal' mb='19px' textAlign='left'>
-						{prettifyCurrency(price, 0, 2, 'ETH')}
+						{prettifyCurrency(price * ethPrice)}
 					</Heading>
 				</Container>
 
@@ -114,7 +130,7 @@ export const Overview = (props) => {
 					}
 				</Container>
 
-			s<Container layerStyle='overview'>
+				<Container layerStyle='overview'>
 					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
 					Current daily emission
 					</Heading>

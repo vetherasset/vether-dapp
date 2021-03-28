@@ -68,14 +68,20 @@ const getCurrentBurn = async (provider) => {
 	)
 }
 
-const getUniswapAssetPrice = async (poolAddress, provider) => {
+const getUniswapAssetPrice = async (poolAddress, decimals0, decimals1, flip, provider) => {
 	const contract = new ethers.Contract(
 		poolAddress,
 		uniswapPairAbi,
 		provider,
 	)
 	const reserves = await contract.getReserves()
-	return Number(ethers.utils.formatEther(reserves._reserve1)) / Number(ethers.utils.formatEther(reserves._reserve0))
+	const i = 1
+	if (flip) {
+		return (Number(reserves._reserve0) / Number(i.toFixed(decimals0).replace('.', ''))) / (Number(reserves._reserve1) / Number(i.toFixed(decimals1).replace('.', '')))
+	}
+	else {
+		return (Number(reserves._reserve1) / Number(i.toFixed(decimals1).replace('.', ''))) / (Number(reserves._reserve0) / Number(i.toFixed(decimals0).replace('.', '')))
+	}
 }
 
 export {
