@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Container, Box, Heading, Badge } from '@chakra-ui/react'
+import {
+	Flex, Container, Box, Heading, Badge,
+} from '@chakra-ui/react'
 import defaults from '../common/defaults'
-import { getNextDayTime, getCurrentBurn, getUniswapAssetPrice, getEmission } from '../common/ethereum'
+import {
+	getNextDayTime, getCurrentBurn, getUniswapAssetPrice, getEmission,
+	getEmitted,
+} from '../common/ethereum'
 import { prettifyCurrency } from '../common/utils'
 import Countdown from 'react-countdown'
 import { ethers } from 'ethers'
@@ -14,6 +19,8 @@ export const Overview = (props) => {
 	const [price, setPrice] = useState(undefined)
 	const [ethPrice, setEthPrice] = useState(undefined)
 	const [emission, setEmission] = useState(undefined)
+	const [emitted, setEmitted] = useState(undefined)
+
 
 	useEffect(() => {
 		getNextDayTime(
@@ -59,6 +66,12 @@ export const Overview = (props) => {
 			.then(n => setEmission(n))
 	}, [])
 
+	useEffect(() => {
+		getEmitted(
+			defaults.network.provider,
+		)
+			.then(n => setEmitted(n))
+	}, [])
 
 	return (
 		<>
@@ -70,22 +83,26 @@ export const Overview = (props) => {
 			<Flex maxWidth='60ch' m='0 auto'>
 				<Container>
 					<Box textAlign='left'><Badge>Price</Badge></Box>
-					<Heading as='h2' size='xl' fontWeight='normal' mb='19px' textAlign='left'>
+					<Heading as='h2' fontSize={{ base: '2x1', md: '3x1', lg: 'md' }} fontWeight='normal' mb='19px' textAlign='left'>
 						{prettifyCurrency(price * ethPrice)}
 					</Heading>
 				</Container>
 
 				<Container>
 					<Box textAlign='left'><Badge>MCAP</Badge></Box>
-					<Heading as='h2' size='xl' fontWeight='normal' mb='35px' textAlign='left'>
-						${numabbr(13763137)}
+					<Heading as='h2' fontSize={{ base: '2x1', md: '3x1', lg: '4xl' }} fontWeight='normal' mb='35px' textAlign='left'>
+						${price && emitted &&
+							numabbr(emitted * (price * ethPrice))
+						}
 					</Heading>
 				</Container>
 
 				<Container>
 					<Box textAlign='left'><Badge>EMITTED</Badge></Box>
-					<Heading as='h2' size='xl' fontWeight='normal' mb='35px' textAlign='left'>
-						{numabbr(542830)}
+					<Heading as='h2' fontSize={{ base: '2x1', md: '3x1', lg: '4xl' }} fontWeight='normal' mb='35px' textAlign='left'>
+						{emitted &&
+							numabbr(emitted)
+						}
 					</Heading>
 				</Container>
 			</Flex>
@@ -125,7 +142,7 @@ export const Overview = (props) => {
 					</Heading>
 					{price &&
 						<Heading as='h3' size='lg'>
-							{prettifyCurrency(price, 0, 5, 'ETH')}
+							{prettifyCurrency((currentBurn / emission) * ethPrice)}
 						</Heading>
 					}
 				</Container>

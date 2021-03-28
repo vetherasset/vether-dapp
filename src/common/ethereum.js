@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import defaults from './defaults'
 import vetherTokenAbi from '../artifacts/vetherTokenAbi'
 import uniswapPairAbi from '../artifacts/uniswapPairAbi'
@@ -68,6 +68,17 @@ const getCurrentBurn = async (provider) => {
 	)
 }
 
+const getEmitted = async (provider) => {
+	const contract = new ethers.Contract(
+		defaults.network.address.vether,
+		vetherTokenAbi,
+		provider,
+	)
+	return (+ethers.utils.formatEther(BigNumber.from('1000000000000000000000000'))
+	- +ethers.utils.formatEther(await contract.balanceOf(defaults.network.address.vether))
+	+ +ethers.utils.formatEther(await contract.totalFees()))
+}
+
 const getUniswapAssetPrice = async (poolAddress, decimals0, decimals1, flip, provider) => {
 	const contract = new ethers.Contract(
 		poolAddress,
@@ -86,5 +97,5 @@ const getUniswapAssetPrice = async (poolAddress, decimals0, decimals1, flip, pro
 
 export {
 	getEmissionEra, getEmissionDay, getEmission, getNextEraDayTime, getNextDayTime, getNextEmission, getCurrentBurn,
-	getUniswapAssetPrice,
+	getEmitted, getUniswapAssetPrice,
 }
