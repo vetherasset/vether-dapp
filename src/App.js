@@ -5,6 +5,7 @@ import vether from './themes/vether'
 import { UseWalletProvider } from 'use-wallet'
 import defaults from './common/defaults'
 import { Header } from './components/Header'
+import { ActionPanel } from './components/ActionPanel'
 
 import Index from './locations/index'
 
@@ -18,6 +19,7 @@ const App = () => {
 					<Header width='100%'
 						      p='1.2rem 1rem'
 							    justifyContent='center'/>
+					<ActionPanel />
 					<Box h='calc(100vh-2.4rem)'
 						  justifyContent='center'
 						  mx={{ base: '0.5rem', sm: '1rem', md: '2.5rem', lg: '13rem' }}
@@ -31,7 +33,6 @@ const App = () => {
 							} />
 						</Switch>
 					</Box>
-
       	</UseWalletProvider>
 			</ChakraProvider>
 		</Router>

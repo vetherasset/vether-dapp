@@ -42,6 +42,11 @@ const overrides = {
 			minHeight: '95px',
 			boxShadow: '0px 0px 32px -20px #ffffff9c',
 		},
+		actionPanel: {
+			display: 'flex',
+			width: '100%',
+			justifyContent: 'center',
+		},
 	},
 }
 

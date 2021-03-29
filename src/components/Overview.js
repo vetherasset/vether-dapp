@@ -24,7 +24,6 @@ export const Overview = (props) => {
 	const [emissionEra, setEmissionEra] = useState(undefined)
 	const [emitted, setEmitted] = useState(undefined)
 
-
 	useEffect(() => {
 		getNextDayTime(
 			defaults.network.provider,
@@ -145,12 +144,12 @@ export const Overview = (props) => {
 						height='32px'
 						borderRadius='13px'
 						value={nextDayTime ? (((82400 - getSecondsToGo(nextDayTime)) / 82400) * 100) : 0}
+						zIndex='-1'
 						hasStripe isAnimated/>
 				</Container>
 			</Flex>
 
 			<Flex {...props}>
-
 				<Container layerStyle='overview'>
 					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
 					Remaining time
