@@ -14,8 +14,8 @@ export const ActionPanel = (props) => {
 			pos='fixed'
 			bottom='0'
 			maxWidth={defaults.layout.width}
-			mb='99px'
-			borderRadius='30px'
+			mb='112px'
+			borderRadius='0.8rem'
 			left='50%'
 			transform='translateX(-50%)'
 			alignItems='center'
@@ -41,8 +41,8 @@ export const ActionPanel = (props) => {
 							</AccordionPanel>
 							{!isExpanded && isOpen === -1 &&
 								<Fade in={true} height='100%'>
-									<AccordionButton height='100%' p='30px 111px'>
-										<Heading as='span' size='md' ml='5px'>Burn</Heading>
+									<AccordionButton height='100%' p='26px 117px'>
+										<Heading as='span' size='1rem' ml='5px'>Burn</Heading>
 									</AccordionButton>
 								</Fade>
 							}
@@ -68,8 +68,8 @@ export const ActionPanel = (props) => {
 							</AccordionPanel>
 							{!isExpanded && isOpen === -1 &&
 								<Fade in={true} height='100%'>
-									<AccordionButton height='100%' p='30px 111px'>
-										<Heading as='span' size='md' ml='5px'>Claim</Heading>
+									<AccordionButton height='100%' p='26px 117px'>
+										<Heading as='span' size='1rem' ml='5px'>Claim</Heading>
 									</AccordionButton>
 								</Fade>
 							}
