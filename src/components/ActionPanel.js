@@ -8,14 +8,14 @@ export const ActionPanel = (props) => {
 	const [isOpen, setIsOpen] = useState(-1)
 
 	return (
-		<Flex w='60ch'
+		<Flex w={{ sm: '100%', md: '60ch' }}
 			bg='accent'
 			color='black'
 			pos='fixed'
 			bottom='0'
 			maxWidth={defaults.layout.width}
-			mb='112px'
-			borderRadius='0.8rem'
+			mb={{ sm: '0', md: '112px' }}
+			borderRadius={{ sm: isOpen > -1 ? '0.8rem 0.8rem 0 0' : '0', md: '0.8rem' }}
 			left='50%'
 			transform='translateX(-50%)'
 			alignItems='center'
