@@ -1,36 +1,33 @@
 import React, { useState } from 'react'
 import defaults from '../common/defaults'
 import { Flex, Accordion, AccordionButton, AccordionItem, AccordionPanel,
-	Box, Container, Heading } from '@chakra-ui/react'
+	Box, Container, Heading, Fade } from '@chakra-ui/react'
 
 export const ActionPanel = (props) => {
 
 	const [isOpen, setIsOpen] = useState(-1)
 
 	return (
-		<Flex w='100%'
+		<Flex w='60ch'
 			bg='accent'
 			color='black'
 			pos='fixed'
 			bottom='0'
 			maxWidth={defaults.layout.width}
-			minHeight='90px'
 			mb='99px'
 			borderRadius='30px'
 			left='50%'
 			transform='translateX(-50%)'
 			alignItems='center'
 			{...props}>
-			<Accordion layerStyle='actionPanel' allowToggle onChange={(n) => setIsOpen(n)}>
-				<AccordionItem>
+			<Accordion layerStyle='actionPanel' alignItems='middle' allowToggle onChange={(n) => setIsOpen(n)}>
+				<AccordionItem border='none'>
 					{({ isExpanded }) => (
 						<>
 							{isExpanded &&
 								<>
 									<AccordionButton
 										display='block'
-										minW='200px'
-										maxW='200px'
 										m='0 auto'
 										justifyContent='center'>
 										<Heading as='span' size='sm'>Close</Heading>
@@ -43,27 +40,22 @@ export const ActionPanel = (props) => {
 								</Box>
 							</AccordionPanel>
 							{!isExpanded && isOpen === -1 &&
-								<AccordionButton
-									display='block'
-									minW='200px'
-									maxW='200px'
-									m='0 auto'
-									justifyContent='center'>
-									<Heading as='span' size='sm'>Burn</Heading>
-								</AccordionButton>
+								<Fade in={true} height='100%'>
+									<AccordionButton height='100%' p='30px 111px'>
+										<Heading as='span' size='md' ml='5px'>Burn</Heading>
+									</AccordionButton>
+								</Fade>
 							}
 						</>
 					)}
 				</AccordionItem>
 
-				<AccordionItem>
+				<AccordionItem border='none'>
 					{({ isExpanded }) => (
 						<>
 							{isExpanded &&
 									<AccordionButton
 										display='block'
-										minW='200px'
-										maxW='200px'
 										m='0 auto'
 										justifyContent='center'>
 										<Heading as='span' size='sm'>Close</Heading>
@@ -75,14 +67,11 @@ export const ActionPanel = (props) => {
 								</Box>
 							</AccordionPanel>
 							{!isExpanded && isOpen === -1 &&
-								<AccordionButton
-									display='block'
-									minW='200px'
-									maxW='200px'
-									m='0 auto'
-									justifyContent='center'>
-									<Heading as='span' size='sm'>Claim</Heading>
-								</AccordionButton>
+								<Fade in={true} height='100%'>
+									<AccordionButton height='100%' p='30px 111px'>
+										<Heading as='span' size='md' ml='5px'>Claim</Heading>
+									</AccordionButton>
+								</Fade>
 							}
 						</>
 					)}
