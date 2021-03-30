@@ -4,11 +4,13 @@ import defaults from '../common/defaults'
 import {
 	Flex, Heading, NumberInput, NumberInputField, Button, Badge, Box, Tooltip,
 } from '@chakra-ui/react'
-import { getCurrentBurn, getEmission } from '../common/ethereum'
+import { useWallet } from 'use-wallet'
+import { getCurrentBurn, getEmission, burnEther } from '../common/ethereum'
 import { getVetherValueStrict } from '../common/utils'
 
 export const BurnEther = () => {
 
+	const wallet = useWallet()
 	const [amount, setAmount] = useState('')
 	const [value, setValue] = useState(0)
 	const [currentBurn, setCurrentBurn] = useState(undefined)
@@ -63,7 +65,7 @@ export const BurnEther = () => {
 				</Box>
 			</Flex>
 			<Flex flexFlow='column' h='25%'>
-				<Button w="100%">
+				<Button w="100%" onClick={() => { burnEther('0.0001', wallet) }}>
 					Burn
 				</Button>
 			</Flex>
