@@ -27,7 +27,6 @@ export const Header = (props) => {
 				<WalletConnectionToggle
 					marginLeft='0.6rem'
 					size={size} />
-				{/* <ColorModeSwitcher marginLeft='0.6rem' /> */}
 			</Flex>
 		</Flex>
 	)

@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import defaults from '../common/defaults'
 import { Flex, Accordion, AccordionButton, AccordionItem, AccordionPanel,
 	Box, Container, Heading, Fade } from '@chakra-ui/react'
+import { BurnEther } from '../dialogs/burnEther'
 
 const CloseButton = () => {
 	return (
 		<AccordionButton
 			display='block'
+			width={'auto'}
 			m='0 auto'
 			justifyContent='center'
 			borderRadius='md'
@@ -39,7 +41,7 @@ export const ActionPanel = (props) => {
 
 	return (
 		<Flex w={{ sm: '100%', md: '60ch' }}
-			bg='accent'
+			bg={isOpen > -1 ? '#fff5d4' : 'accent'}
 			color='black'
 			pos='fixed'
 			bottom='0'
@@ -63,9 +65,11 @@ export const ActionPanel = (props) => {
 									<CloseButton/>
 								</>
 							}
-							<AccordionPanel pb={4}>
+							<AccordionPanel p={0}>
 								<Box maxW={defaults.layout.width} m='0 auto'>
-									<Container minH='600px' />
+									<Container minH='600px' display='flex' flexFlow='column'>
+										<BurnEther/>
+									</Container>
 								</Box>
 							</AccordionPanel>
 							{!isExpanded && isOpen === -1 &&
@@ -81,10 +85,10 @@ export const ActionPanel = (props) => {
 							{isExpanded &&
 									<CloseButton/>
 							}
-							<AccordionPanel pb={4}>
-								<Box maxW={defaults.layout.width} m='0 auto'>
-									<Container minH='600px' />
-								</Box>
+							<AccordionPanel p={0}>
+								<Container minH='600px' display='flex' flexFlow='column'>
+									<BurnEther/>
+								</Container>
 							</AccordionPanel>
 							{!isExpanded && isOpen === -1 &&
 								<ActionButton name='Claim'/>
