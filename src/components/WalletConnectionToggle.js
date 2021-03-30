@@ -4,6 +4,7 @@ import { useWallet } from 'use-wallet'
 import { Button, useToast } from '@chakra-ui/react'
 import { prettifyAddress } from '../common/utils'
 import Jazzicon from '@metamask/jazzicon'
+import { connected } from '../messages'
 
 export const WalletConnectionToggle = (props) => {
 
@@ -29,13 +30,7 @@ export const WalletConnectionToggle = (props) => {
 			ref.current.appendChild(Jazzicon(16, parseInt(
 				wallet.account.slice(2, 10), 16)))
 				.style.marginLeft = '7px'
-			toast({
-				title: 'Wallet connected',
-				description: 'Your wallet account has been successfully connected.',
-				status: 'success',
-				duration: defaults.toast.duration,
-				isClosable: true,
-			})
+			toast(connected)
 		}
 		return () => {
 			if (wallet.account) {

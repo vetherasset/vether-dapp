@@ -103,31 +103,7 @@ const getVetherValue = async (amount) => {
 	return value
 }
 
-const burnEther = async (amount, wallet) => {
-	if (wallet.account) {
-		const provider = new ethers.providers.Web3Provider(wallet.ethereum)
-		const signer = provider.getSigner(0)
-		await signer.sendTransaction({
-			to: defaults.network.address.vether,
-			value: ethers.utils.parseEther(amount),
-		}).then((tx) => {
-			tx.wait().then(() => {
-				console.log('success')
-			}).catch(() => {
-				console.log('fail')
-			}).catch((err) => {
-				if (err.code === 4001) {
-					console.log('denied')
-				}
-				else {
-					console.log('failed')
-				}
-			})
-		})
-	}
-}
-
 export {
 	getEmissionEra, getEmissionDay, getEmission, getNextEraDayTime, getNextDayTime, getNextEmission, getCurrentBurn,
-	getEmitted, getUniswapAssetPrice, getVetherValue, burnEther,
+	getEmitted, getUniswapAssetPrice, getVetherValue,
 }

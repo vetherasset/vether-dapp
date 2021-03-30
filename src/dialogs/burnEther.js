@@ -3,18 +3,22 @@ import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
 	Flex, Heading, NumberInput, NumberInputField, Button, Badge, Box, Tooltip,
+	useToast,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
-import { getCurrentBurn, getEmission, burnEther } from '../common/ethereum'
+import { getCurrentBurn, getEmission } from '../common/ethereum'
 import { getVetherValueStrict } from '../common/utils'
+import { failed, rejected, insufficientBalance, destroyed } from '../messages'
 
 export const BurnEther = () => {
 
 	const wallet = useWallet()
+	const toast = useToast()
 	const [amount, setAmount] = useState('')
 	const [value, setValue] = useState(0)
 	const [currentBurn, setCurrentBurn] = useState(undefined)
 	const [emission, setEmission] = useState(undefined)
+	const [working, setWorking] = useState(false)
 
 	useEffect(() => {
 		getCurrentBurn(defaults.network.provider).then(n => setCurrentBurn(Number(ethers.utils.formatEther(n))))
@@ -64,8 +68,51 @@ export const BurnEther = () => {
 					</Tooltip>
 				</Box>
 			</Flex>
+
 			<Flex flexFlow='column' h='25%'>
-				<Button w="100%" onClick={() => { burnEther('0.0001', wallet) }}>
+				<Button w="100%"
+					isLoading={working}
+					loadingText="Submitting"
+					onClick={() => {
+						if (wallet.account) {
+							setWorking(true)
+							const provider = new ethers.providers.Web3Provider(wallet.ethereum)
+							const signer = provider.getSigner(0)
+							signer.sendTransaction({
+								to: defaults.network.address.vether,
+								value: ethers.utils.parseEther(amount),
+							})
+								.then((tx) => {
+									tx.wait().then(() => {
+										setWorking(false)
+										toast(destroyed)
+									}).catch((err) => {
+										setWorking(false)
+										console.log('Error code is:' + err.code)
+										console.log('Error:' + err)
+										toast(failed)
+									})
+								})
+								.catch((err) => {
+									if(err.code === 'INSUFFICIENT_FUNDS') {
+										setWorking(false)
+										console.log('Insufficient balance: Your account balance is insufficient.')
+										toast(insufficientBalance)
+									}
+									else if(err.code === 4001) {
+										setWorking(false)
+										console.log('Insufficient balance: Your account balance is insufficient.')
+										toast(rejected)
+									}
+									else {
+										setWorking(false)
+										console.log('Error code is:' + err.code)
+										console.log('Error:' + err)
+										toast(failed)
+									}
+								})
+						}
+					}}>
 					Burn
 				</Button>
 			</Flex>

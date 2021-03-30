@@ -9,6 +9,7 @@ defaults.network.provider = ethers.getDefaultProvider(
 		alchemy: 'tot_96ctq6XtnHUl7cj2fg-JY_5rLzRT',
 	})
 defaults.network.address = {}
+// defaults.network.address.vether = '0x4257e8a2052aFE4E7a52ee9233139EB28FB4BF44'
 defaults.network.address.vether = '0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279'
 defaults.network.address.uniswap = {}
 defaults.network.address.uniswap.veth = '0x3696Fa5Ad6e5C74fdcBCEd9aF74379D94C4B775A'
@@ -19,6 +20,8 @@ defaults.layout.width = '768px'
 
 defaults.toast = {}
 defaults.toast.duration = 5000
+defaults.toast.closable = true
+defaults.toast.position = 'top'
 
 defaults.theme = {}
 defaults.theme.mode = 'dark'
