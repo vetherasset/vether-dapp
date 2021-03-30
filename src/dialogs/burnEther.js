@@ -1,18 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { ethers } from 'ethers'
+import defaults from '../common/defaults'
 import {
 	Flex, Heading, NumberInput, NumberInputField, Button, Badge, Box, Tooltip,
 } from '@chakra-ui/react'
-import { getVetherValue } from '../common/ethereum'
+import { getCurrentBurn, getEmission } from '../common/ethereum'
+import { getVetherValueStrict } from '../common/utils'
 
 export const BurnEther = () => {
 
 	const [amount, setAmount] = useState('')
-	const [value, setValue] = useState('')
+	const [value, setValue] = useState(0)
+	const [currentBurn, setCurrentBurn] = useState(undefined)
+	const [emission, setEmission] = useState(undefined)
 
 	useEffect(() => {
-		getVetherValue(amount)
-			.then(n => setValue(n))
-	}, [amount])
+		getCurrentBurn(defaults.network.provider).then(n => setCurrentBurn(Number(ethers.utils.formatEther(n))))
+	}, [])
+
+	useEffect(() => {
+		getEmission(defaults.network.provider).then(n => setEmission(Number(ethers.utils.formatEther(n))))
+	}, [])
 
 	return (
 		<>
@@ -25,7 +33,10 @@ export const BurnEther = () => {
 				<NumberInput
 					min={0}
 					value={amount}
-					onChange={(n) => setAmount(n)}
+					onChange={(n) => {
+						setAmount(n)
+						getVetherValueStrict(n, currentBurn, emission).then(v => setValue(v))
+					}}
 					clampValueOnBlur={false}
 					variant='filled'
 				>
@@ -34,7 +45,7 @@ export const BurnEther = () => {
 			</Flex>
 			<Flex flexFlow='column' h='25%'>
 				<Heading as='h3' textAlign='center'>
-					{value}
+					{value === 0 ? value : value.toFixed(5)}
 				</Heading>
 				<Heading as='span' size='sm' fontWeight='normal' textAlign='center'>Potential Veth value</Heading>
 				<Box width='98px'

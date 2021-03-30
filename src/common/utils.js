@@ -67,4 +67,10 @@ const getSecondsToGo = (date) => {
 	return (Number((date - time)))
 }
 
-export { prettifyAddress, prettifyCurrency, prettifyNumber, getPercentage, getSecondsToGo }
+const getVetherValueStrict = async (amount, currentBurn, emission) => {
+	let value = (+amount / (+amount + currentBurn)) * emission
+	value = value < 0 || isNaN(value) ? 0 : value
+	return value
+}
+
+export { prettifyAddress, prettifyCurrency, prettifyNumber, getPercentage, getSecondsToGo, getVetherValueStrict }

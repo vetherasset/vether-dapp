@@ -6,10 +6,10 @@ import { UseWalletProvider } from 'use-wallet'
 import defaults from './common/defaults'
 import { Header } from './components/Header'
 import { ActionPanel } from './components/ActionPanel'
-
-import Index from './locations/index'
+import { Overview } from './components/Overview'
 
 const App = () => {
+
 	return (
 		<Router>
 			<ChakraProvider theme={vether}>
@@ -26,7 +26,9 @@ const App = () => {
 						  p={3}>
 						<Switch>
 							<Route path='/' exact render={() =>
-								<Index />
+								<Box maxW={defaults.layout.width} m='0 auto'>
+									<Overview flexFlow='row wrap' />
+								</Box>
 							}/>
 							<Route path='*' render={() =>
 								<Redirect to={'/'} />
