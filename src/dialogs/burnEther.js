@@ -51,13 +51,13 @@ export const BurnEther = () => {
 				<Box width='98px'
 					m='0 auto'>
 					<Tooltip hasArrow
-						label='The amount of Veth you get is dependent on how much you burn, compared to how much everyone else burns.'
+						label='Your share might be different at the end of the day! The final amount of Veth you get is dependent on how much you burn, compared to how much everyone else burns.'
 						placement='bottom'
 						color='white'
 						bg='rgb(0,0,0)'
 						arrowShadowColor='rgb(0,0,0)'>
 						<Box textAlign='center'>
-							<Badge colorScheme='purple'>What is this?</Badge>
+							<Badge background='rgb(214, 188, 250)' color='rgb(128, 41, 251)'>What is this?</Badge>
 						</Box>
 					</Tooltip>
 				</Box>
