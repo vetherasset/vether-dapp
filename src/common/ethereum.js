@@ -95,7 +95,15 @@ const getUniswapAssetPrice = async (poolAddress, decimals0, decimals1, flip, pro
 	}
 }
 
+const getVetherValue = async (amount) => {
+	const currentBurn = Number(ethers.utils.formatEther(await getCurrentBurn(defaults.network.provider)))
+	const emission = Number(ethers.utils.formatEther(await getEmission(defaults.network.provider)))
+	let value = (+amount / (+amount + currentBurn)) * emission
+	value = value < 0 || isNaN(value) ? 0 : value
+	return value
+}
+
 export {
 	getEmissionEra, getEmissionDay, getEmission, getNextEraDayTime, getNextDayTime, getNextEmission, getCurrentBurn,
-	getEmitted, getUniswapAssetPrice,
+	getEmitted, getUniswapAssetPrice, getVetherValue,
 }

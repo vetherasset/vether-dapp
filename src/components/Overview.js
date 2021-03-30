@@ -28,8 +28,7 @@ export const Overview = (props) => {
 		getNextDayTime(
 			defaults.network.provider,
 		)
-			.then(n => setNextDayTime(n),
-			)
+			.then(n => setNextDayTime(n))
 	}, [])
 
 	useEffect(() => {

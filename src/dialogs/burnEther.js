@@ -1,7 +1,18 @@
-import React from 'react'
-import { Flex, Heading, NumberInput, NumberInputField, Button, Badge, Box, Tooltip } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import {
+	Flex, Heading, NumberInput, NumberInputField, Button, Badge, Box, Tooltip,
+} from '@chakra-ui/react'
+import { getVetherValue } from '../common/ethereum'
 
 export const BurnEther = () => {
+
+	const [amount, setAmount] = useState('')
+	const [value, setValue] = useState('')
+
+	useEffect(() => {
+		getVetherValue(amount)
+			.then(n => setValue(n))
+	}, [amount])
 
 	return (
 		<>
@@ -13,6 +24,8 @@ export const BurnEther = () => {
 				<Heading as='h3' size='sm' mb='11px'>Amount Eth to burn</Heading>
 				<NumberInput
 					min={0}
+					value={amount}
+					onChange={(n) => setAmount(n)}
 					clampValueOnBlur={false}
 					variant='filled'
 				>
@@ -20,7 +33,9 @@ export const BurnEther = () => {
 				</NumberInput>
 			</Flex>
 			<Flex flexFlow='column' h='25%'>
-				<Heading as='h3' textAlign='center'>201.51 Veth</Heading>
+				<Heading as='h3' textAlign='center'>
+					{value}
+				</Heading>
 				<Heading as='span' size='sm' fontWeight='normal' textAlign='center'>Potential Veth value</Heading>
 				<Box width='98px'
 					m='0 auto'>
