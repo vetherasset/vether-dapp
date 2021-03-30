@@ -3,6 +3,7 @@ import typography from './typography'
 import colors from './colors'
 import badge from './badge'
 import button from './button'
+import tooltip from './tooltip'
 import input from './input'
 import { extendTheme } from '@chakra-ui/react'
 import defaults from '../../common/defaults'
@@ -31,6 +32,7 @@ const overrides = {
 		Button: button,
 		Input: input,
 		Badge: badge,
+		Tooltip: tooltip,
 	},
 	layerStyles: {
 		overview: {

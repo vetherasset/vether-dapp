@@ -40,14 +40,14 @@ export const ActionPanel = (props) => {
 	const [isOpen, setIsOpen] = useState(-1)
 
 	return (
-		<Flex w={{ sm: '100%', md: '60ch' }}
+		<Flex w={{ base: '100%', sm: '60ch' }}
 			bg={isOpen > -1 ? '#fff5d4' : 'accent'}
 			color='black'
 			pos='fixed'
 			bottom='0'
 			maxWidth={defaults.layout.width}
-			mb={{ sm: '0', md: '112px' }}
-			borderRadius={{ sm: isOpen > -1 ? '0.8rem 0.8rem 0 0' : '0', md: '0.8rem' }}
+			mb={{ base: '0', sm: '112px' }}
+			borderRadius={{ base: isOpen > -1 ? '0.8rem 0.8rem 0 0' : '0', sm: '0.8rem' }}
 			left='50%'
 			transform='translateX(-50%)'
 			alignItems='center'
@@ -67,7 +67,7 @@ export const ActionPanel = (props) => {
 							}
 							<AccordionPanel p={0}>
 								<Box maxW={defaults.layout.width} m='0 auto'>
-									<Container minH='600px' display='flex' flexFlow='column'>
+									<Container minH='600px' display='flex' flexFlow='column' justifyContent='space-around'>
 										<BurnEther/>
 									</Container>
 								</Box>
@@ -86,7 +86,7 @@ export const ActionPanel = (props) => {
 									<CloseButton/>
 							}
 							<AccordionPanel p={0}>
-								<Container minH='600px' display='flex' flexFlow='column'>
+								<Container minH='600px' display='flex' flexFlow='column' justifyContent='space-around'>
 									<BurnEther/>
 								</Container>
 							</AccordionPanel>
