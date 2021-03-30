@@ -41,7 +41,7 @@ export const ActionPanel = (props) => {
 
 	return (
 		<Flex w={{ base: '100%', sm: '60ch' }}
-			bg={isOpen > -1 ? '#fff5d4' : 'accent'}
+			bg={isOpen > -1 ? '#fff6d9' : 'accent'}
 			color='black'
 			pos='fixed'
 			bottom='0'

@@ -5,6 +5,7 @@ import badge from './badge'
 import button from './button'
 import tooltip from './tooltip'
 import input from './input'
+import numberInput from './numberinput'
 import { extendTheme } from '@chakra-ui/react'
 import defaults from '../../common/defaults'
 
@@ -24,6 +25,9 @@ const overrides = {
 			'button:focus': {
 				boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)!important',
 			},
+			'input::placeholder': {
+				color: '#000',
+			},
 		}),
 	},
 	textStyles: typography,
@@ -31,6 +35,7 @@ const overrides = {
 	components: {
 		Button: button,
 		Input: input,
+		NumberInput: numberInput,
 		Badge: badge,
 		Tooltip: tooltip,
 	},

@@ -112,7 +112,7 @@ export const Overview = (props) => {
 						<Badge layerStyle='badge'>MCAP</Badge>
 					</Box>
 					<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
-						{price && emitted &&
+						{emitted && price && ethPrice &&
 							'$' + numabbr(emitted * (price * ethPrice))
 						}
 					</Heading>
@@ -172,7 +172,9 @@ export const Overview = (props) => {
 					</Heading>
 					{currentBurn &&
 						<Heading as='h3' size='lg'>
-							{prettifyCurrency(ethers.utils.formatEther(currentBurn), 0, 2, 'ETH')}
+							{currentBurn &&
+								prettifyCurrency(ethers.utils.formatEther(currentBurn), 0, 2, 'ETH')
+							}
 						</Heading>
 					}
 				</Container>
@@ -183,7 +185,9 @@ export const Overview = (props) => {
 					</Heading>
 					{price &&
 						<Heading as='h3' size='lg'>
-							{prettifyCurrency((currentBurn / emission) * ethPrice)}
+							{currentBurn && emission && ethPrice &&
+								prettifyCurrency((Number(ethers.utils.formatEther(currentBurn)) / Number(ethers.utils.formatEther(emission))) * ethPrice)
+							}
 						</Heading>
 					}
 				</Container>
@@ -194,7 +198,9 @@ export const Overview = (props) => {
 					</Heading>
 					{emission &&
 						<Heading as='h3' size='lg'>
-							{prettifyCurrency(ethers.utils.formatEther(emission), 0, 0, 'VETH')}
+							{emission &&
+								prettifyCurrency(ethers.utils.formatEther(emission), 0, 0, 'VETH')
+							}
 						</Heading>
 					}
 				</Container>

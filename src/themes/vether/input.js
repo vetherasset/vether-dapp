@@ -2,7 +2,7 @@ export default {
 	variants: {
 		filled: props => ({
 			field: {
-				bg: props.colorMode === 'dark' ? 'rgba(255, 255, 255, 0.13)' : 'rgb(179 179 179)',
+				bg: props.colorMode === 'red',
 				_hover: {
 					bg: props.colorMode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgb(168 168 168)',
 				},
