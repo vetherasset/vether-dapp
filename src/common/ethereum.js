@@ -103,7 +103,43 @@ const getVetherValue = async (amount) => {
 	return value
 }
 
+const getDaysContributed = async (emissionEra, address, provider) => {
+	const contract = new ethers.Contract(
+		defaults.network.address.vether,
+		vetherTokenAbi,
+		provider,
+	)
+	return contract.getDaysContributedForEra(address, emissionEra)
+}
+
+const getEachDayContributed = async (daysContributed, era, address, provider) => {
+	const emissionEra = Number(await getEmissionEra(provider))
+	const emissionDay = Number(await getEmissionDay(provider))
+	const contract = new ethers.Contract(
+		defaults.network.address.vether,
+		vetherTokenAbi,
+		provider,
+	)
+	const days = []
+	for (let j = daysContributed - 1; j >= 0; j--) {
+		const day = +(await contract.mapMemberEra_Days(address, emissionEra, j))
+		if (era < emissionEra || (era >= emissionEra && day < emissionDay)) {
+			days.push(day)
+		}
+	}
+	return days
+}
+
+const getShare = async (era, day, address, provider) => {
+	const contract = new ethers.Contract(
+		defaults.network.address.vether,
+		vetherTokenAbi,
+		provider,
+	)
+	return await contract.getEmissionShare(era, day, address)
+}
+
 export {
 	getEmissionEra, getEmissionDay, getEmission, getNextEraDayTime, getNextDayTime, getNextEmission, getCurrentBurn,
-	getEmitted, getUniswapAssetPrice, getVetherValue,
+	getEmitted, getUniswapAssetPrice, getVetherValue, getDaysContributed, getEachDayContributed, getShare,
 }

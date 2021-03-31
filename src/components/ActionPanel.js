@@ -4,6 +4,7 @@ import defaults from '../common/defaults'
 import { Flex, Accordion, AccordionButton, AccordionItem, AccordionPanel,
 	Box, Container, Heading, Fade } from '@chakra-ui/react'
 import { BurnEther } from '../dialogs/burnEther'
+import { ClaimVeth } from '../dialogs/claimVeth'
 
 const CloseButton = () => {
 	return (
@@ -87,7 +88,7 @@ export const ActionPanel = (props) => {
 							}
 							<AccordionPanel p={0}>
 								<Container minH='600px' display='flex' flexFlow='column' justifyContent='space-around'>
-									<BurnEther/>
+									<ClaimVeth/>
 								</Container>
 							</AccordionPanel>
 							{!isExpanded && isOpen === -1 &&

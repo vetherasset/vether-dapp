@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
 import { getCurrentBurn, getEmission } from '../common/ethereum'
-import { getVetherValueStrict } from '../common/utils'
+import { getVetherValueStrict, prettifyCurrency } from '../common/utils'
 import { failed, rejected, insufficientBalance, destroyed } from '../messages'
 
 export const BurnEther = () => {
@@ -34,6 +34,7 @@ export const BurnEther = () => {
 				<Heading as='h3' size='md' textAlign='center' m='-4px 0 11px 0'>ACQUIRE VETHER</Heading>
 				<span>Acquire a share of today’s emission by burning Ether.</span>
 			</Flex>
+
 			<Flex flexFlow='column' h='25%'>
 				<Heading as='h3' size='sm' mb='11px'>Amount Eth to burn</Heading>
 				<NumberInput
@@ -49,11 +50,12 @@ export const BurnEther = () => {
 					<NumberInputField placeholder='🔥🔥🔥' />
 				</NumberInput>
 			</Flex>
+
 			<Flex flexFlow='column' h='25%'>
 				<Heading as='h3' textAlign='center'>
-					{value === 0 ? value : value.toFixed(5)}
+					{value === 0 ? prettifyCurrency(value, 0, 2, 'VETH') : prettifyCurrency(value, 0, 2, 'VETH')}
 				</Heading>
-				<Heading as='span' size='sm' fontWeight='normal' textAlign='center'>Potential Veth value</Heading>
+				<Heading as='span' size='sm' fontWeight='normal' textAlign='center'>Potential share</Heading>
 				<Box width='98px'
 					m='0 auto'>
 					<Tooltip hasArrow
@@ -70,9 +72,9 @@ export const BurnEther = () => {
 			</Flex>
 
 			<Flex flexFlow='column' h='25%'>
-				<Button w="100%"
+				<Button w='100%'
 					isLoading={working}
-					loadingText="Submitting"
+					loadingText='Submitting'
 					onClick={() => {
 						if (wallet.account) {
 							setWorking(true)

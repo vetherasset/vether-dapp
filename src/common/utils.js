@@ -73,4 +73,16 @@ const getVetherValueStrict = async (amount, currentBurn, emission) => {
 	return value
 }
 
-export { prettifyAddress, prettifyCurrency, prettifyNumber, getPercentage, getSecondsToGo, getVetherValueStrict }
+const getAvailableEras = async (emissionEra) => {
+	const eras = []
+	for (let e = 1; e <= emissionEra; e++) {
+		eras.push(e)
+	}
+	return eras
+}
+
+
+export {
+	prettifyAddress, prettifyCurrency, prettifyNumber, getPercentage, getSecondsToGo, getVetherValueStrict,
+	getAvailableEras,
+}

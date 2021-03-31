@@ -6,6 +6,7 @@ import button from './button'
 import tooltip from './tooltip'
 import input from './input'
 import numberInput from './numberinput'
+import select from './select'
 import { extendTheme } from '@chakra-ui/react'
 import defaults from '../../common/defaults'
 
@@ -38,6 +39,7 @@ const overrides = {
 		NumberInput: numberInput,
 		Badge: badge,
 		Tooltip: tooltip,
+		Select: select,
 	},
 	layerStyles: {
 		overview: {
