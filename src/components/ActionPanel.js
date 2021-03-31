@@ -30,7 +30,7 @@ const ActionButton = (props) => {
 	return (
 		<Fade in={true} height='100%'>
 			<AccordionButton height='100%'
-				p={{ base: '26px 102px', sm: '28px 85px', md: '26px 117px' }}>
+				p={{ base: '26px 102px', sm: '26px 117px' }}>
 				<Heading as='span' size='1rem' ml='5px'>{props.name}</Heading>
 			</AccordionButton>
 		</Fade>
