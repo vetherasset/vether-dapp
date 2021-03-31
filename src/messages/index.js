@@ -18,6 +18,15 @@ const destroyed = {
 	position: defaults.toast.position,
 }
 
+const claimed = {
+	title: 'Vether claimed',
+	description: 'Your share of Vether has been withdrawn to your account.',
+	status: 'success',
+	duration: defaults.toast.duration,
+	isClosable: defaults.toast.closable,
+	position: defaults.toast.position,
+}
+
 const insufficientBalance = {
 	title: 'Insufficient balance',
 	description: 'Your account balance is insufficient. You might want lower the amount.',
@@ -46,5 +55,5 @@ const failed = {
 }
 
 export {
-	connected, failed, rejected, insufficientBalance, destroyed,
+	connected, failed, rejected, insufficientBalance, destroyed, claimed,
 }

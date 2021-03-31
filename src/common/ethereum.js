@@ -139,7 +139,16 @@ const getShare = async (era, day, address, provider) => {
 	return await contract.getEmissionShare(era, day, address)
 }
 
+const claimShare = async (era, day, provider) => {
+	const contract = new ethers.Contract(
+		defaults.network.address.vether,
+		vetherTokenAbi,
+		provider.getSigner(0),
+	)
+	return await contract.withdrawShare(era, day)
+}
+
 export {
 	getEmissionEra, getEmissionDay, getEmission, getNextEraDayTime, getNextDayTime, getNextEmission, getCurrentBurn,
-	getEmitted, getUniswapAssetPrice, getVetherValue, getDaysContributed, getEachDayContributed, getShare,
+	getEmitted, getUniswapAssetPrice, getVetherValue, getDaysContributed, getEachDayContributed, getShare, claimShare,
 }

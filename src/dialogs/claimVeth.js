@@ -3,20 +3,24 @@ import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
 	Flex, Heading, Select, Button,
+	useToast,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
-import { getEmissionEra, getDaysContributed, getEachDayContributed, getShare } from '../common/ethereum'
+import { getEmissionEra, getDaysContributed, getEachDayContributed, getShare, claimShare } from '../common/ethereum'
 import { getAvailableEras, prettifyCurrency } from '../common/utils'
+import { claimed, failed, rejected } from '../messages'
 
 export const ClaimVeth = () => {
 
 	const wallet = useWallet()
+	const toast = useToast()
 	const [emissionEra, setEmissionEra] = useState(undefined)
 	const [availableEras, setAvailableEras] = useState(undefined)
 	const [eachDayContributed, setEachDayContributed] = useState(undefined)
 	const [era, setEra] = useState(undefined)
 	const [day, setDay] = useState(undefined)
 	const [share, setShare] = useState(undefined)
+	const [working, setWorking] = useState(false)
 
 	useEffect(() => {
 		getEmissionEra(defaults.network.provider)
@@ -31,11 +35,18 @@ export const ClaimVeth = () => {
 	useEffect(() => {
 		if(wallet.account && emissionEra) {
 			const provider = new ethers.providers.Web3Provider(wallet.ethereum)
-			getDaysContributed(emissionEra, wallet.account, provider)
-				.then((d) => {
-					getEachDayContributed(d.toNumber(), emissionEra, wallet.account, provider)
-						.then(c => setEachDayContributed(c))
-				})
+			if(era) {
+				getDaysContributed(era, wallet.account, provider)
+					.then((d) => {
+						getEachDayContributed(d.toNumber(), era, wallet.account, provider)
+							.then(c => setEachDayContributed(c))
+					})
+			}
+		}
+		if (era === '') setEachDayContributed(undefined)
+		return () => {
+			setShare(undefined)
+			setDay(undefined)
 		}
 	}, [era, wallet])
 
@@ -47,7 +58,8 @@ export const ClaimVeth = () => {
 					setShare(ethers.utils.formatEther(s))
 				})
 		}
-	}, [day])
+		return () => setShare(undefined)
+	}, [day, wallet])
 
 	return (
 		<>
@@ -97,8 +109,39 @@ export const ClaimVeth = () => {
 
 			<Flex flexFlow='column' h='20%'>
 				<Button w='100%'
+					isLoading={working}
 					loadingText='Submitting'
-				>
+					onClick={() => {
+						if (wallet.account) {
+							setWorking(true)
+							const provider = new ethers.providers.Web3Provider(wallet.ethereum)
+							claimShare(era, day, provider)
+								.then((tx) => {
+									tx.wait().then(() => {
+										setWorking(false)
+										toast(claimed)
+									}).catch((err) => {
+										setWorking(false)
+										console.log('Error code is:' + err.code)
+										console.log('Error:' + err)
+										toast(failed)
+									})
+								})
+								.catch((err) => {
+									if(err.code === 4001) {
+										setWorking(false)
+										console.log('Transaction rejected: Your have decided to reject the transaction.')
+										toast(rejected)
+									}
+									else {
+										setWorking(false)
+										console.log('Error code is:' + err.code)
+										console.log('Error:' + err)
+										toast(failed)
+									}
+								})
+						}
+					}}>
 					Claim
 				</Button>
 			</Flex>

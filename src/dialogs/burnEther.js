@@ -103,7 +103,7 @@ export const BurnEther = () => {
 									}
 									else if(err.code === 4001) {
 										setWorking(false)
-										console.log('Insufficient balance: Your account balance is insufficient.')
+										console.log('Transaction rejected: Your have decided to reject the transaction..')
 										toast(rejected)
 									}
 									else {
