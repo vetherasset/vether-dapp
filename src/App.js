@@ -16,24 +16,26 @@ const App = () => {
 				<UseWalletProvider
 					chainId={defaults.network.chainId}
 					connectors={defaults.network.connectors}>
-					<Header width='100%'
+					<Box pb={{ base: '76px', sm: '0' }}>
+						<Header width='100%'
 						      p='1.2rem 1rem'
 							    justifyContent='center'/>
-					<ActionPanel />
-					<Box h='calc(100vh-2.4rem)'
+						<ActionPanel />
+						<Box h='calc(100vh-2.4rem)'
 						  justifyContent='center'
 						  mx={{ base: '0.5rem', sm: '1rem', md: '2.5rem', lg: '13rem' }}
 						  p={3}>
-						<Switch>
-							<Route path='/' exact render={() =>
-								<Box maxW={defaults.layout.width} m='0 auto'>
-									<Overview flexFlow='row wrap' />
-								</Box>
-							}/>
-							<Route path='*' render={() =>
-								<Redirect to={'/'} />
-							} />
-						</Switch>
+							<Switch>
+								<Route path='/' exact render={() =>
+									<Box maxW={defaults.layout.width} m='0 auto'>
+										<Overview flexFlow='row wrap' />
+									</Box>
+								}/>
+								<Route path='*' render={() =>
+									<Redirect to={'/'} />
+								} />
+							</Switch>
+						</Box>
 					</Box>
       	</UseWalletProvider>
 			</ChakraProvider>
