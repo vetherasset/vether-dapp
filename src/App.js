@@ -20,7 +20,6 @@ const App = () => {
 						<Header width='100%'
 						      p='1.2rem 1rem'
 							    justifyContent='center'/>
-						<ActionPanel />
 						<Box h='calc(100vh-2.4rem)'
 						  justifyContent='center'
 						  mx={{ base: '0.5rem', sm: '1rem', md: '2.5rem', lg: '13rem' }}
@@ -28,13 +27,14 @@ const App = () => {
 							<Switch>
 								<Route path='/' exact render={() =>
 									<Box maxW={defaults.layout.width} m='0 auto'>
-										<Overview flexFlow='row wrap' />
+										<Overview flexFlow='row wrap' mb={{ base: '0', sm: '19px' }}/>
 									</Box>
 								}/>
 								<Route path='*' render={() =>
 									<Redirect to={'/'} />
 								} />
 							</Switch>
+							<ActionPanel />
 						</Box>
 					</Box>
       	</UseWalletProvider>

@@ -29,7 +29,8 @@ const ActionButton = (props) => {
 
 	return (
 		<Fade in={true} height='100%'>
-			<AccordionButton height='100%' p='26px 117px'>
+			<AccordionButton height='100%'
+				p={{ base: '26px 102px', sm: '28px 85px', md: '26px 117px' }}>
 				<Heading as='span' size='1rem' ml='5px'>{props.name}</Heading>
 			</AccordionButton>
 		</Fade>
@@ -41,13 +42,12 @@ export const ActionPanel = (props) => {
 	const [isOpen, setIsOpen] = useState(-1)
 
 	return (
-		<Flex w={{ base: '100%', sm: '60ch' }}
+		<Flex w={{ base: '100%', md: '60ch' }}
 			bg={isOpen > -1 ? '#fff6d9' : 'accent'}
 			color='black'
-			pos='fixed'
-			bottom='0'
+			pos={isOpen > -1 ? 'fixed' : { base: 'fixed', sm: 'relative' }}
+			bottom={isOpen > -1 ? { base: '0', md: '35px' } : '0'}
 			maxWidth={defaults.layout.width}
-			mb={{ base: '0', sm: '112px' }}
 			borderRadius={{ base: isOpen > -1 ? '0.8rem 0.8rem 0 0' : '0', sm: '0.8rem' }}
 			left='50%'
 			transform='translateX(-50%)'
