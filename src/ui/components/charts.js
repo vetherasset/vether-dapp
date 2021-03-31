@@ -7,11 +7,9 @@ import { convertToDate, currency } from '../../common/utils'
 
 export const ChartStyles = {
     marginLeft: 0,
-    marginRight: 35,
+    marginRight: 20,
     marginTop: 20,
     marginBottom: 20,
-    paddingLeft: 12,
-    paddingRight: 12,
     paddingTop: 5,
     paddingBottom: 5,
     backgroundColor:Colour().black,

@@ -152,7 +152,7 @@ const Stats = () => {
     }
 
     return (
-        <div style={{ marginRight: -50 }}>
+        <div>
             <h1>STATS</h1>
             <span>Stats for the Vether Economy</span>
             <Row>

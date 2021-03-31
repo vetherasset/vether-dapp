@@ -4,7 +4,7 @@
 
 ## DApp Interface
 
-The Vether DApp interfaces to the Vether Smart Contracts.
+The Vether Stats Dashboard
 
 ## Building Locally
 
