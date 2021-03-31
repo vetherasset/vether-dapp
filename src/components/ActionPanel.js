@@ -47,7 +47,7 @@ export const ActionPanel = (props) => {
 			color='black'
 			pos={isOpen > -1 ? 'fixed' : { base: 'fixed', sm: 'relative' }}
 			bottom={isOpen > -1 ? { base: '0', md: '35px' } : '0'}
-			maxWidth={defaults.layout.width}
+			maxWidth={'60ch'}
 			borderRadius={{ base: isOpen > -1 ? '0.8rem 0.8rem 0 0' : '0', sm: '0.8rem' }}
 			left='50%'
 			transform='translateX(-50%)'
