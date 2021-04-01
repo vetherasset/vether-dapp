@@ -122,7 +122,7 @@ const getEachDayContributed = async (daysContributed, era, address, provider) =>
 	)
 	const days = []
 	for (let j = daysContributed - 1; j >= 0; j--) {
-		const day = +(await contract.mapMemberEra_Days(address, emissionEra, j))
+		const day = +(await contract.mapMemberEra_Days(address, era, j))
 		if (era < emissionEra || (era >= emissionEra && day < emissionDay)) {
 			const share = await getShare(ethers.BigNumber.from(era), ethers.BigNumber.from(day), address, provider)
 			if (Number(ethers.utils.formatEther(share)) > 0) {

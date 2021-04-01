@@ -33,7 +33,7 @@ export const ClaimVeth = () => {
 	}, [emissionEra])
 
 	useEffect(() => {
-		if(wallet.account && emissionEra) {
+		if(wallet.account) {
 			const provider = new ethers.providers.Web3Provider(wallet.ethereum)
 			if(era) {
 				getDaysContributed(era, wallet.account, provider)
