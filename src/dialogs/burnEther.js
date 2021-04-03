@@ -56,16 +56,17 @@ export const BurnEther = () => {
 					{value === 0 ? prettifyCurrency(value, 0, 2, 'VETH') : prettifyCurrency(value, 0, 2, 'VETH')}
 				</Heading>
 				<Heading as='span' size='sm' fontWeight='normal' textAlign='center'>Potential share</Heading>
-				<Box width='98px'
-					m='0 auto'>
+				<Box m='0 auto'>
 					<Tooltip hasArrow
-						label='Your share might be different at the end of the day! The final amount of Veth you get is dependent on how much you burn, compared to how much everyone else burns.'
+						label='Your share is going to be almost surely different at the end of the day!
+						The final amount of Veth you get is dependent on how much you burn,
+						compared to how much everyone else burns. Your share decreases with each incoming burn after yours.'
 						placement='bottom'
 						color='white'
 						bg='rgb(0,0,0)'
 						arrowShadowColor='rgb(0,0,0)'>
 						<Box textAlign='center'>
-							<Badge background='rgb(214, 188, 250)' color='rgb(128, 41, 251)'>What is this?</Badge>
+							<Badge background='rgb(214, 188, 250)' color='rgb(128, 41, 251)'>Why this is not my final share?</Badge>
 						</Box>
 					</Tooltip>
 				</Box>
