@@ -2,6 +2,7 @@ import { BigNumber, ethers } from 'ethers'
 import defaults from './defaults'
 import vetherTokenAbi from '../artifacts/vetherTokenAbi'
 import uniswapPairAbi from '../artifacts/uniswapPairAbi'
+import humanStandardTokenAbi from '../artifacts/humanStandardTokenAbi'
 
 const getEmissionEra = async (provider) => {
 	const contract = new ethers.Contract(
@@ -151,7 +152,17 @@ const claimShare = async (era, day, provider) => {
 	return await contract.withdrawShare(era, day)
 }
 
+const getERC20BalanceOf = async (tokenAddress, address, provider) => {
+	const contract = new ethers.Contract(
+		tokenAddress,
+		humanStandardTokenAbi,
+		provider,
+	)
+	return await contract.balanceOf(address)
+}
+
 export {
 	getEmissionEra, getEmissionDay, getEmission, getNextEraDayTime, getNextDayTime, getNextEmission, getCurrentBurn,
 	getEmitted, getUniswapAssetPrice, getVetherValue, getDaysContributed, getEachDayContributed, getShare, claimShare,
+	getERC20BalanceOf,
 }

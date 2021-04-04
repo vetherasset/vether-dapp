@@ -6,7 +6,8 @@ import {
 import defaults from '../common/defaults'
 import {
 	getNextDayTime, getCurrentBurn, getUniswapAssetPrice, getEmissionDay, getEmission,
-	getEmissionEra, getEmitted,
+	getEmissionEra, getERC20BalanceOf,
+	// getEmitted,
 } from '../common/ethereum'
 import { prettifyCurrency, getSecondsToGo } from '../common/utils'
 import Countdown from 'react-countdown'
@@ -22,13 +23,23 @@ export const Overview = (props) => {
 	const [emission, setEmission] = useState(undefined)
 	const [emissionDay, setEmissionDay] = useState(undefined)
 	const [emissionEra, setEmissionEra] = useState(undefined)
-	const [emitted, setEmitted] = useState(undefined)
+	// const [emitted, setEmitted] = useState(undefined)
+	const [supply, setSupply] = useState(undefined)
 
 	useEffect(() => {
 		getNextDayTime(
 			defaults.network.provider,
 		)
 			.then(n => setNextDayTime(n))
+	}, [])
+
+	useEffect(() => {
+		getERC20BalanceOf(
+			defaults.network.address.vether,
+			defaults.network.address.vether,
+			defaults.network.provider,
+		)
+			.then(n => setSupply(n))
 	}, [])
 
 	useEffect(() => {
@@ -81,12 +92,12 @@ export const Overview = (props) => {
 			.then(n => setEmissionEra(n))
 	}, [])
 
-	useEffect(() => {
-		getEmitted(
-			defaults.network.provider,
-		)
-			.then(n => setEmitted(n))
-	}, [])
+	// useEffect(() => {
+	// 	getEmitted(
+	// 		defaults.network.provider,
+	// 	)
+	// 		.then(n => setEmitted(n))
+	// }, [])
 
 	return (
 		<>
@@ -111,19 +122,19 @@ export const Overview = (props) => {
 						<Badge layerStyle='badge'>MCAP</Badge>
 					</Box>
 					<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
-						{emitted && price && ethPrice &&
-							'$' + numabbr(emitted * (price * ethPrice))
+						{supply && price && ethPrice &&
+							'$' + numabbr((1000000 - Number(ethers.utils.formatEther(supply))) * ((price * ethPrice)))
 						}
 					</Heading>
 				</Container>
 
 				<Container p='0' ml='70px'>
 					<Box textAlign='left'>
-						<Badge layerStyle='badge'>EMITTED</Badge>
+						<Badge layerStyle='badge'>CIRCULATING</Badge>
 					</Box>
 					<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
-						{emitted &&
-							numabbr(emitted, { precision: 2 })
+						{supply &&
+							numabbr((1000000 - Number(ethers.utils.formatEther(supply))), { precision: 2 })
 						}
 					</Heading>
 				</Container>
