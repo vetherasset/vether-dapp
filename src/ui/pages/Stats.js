@@ -23,7 +23,7 @@ const Stats = () => {
     const [loaded, setLoaded] = useState(false)
     const [loadedClaims, setLoadedClaims] = useState(false)
 
-    const [chartData, setChartData] = useState({ claimArray: [], holderArray: [] })
+    const [chartData, setChartData] = useState({ claimArray: [], holderArray: [], holdersCount: 0 })
     const [claimData, setClaimData] = useState(null)
     const [eraData, setEraData] = useState(
         { era: '', day: '', emission: '', currentBurn: '', nextDay: '', nextEra: '', nextEmission: '' })
@@ -73,10 +73,11 @@ const Stats = () => {
         const baseURL2 = 'https://api.ethplorer.io/getTokenInfo/'+vetherAddr()+'?apiKey='
         const response3 = await axios.get(baseURL2 + apiKey)
         let transfers = response3.data.transfersCount
-
+        let holdersCount = response3.data.holdersCount
         const chartData = {
             holderArray: holderArray.holders,
             transfers: transfers,
+            holdersCount: holdersCount,
         }
 
         setChartData(chartData)
@@ -151,6 +152,8 @@ const Stats = () => {
         fontSize: 32
     }
 
+    console.log(chartData.holderArray.length)
+
     return (
         <div>
             <h1>STATS</h1>
@@ -167,7 +170,7 @@ const Stats = () => {
                             <Breakpoint small down>
                                 <ChartData eraData={eraData}
                                     emissionData={emissionData}
-                                    holders={chartData.holderArray.length - 1}
+                                    holders={chartData.holdersCount - 1}
                                     transfers={chartData.transfers}
                                     size={12}
                                     style={{
@@ -178,7 +181,7 @@ const Stats = () => {
                             <Breakpoint medium up>
                                 <ChartData eraData={eraData}
                                     emissionData={emissionData}
-                                    holders={chartData.holderArray.length - 1}
+                                    holders={chartData.holdersCount - 1}
                                     transfers={chartData.transfers}
                                     size={14}
                                     style={{
