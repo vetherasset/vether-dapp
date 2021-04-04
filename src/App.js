@@ -6,7 +6,7 @@ import 'antd/dist/antd.less'
 import Notification from './ui/layout/Notification'
 import Header from './ui/layout/Header'
 import Footer from './ui/layout/Footer'
-import Stats from './ui/pages/Stats'
+import Whitepaper from './ui/pages/Whitepaper'
 import { Colour } from './ui/components'
 
 import { ContextProvider } from './context'
@@ -44,7 +44,7 @@ const App = () => {
 						<Content style={{ color: Colour().white }}>
 							<div className="ant-wrapper">
 								<Switch>
-									<Route path="/" exact component={Stats} />
+									<Route path="/" exact component={Whitepaper} />
 								</Switch>
 								<Footer/>
 							</div>

@@ -10,8 +10,8 @@ const api = 'https://eth-mainnet.alchemyapi.io/v2/PW8dClFJzk12tP2elGQZWznAV2P5xc
 const apiTestnet = ''
 
 defaults.color= {}
-defaults.color.background = '#2b2515'
-defaults.color.dark = '#110d01'
+defaults.color.background = '##110d02'
+defaults.color.dark = '#110d02'
 defaults.color.accent = '#d09800'
 defaults.color.highlight = '#ffba00'
 defaults.color.gray = '#97948e'
