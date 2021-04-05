@@ -3,6 +3,7 @@ import defaults from './defaults'
 import vetherTokenAbi from '../artifacts/vetherTokenAbi'
 import uniswapPairAbi from '../artifacts/uniswapPairAbi'
 import humanStandardTokenAbi from '../artifacts/humanStandardTokenAbi'
+import pLimit from 'p-limit'
 
 const getEmissionEra = async (provider) => {
 	const contract = new ethers.Contract(
@@ -113,25 +114,24 @@ const getDaysContributed = async (emissionEra, address, provider) => {
 	return contract.getDaysContributedForEra(address, emissionEra)
 }
 
-const getEachDayContributed = async (daysContributed, era, address, provider) => {
-	const emissionEra = Number(await getEmissionEra(provider))
-	const emissionDay = Number(await getEmissionDay(provider))
+const getClaimDayNums = async (era, address, provider) => {
 	const contract = new ethers.Contract(
 		defaults.network.address.vether,
 		vetherTokenAbi,
 		provider,
 	)
-	const days = []
-	for (let j = daysContributed - 1; j >= 0; j--) {
-		const day = +(await contract.mapMemberEra_Days(address, era, j))
-		if (era < emissionEra || (era >= emissionEra && day < emissionDay)) {
-			const share = await getShare(ethers.BigNumber.from(era), ethers.BigNumber.from(day), address, provider)
-			if (Number(ethers.utils.formatEther(share)) > 0) {
-				days.push(day)
-			}
-		}
-	}
-	return days
+	const concurrency = 16
+	const limit = pLimit(concurrency)
+	const numBurnDays = await contract.getDaysContributedForEra(address, era)
+	const idxs = Array.from({ length: numBurnDays }, (x, i) => i)
+	const ps = idxs.map(idx => limit(() => (
+		contract.mapMemberEra_Days(address, era, idx)
+			.then(dayNum => contract.getEmissionShare(era, dayNum, address)
+				.then(v => Number(ethers.utils.formatEther(v)) > 0 ? dayNum : null))
+	)))
+	const burnDayNumsWithNonzeroShare = await Promise.all(ps)
+	const claimDayNums = burnDayNumsWithNonzeroShare.filter(x => x).sort((a, b) => a - b)
+	return claimDayNums
 }
 
 const getShare = async (era, day, address, provider) => {
@@ -163,6 +163,6 @@ const getERC20BalanceOf = async (tokenAddress, address, provider) => {
 
 export {
 	getEmissionEra, getEmissionDay, getEmission, getNextEraDayTime, getNextDayTime, getNextEmission, getCurrentBurn,
-	getEmitted, getUniswapAssetPrice, getVetherValue, getDaysContributed, getEachDayContributed, getShare, claimShare,
-	getERC20BalanceOf,
+	getEmitted, getUniswapAssetPrice, getVetherValue, getDaysContributed, getClaimDayNums, getShare,
+	claimShare, getERC20BalanceOf,
 }
