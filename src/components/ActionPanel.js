@@ -66,7 +66,7 @@ export const ActionPanel = (props) => {
 									<CloseButton/>
 								</>
 							}
-							<AccordionPanel p={0}>
+							<AccordionPanel p={0} visibility={isOpen === -1 ? 'hidden' : 'visible'}>
 								<Box maxW={defaults.layout.width} m='0 auto'>
 									<Container minH='600px' display='flex' flexFlow='column' justifyContent='space-around'>
 										<BurnEther/>
@@ -86,7 +86,7 @@ export const ActionPanel = (props) => {
 							{isExpanded &&
 									<CloseButton/>
 							}
-							<AccordionPanel p={0}>
+							<AccordionPanel p={0} visibility={isOpen === -1 ? 'hidden' : 'visible'}>
 								<Container minH='600px' display='flex' flexFlow='column' justifyContent='space-around'>
 									<ClaimVeth/>
 								</Container>
