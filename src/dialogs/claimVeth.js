@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
-	Flex, Heading, Select, Button,
+	Flex, Heading, Box, Select, Button,
 	useToast,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
@@ -64,7 +64,7 @@ export const ClaimVeth = () => {
 		<>
 			<Flex flexFlow='column' h='20%'>
 				<Heading as='h3' size='md' textAlign='center' m='-4px 0 11px 0'>CLAIM VETHER</Heading>
-				<span>Claim your share of a previous day’s emission.</span>
+				<Box as='span' textAlign='center'>Claim your share of a previous day’s emission.</Box>
 			</Flex>
 
 			<Flex flexFlow='column' h='20%'>

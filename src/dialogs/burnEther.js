@@ -32,7 +32,7 @@ export const BurnEther = () => {
 		<>
 			<Flex flexFlow='column' h='25%'>
 				<Heading as='h3' size='md' textAlign='center' m='-4px 0 11px 0'>ACQUIRE VETHER</Heading>
-				<span>Acquire a share of today’s emission by burning Ether.</span>
+				<Box as='span' textAlign='center'>Acquire a share of today’s emission by&nbsp;burning Ether.</Box>
 			</Flex>
 
 			<Flex flexFlow='column' h='25%'>

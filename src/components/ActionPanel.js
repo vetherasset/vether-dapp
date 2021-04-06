@@ -30,7 +30,7 @@ const ActionButton = (props) => {
 	return (
 		<Fade in={true} height='100%'>
 			<AccordionButton height='100%'
-				p={{ base: '26px 102px', sm: '26px 117px' }}>
+				p={{ base: '26px 107px', sm: '26px 117px' }}>
 				<Heading as='span' size='1rem' ml='5px'>{props.name}</Heading>
 			</AccordionButton>
 		</Fade>
@@ -68,7 +68,7 @@ export const ActionPanel = (props) => {
 							}
 							<AccordionPanel p={0} visibility={isOpen === -1 ? 'hidden' : 'visible'}>
 								<Box maxW={defaults.layout.width} m='0 auto'>
-									<Container minH='600px' display='flex' flexFlow='column' justifyContent='space-around'>
+									<Container minH='600px' maxW='340px' display='flex' flexFlow='column' justifyContent='space-around'>
 										<BurnEther/>
 									</Container>
 								</Box>
@@ -87,7 +87,7 @@ export const ActionPanel = (props) => {
 									<CloseButton/>
 							}
 							<AccordionPanel p={0} visibility={isOpen === -1 ? 'hidden' : 'visible'}>
-								<Container minH='600px' display='flex' flexFlow='column' justifyContent='space-around'>
+								<Container minH='600px' maxW='340px' display='flex' flexFlow='column' justifyContent='space-around'>
 									<ClaimVeth/>
 								</Container>
 							</AccordionPanel>
