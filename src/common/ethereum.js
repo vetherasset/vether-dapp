@@ -131,6 +131,11 @@ const getClaimDayNums = async (era, address, provider) => {
 	)))
 	const burnDayNumsWithNonzeroShare = await Promise.all(ps)
 	const claimDayNums = burnDayNumsWithNonzeroShare.filter(x => x).sort((a, b) => a - b)
+	const emissionEra = Number(await getEmissionEra(provider))
+	if (era == emissionEra) {
+		const emissionDay = Number(await getEmissionDay(provider))
+		return claimDayNums.filter(d => d != emissionDay)
+	}
 	return claimDayNums
 }
 
