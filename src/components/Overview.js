@@ -150,7 +150,7 @@ export const Overview = (props) => {
 							<Badge ml='5px' layerStyle='badge'>ERA {emissionEra.toString()}</Badge>
 						}
 					</Box>
-					<Progress colorScheme='green'
+					<Progress colorScheme='vether'
 						height='32px'
 						borderRadius='13px'
 						value={nextDayTime ? (((82400 - getSecondsToGo(nextDayTime)) / 82400) * 100) : 0}

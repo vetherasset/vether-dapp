@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
-	Flex, Heading, Box, Select, Button,
+	Flex, Heading, Box, Select, Button, Progress,
 	useToast,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
@@ -22,7 +22,8 @@ export const ClaimVeth = () => {
 	const [era, setEra] = useState(undefined)
 	const [day, setDay] = useState(undefined)
 	const [share, setShare] = useState(undefined)
-	const [working, setWorking] = useState(false)
+	const [submitingTx, setSubmitingTx] = useState(false)
+	const [gettingClaimDays, setGettingClaimDays] = useState(false)
 
 	useEffect(() => {
 		getEmissionEra(defaults.network.provider)
@@ -38,8 +39,12 @@ export const ClaimVeth = () => {
 		if(wallet.account) {
 			const provider = new ethers.providers.Web3Provider(wallet.ethereum)
 			if(era) {
+				setGettingClaimDays(true)
 				getClaimDayNums(era, wallet.account, provider)
-					.then(cd => setEachDayContributed(cd))
+					.then(cd => {
+						setEachDayContributed(cd)
+						setGettingClaimDays(false)
+					})
 			}
 		}
 		if (era === '') setEachDayContributed(undefined)
@@ -85,8 +90,10 @@ export const ClaimVeth = () => {
 
 			<Flex flexFlow='column' h='20%'>
 				<Heading as='h3' size='sm' mb='11px'>Emission Day</Heading>
-				<Select isRequired
-				 placeholder='Select available day'
+				<Select
+				 disabled={!eachDayContributed || eachDayContributed.length === 0}
+				 isRequired
+				 placeholder={!eachDayContributed || eachDayContributed.length === 0 ? 'No claimable days available' : 'Select available day'}
 				 onChange={(event) => {
 						setDay(event.target.value)
 					}}
@@ -97,6 +104,14 @@ export const ClaimVeth = () => {
 						)
 					})}
 				</Select>
+				<Progress
+					visibility={gettingClaimDays ? 'visible' : 'hidden'}
+					mt='5px'
+					size='sm'
+					borderRadius='13px'
+					colorScheme='vether'
+					isIndeterminate
+				/>
 			</Flex>
 
 			<Flex flexFlow='column' h='20%'>
@@ -108,19 +123,19 @@ export const ClaimVeth = () => {
 
 			<Flex flexFlow='column' h='20%'>
 				<Button w='100%'
-					isLoading={working}
+					isLoading={submitingTx}
 					loadingText='Submitting'
 					onClick={() => {
 						if (wallet.account) {
-							setWorking(true)
+							setSubmitingTx(true)
 							const provider = new ethers.providers.Web3Provider(wallet.ethereum)
 							claimShare(era, day, provider)
 								.then((tx) => {
 									tx.wait().then(() => {
-										setWorking(false)
+										setSubmitingTx(false)
 										toast(claimed)
 									}).catch((err) => {
-										setWorking(false)
+										setSubmitingTx(false)
 										console.log('Error code is:' + err.code)
 										console.log('Error:' + err)
 										toast(failed)
@@ -128,12 +143,12 @@ export const ClaimVeth = () => {
 								})
 								.catch((err) => {
 									if(err.code === 4001) {
-										setWorking(false)
+										setSubmitingTx(false)
 										console.log('Transaction rejected: Your have decided to reject the transaction.')
 										toast(rejected)
 									}
 									else {
-										setWorking(false)
+										setSubmitingTx(false)
 										console.log('Error code is:' + err.code)
 										console.log('Error:' + err)
 										toast(failed)

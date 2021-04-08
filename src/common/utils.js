@@ -81,8 +81,20 @@ const getAvailableEras = async (emissionEra) => {
 	return eras
 }
 
+const promiseAllProgress = (promises, tickCallback) => {
+	const numPromises = promises.length
+	let progress = 0
+	function tick(promise) {
+		promise.then(() => {
+			progress++
+			typeof tickCallback === 'function' && tickCallback(progress / numPromises)
+		})
+		return promise
+	}
+	return Promise.all(promises.map(tick))
+}
 
 export {
 	prettifyAddress, prettifyCurrency, prettifyNumber, getPercentage, getSecondsToGo, getVetherValueStrict,
-	getAvailableEras,
+	getAvailableEras, promiseAllProgress,
 }

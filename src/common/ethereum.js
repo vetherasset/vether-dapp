@@ -4,6 +4,7 @@ import vetherTokenAbi from '../artifacts/vetherTokenAbi'
 import uniswapPairAbi from '../artifacts/uniswapPairAbi'
 import humanStandardTokenAbi from '../artifacts/humanStandardTokenAbi'
 import pLimit from 'p-limit'
+import { promiseAllProgress } from './utils'
 
 const getEmissionEra = async (provider) => {
 	const contract = new ethers.Contract(
@@ -114,7 +115,7 @@ const getDaysContributed = async (emissionEra, address, provider) => {
 	return contract.getDaysContributedForEra(address, emissionEra)
 }
 
-const getClaimDayNums = async (era, address, provider) => {
+const getClaimDayNums = async (era, address, provider, progressCallback) => {
 	const contract = new ethers.Contract(
 		defaults.network.address.vether,
 		vetherTokenAbi,
@@ -129,7 +130,7 @@ const getClaimDayNums = async (era, address, provider) => {
 			.then(dayNum => contract.getEmissionShare(era, dayNum, address)
 				.then(v => Number(ethers.utils.formatEther(v)) > 0 ? dayNum : null))
 	)))
-	const burnDayNumsWithNonzeroShare = await Promise.all(ps)
+	const burnDayNumsWithNonzeroShare = await promiseAllProgress(ps, progressCallback)
 	const claimDayNums = burnDayNumsWithNonzeroShare.filter(x => x).sort((a, b) => a - b)
 	const emissionEra = Number(await getEmissionEra(provider))
 	if (era == emissionEra) {
