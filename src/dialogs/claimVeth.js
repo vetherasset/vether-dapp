@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
-	Flex, Heading, Box, Select, Button,
+	Flex, Heading, Box, Select, Button, Progress,
 	useToast,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
@@ -23,6 +23,8 @@ export const ClaimVeth = () => {
 	const [day, setDay] = useState(undefined)
 	const [share, setShare] = useState(undefined)
 	const [working, setWorking] = useState(false)
+	const [claimDaysProgressPercent, setClaimDaysProgressPercent] = useState(0)
+	const [gettingClaimDays, setGettingClaimDays] = useState(false)
 
 	useEffect(() => {
 		getEmissionEra(defaults.network.provider)
@@ -38,8 +40,17 @@ export const ClaimVeth = () => {
 		if(wallet.account) {
 			const provider = new ethers.providers.Web3Provider(wallet.ethereum)
 			if(era) {
-				getClaimDayNums(era, wallet.account, provider)
-					.then(cd => setEachDayContributed(cd))
+				setEachDayContributed(undefined)
+				setClaimDaysProgressPercent(0)
+				setGettingClaimDays(true)
+				const progressCallback = (f) => {
+					setClaimDaysProgressPercent(f * 100)
+				}
+				getClaimDayNums(era, wallet.account, provider, progressCallback)
+					.then(cd => {
+						setEachDayContributed(cd)
+						setGettingClaimDays(false)
+					})
 			}
 		}
 		if (era === '') setEachDayContributed(undefined)
@@ -85,7 +96,9 @@ export const ClaimVeth = () => {
 
 			<Flex flexFlow='column' h='20%'>
 				<Heading as='h3' size='sm' mb='11px'>Emission Day</Heading>
-				<Select isRequired
+				<Select
+				 disabled={!eachDayContributed}
+				 isRequired
 				 placeholder='Select available day'
 				 onChange={(event) => {
 						setDay(event.target.value)
@@ -97,6 +110,7 @@ export const ClaimVeth = () => {
 						)
 					})}
 				</Select>
+				<Progress visibility={gettingClaimDays ? 'visible' : 'hidden'} size='sm' value={claimDaysProgressPercent}/>
 			</Flex>
 
 			<Flex flexFlow='column' h='20%'>
