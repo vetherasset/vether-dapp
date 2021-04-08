@@ -104,7 +104,14 @@ export const ClaimVeth = () => {
 						)
 					})}
 				</Select>
-				<Progress visibility={gettingClaimDays ? 'visible' : 'hidden'} mt='5px' size='sm' colorScheme='vether' isIndeterminate/>
+				<Progress
+					visibility={gettingClaimDays ? 'visible' : 'hidden'}
+					mt='5px'
+					size='sm'
+					borderRadius='13px'
+					colorScheme='vether'
+					isIndeterminate
+				/>
 			</Flex>
 
 			<Flex flexFlow='column' h='20%'>
