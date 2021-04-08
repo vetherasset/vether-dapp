@@ -9,4 +9,8 @@ export default {
 		300: '#f1f2f3',
 		600: '#302c2d',
 	},
+	vether: {
+		200: '#ffba00',
+		500: '#ffba00',
+	},
 }
