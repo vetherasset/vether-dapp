@@ -3,7 +3,10 @@ const defaults = {}
 
 defaults.network = {}
 defaults.network.chainId = 1
-defaults.network.provider = new ethers.providers.WebSocketProvider('wss://eth-mainnet.ws.alchemyapi.io/v2/tot_96ctq6XtnHUl7cj2fg-JY_5rLzRT')
+defaults.network.provider = new ethers.providers.WebSocketProvider(
+	'wss://eth-mainnet.ws.alchemyapi.io/v2/tot_96ctq6XtnHUl7cj2fg-JY_5rLzRT',
+	 defaults.network.chainId,
+	 )
 
 defaults.network.address = {}
 // Rinkeby Testnet // defaults.network.address.vether = '0x4257e8a2052aFE4E7a52ee9233139EB28FB4BF44'
