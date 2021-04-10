@@ -39,6 +39,7 @@ export const ClaimVeth = () => {
 		if(wallet.account) {
 			const provider = new ethers.providers.Web3Provider(wallet.ethereum)
 			if(era) {
+				setEachDayContributed(undefined)
 				setGettingClaimDays(true)
 				getClaimDayNums(era, wallet.account, provider)
 					.then(cd => {
@@ -91,7 +92,7 @@ export const ClaimVeth = () => {
 			<Flex flexFlow='column' h='20%'>
 				<Heading as='h3' size='sm' mb='11px'>Emission Day</Heading>
 				<Select
-				 disabled={!eachDayContributed || eachDayContributed.length === 0}
+				 disabled={!eachDayContributed || eachDayContributed.length === 0 || gettingClaimDays}
 				 isRequired
 				 placeholder={!eachDayContributed || eachDayContributed.length === 0 ? 'No claimable days available' : 'Select available day'}
 				 onChange={(event) => {
