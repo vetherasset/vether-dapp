@@ -54,6 +54,43 @@ const failed = {
 	position: defaults.toast.position,
 }
 
+const walletNotConnected = {
+	title: 'Wallet not connected',
+	description: 'Please connect a wallet.',
+	status: 'error',
+	duration: defaults.toast.duration,
+	isClosable: defaults.toast.closable,
+	position: defaults.toast.position,
+}
+
+const eraNotSelected = {
+	title: 'Era not selected',
+	description: 'Please select an emission era.',
+	status: 'error',
+	duration: defaults.toast.duration,
+	isClosable: defaults.toast.closable,
+	position: defaults.toast.position,
+}
+
+const dayNotSelected = {
+	title: 'Day not selected',
+	description: 'Please select an emission day.',
+	status: 'error',
+	duration: defaults.toast.duration,
+	isClosable: defaults.toast.closable,
+	position: defaults.toast.position,
+}
+
+const amountOfEthToBurnNotEntered = {
+	title: 'Amount of ETH to burn not entered',
+	description: 'Please enter the amount of ETH to burn.',
+	status: 'error',
+	duration: defaults.toast.duration,
+	isClosable: defaults.toast.closable,
+	position: defaults.toast.position,
+}
+
 export {
 	connected, failed, rejected, insufficientBalance, destroyed, claimed,
+	walletNotConnected, eraNotSelected, dayNotSelected, amountOfEthToBurnNotEntered,
 }

@@ -8,7 +8,7 @@ import {
 import { useWallet } from 'use-wallet'
 import { getCurrentBurn, getEmission } from '../common/ethereum'
 import { getVetherValueStrict, prettifyCurrency } from '../common/utils'
-import { failed, rejected, insufficientBalance, destroyed } from '../messages'
+import { failed, rejected, insufficientBalance, destroyed, walletNotConnected, amountOfEthToBurnNotEntered } from '../messages'
 
 export const BurnEther = () => {
 
@@ -77,44 +77,50 @@ export const BurnEther = () => {
 					isLoading={working}
 					loadingText='Submitting'
 					onClick={() => {
-						if (wallet.account) {
-							setWorking(true)
-							const provider = new ethers.providers.Web3Provider(wallet.ethereum)
-							const signer = provider.getSigner(0)
-							signer.sendTransaction({
-								to: defaults.network.address.vether,
-								value: ethers.utils.parseEther(amount),
-							})
-								.then((tx) => {
-									tx.wait().then(() => {
-										setWorking(false)
-										toast(destroyed)
-									}).catch((err) => {
-										setWorking(false)
-										console.log('Error code is:' + err.code)
-										console.log('Error:' + err)
-										toast(failed)
-									})
-								})
-								.catch((err) => {
-									if(err.code === 'INSUFFICIENT_FUNDS') {
-										setWorking(false)
-										console.log('Insufficient balance: Your account balance is insufficient.')
-										toast(insufficientBalance)
-									}
-									else if(err.code === 4001) {
-										setWorking(false)
-										console.log('Transaction rejected: Your have decided to reject the transaction..')
-										toast(rejected)
-									}
-									else {
-										setWorking(false)
-										console.log('Error code is:' + err.code)
-										console.log('Error:' + err)
-										toast(failed)
-									}
-								})
+						if (!wallet.account) {
+							toast(walletNotConnected)
+							return
 						}
+						if (!amount) {
+							toast(amountOfEthToBurnNotEntered)
+							return
+						}
+						setWorking(true)
+						const provider = new ethers.providers.Web3Provider(wallet.ethereum)
+						const signer = provider.getSigner(0)
+						signer.sendTransaction({
+							to: defaults.network.address.vether,
+							value: ethers.utils.parseEther(amount),
+						})
+							.then((tx) => {
+								tx.wait().then(() => {
+									setWorking(false)
+									toast(destroyed)
+								}).catch((err) => {
+									setWorking(false)
+									console.log('Error code is:' + err.code)
+									console.log('Error:' + err)
+									toast(failed)
+								})
+							})
+							.catch((err) => {
+								if(err.code === 'INSUFFICIENT_FUNDS') {
+									setWorking(false)
+									console.log('Insufficient balance: Your account balance is insufficient.')
+									toast(insufficientBalance)
+								}
+								else if(err.code === 4001) {
+									setWorking(false)
+									console.log('Transaction rejected: Your have decided to reject the transaction..')
+									toast(rejected)
+								}
+								else {
+									setWorking(false)
+									console.log('Error code is:' + err.code)
+									console.log('Error:' + err)
+									toast(failed)
+								}
+							})
 					}}>
 					Burn
 				</Button>

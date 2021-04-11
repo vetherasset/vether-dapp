@@ -10,7 +10,7 @@ import {
 	getClaimDayNums, getEmissionEra, getShare, claimShare,
 } from '../common/ethereum'
 import { getAvailableEras, prettifyCurrency } from '../common/utils'
-import { claimed, failed, rejected } from '../messages'
+import { claimed, failed, rejected, walletNotConnected, eraNotSelected, dayNotSelected } from '../messages'
 
 export const ClaimVeth = () => {
 
@@ -127,35 +127,45 @@ export const ClaimVeth = () => {
 					isLoading={submitingTx}
 					loadingText='Submitting'
 					onClick={() => {
-						if (wallet.account) {
-							setSubmitingTx(true)
-							const provider = new ethers.providers.Web3Provider(wallet.ethereum)
-							claimShare(era, day, provider)
-								.then((tx) => {
-									tx.wait().then(() => {
-										setSubmitingTx(false)
-										toast(claimed)
-									}).catch((err) => {
-										setSubmitingTx(false)
-										console.log('Error code is:' + err.code)
-										console.log('Error:' + err)
-										toast(failed)
-									})
-								})
-								.catch((err) => {
-									if(err.code === 4001) {
-										setSubmitingTx(false)
-										console.log('Transaction rejected: Your have decided to reject the transaction.')
-										toast(rejected)
-									}
-									else {
-										setSubmitingTx(false)
-										console.log('Error code is:' + err.code)
-										console.log('Error:' + err)
-										toast(failed)
-									}
-								})
+						if (!wallet.account) {
+							toast(walletNotConnected)
+							return
 						}
+						if (!era) {
+							toast(eraNotSelected)
+							return
+						}
+						if (!day) {
+							toast(dayNotSelected)
+							return
+						}
+						setSubmitingTx(true)
+						const provider = new ethers.providers.Web3Provider(wallet.ethereum)
+						claimShare(era, day, provider)
+							.then((tx) => {
+								tx.wait().then(() => {
+									setSubmitingTx(false)
+									toast(claimed)
+								}).catch((err) => {
+									setSubmitingTx(false)
+									console.log('Error code is:' + err.code)
+									console.log('Error:' + err)
+									toast(failed)
+								})
+							})
+							.catch((err) => {
+								if(err.code === 4001) {
+									setSubmitingTx(false)
+									console.log('Transaction rejected: Your have decided to reject the transaction.')
+									toast(rejected)
+								}
+								else {
+									setSubmitingTx(false)
+									console.log('Error code is:' + err.code)
+									console.log('Error:' + err)
+									toast(failed)
+								}
+							})
 					}}>
 					Claim
 				</Button>
