@@ -3,7 +3,7 @@ export default {
 		fontFamily: 'Button',
 		lineHeight: '0px',
 		_focus: {
-			boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)!important',
+			boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)',
 		},
 	},
 	variants: {

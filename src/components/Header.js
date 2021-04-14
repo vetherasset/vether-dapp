@@ -3,7 +3,7 @@ import { Flex, Spacer, useBreakpointValue } from '@chakra-ui/react'
 
 import { Logotype } from './Logotype'
 import { WalletConnectionToggle } from './WalletConnectionToggle'
-
+import { InfoMenu } from './InfoMenu'
 
 export const Header = (props) => {
 
@@ -15,18 +15,19 @@ export const Header = (props) => {
 
 	return (
 		<Flex {...props}>
-			<Flex w="33%">
+			<Flex>
 				<Logotype h='60px'
 					transform='scale(0.9)' />
 			</Flex>
 			<Spacer />
-			<Flex w="33%"
-				justifyContent='flex-end'
-				alignItems='center'
-			>
+			<Flex justifyContent='flex-end' alignItems='center'>
 				<WalletConnectionToggle
 					marginLeft='0.6rem'
 					size={size} />
+				{useBreakpointValue({
+					base: '',
+					sm: <InfoMenu size={size} />,
+				})}
 			</Flex>
 		</Flex>
 	)

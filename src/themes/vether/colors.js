@@ -8,6 +8,7 @@ export default {
 	gray: {
 		300: '#f1f2f3',
 		600: '#302c2d',
+		700: '#1a160c',
 	},
 	vether: {
 		200: '#ffba00',

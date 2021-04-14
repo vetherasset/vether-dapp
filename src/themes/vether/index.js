@@ -7,6 +7,8 @@ import tooltip from './tooltip'
 import input from './input'
 import numberInput from './numberinput'
 import select from './select'
+import menuitem from './menuitem'
+import link from './link'
 import { extendTheme } from '@chakra-ui/react'
 import defaults from '../../common/defaults'
 
@@ -31,9 +33,6 @@ const overrides = {
 			'html::-webkit-scrollbar': {
 				display: 'none',
 			},
-			'button:focus': {
-				boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)!important',
-			},
 			'input::placeholder': {
 				color: '#000',
 			},
@@ -48,6 +47,8 @@ const overrides = {
 		Badge: badge,
 		Tooltip: tooltip,
 		Select: select,
+		MenuItem: menuitem,
+		Link: link,
 	},
 	layerStyles: {
 		overview: {

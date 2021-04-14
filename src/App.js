@@ -5,6 +5,7 @@ import vether from './themes/vether'
 import { UseWalletProvider } from 'use-wallet'
 import defaults from './common/defaults'
 import { Header } from './components/Header'
+import { Footer } from './components/Footer'
 import { ActionPanel } from './components/ActionPanel'
 import { Overview } from './components/Overview'
 
@@ -35,6 +36,7 @@ const App = () => {
 								} />
 							</Switch>
 							<ActionPanel />
+							<Footer/>
 						</Box>
 					</Box>
       	</UseWalletProvider>

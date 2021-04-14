@@ -15,6 +15,7 @@ const CloseButton = () => {
 			justifyContent='center'
 			borderRadius='md'
 			_hover={{ background: 'none' }}
+			_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
 		>
 			<Heading as='span' size='sm'>Close</Heading>
 		</AccordionButton>
@@ -30,7 +31,9 @@ const ActionButton = (props) => {
 	return (
 		<Fade in={true} height='100%'>
 			<AccordionButton height='100%'
-				p={{ base: '26px 107px', sm: '26px 117px' }}>
+				p={{ base: '26px 107px', sm: '26px 117px' }}
+				_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
+			>
 				<Heading as='span' size='1rem' ml='5px'>{props.name}</Heading>
 			</AccordionButton>
 		</Fade>
