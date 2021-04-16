@@ -11,6 +11,7 @@ import menuitem from './menuitem'
 import link from './link'
 import { extendTheme } from '@chakra-ui/react'
 import defaults from '../../common/defaults'
+import spinner from './spinner'
 
 const overrides = {
 	config: {
@@ -36,6 +37,12 @@ const overrides = {
 			'input::placeholder': {
 				color: '#000',
 			},
+			'.chakra-alert button:focus': {
+				boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)',
+			},
+			'.chakra-toast__inner': {
+				minWidth: '440px!important',
+			},
 		}),
 	},
 	textStyles: typography,
@@ -49,6 +56,13 @@ const overrides = {
 		Select: select,
 		MenuItem: menuitem,
 		Link: link,
+		Spinner: spinner,
+		Toast: {
+			minWidth: '440px',
+			baseStyle: {
+				bg: 'red',
+			},
+		},
 	},
 	layerStyles: {
 		overview: {
