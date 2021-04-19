@@ -41,7 +41,7 @@ const overrides = {
 				boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)',
 			},
 			'.chakra-toast__inner': {
-				width: '20vw',
+				width: '30vw',
 			},
 		}),
 	},
