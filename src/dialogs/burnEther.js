@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
@@ -6,11 +7,17 @@ import {
 	useToast,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
-import { getCurrentBurn, getEmission } from '../common/ethereum'
+import { getCurrentBurn, getEmission, getUniswapAssetPrice } from '../common/ethereum'
 import { getVetherValueStrict, prettifyCurrency } from '../common/utils'
 import { failed, rejected, insufficientBalance, destroyed, walletNotConnected, amountOfEthToBurnNotEntered } from '../messages'
+import { HighImpliedPriceWarning } from '../components/HighImpliedPriceWarning'
 
-export const BurnEther = () => {
+export const BurnEther = (props) => {
+
+	BurnEther.propTypes = {
+		width: PropTypes.string.isRequired,
+		visible: PropTypes.number.isRequired,
+	}
 
 	const wallet = useWallet()
 	const toast = useToast()
@@ -18,24 +25,74 @@ export const BurnEther = () => {
 	const [value, setValue] = useState(0)
 	const [currentBurn, setCurrentBurn] = useState(undefined)
 	const [emission, setEmission] = useState(undefined)
+	const [ethPrice, setEthPrice] = useState(undefined)
+	const [price, setPrice] = useState(undefined)
 	const [working, setWorking] = useState(false)
+	const [warning, setWarning] = useState(-1)
 
 	useEffect(() => {
-		getCurrentBurn(defaults.network.provider).then(n => setCurrentBurn(Number(ethers.utils.formatEther(n))))
+		getCurrentBurn(
+			defaults.network.provider,
+		)
+			.then(n => setCurrentBurn(n))
 	}, [])
 
 	useEffect(() => {
-		getEmission(defaults.network.provider).then(n => setEmission(Number(ethers.utils.formatEther(n))))
+		getEmission(
+			defaults.network.provider,
+		)
+			.then(n => setEmission(n))
 	}, [])
+
+	useEffect(() => {
+		getUniswapAssetPrice(
+			defaults.network.address.uniswap.usdc,
+			6,
+			18,
+			true,
+			defaults.network.provider,
+		)
+			.then(n => setEthPrice(n))
+	}, [])
+
+	useEffect(() => {
+		getUniswapAssetPrice(
+			defaults.network.address.uniswap.veth,
+			18,
+			18,
+			false,
+			defaults.network.provider,
+		)
+			.then(n => setPrice(n))
+	}, [])
+
+	useEffect(() => {
+		if(currentBurn && emission && price && ethPrice) {
+			if (((Number(ethers.utils.formatEther(currentBurn)) / Number(ethers.utils.formatEther(emission)) * ethPrice)) > (price * ethPrice)) {
+				setWarning(1)
+			}
+		}
+	}, [currentBurn, emission, price, ethPrice, props.visible])
 
 	return (
 		<>
-			<Flex flexFlow='column' h='25%'>
+			<Flex flexFlow='column' h='25%' width={props.width}>
 				<Heading as='h3' size='md' textAlign='center' m='-4px 0 11px 0'>ACQUIRE VETHER</Heading>
 				<Box as='span' textAlign='center'>Acquire a share of today’s emission by&nbsp;burning Ether.</Box>
 			</Flex>
 
-			<Flex flexFlow='column' h='25%'>
+			<Flex display={warning < 1 ? 'none' : 'flex'}>
+				<HighImpliedPriceWarning
+					setState={setWarning}
+					impliedValue={
+						currentBurn && emission && ethPrice
+							? prettifyCurrency((Number(ethers.utils.formatEther(currentBurn)) / Number(ethers.utils.formatEther(emission))) * ethPrice)
+							: ''
+					}
+					price={price && ethPrice ? prettifyCurrency(price * ethPrice, 0, 2) : ''} />
+			</Flex>
+
+			<Flex flexFlow='column' h='25%' width={props.width}>
 				<Heading as='h3' size='sm' mb='11px'>Amount Eth to burn</Heading>
 				<NumberInput
 					min={0}
@@ -51,7 +108,7 @@ export const BurnEther = () => {
 				</NumberInput>
 			</Flex>
 
-			<Flex flexFlow='column' h='25%'>
+			<Flex flexFlow='column' h='25%' width={props.width}>
 				<Heading as='h3' textAlign='center'>
 					{value === 0 ? prettifyCurrency(value, 0, 2, 'VETH') : prettifyCurrency(value, 0, 2, 'VETH')}
 				</Heading>
@@ -72,7 +129,7 @@ export const BurnEther = () => {
 				</Box>
 			</Flex>
 
-			<Flex flexFlow='column' h='25%'>
+			<Flex flexFlow='column' h='25%' width={props.width}>
 				<Button w='100%'
 					isLoading={working}
 					loadingText='Submitting'

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
@@ -12,7 +13,12 @@ import {
 import { getAvailableEras, prettifyCurrency } from '../common/utils'
 import { claimed, failed, rejected, walletNotConnected, eraNotSelected, dayNotSelected } from '../messages'
 
-export const ClaimVeth = () => {
+export const ClaimVeth = (props) => {
+
+	ClaimVeth.propTypes = {
+		width: PropTypes.string.isRequired,
+		visible: PropTypes.string.isRequired,
+	}
 
 	const wallet = useWallet()
 	const toast = useToast()
@@ -68,12 +74,12 @@ export const ClaimVeth = () => {
 
 	return (
 		<>
-			<Flex flexFlow='column' h='20%'>
+			<Flex flexFlow='column' h='20%' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
 				<Heading as='h3' size='md' textAlign='center' m='-4px 0 11px 0'>CLAIM VETHER</Heading>
 				<Box as='span' textAlign='center'>Claim your share of a previous day’s emission.</Box>
 			</Flex>
 
-			<Flex flexFlow='column' h='20%'>
+			<Flex flexFlow='column' h='20%' width={props.width}>
 				<Heading as='h3' size='sm' mb='11px'>Emission Era</Heading>
 				<Select isRequired
 				 placeholder='Select available era'
@@ -89,7 +95,7 @@ export const ClaimVeth = () => {
 				</Select>
 			</Flex>
 
-			<Flex flexFlow='column' h='20%'>
+			<Flex flexFlow='column' h='20%' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
 				<Heading as='h3' size='sm' mb='11px'>Emission Day</Heading>
 				<Select
 				 disabled={!eachDayContributed || eachDayContributed.length === 0 || gettingClaimDays}
@@ -115,14 +121,14 @@ export const ClaimVeth = () => {
 				/>
 			</Flex>
 
-			<Flex flexFlow='column' h='20%'>
+			<Flex flexFlow='column' h='20%' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
 				<Heading as='h3' textAlign='center'>
 					{isNaN(share) ? prettifyCurrency(0, 0, 2, 'VETH') : prettifyCurrency(share, 0, 2, 'VETH')}
 				</Heading>
 				<Heading as='span' size='sm' fontWeight='normal' textAlign='center'>Acquired share</Heading>
 			</Flex>
 
-			<Flex flexFlow='column' h='20%'>
+			<Flex flexFlow='column' h='20%' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
 				<Button w='100%'
 					isLoading={submitingTx}
 					loadingText='Submitting'

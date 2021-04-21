@@ -69,10 +69,10 @@ export const ActionPanel = (props) => {
 									<CloseButton/>
 								</>
 							}
-							<AccordionPanel p={0} visibility={isOpen === -1 ? 'hidden' : 'visible'}>
+							<AccordionPanel p={0} visibility={isOpen === -1 ? 'hidden' : 'visible'} width={isOpen === -1 ? 0 : 'auto'}>
 								<Box maxW={defaults.layout.width} m='0 auto'>
-									<Container minH='600px' maxW='340px' display='flex' flexFlow='column' justifyContent='space-around'>
-										<BurnEther/>
+									<Container minH='600px' maxH='600px' display='flex' flexFlow='column' justifyContent='space-around' alignItems='center'>
+										<BurnEther width={isOpen === -1 ? '0' : '307px'} visible={isOpen}/>
 									</Container>
 								</Box>
 							</AccordionPanel>
@@ -89,9 +89,9 @@ export const ActionPanel = (props) => {
 							{isExpanded &&
 									<CloseButton/>
 							}
-							<AccordionPanel p={0} visibility={isOpen === -1 ? 'hidden' : 'visible'}>
-								<Container minH='600px' maxW='340px' display='flex' flexFlow='column' justifyContent='space-around'>
-									<ClaimVeth/>
+							<AccordionPanel p={0} visibility={isOpen === -1 ? 'hidden' : 'visible'} width={isOpen === -1 ? 0 : 'auto'}>
+								<Container minH='600px' maxH='600px' display='flex' flexFlow='column' justifyContent='space-around' alignItems='center'>
+									<ClaimVeth width={isOpen === -1 ? '0' : '307px'} visible={isOpen}/>
 								</Container>
 							</AccordionPanel>
 							{!isExpanded && isOpen === -1 &&
