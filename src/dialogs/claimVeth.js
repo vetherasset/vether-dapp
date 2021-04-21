@@ -17,7 +17,7 @@ export const ClaimVeth = (props) => {
 
 	ClaimVeth.propTypes = {
 		width: PropTypes.string.isRequired,
-		visible: PropTypes.string.isRequired,
+		visible: PropTypes.number.isRequired,
 	}
 
 	const wallet = useWallet()

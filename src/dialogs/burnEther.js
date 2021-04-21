@@ -32,16 +32,18 @@ export const BurnEther = (props) => {
 
 	useEffect(() => {
 		getCurrentBurn(
-			defaults.network.provider,
-		)
-			.then(n => setCurrentBurn(n))
+			defaults.network.provider)
+			.then(n => setCurrentBurn(
+				Number(ethers.utils.formatEther(n)),
+			))
 	}, [])
 
 	useEffect(() => {
 		getEmission(
-			defaults.network.provider,
-		)
-			.then(n => setEmission(n))
+			defaults.network.provider)
+			.then(n => setEmission(
+				Number(ethers.utils.formatEther(n)),
+			))
 	}, [])
 
 	useEffect(() => {
@@ -68,7 +70,7 @@ export const BurnEther = (props) => {
 
 	useEffect(() => {
 		if(currentBurn && emission && price && ethPrice) {
-			if (((Number(ethers.utils.formatEther(currentBurn)) / Number(ethers.utils.formatEther(emission)) * ethPrice)) > (price * ethPrice)) {
+			if (((currentBurn / emission) * (ethPrice)) > (price * ethPrice)) {
 				setWarning(1)
 			}
 		}
@@ -86,7 +88,7 @@ export const BurnEther = (props) => {
 					setState={setWarning}
 					impliedValue={
 						currentBurn && emission && ethPrice
-							? prettifyCurrency((Number(ethers.utils.formatEther(currentBurn)) / Number(ethers.utils.formatEther(emission))) * ethPrice)
+							? prettifyCurrency((currentBurn / emission) * (ethPrice))
 							: ''
 					}
 					price={price && ethPrice ? prettifyCurrency(price * ethPrice, 0, 2) : ''} />
@@ -110,7 +112,7 @@ export const BurnEther = (props) => {
 
 			<Flex flexFlow='column' h='25%' width={props.width}>
 				<Heading as='h3' textAlign='center'>
-					{value === 0 ? prettifyCurrency(value, 0, 2, 'VETH') : prettifyCurrency(value, 0, 2, 'VETH')}
+					{value === 0 ? prettifyCurrency(value, 0, 2, 'VETH') : prettifyCurrency(value, 2, 2, 'VETH')}
 				</Heading>
 				<Heading as='span' size='sm' fontWeight='normal' textAlign='center'>Potential share</Heading>
 				<Box m='0 auto'>
