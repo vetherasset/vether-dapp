@@ -1,8 +1,9 @@
 import React from 'react'
-import { Button, Link, Menu, MenuButton, MenuItem, MenuList, Image } from '@chakra-ui/react'
+import { Button, Link, Menu, MenuButton, MenuItem, MenuDivider, MenuList, Image } from '@chakra-ui/react'
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { FaDiscord, FaTelegramPlane, FaGithub } from 'react-icons/fa'
 import { IoIosPaper } from 'react-icons/io'
+import { IoBarChart } from 'react-icons/io5'
 import { MdHelp } from 'react-icons/md'
 import UniswapIcon from '../assets/svg/uniswap.svg'
 
@@ -41,6 +42,12 @@ export const InfoMenu = (props) => {
 					</Link>
 				</MenuItem>
 				<MenuItem {...menuItemStyle}>
+					<Link {...linkStyle} isExternal href='https://stats.vetherasset.app/'>
+						<IoBarChart style={iconStyle}/>
+						Analytics
+					</Link>
+				</MenuItem>
+				<MenuItem {...menuItemStyle}>
 					<Link {...linkStyle} isExternal href='https://wp.vetherasset.io/'>
 						<IoIosPaper style={iconStyle}/>
 						Whitepaper
@@ -52,6 +59,7 @@ export const InfoMenu = (props) => {
 						Docs
 					</Link>
 				</MenuItem>
+				<MenuDivider />
 				<MenuItem {...menuItemStyle}>
 					<Link {...linkStyle} isExternal href='https://discord.com/invite/c5aBC7Q'>
 						<FaDiscord style={iconStyle}/>
