@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import defaults from '../common/defaults'
 import { Flex, Accordion, AccordionButton, AccordionItem, AccordionPanel,
-	Box, Container, Heading, Fade } from '@chakra-ui/react'
+	Box, Container, Heading } from '@chakra-ui/react'
 import { BurnEther } from '../dialogs/burnEther'
 import { ClaimVeth } from '../dialogs/claimVeth'
 
@@ -29,20 +29,79 @@ const ActionButton = (props) => {
 	}
 
 	return (
-		<Fade in={true} height='100%'>
-			<AccordionButton height='100%'
-				p={{ base: '26px 107px', sm: '26px 117px' }}
-				_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
-			>
-				<Heading as='span' size='1rem' ml='5px'>{props.name}</Heading>
-			</AccordionButton>
-		</Fade>
+		<AccordionButton
+			height='100%'
+			width='100%'
+			justifyContent='center'
+			p={{ base: '26px' }}
+			_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
+		>
+			<Heading as='span' size='1rem' ml='5px'>{props.name}</Heading>
+		</AccordionButton>
+	)
+}
+
+const Body = (props) => {
+
+	Body.propTypes = {
+		isOpen: PropTypes.number.isRequired,
+		name: PropTypes.string.isRequired,
+		children: PropTypes.object.isRequired,
+		index: PropTypes.number.isRequired,
+	}
+
+	return (
+		<AccordionItem
+			width={props.isOpen === -1 ? '50%' : props.isOpen === props.index ? '100%' : '0'}
+			border='none'>
+			{({ isExpanded }) => (
+				<>
+					{isExpanded &&
+								<>
+									<CloseButton/>
+								</>
+					}
+					<AccordionPanel p={0} visibility={props.isOpen === -1 ? 'hidden' : 'visible'} width={props.isOpen === -1 ? 0 : 'auto'}>
+						<Box maxW={defaults.layout.width} m='0 auto'>
+							<Container
+								minH='600px'
+								maxH='600px'
+								display='flex'
+								flexFlow='column'
+								justifyContent='space-around'
+								alignItems='center'>
+								{props.children}
+							</Container>
+						</Box>
+					</AccordionPanel>
+					{!isExpanded && props.isOpen === -1 &&
+								<ActionButton name={props.name}/>
+					}
+				</>
+			)}
+		</AccordionItem>
 	)
 }
 
 export const ActionPanel = (props) => {
 
 	const [isOpen, setIsOpen] = useState(-1)
+
+	const itemProps = {
+		width: isOpen === -1 ? '0' : '307px',
+		visible: isOpen,
+	}
+
+	const items = [
+		{
+			name: 'Burn',
+			content: <BurnEther {...itemProps}/>,
+		},
+		{
+			name: 'Claim',
+			content: <ClaimVeth {...itemProps}/>,
+		},
+	]
 
 	return (
 		<Flex w={{ base: '100%', md: '60ch' }}
@@ -61,45 +120,15 @@ export const ActionPanel = (props) => {
 				alignItems='middle'
 				allowToggle
 				onChange={(n) => setIsOpen(n)}>
-				<AccordionItem border='none'>
-					{({ isExpanded }) => (
-						<>
-							{isExpanded &&
-								<>
-									<CloseButton/>
-								</>
-							}
-							<AccordionPanel p={0} visibility={isOpen === -1 ? 'hidden' : 'visible'} width={isOpen === -1 ? 0 : 'auto'}>
-								<Box maxW={defaults.layout.width} m='0 auto'>
-									<Container minH='600px' maxH='600px' display='flex' flexFlow='column' justifyContent='space-around' alignItems='center'>
-										<BurnEther width={isOpen === -1 ? '0' : '307px'} visible={isOpen}/>
-									</Container>
-								</Box>
-							</AccordionPanel>
-							{!isExpanded && isOpen === -1 &&
-								<ActionButton name='Burn'/>
-							}
-						</>
-					)}
-				</AccordionItem>
 
-				<AccordionItem border='none'>
-					{({ isExpanded }) => (
-						<>
-							{isExpanded &&
-									<CloseButton/>
-							}
-							<AccordionPanel p={0} visibility={isOpen === -1 ? 'hidden' : 'visible'} width={isOpen === -1 ? 0 : 'auto'}>
-								<Container minH='600px' maxH='600px' display='flex' flexFlow='column' justifyContent='space-around' alignItems='center'>
-									<ClaimVeth width={isOpen === -1 ? '0' : '307px'} visible={isOpen}/>
-								</Container>
-							</AccordionPanel>
-							{!isExpanded && isOpen === -1 &&
-								<ActionButton name='Claim'/>
-							}
-						</>
-					)}
-				</AccordionItem>
+				{items.map((item, index) => {
+					return (
+						<Body isOpen={isOpen} name={item.name} index={index} key={index}>
+							{item.content}
+						</Body>
+					)
+				})}
+
 			</Accordion>
 		</Flex>
 	)
