@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import { ChakraProvider, Box } from '@chakra-ui/react'
+import { ChakraProvider, Flex, Box } from '@chakra-ui/react'
 import vether from './themes/vether'
 import { UseWalletProvider } from 'use-wallet'
 import defaults from './common/defaults'
@@ -17,7 +17,10 @@ const App = () => {
 				<UseWalletProvider
 					chainId={defaults.network.chainId}
 					connectors={defaults.network.connectors}>
-					<Box pb={{ base: '76px', sm: '0' }}>
+					<Flex
+						height='100vh'
+						pb={{ base: '76px', sm: '0' }}
+						flexDir='column'>
 						<Header width='100%'
 						      p='1.2rem 1rem'
 							    justifyContent='center'/>
@@ -38,7 +41,7 @@ const App = () => {
 							<ActionPanel />
 							<Footer/>
 						</Box>
-					</Box>
+					</Flex>
       	</UseWalletProvider>
 			</ChakraProvider>
 		</Router>
