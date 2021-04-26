@@ -33,7 +33,8 @@ const ActionButton = (props) => {
 			height='100%'
 			width='100%'
 			justifyContent='center'
-			p={{ base: '26px' }}
+			fontSize={{ base: '0.85rem', sm: '1rem' }}
+			p={{ base: '23px 0', sm: '26px 0' }}
 			_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
 		>
 			<Heading as='span' size='1rem' ml='5px'>{props.name}</Heading>
@@ -110,7 +111,7 @@ export const ActionPanel = (props) => {
 			pos={isOpen > -1 ? 'fixed' : { base: 'fixed', sm: 'relative' }}
 			bottom={isOpen > -1 ? { base: '0', md: '35px' } : '0'}
 			maxWidth={'60ch'}
-			borderRadius={{ base: isOpen > -1 ? '0.8rem 0.8rem 0 0' : '0', sm: '0.8rem' }}
+			borderRadius={{ base: '0.8rem 0.8rem 0 0', sm: '0.8rem' }}
 			left='50%'
 			transform='translateX(-50%)'
 			alignItems='center'
