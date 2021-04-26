@@ -33,7 +33,7 @@ const ActionButton = (props) => {
 			height='100%'
 			width='100%'
 			justifyContent='center'
-			fontSize={{ base: '0.85rem', sm: '1rem' }}
+			fontSize={{ base: '0.90rem', sm: '1rem' }}
 			p={{ base: '23px 0', sm: '26px 0' }}
 			_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
 		>
