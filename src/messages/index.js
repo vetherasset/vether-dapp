@@ -2,7 +2,7 @@ import defaults from '../common/defaults'
 
 const connected = {
 	title: 'Wallet connected',
-	description: 'Your wallet account has been successfully connected.',
+	description: 'Your wallet account has been connected.',
 	status: 'success',
 	duration: defaults.toast.duration,
 	isClosable: defaults.toast.closable,
@@ -10,8 +10,8 @@ const connected = {
 }
 
 const destroyed = {
-	title: 'Ether destroyed',
-	description: 'Submited ether was successfully destroyed. Claim your share later.',
+	title: 'Share acquired',
+	description: 'Ether was burnt. Claim your Veth share later.',
 	status: 'success',
 	duration: defaults.toast.duration,
 	isClosable: defaults.toast.closable,
@@ -19,8 +19,8 @@ const destroyed = {
 }
 
 const claimed = {
-	title: 'Vether claimed',
-	description: 'Your share of Vether has been withdrawn to your account.',
+	title: 'Veth claimed',
+	description: 'Your share of Veth has been withdrawn.',
 	status: 'success',
 	duration: defaults.toast.duration,
 	isClosable: defaults.toast.closable,
@@ -29,7 +29,7 @@ const claimed = {
 
 const insufficientBalance = {
 	title: 'Insufficient balance',
-	description: 'Your account balance is insufficient. You might want lower the amount.',
+	description: 'Your account balance is insufficient.',
 	status: 'error',
 	duration: defaults.toast.duration,
 	isClosable: defaults.toast.closable,
@@ -38,7 +38,7 @@ const insufficientBalance = {
 
 const rejected = {
 	title: 'Transaction rejected',
-	description: 'You have rejected the transaction. Your balance remains unaffected.',
+	description: 'You have rejected the transaction.',
 	status: 'success',
 	duration: defaults.toast.duration,
 	isClosable: defaults.toast.closable,
@@ -47,7 +47,7 @@ const rejected = {
 
 const failed = {
 	title: 'Transaction failed',
-	description: 'Something bad happened. Transaction proccessing failed.',
+	description: 'Something happened. Proccessing failed.',
 	status: 'error',
 	duration: defaults.toast.duration,
 	isClosable: defaults.toast.closable,
