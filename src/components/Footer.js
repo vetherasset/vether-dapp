@@ -21,7 +21,7 @@ export const Footer = (props) => {
 const Links = (props) => {
 
 	const linkStyle = {
-		margin: '10px 45px',
+		margin: '10px auto',
 	}
 
 	const iconStyle = {
