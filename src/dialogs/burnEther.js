@@ -36,7 +36,7 @@ export const BurnEther = (props) => {
 			.then(n => setCurrentBurn(
 				Number(ethers.utils.formatEther(n)),
 			))
-	}, [])
+	}, [props.visible])
 
 	useEffect(() => {
 		getEmission(
@@ -44,7 +44,7 @@ export const BurnEther = (props) => {
 			.then(n => setEmission(
 				Number(ethers.utils.formatEther(n)),
 			))
-	}, [])
+	}, [props.visible])
 
 	useEffect(() => {
 		getUniswapAssetPrice(
@@ -55,7 +55,7 @@ export const BurnEther = (props) => {
 			defaults.network.provider,
 		)
 			.then(n => setEthPrice(n))
-	}, [])
+	}, [props.visible])
 
 	useEffect(() => {
 		getUniswapAssetPrice(
@@ -66,7 +66,7 @@ export const BurnEther = (props) => {
 			defaults.network.provider,
 		)
 			.then(n => setPrice(n))
-	}, [])
+	}, [props.visible])
 
 	useEffect(() => {
 		if(currentBurn && emission && price && ethPrice) {
@@ -74,7 +74,7 @@ export const BurnEther = (props) => {
 				setWarning(1)
 			}
 		}
-	}, [currentBurn, emission, price, ethPrice, props.visible])
+	}, [currentBurn, emission, price, ethPrice])
 
 	return (
 		<>

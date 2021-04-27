@@ -7,8 +7,8 @@ import defaults from '../common/defaults'
 import {
 	getNextDayTime, getCurrentBurn, getUniswapAssetPrice, getEmissionDay, getEmission,
 	getEmissionEra, getERC20BalanceOf,
-	// getEmitted,
 } from '../common/ethereum'
+// eslint-disable-next-line no-unused-vars
 import { prettifyCurrency, getSecondsToGo } from '../common/utils'
 import Countdown from 'react-countdown'
 import { ethers } from 'ethers'
@@ -16,22 +16,39 @@ import numabbr from 'numabbr'
 
 export const Overview = (props) => {
 
+	// eslint-disable-next-line no-unused-vars
+	const [inited, setInited] = useState(-1)
+	const [refresh, setRefresh] = useState(undefined)
+	// eslint-disable-next-line no-unused-vars
+	const [autoRefresh, setAutoRefresh] = useState(true)
 	const [nextDayTime, setNextDayTime] = useState(undefined)
+	const [dayProgress, setDayProgress] = useState(0)
 	const [currentBurn, setCurrentBurn] = useState(undefined)
 	const [price, setPrice] = useState(undefined)
 	const [ethPrice, setEthPrice] = useState(undefined)
 	const [emission, setEmission] = useState(undefined)
 	const [emissionDay, setEmissionDay] = useState(undefined)
 	const [emissionEra, setEmissionEra] = useState(undefined)
-	// const [emitted, setEmitted] = useState(undefined)
 	const [supply, setSupply] = useState(undefined)
 
 	useEffect(() => {
 		getNextDayTime(
 			defaults.network.provider,
 		)
-			.then(n => setNextDayTime(n))
-	}, [])
+			.then(n => {
+				setNextDayTime(n)
+				setInited(prevState => prevState + 1)
+			})
+	}, [refresh])
+
+	useEffect(() => {
+		if (nextDayTime) {
+			let p = ((82400 - getSecondsToGo(nextDayTime)) / 82400) * 100
+			p = p < 0 ? 0 : p
+			setDayProgress(p)
+		}
+		return () => setDayProgress(0)
+	}, [nextDayTime])
 
 	useEffect(() => {
 		getERC20BalanceOf(
@@ -39,15 +56,21 @@ export const Overview = (props) => {
 			defaults.network.address.vether,
 			defaults.network.provider,
 		)
-			.then(n => setSupply(n))
-	}, [])
+			.then(n => {
+				setSupply(n)
+				setInited(prevState => prevState + 1)
+			})
+	}, [refresh])
 
 	useEffect(() => {
 		getCurrentBurn(
 			defaults.network.provider,
 		)
-			.then(n => setCurrentBurn(n))
-	}, [])
+			.then(n => {
+				setCurrentBurn(n)
+				setInited(prevState => prevState + 1)
+			})
+	}, [refresh])
 
 	useEffect(() => {
 		getUniswapAssetPrice(
@@ -57,8 +80,11 @@ export const Overview = (props) => {
 			false,
 			defaults.network.provider,
 		)
-			.then(n => setPrice(n))
-	}, [])
+			.then(n => {
+				setPrice(n)
+				setInited(prevState => prevState + 1)
+			})
+	}, [refresh])
 
 	useEffect(() => {
 		getUniswapAssetPrice(
@@ -68,36 +94,55 @@ export const Overview = (props) => {
 			true,
 			defaults.network.provider,
 		)
-			.then(n => setEthPrice(n))
-	}, [])
+			.then(n => {
+				setEthPrice(n)
+				setInited(prevState => prevState + 1)
+			})
+	}, [refresh])
 
 	useEffect(() => {
 		getEmissionDay(
 			defaults.network.provider,
 		)
-			.then(n => setEmissionDay(n))
-	}, [])
+			.then(n => {
+				setEmissionDay(n)
+				setInited(prevState => prevState + 1)
+			})
+	}, [refresh])
 
 	useEffect(() => {
 		getEmission(
 			defaults.network.provider,
 		)
-			.then(n => setEmission(n))
-	}, [])
+			.then(n => {
+				setEmission(n)
+				setInited(prevState => prevState + 1)
+			})
+	}, [refresh])
 
 	useEffect(() => {
 		getEmissionEra(
 			defaults.network.provider,
 		)
-			.then(n => setEmissionEra(n))
-	}, [])
+			.then(n => {
+				setEmissionEra(n)
+				setInited(prevState => prevState + 1)
+			})
+	}, [refresh])
 
-	// useEffect(() => {
-	// 	getEmitted(
-	// 		defaults.network.provider,
-	// 	)
-	// 		.then(n => setEmitted(n))
-	// }, [])
+	useEffect(() => {
+		setInited(-1)
+	}, [refresh])
+
+	useEffect(() => {
+		let r
+		if(autoRefresh) {
+			r = setInterval(() => {
+				setRefresh(!refresh)
+			}, defaults.poll.time)
+		}
+		return () => { if (r) clearInterval(r) }
+	})
 
 	return (
 		<>
@@ -153,7 +198,7 @@ export const Overview = (props) => {
 					<Progress colorScheme='vether'
 						height='32px'
 						borderRadius='13px'
-						value={nextDayTime ? (((82400 - getSecondsToGo(nextDayTime)) / 82400) * 100) : 0}
+						value={dayProgress}
 						zIndex='-1'
 						hasStripe isAnimated/>
 				</Container>
