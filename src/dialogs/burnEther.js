@@ -31,41 +31,49 @@ export const BurnEther = (props) => {
 	const [warning, setWarning] = useState(-1)
 
 	useEffect(() => {
-		getCurrentBurn(
-			defaults.network.provider)
-			.then(n => setCurrentBurn(
-				Number(ethers.utils.formatEther(n)),
-			))
+		if(props.visible > -1) {
+			getCurrentBurn(
+				defaults.network.provider)
+				.then(n => setCurrentBurn(
+					Number(ethers.utils.formatEther(n)),
+				))
+		}
 	}, [props.visible])
 
 	useEffect(() => {
-		getEmission(
-			defaults.network.provider)
-			.then(n => setEmission(
-				Number(ethers.utils.formatEther(n)),
-			))
+		if(props.visible > -1) {
+			getEmission(
+				defaults.network.provider)
+				.then(n => setEmission(
+					Number(ethers.utils.formatEther(n)),
+				))
+		}
 	}, [props.visible])
 
 	useEffect(() => {
-		getUniswapAssetPrice(
-			defaults.network.address.uniswap.usdc,
-			6,
-			18,
-			true,
-			defaults.network.provider,
-		)
-			.then(n => setEthPrice(n))
+		if(props.visible > -1) {
+			getUniswapAssetPrice(
+				defaults.network.address.uniswap.usdc,
+				6,
+				18,
+				true,
+				defaults.network.provider,
+			)
+				.then(n => setEthPrice(n))
+		}
 	}, [props.visible])
 
 	useEffect(() => {
-		getUniswapAssetPrice(
-			defaults.network.address.uniswap.veth,
-			18,
-			18,
-			false,
-			defaults.network.provider,
-		)
-			.then(n => setPrice(n))
+		if(props.visible > -1) {
+			getUniswapAssetPrice(
+				defaults.network.address.uniswap.veth,
+				18,
+				18,
+				false,
+				defaults.network.provider,
+			)
+				.then(n => setPrice(n))
+		}
 	}, [props.visible])
 
 	useEffect(() => {
