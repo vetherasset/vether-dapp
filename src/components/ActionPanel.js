@@ -39,14 +39,14 @@ const ActionButton = (props) => {
 			flexFlow='column'
 			justifyContent='center'
 			fontSize={{ base: '0.90rem', sm: '1rem' }}
-			p={{ base: '16px 0', sm: '26px 0' }}
+			p={{ base: '11px 0', sm: '26px 0' }}
 			_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
 		>
 			{useBreakpointValue({
 				base: props.icon,
 				sm: '',
 			})}
-			<Heading as='span' size='1rem' ml='5px'>{props.name}</Heading>
+			<Heading as='span' size='1rem'>{props.name}</Heading>
 		</AccordionButton>
 	)
 }
