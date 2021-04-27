@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import defaults from '../common/defaults'
 import { Flex, Accordion, AccordionButton, AccordionItem, AccordionPanel,
-	Box, Container, Heading } from '@chakra-ui/react'
+	Box, Container, Heading, useBreakpointValue } from '@chakra-ui/react'
 import { BurnEther } from '../dialogs/burnEther'
 import { ClaimVeth } from '../dialogs/claimVeth'
+import { GiFireRay } from 'react-icons/gi'
+import { FiCornerRightDown } from 'react-icons/fi'
 
 const CloseButton = () => {
 	return (
@@ -26,17 +28,24 @@ const ActionButton = (props) => {
 
 	ActionButton.propTypes = {
 		name: PropTypes.string.isRequired,
+		icon: PropTypes.object.isRequired,
 	}
 
 	return (
 		<AccordionButton
 			height='100%'
 			width='100%'
+			display='flex'
+			flexFlow='column'
 			justifyContent='center'
 			fontSize={{ base: '0.90rem', sm: '1rem' }}
-			p={{ base: '23px 0', sm: '26px 0' }}
+			p={{ base: '16px 0', sm: '26px 0' }}
 			_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
 		>
+			{useBreakpointValue({
+				base: props.icon,
+				sm: '',
+			})}
 			<Heading as='span' size='1rem' ml='5px'>{props.name}</Heading>
 		</AccordionButton>
 	)
@@ -47,6 +56,7 @@ const Body = (props) => {
 	Body.propTypes = {
 		isOpen: PropTypes.number.isRequired,
 		name: PropTypes.string.isRequired,
+		icon: PropTypes.object.isRequired,
 		children: PropTypes.object.isRequired,
 		index: PropTypes.number.isRequired,
 	}
@@ -76,7 +86,7 @@ const Body = (props) => {
 						</Box>
 					</AccordionPanel>
 					{!isExpanded && props.isOpen === -1 &&
-								<ActionButton name={props.name}/>
+						<ActionButton name={props.name} icon={props.icon}/>
 					}
 				</>
 			)}
@@ -93,13 +103,19 @@ export const ActionPanel = (props) => {
 		visible: isOpen,
 	}
 
+	const iconProps = {
+		size: '1.5rem',
+	}
+
 	const items = [
 		{
 			name: 'Burn',
+			icon: <GiFireRay {...iconProps}/>,
 			content: <BurnEther {...itemProps}/>,
 		},
 		{
 			name: 'Claim',
+			icon: <FiCornerRightDown {...iconProps}/>,
 			content: <ClaimVeth {...itemProps}/>,
 		},
 	]
@@ -124,7 +140,7 @@ export const ActionPanel = (props) => {
 
 				{items.map((item, index) => {
 					return (
-						<Body isOpen={isOpen} name={item.name} index={index} key={index}>
+						<Body isOpen={isOpen} name={item.name} icon={item.icon} index={index} key={index}>
 							{item.content}
 						</Body>
 					)
