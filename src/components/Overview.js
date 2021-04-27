@@ -22,6 +22,7 @@ export const Overview = (props) => {
 	// eslint-disable-next-line no-unused-vars
 	const [autoRefresh, setAutoRefresh] = useState(true)
 	const [nextDayTime, setNextDayTime] = useState(undefined)
+	const [remainingTime, setRemainingTime] = useState(undefined)
 	const [dayProgress, setDayProgress] = useState(0)
 	const [currentBurn, setCurrentBurn] = useState(undefined)
 	const [price, setPrice] = useState(undefined)
@@ -32,13 +33,15 @@ export const Overview = (props) => {
 	const [supply, setSupply] = useState(undefined)
 
 	useEffect(() => {
-		getNextDayTime(
-			defaults.network.provider,
-		)
-			.then(n => {
-				setNextDayTime(n)
-				setInited(prevState => prevState + 1)
-			})
+		if (dayProgress > 99 || dayProgress === 0) {
+			getNextDayTime(
+				defaults.network.provider,
+			)
+				.then(n => {
+					setNextDayTime(n)
+					setInited(prevState => prevState + 1)
+				})
+		}
 	}, [refresh])
 
 	useEffect(() => {
@@ -48,6 +51,10 @@ export const Overview = (props) => {
 			setDayProgress(p)
 		}
 		return () => setDayProgress(0)
+	})
+
+	useEffect(() => {
+		if (nextDayTime) setRemainingTime(Number(nextDayTime.toString()) * 1000)
 	}, [nextDayTime])
 
 	useEffect(() => {
@@ -209,12 +216,12 @@ export const Overview = (props) => {
 					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
 					Remaining time
 					</Heading>
-					{nextDayTime &&
+					{remainingTime &&
 						<Heading as='h3' size='lg'>
 							<Countdown
 								zeroPadTime={2}
 								daysInHours={true}
-								date={Number(nextDayTime.toString()) * 1000}>
+								date={remainingTime}>
 									 <Box as='span' fontSize='1.3rem'>One more burn to start new day.</Box>
 							</Countdown>
 						</Heading>
