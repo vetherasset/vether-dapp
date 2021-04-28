@@ -10,7 +10,7 @@ import UniswapIcon from '../assets/svg/uniswap.svg'
 const linkStyle = {
 	width: '100%',
 	display: 'inline-block',
-	padding: '0 0.8rem',
+	padding: '0.4rem 0.8rem',
 	_hover: {
 		textDecoration: 'none',
 	},
@@ -24,8 +24,7 @@ const iconStyle = {
 }
 
 const menuItemStyle = {
-	paddingInlineEnd: '0',
-	paddingInlineStart: '0',
+	padding: '0',
 }
 
 export const InfoMenu = (props) => {
