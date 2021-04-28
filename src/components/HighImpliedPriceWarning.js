@@ -24,7 +24,7 @@ export const HighImpliedPriceWarning = (props) => {
 				status='warning'
 				variant='subtle'
 				flexDirection='row'
-				alignItems='center'
+				width='100%'
 				justifyContent='center'
 				textAlign='justify'
 				display={props.state < 1 ? 'none' : 'flex'}
