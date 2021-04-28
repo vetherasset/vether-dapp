@@ -82,7 +82,8 @@ export const BurnEther = (props) => {
 				setWarning(1)
 			}
 		}
-	}, [currentBurn, emission, price, ethPrice])
+		return () => setWarning(-1)
+	}, [currentBurn, emission, price, ethPrice, props.visible])
 
 	return (
 		<>
