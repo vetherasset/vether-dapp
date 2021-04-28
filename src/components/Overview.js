@@ -34,7 +34,7 @@ export const Overview = (props) => {
 	const [supply, setSupply] = useState(undefined)
 
 	useEffect(() => {
-		if (dayProgress > 99.8 || dayProgress === 0) {
+		if (dayProgress >= 100 || dayProgress === 0) {
 			getNextDayTime(
 				defaults.network.provider,
 			)
@@ -55,7 +55,7 @@ export const Overview = (props) => {
 	})
 
 	useEffect(() => {
-		if (dayProgress > 99.2) setPollTime(defaults.poll.timePeak)
+		if (dayProgress > 99.3 && dayProgress < 100) setPollTime(defaults.poll.timePeak)
 		return () => setPollTime(defaults.poll.time)
 	}, [dayProgress])
 
@@ -156,7 +156,6 @@ export const Overview = (props) => {
 		}
 		return () => { if (r) clearInterval(r) }
 	})
-
 
 	return (
 		<>
