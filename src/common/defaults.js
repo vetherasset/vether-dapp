@@ -17,6 +17,7 @@ defaults.network.address.uniswap.usdc = '0xB4e16d0168e52d35CaCD2c6185b44281Ec28C
 
 defaults.poll = {}
 defaults.poll.time = 60000
+defaults.poll.timePeak = 3000
 
 defaults.layout = {}
 defaults.layout.width = '768px'

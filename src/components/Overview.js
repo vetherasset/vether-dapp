@@ -21,6 +21,7 @@ export const Overview = (props) => {
 	const [refresh, setRefresh] = useState(undefined)
 	// eslint-disable-next-line no-unused-vars
 	const [autoRefresh, setAutoRefresh] = useState(true)
+	const [pollTime, setPollTime] = useState(defaults.poll.time)
 	const [nextDayTime, setNextDayTime] = useState(undefined)
 	const [remainingTime, setRemainingTime] = useState(undefined)
 	const [dayProgress, setDayProgress] = useState(0)
@@ -33,7 +34,7 @@ export const Overview = (props) => {
 	const [supply, setSupply] = useState(undefined)
 
 	useEffect(() => {
-		if (dayProgress > 99 || dayProgress === 0) {
+		if (dayProgress > 99.8 || dayProgress === 0) {
 			getNextDayTime(
 				defaults.network.provider,
 			)
@@ -52,6 +53,11 @@ export const Overview = (props) => {
 		}
 		return () => setDayProgress(0)
 	})
+
+	useEffect(() => {
+		if (dayProgress > 99.2) setPollTime(defaults.poll.timePeak)
+		return () => setPollTime(defaults.poll.time)
+	}, [dayProgress])
 
 	useEffect(() => {
 		if (nextDayTime) setRemainingTime(Number(nextDayTime.toString()) * 1000)
@@ -146,10 +152,11 @@ export const Overview = (props) => {
 		if(autoRefresh) {
 			r = setInterval(() => {
 				setRefresh(!refresh)
-			}, defaults.poll.time)
+			}, pollTime)
 		}
 		return () => { if (r) clearInterval(r) }
 	})
+
 
 	return (
 		<>
