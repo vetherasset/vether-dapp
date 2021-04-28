@@ -92,16 +92,16 @@ export const BurnEther = (props) => {
 				<Box as='span' textAlign='center'>Acquire a share of today’s emission by&nbsp;burning Ether.</Box>
 			</Flex>
 
-			<Flex display={warning < 1 ? 'none' : 'flex'}>
-				<HighImpliedPriceWarning
-					setState={setWarning}
-					impliedValue={
-						currentBurn && emission && ethPrice
-							? prettifyCurrency((currentBurn / emission) * (ethPrice))
-							: ''
-					}
-					price={price && ethPrice ? prettifyCurrency(price * ethPrice, 0, 2) : ''} />
-			</Flex>
+			<HighImpliedPriceWarning
+				state={warning}
+				setState={setWarning}
+				impliedValue={
+					currentBurn && emission && ethPrice
+						? prettifyCurrency((currentBurn / emission) * (ethPrice))
+						: ''
+				}
+				price={price && ethPrice ? prettifyCurrency(price * ethPrice, 0, 2) : ''}
+			/>
 
 			<Flex flexFlow='column' h='25%' width={props.width}>
 				<Heading as='h3' size='sm' mb='11px'>Amount Eth to burn</Heading>
