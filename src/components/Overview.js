@@ -175,7 +175,7 @@ export const Overview = (props) => {
 					</Heading>
 				</Container>
 
-				<Container p='0' ml='51px'>
+				<Container p='0' ml={{ base: '0', sm: '51px' }}>
 					<Box textAlign='left'>
 						<Badge layerStyle='badge'>MCAP</Badge>
 					</Box>
@@ -186,7 +186,7 @@ export const Overview = (props) => {
 					</Heading>
 				</Container>
 
-				<Container p='0' ml='70px'>
+				<Container p='0' ml={{ base: '0', sm: '70px' }}>
 					<Box textAlign='left'>
 						<Badge layerStyle='badge'>CIRCULATING</Badge>
 					</Box>
