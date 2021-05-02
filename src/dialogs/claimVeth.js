@@ -76,7 +76,7 @@ export const ClaimVeth = (props) => {
 		<>
 			<Flex flexFlow='column' h='20%' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
 				<Heading as='h3' size='md' textAlign='center' m='-4px 0 11px 0'>CLAIM VETHER</Heading>
-				<Box as='span' textAlign='center'>Claim your share of a previous day’s emission.</Box>
+				<Box as='span' textAlign='center'>Claim previous day’s emission share.</Box>
 			</Flex>
 
 			<Flex flexFlow='column' h='20%' width={props.width}>
@@ -126,7 +126,7 @@ export const ClaimVeth = (props) => {
 					{isNaN(share) ? prettifyCurrency(0, 0, 2, 'VETH') : prettifyCurrency(share, 0, 2, 'VETH')}
 				</Heading>
 				<Box textAlign='center'>
-					<Badge as='div' background='rgb(214, 188, 250)' color='rgb(128, 41, 251)'>Your Aquired Share</Badge>
+					<Badge as='div' background='rgb(214, 188, 250)' color='rgb(128, 41, 251)'>Your Acquired Share</Badge>
 				</Box>
 			</Flex>
 
