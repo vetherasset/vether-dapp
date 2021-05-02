@@ -24,7 +24,7 @@ export const Overview = (props) => {
 	const [pollTime, setPollTime] = useState(defaults.poll.time)
 	const [nextDayTime, setNextDayTime] = useState(undefined)
 	const [remainingTime, setRemainingTime] = useState(undefined)
-	const [dayProgress, setDayProgress] = useState(0)
+	const [dayProgress, setDayProgress] = useState(undefined)
 	const [currentBurn, setCurrentBurn] = useState(undefined)
 	const [price, setPrice] = useState(undefined)
 	const [ethPrice, setEthPrice] = useState(undefined)
@@ -34,11 +34,12 @@ export const Overview = (props) => {
 	const [supply, setSupply] = useState(undefined)
 
 	useEffect(() => {
-		if (dayProgress >= 100 || dayProgress === 0) {
+		if (dayProgress >= 100 || dayProgress === undefined) {
 			getNextDayTime(
 				defaults.network.provider,
 			)
 				.then(n => {
+					setRemainingTime(0)
 					setNextDayTime(n)
 					setInited(prevState => prevState + 1)
 				})
