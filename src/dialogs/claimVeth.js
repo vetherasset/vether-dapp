@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
 	Flex, Heading, Box, Select, Button, Progress,
-	useToast,
+	useToast, Badge,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
 import {
@@ -125,7 +125,9 @@ export const ClaimVeth = (props) => {
 				<Heading as='h3' textAlign='center'>
 					{isNaN(share) ? prettifyCurrency(0, 0, 2, 'VETH') : prettifyCurrency(share, 0, 2, 'VETH')}
 				</Heading>
-				<Heading as='span' size='sm' fontWeight='normal' textAlign='center'>Acquired share</Heading>
+				<Box textAlign='center'>
+					<Badge as='div' background='rgb(214, 188, 250)' color='rgb(128, 41, 251)'>Your Aquired Share</Badge>
+				</Box>
 			</Flex>
 
 			<Flex flexFlow='column' h='20%' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>

@@ -125,7 +125,7 @@ export const ActionPanel = (props) => {
 			bg={isOpen > -1 ? '#fff6d9' : 'accent'}
 			color='black'
 			pos={isOpen > -1 ? 'fixed' : { base: 'fixed', sm: 'relative' }}
-			bottom={isOpen > -1 ? { base: '0', md: '35px' } : '0'}
+			bottom='0'
 			maxWidth={'60ch'}
 			borderRadius={{ base: isOpen > -1 ? '0.8rem 0.8rem 0 0' : '0', sm: '0.8rem' }}
 			left='50%'
