@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
-	Flex, Heading, NumberInput, NumberInputField, Button, Badge, Box, Tooltip,
+	Flex, Heading, NumberInput, NumberInputField, Button, Badge, Box,
 	useToast,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
@@ -123,20 +123,9 @@ export const BurnEther = (props) => {
 				<Heading as='h3' textAlign='center'>
 					{value === 0 ? prettifyCurrency(value, 0, 2, 'VETH') : prettifyCurrency(value, 2, 2, 'VETH')}
 				</Heading>
-				<Heading as='span' size='sm' fontWeight='normal' textAlign='center'>Potential share</Heading>
-				<Box m='0 auto'>
-					<Tooltip hasArrow
-						label='Your share is going to be almost surely different at the end of the day!
-						The final amount of Veth you get is dependent on how much you burn,
-						compared to how much everyone else burns. Your share decreases with each incoming burn after yours.'
-						placement='bottom'
-						color='white'
-						bg='rgb(0,0,0)'
-						arrowShadowColor='rgb(0,0,0)'>
-						<Box textAlign='center'>
-							<Badge background='rgb(214, 188, 250)' color='rgb(128, 41, 251)'>Why this is not my final share?</Badge>
-						</Box>
-					</Tooltip>
+				<Box textAlign='center'>
+					<Badge as='div' background='rgb(214, 188, 250)' color='rgb(128, 41, 251)'>Potential share only
+					</Badge>
 				</Box>
 			</Flex>
 
