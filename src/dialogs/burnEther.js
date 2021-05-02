@@ -104,7 +104,7 @@ export const BurnEther = (props) => {
 			/>
 
 			<Flex flexFlow='column' h='25%' width={props.width}>
-				<Heading as='h3' size='sm' mb='11px'>Amount Eth to burn</Heading>
+				<Heading as='h3' size='sm' mb='11px'>Amount Ξ to burn</Heading>
 				<NumberInput
 					min={0}
 					value={amount}
