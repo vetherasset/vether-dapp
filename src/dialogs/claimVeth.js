@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
 	Flex, Heading, Box, Select, Button, Progress,
-	useToast, Badge,
+	useToast, Badge, Spinner,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
 import {
@@ -134,6 +134,7 @@ export const ClaimVeth = (props) => {
 				<Button w='100%'
 					isLoading={submitingTx}
 					loadingText='Submitting'
+					spinner={<Spinner size='sm' variant='inverted' />}
 					onClick={() => {
 						if (!wallet.account) {
 							toast(walletNotConnected)

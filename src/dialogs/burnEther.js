@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
 	Flex, Heading, NumberInput, NumberInputField, Button, Badge, Box,
-	useToast,
+	useToast, Spinner,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
 import { getCurrentBurn, getEmission, getUniswapAssetPrice } from '../common/ethereum'
@@ -133,6 +133,7 @@ export const BurnEther = (props) => {
 				<Button w='100%'
 					isLoading={working}
 					loadingText='Submitting'
+					spinner={<Spinner size='sm' variant='inverted' />}
 					onClick={() => {
 						if (!wallet.account) {
 							toast(walletNotConnected)
