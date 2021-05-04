@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import { ChakraProvider, Flex, Box } from '@chakra-ui/react'
+import { ChakraProvider, Flex, Box, ScaleFade } from '@chakra-ui/react'
 import vether from './themes/vether'
 import { UseWalletProvider } from 'use-wallet'
 import defaults from './common/defaults'
@@ -30,9 +30,14 @@ const App = () => {
 						  p={3}>
 							<Switch>
 								<Route path='/' exact render={() =>
-									<Box maxW={defaults.layout.width} m='0 auto'>
-										<Overview flexFlow='row wrap' mb={{ base: '0', sm: '19px' }}/>
-									</Box>
+									<ScaleFade
+										initialScale={0.95}
+										in={true}
+										unmountOnExit>
+										<Box maxW={defaults.layout.width} m='0 auto'>
+											<Overview flexFlow='row wrap' mb={{ base: '0', sm: '19px' }}/>
+										</Box>
+									</ScaleFade>
 								}/>
 								<Route path='*' render={() =>
 									<Redirect to={'/'} />

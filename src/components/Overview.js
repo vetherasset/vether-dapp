@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {
 	Flex, Container, Box, Heading, Badge,
-	Progress,
+	Progress, ScaleFade, Fade,
 } from '@chakra-ui/react'
 import defaults from '../common/defaults'
 import {
@@ -166,64 +166,83 @@ export const Overview = (props) => {
 				</Container>
 			</Box>
 
-			<Flex maxWidth='60ch' m='23px auto 9px auto' minH={{ lg: '103.167' }}>
+			<Flex maxWidth='60ch' m='23px auto 9px auto' minH={{ base: '86.6667px', sm: '103.167px' }}>
 				<Container p='0'>
-					<Box textAlign='left'><Badge>Price</Badge></Box>
-					<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='19px' textAlign='left'>
-						{price && ethPrice &&
+					<ScaleFade
+						initialScale={0.9}
+						in={price && ethPrice}>
+						<Box textAlign='left'><Badge>Price</Badge></Box>
+						<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='19px' textAlign='left'>
+							{price && ethPrice &&
 							prettifyCurrency(price * ethPrice, 0, 2)
-						}
-					</Heading>
+							}
+						</Heading>
+					</ScaleFade>
 				</Container>
 
 				<Container p='0' ml={{ base: '0', sm: '51px' }}>
-					<Box textAlign='left'>
-						<Badge layerStyle='badge'>MCAP</Badge>
-					</Box>
-					<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
-						{supply && price && ethPrice &&
+					<ScaleFade
+						initialScale={0.9}
+						in={supply && price && ethPrice}>
+						<Box textAlign='left'>
+							<Badge layerStyle='badge'>MCAP</Badge>
+						</Box>
+						<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
+							{supply && price && ethPrice &&
 							'$' + numabbr((1000000 - Number(ethers.utils.formatEther(supply))) * ((price * ethPrice)))
-						}
-					</Heading>
+							}
+						</Heading>
+					</ScaleFade>
 				</Container>
 
 				<Container p='0' ml={{ base: '0', sm: '70px' }}>
-					<Box textAlign='left'>
-						<Badge layerStyle='badge'>CIRCULATING</Badge>
-					</Box>
-					<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
-						{supply &&
+					<ScaleFade
+						initialScale={0.9}
+						in={supply}>
+						<Box textAlign='left'>
+							<Badge layerStyle='badge'>CIRCULATING</Badge>
+						</Box>
+						<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
+							{supply &&
 							numabbr((1000000 - Number(ethers.utils.formatEther(supply))), { precision: 2 })
-						}
-					</Heading>
+							}
+						</Heading>
+					</ScaleFade>
 				</Container>
 			</Flex>
 
-			<Flex maxWidth='60ch' m='0px auto' minH='103.167px'>
-				<Container padding='0 6px' mb='19px' >
-					<Box textAlign='left' mb='5px' minH='24px'>
+			<Flex maxWidth='60ch' p='0 6px' m='0px auto'>
+				<Box mb='5px' minH='24px'>
+					<ScaleFade
+						initialScale='0.9'
+						in={emissionDay && emissionEra}
+						unmountOnExit>
 						{emissionDay &&
 							<Badge layerStyle='badge'>DAY {emissionDay.toString()}</Badge>
 						}
 						{emissionEra &&
 							<Badge ml='5px' layerStyle='badge'>ERA {emissionEra.toString()}</Badge>
 						}
-					</Box>
-					<Progress colorScheme='vether'
-						height='32px'
-						borderRadius='13px'
-						value={dayProgress}
-						zIndex='-1'
-						hasStripe isAnimated/>
-				</Container>
+					</ScaleFade>
+				</Box>
 			</Flex>
+			<Container padding='0 6px 19.167px' mb='19px' >
+				<Progress colorScheme='vether'
+					height='32px'
+					borderRadius='13px'
+					value={dayProgress}
+					hasStripe isAnimated/>
+			</Container>
 
 			<Flex {...props}>
 				<Container layerStyle='overview'>
 					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
 					Remaining time
 					</Heading>
-					{remainingTime &&
+					<Fade
+						in={remainingTime}
+						unmountOnExit>
+						{remainingTime &&
 						<Heading as='h3' size='lg'>
 							<Countdown
 								zeroPadTime={2}
@@ -232,46 +251,61 @@ export const Overview = (props) => {
 									 <Box as='span' fontSize='1.3rem'>One more burn to start new day.</Box>
 							</Countdown>
 						</Heading>
-					}
+						}
+					</Fade>
 				</Container>
 
 				<Container layerStyle='overview'>
 					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
 					Total value burnt today
 					</Heading>
-					{currentBurn &&
+					<Fade
+						in={currentBurn}
+						unmountOnExit>
+						{currentBurn &&
 						<Heading as='h3' size='lg'>
 							{currentBurn &&
 								prettifyCurrency(ethers.utils.formatEther(currentBurn), 0, 2, 'ETH')
 							}
 						</Heading>
-					}
+						}
+					</Fade>
 				</Container>
 
 				<Container layerStyle='overview'>
 					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
 					Implied value today
 					</Heading>
-					{price &&
+					<Fade
+						initialScale={0.9}
+						in={currentBurn && emission && ethPrice}
+						unmountOnExit>
+						{currentBurn && emission && ethPrice &&
 						<Heading as='h3' size='lg'>
 							{currentBurn && emission && ethPrice &&
 								prettifyCurrency((Number(ethers.utils.formatEther(currentBurn)) / Number(ethers.utils.formatEther(emission))) * ethPrice)
 							}
 						</Heading>
-					}
+						}
+					</Fade>
 				</Container>
 
 				<Container layerStyle='overview'>
 					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
 					Current daily emission
 					</Heading>
-					{emission &&
+					<Fade
+						initialScale={0.9}
+						in={emission}
+						unmountOnExit>
+						{emission &&
 						<Heading as='h3' size='lg'>
 							{emission &&
 								prettifyCurrency(ethers.utils.formatEther(emission), 0, 0, 'VETH')
 							}
 						</Heading>
-					}
+						}
+					</Fade>
 				</Container>
 			</Flex>
 		</>
