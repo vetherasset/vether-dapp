@@ -28,6 +28,7 @@ export const HighImpliedPriceWarning = (props) => {
 				justifyContent='center'
 				textAlign='justify'
 				display={props.state < 1 ? 'none' : 'flex'}
+				marginBottom='0.5rem'
 			>
 				<AlertIcon />
 				<Box flex='1'>

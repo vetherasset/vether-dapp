@@ -74,12 +74,12 @@ export const ClaimVeth = (props) => {
 
 	return (
 		<>
-			<Flex flexFlow='column' h='20%' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
-				<Heading as='h3' size='md' textAlign='center' m='-4px 0 11px 0'>CLAIM VETHER</Heading>
+			<Flex flexFlow='column' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
+				<Heading as='h3' size='md' textAlign='center'>CLAIM VETHER</Heading>
 				<Box as='span' textAlign='center'>Claim previous day’s emission share.</Box>
 			</Flex>
 
-			<Flex flexFlow='column' h='20%' width={props.width}>
+			<Flex flexFlow='column' width={props.width}>
 				<Heading as='h3' size='sm' mb='11px'>Emission Era</Heading>
 				<Select isRequired
 				 placeholder='Select available era'
@@ -95,7 +95,7 @@ export const ClaimVeth = (props) => {
 				</Select>
 			</Flex>
 
-			<Flex flexFlow='column' h='20%' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
+			<Flex flexFlow='column' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
 				<Heading as='h3' size='sm' mb='11px'>Emission Day</Heading>
 				<Select
 				 disabled={!eachDayContributed || eachDayContributed.length === 0 || gettingClaimDays}
@@ -121,7 +121,7 @@ export const ClaimVeth = (props) => {
 				/>
 			</Flex>
 
-			<Flex flexFlow='column' h='20%' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
+			<Flex flexFlow='column' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
 				<Heading as='h3' textAlign='center'>
 					{isNaN(share) ? prettifyCurrency(0, 0, 2, 'VETH') : prettifyCurrency(share, 0, 2, 'VETH')}
 				</Heading>
@@ -130,7 +130,7 @@ export const ClaimVeth = (props) => {
 				</Box>
 			</Flex>
 
-			<Flex flexFlow='column' h='20%' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
+			<Flex flexFlow='column' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
 				<Button w='100%'
 					isLoading={submitingTx}
 					loadingText='Submitting'

@@ -75,9 +75,10 @@ const Body = (props) => {
 					<AccordionPanel p={0} visibility={props.isOpen === -1 ? 'hidden' : 'visible'} width={props.isOpen === -1 ? 0 : 'auto'}>
 						<Box maxW={defaults.layout.width} m='0 auto'>
 							<Container
-								minH={{ base: '485px', sm: '600px' }}
-								maxH={{ base: '485px', sm: '600px' }}
+								height={{ base: '60vh' }}
 								display='flex'
+								overflow='auto'
+								m='1rem 0'
 								flexFlow='column'
 								justifyContent='space-around'
 								alignItems='center'>

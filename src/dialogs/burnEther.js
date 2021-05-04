@@ -87,9 +87,9 @@ export const BurnEther = (props) => {
 
 	return (
 		<>
-			<Flex flexFlow='column' h='25%' width={props.width}>
-				<Heading as='h3' size='md' textAlign='center' m='-4px 0 11px 0'>ACQUIRE VETHER</Heading>
-				<Box as='span' textAlign='center'>Acquire a share of today’s emission by&nbsp;burning Ether.</Box>
+			<Flex flexFlow='column' width={props.width}>
+				<Heading as='h3' size='md' textAlign='center'>ACQUIRE VETHER</Heading>
+				<Box as='span' textAlign='center'>Acquire a share of today’s emission.</Box>
 			</Flex>
 
 			<HighImpliedPriceWarning
@@ -103,7 +103,7 @@ export const BurnEther = (props) => {
 				price={price && ethPrice ? prettifyCurrency(price * ethPrice, 0, 2) : ''}
 			/>
 
-			<Flex flexFlow='column' h='25%' width={props.width}>
+			<Flex flexFlow='column' width={props.width}>
 				<Heading as='h3' size='sm' mb='11px'>Amount Ξ to burn</Heading>
 				<NumberInput
 					min={0}
@@ -119,7 +119,7 @@ export const BurnEther = (props) => {
 				</NumberInput>
 			</Flex>
 
-			<Flex flexFlow='column' h='25%' width={props.width}>
+			<Flex flexFlow='column' width={props.width}>
 				<Heading as='h3' textAlign='center'>
 					{value === 0 ? prettifyCurrency(value, 0, 2, 'VETH') : prettifyCurrency(value, 2, 2, 'VETH')}
 				</Heading>
@@ -129,7 +129,7 @@ export const BurnEther = (props) => {
 				</Box>
 			</Flex>
 
-			<Flex flexFlow='column' h='25%' width={props.width}>
+			<Flex flexFlow='column' width={props.width}>
 				<Button w='100%'
 					isLoading={working}
 					loadingText='Submitting'
