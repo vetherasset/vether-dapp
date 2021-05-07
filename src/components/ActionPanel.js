@@ -63,6 +63,8 @@ const Body = (props) => {
 
 	return (
 		<AccordionItem
+			display='flex'
+			flexDirection='column'
 			width={props.isOpen === -1 ? '50%' : props.isOpen === props.index ? '100%' : '0'}
 			border='none'>
 			{({ isExpanded }) => (
