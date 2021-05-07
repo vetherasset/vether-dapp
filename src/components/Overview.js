@@ -23,6 +23,7 @@ export const Overview = (props) => {
 	const [autoRefresh, setAutoRefresh] = useState(true)
 	const [pollTime, setPollTime] = useState(defaults.poll.time)
 	const [nextDayTime, setNextDayTime] = useState(undefined)
+	const [countDownId, setCountDownId] = useState(-1)
 	const [remainingTime, setRemainingTime] = useState(undefined)
 	const [dayProgress, setDayProgress] = useState(undefined)
 	const [currentBurn, setCurrentBurn] = useState(undefined)
@@ -39,8 +40,8 @@ export const Overview = (props) => {
 				defaults.network.provider,
 			)
 				.then(n => {
-					setRemainingTime(0)
 					setNextDayTime(n)
+					setCountDownId(n.toString() * 1000)
 					setInited(prevState => prevState + 1)
 				})
 		}
@@ -61,7 +62,7 @@ export const Overview = (props) => {
 	}, [dayProgress])
 
 	useEffect(() => {
-		if (nextDayTime) setRemainingTime(Number(nextDayTime.toString()) * 1000)
+		if (nextDayTime) setRemainingTime(nextDayTime.toString() * 1000)
 	}, [nextDayTime])
 
 	useEffect(() => {
@@ -247,6 +248,7 @@ export const Overview = (props) => {
 							<Countdown
 								zeroPadTime={2}
 								daysInHours={true}
+								key={countDownId}
 								date={remainingTime}>
 									 <Box as='span' fontSize='1.3rem'>One more burn to start new day.</Box>
 							</Countdown>
