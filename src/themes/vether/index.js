@@ -80,7 +80,7 @@ const overrides = {
 			borderRadius: '11px',
 			marginBottom: '17px',
 			p: '22px 19px 13px',
-			minHeight: '90px',
+			minHeight: '93px',
 			border: '1px solid rgba(255, 255, 255, 0.2)',
 		},
 		actionPanel: {
