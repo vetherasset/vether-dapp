@@ -81,6 +81,7 @@ const overrides = {
 			marginBottom: '17px',
 			p: '22px 19px 13px',
 			minHeight: '90px',
+			border: '1px solid rgba(255, 255, 255, 0.11)',
 		},
 		actionPanel: {
 			display: 'flex',
