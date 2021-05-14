@@ -76,12 +76,12 @@ const overrides = {
 	},
 	layerStyles: {
 		overview: {
-			bg: '#1E1E1E',
+			bg: '#2a2a2a',
 			borderRadius: '11px',
 			marginBottom: '17px',
 			p: '22px 19px 13px',
 			minHeight: '90px',
-			border: '1px solid rgba(255, 255, 255, 0.11)',
+			border: '1px solid rgba(255, 255, 255, 0.2)',
 		},
 		actionPanel: {
 			display: 'flex',
