@@ -1,6 +1,17 @@
 export default {
-	body: {
-		fontFamily: 'Body',
+	button: {
+		fontFamily: 'Button',
+		fontWeight: 'semibold',
+	},
+	overviewItemHeading: {
+		fontWeight: 'normal',
+		fontStyle: 'italic',
+		lineHeight: '1',
+		mb: '4px',
+	},
+	overviewItem: {
+		fontSize: '2xl',
+		fontWeight: 'normal',
 	},
 	h1: {
 		margin: '2rem 0',

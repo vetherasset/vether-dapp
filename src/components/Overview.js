@@ -173,11 +173,11 @@ export const Overview = (props) => {
 						initialScale={0.9}
 						in={price && ethPrice}>
 						<Box textAlign='left'><Badge>Price</Badge></Box>
-						<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='19px' textAlign='left'>
+						<Box fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} lineHeight='1.2' fontWeight='normal' mb='19px' textAlign='left'>
 							{price && ethPrice &&
 							prettifyCurrency(price * ethPrice, 0, 2)
 							}
-						</Heading>
+						</Box>
 					</ScaleFade>
 				</Container>
 
@@ -188,11 +188,11 @@ export const Overview = (props) => {
 						<Box textAlign='left'>
 							<Badge layerStyle='badge'>MCAP</Badge>
 						</Box>
-						<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
+						<Box fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} lineHeight='1.2' fontWeight='normal' mb='19px' textAlign='left'>
 							{supply && price && ethPrice &&
 							'$' + numabbr((1000000 - Number(ethers.utils.formatEther(supply))) * ((price * ethPrice)))
 							}
-						</Heading>
+						</Box>
 					</ScaleFade>
 				</Container>
 
@@ -203,11 +203,11 @@ export const Overview = (props) => {
 						<Box textAlign='left'>
 							<Badge layerStyle='badge'>CIRCULATING</Badge>
 						</Box>
-						<Heading as='h2' fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} fontWeight='normal' mb='35px' textAlign='left'>
+						<Box fontSize={{ base: '1.3rem', md: '2.3rem', lg: '2.3rem' }} lineHeight='1.2' fontWeight='normal' mb='19px' textAlign='left'>
 							{supply &&
 							numabbr((1000000 - Number(ethers.utils.formatEther(supply))), { precision: 2 })
 							}
-						</Heading>
+						</Box>
 					</ScaleFade>
 				</Container>
 			</Flex>
@@ -231,20 +231,22 @@ export const Overview = (props) => {
 				<Progress colorScheme='vether'
 					height='32px'
 					borderRadius='13px'
+					background='#1E1E1E'
 					value={dayProgress}
 					hasStripe isAnimated/>
 			</Container>
 
-			<Flex {...props}>
-				<Container layerStyle='overview'>
-					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
+			<Flex {...props} justifyContent='center'>
+				<Box w='60ch'>
+					<Container layerStyle='overview'>
+						<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px' opacity='0.8'>
 					Remaining time
-					</Heading>
-					<Fade
-						in={remainingTime}
-						unmountOnExit>
-						{remainingTime &&
-						<Heading as='h3' size='lg'>
+						</Heading>
+						<Fade
+							in={remainingTime}
+							unmountOnExit>
+							{remainingTime &&
+						<Box textStyle='overviewItem'>
 							<Countdown
 								zeroPadTime={2}
 								daysInHours={true}
@@ -252,63 +254,67 @@ export const Overview = (props) => {
 								date={remainingTime}>
 									 <Box as='span' fontSize='1.3rem'>One more burn to start new day.</Box>
 							</Countdown>
-						</Heading>
-						}
-					</Fade>
-				</Container>
-
-				<Container layerStyle='overview'>
-					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
-					Total value burnt today
-					</Heading>
-					<Fade
-						in={currentBurn}
-						unmountOnExit>
-						{currentBurn &&
-						<Heading as='h3' size='lg'>
-							{currentBurn &&
-								prettifyCurrency(ethers.utils.formatEther(currentBurn), 0, 2, 'ETH')
+						</Box>
 							}
-						</Heading>
-						}
-					</Fade>
-				</Container>
+						</Fade>
+					</Container>
 
-				<Container layerStyle='overview'>
-					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
+					<Container layerStyle='overview'>
+						<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px' opacity='0.8'>
+					Total value burnt today
+						</Heading>
+						<Fade
+							in={currentBurn}
+							unmountOnExit>
+							{currentBurn &&
+								<Box textStyle='overviewItem'>
+									{currentBurn &&
+										<>
+											{prettifyCurrency(ethers.utils.formatEther(currentBurn), 0, 2, 'ETH').replace('Ξ', '')}
+											<span style={{ fontFamily: 'arial' }}>Ξ</span>
+										</>
+									}
+								</Box>
+							}
+						</Fade>
+					</Container>
+
+					<Container layerStyle='overview'>
+						<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px' opacity='0.8'>
 					Implied value today
-					</Heading>
-					<Fade
-						initialScale={0.9}
-						in={currentBurn && emission && ethPrice}
-						unmountOnExit>
-						{currentBurn && emission && ethPrice &&
-						<Heading as='h3' size='lg'>
+						</Heading>
+						<Fade
+							initialScale={0.9}
+							in={currentBurn && emission && ethPrice}
+							unmountOnExit>
+							{currentBurn && emission && ethPrice &&
+						<Box textStyle='overviewItem'>
 							{currentBurn && emission && ethPrice &&
 								prettifyCurrency((Number(ethers.utils.formatEther(currentBurn)) / Number(ethers.utils.formatEther(emission))) * ethPrice)
 							}
-						</Heading>
-						}
-					</Fade>
-				</Container>
+						</Box>
+							}
+						</Fade>
+					</Container>
 
-				<Container layerStyle='overview'>
-					<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px'>
+					<Container layerStyle='overview'>
+						<Heading as='h4' size='xs' fontWeight='normal' fontStyle='italic' lineHeight='1' mb='5px' opacity='0.8'>
 					Current daily emission
-					</Heading>
-					<Fade
-						initialScale={0.9}
-						in={emission}
-						unmountOnExit>
-						{emission &&
-						<Heading as='h3' size='lg'>
+						</Heading>
+						<Fade
+							initialScale={0.9}
+							in={emission}
+							unmountOnExit>
+							{emission &&
+						<Box textStyle='overviewItem'>
 							{emission &&
 								prettifyCurrency(ethers.utils.formatEther(emission), 0, 0, 'VETH')
 							}
-						</Heading>
-						}
-					</Fade>
-				</Container>
+						</Box>
+							}
+						</Fade>
+					</Container>
+				</Box>
 			</Flex>
 		</>
 	)

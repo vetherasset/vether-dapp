@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import defaults from '../common/defaults'
 import { Flex, Accordion, AccordionButton, AccordionItem, AccordionPanel,
-	Box, Container, Heading, useBreakpointValue } from '@chakra-ui/react'
+	Box, Container, useBreakpointValue } from '@chakra-ui/react'
 import { BurnEther } from '../dialogs/burnEther'
 import { ClaimVeth } from '../dialogs/claimVeth'
 import { GiFireRay } from 'react-icons/gi'
@@ -19,7 +19,7 @@ const CloseButton = () => {
 			_hover={{ background: 'none' }}
 			_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
 		>
-			<Heading as='span' size='sm'>Close</Heading>
+			<Box as='span' size='sm' textStyle='button'>Close</Box>
 		</AccordionButton>
 	)
 }
@@ -46,7 +46,7 @@ const ActionButton = (props) => {
 				base: props.icon,
 				sm: '',
 			})}
-			<Heading as='span' size='1rem'>{props.name}</Heading>
+			<Box as='span' size='1rem' textStyle='button'>{props.name}</Box>
 		</AccordionButton>
 	)
 }

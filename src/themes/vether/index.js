@@ -12,6 +12,7 @@ import link from './link'
 import { extendTheme } from '@chakra-ui/react'
 import defaults from '../../common/defaults'
 import spinner from './spinner'
+import fonts from './fonts'
 
 const overrides = {
 	config: {
@@ -27,7 +28,7 @@ const overrides = {
 				fontFamily: 'Body',
 				fontSize: '1em',
 				fontWeight: '300',
-				bg: mode('#ffffff', '#110D02')(props),
+				bg: mode('#ffffff', '#000000')(props),
 				'-ms-overflow-style': 'none',
 				'scrollbar-width': 'none',
 			},
@@ -43,8 +44,12 @@ const overrides = {
 			'.chakra-toast__inner': {
 				width: '30vw',
 			},
+			'option': {
+				color: 'white',
+			},
 		}),
 	},
+	fonts: fonts,
 	textStyles: typography,
 	colors: colors,
 	components: {
@@ -54,6 +59,11 @@ const overrides = {
 		Badge: badge,
 		Tooltip: tooltip,
 		Select: select,
+		Progress: {
+			baseStyle: {
+				background: 'red',
+			},
+		},
 		MenuItem: menuitem,
 		Link: link,
 		Spinner: spinner,
@@ -66,13 +76,11 @@ const overrides = {
 	},
 	layerStyles: {
 		overview: {
-			bg: 'black',
-			border: '1px solid #ffc300ce',
-			borderRadius: '19px',
-			marginBottom: '15px',
-			p: '19px',
-			minHeight: '95px',
-			boxShadow: '0px 0px 32px -20px #ffffff9c',
+			bg: '#1E1E1E',
+			borderRadius: '11px',
+			marginBottom: '17px',
+			p: '22px 19px 13px',
+			minHeight: '90px',
 		},
 		actionPanel: {
 			display: 'flex',

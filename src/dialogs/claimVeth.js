@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
-	Flex, Heading, Box, Select, Button, Progress,
+	Flex, Box, Select, Button, Progress,
 	useToast, Badge, Spinner,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
@@ -75,12 +75,12 @@ export const ClaimVeth = (props) => {
 	return (
 		<>
 			<Flex flexFlow='column' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
-				<Heading as='h3' size='md' textAlign='center'>CLAIM VETHER</Heading>
+				<Box as='h3' fontSize='1.2rem' fontWeight='bold' size='md' textAlign='center'>CLAIM VETHER</Box>
 				<Box as='span' textAlign='center'>Claim previous day’s emission share.</Box>
 			</Flex>
 
 			<Flex flexFlow='column' width={props.width}>
-				<Heading as='h3' size='sm' mb='11px'>Emission Era</Heading>
+				<Box as='h3' fontWeight='bold' size='sm' mb='11px'>Emission Era</Box>
 				<Select isRequired
 				 placeholder='Select available era'
 				 onChange={(event) => {
@@ -96,7 +96,7 @@ export const ClaimVeth = (props) => {
 			</Flex>
 
 			<Flex flexFlow='column' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
-				<Heading as='h3' size='sm' mb='11px'>Emission Day</Heading>
+				<Box as='h3' fontWeight='bold' mb='11px'>Emission Day</Box>
 				<Select
 				 disabled={!eachDayContributed || eachDayContributed.length === 0 || gettingClaimDays}
 				 isRequired
@@ -122,9 +122,9 @@ export const ClaimVeth = (props) => {
 			</Flex>
 
 			<Flex flexFlow='column' width={props.width} display={props.visible === -1 ? 'none' : 'flex'}>
-				<Heading as='h3' textAlign='center'>
+				<Box as='h3' fontSize='1.9rem' fontWeight='bold' textAlign='center'>
 					{isNaN(share) ? prettifyCurrency(0, 0, 2, 'VETH') : prettifyCurrency(share, 0, 2, 'VETH')}
-				</Heading>
+				</Box>
 				<Box textAlign='center'>
 					<Badge as='div' background='rgb(214, 188, 250)' color='rgb(128, 41, 251)'>Your Acquired Share</Badge>
 				</Box>

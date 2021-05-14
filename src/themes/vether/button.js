@@ -2,14 +2,15 @@ export default {
 	baseStyle: {
 		fontFamily: 'Button',
 		lineHeight: '0px',
+		borderRadius: '4px',
 		_focus: {
 			boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)',
 		},
 	},
 	variants: {
 		solid: () => ({
-			color: 'rgb(17, 13, 1)',
-			bg: 'rgb(255, 186, 0)',
+			color: '#000',
+			bg: 'accent',
 			_hover: {
 				bg: '#ffc300',
 			},

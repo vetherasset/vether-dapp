@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { ethers } from 'ethers'
 import defaults from '../common/defaults'
 import {
-	Flex, Heading, NumberInput, NumberInputField, Button, Badge, Box,
+	Flex, NumberInput, NumberInputField, Button, Badge, Box,
 	useToast, Spinner,
 } from '@chakra-ui/react'
 import { useWallet } from 'use-wallet'
@@ -88,7 +88,7 @@ export const BurnEther = (props) => {
 	return (
 		<>
 			<Flex flexFlow='column' width={props.width}>
-				<Heading as='h3' size='md' textAlign='center'>ACQUIRE VETHER</Heading>
+				<Box as='h3' fontSize='1.2rem' fontWeight='bold' size='md' textAlign='center'>ACQUIRE VETHER</Box>
 				<Box as='span' textAlign='center'>Acquire a share of today’s emission.</Box>
 			</Flex>
 
@@ -104,7 +104,7 @@ export const BurnEther = (props) => {
 			/>
 
 			<Flex flexFlow='column' width={props.width}>
-				<Heading as='h3' size='sm' mb='11px'>Amount Ξ to burn</Heading>
+				<Box as='h3' fontSize='1.01rem' fontWeight='bold' mb='11px'>Amount <span style={{ fontFamily: 'arial' }}>Ξ</span> to burn</Box>
 				<NumberInput
 					min={0}
 					value={amount}
@@ -120,10 +120,10 @@ export const BurnEther = (props) => {
 			</Flex>
 
 			<Flex flexFlow='column' width={props.width}>
-				<Heading as='h3' textAlign='center'>
+				<Box as='h3' fontSize='1.9rem' fontWeight='bold' textAlign='center'>
 					{value === 0 ? prettifyCurrency(value, 0, 2, 'VETH') : prettifyCurrency(value, 2, 2, 'VETH')}
-				</Heading>
-				<Box textAlign='center'>
+				</Box>
+				<Box as='h3' fontWeight='bold' textAlign='center'>
 					<Badge as='div' background='rgb(214, 188, 250)' color='rgb(128, 41, 251)'>Potential share only
 					</Badge>
 				</Box>
