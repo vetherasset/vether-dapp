@@ -17,7 +17,7 @@ const CloseButton = () => {
 			justifyContent='center'
 			borderRadius='md'
 			_hover={{ background: 'none' }}
-			_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
+			_focus={{ boxShadow: '0 0 0 3px #ff8ac091' }}
 		>
 			<Box as='span' size='sm' textStyle='button'>Close</Box>
 		</AccordionButton>
@@ -40,7 +40,7 @@ const ActionButton = (props) => {
 			justifyContent='center'
 			fontSize={{ base: '0.90rem', sm: '1rem' }}
 			p={{ base: '11px 0', sm: '26px 0' }}
-			_focus={{ boxShadow: '0 0 0 3px rgba(206, 150, 0, 0.6)' }}
+			_focus={{ boxShadow: '0 0 0 3px #ff8ac091' }}
 		>
 			{useBreakpointValue({
 				base: props.icon,
@@ -125,7 +125,7 @@ export const ActionPanel = (props) => {
 
 	return (
 		<Flex w={{ base: '100%', md: '60ch' }}
-			bg={isOpen > -1 ? '#fff6d9' : 'accent'}
+			bg={isOpen > -1 ? '#ffebda' : 'linear-gradient(90deg,#ff65ac  0%, #FFBF00 100%)'}
 			color='black'
 			pos={isOpen > -1 ? 'fixed' : { base: 'fixed', sm: 'relative' }}
 			bottom='0'

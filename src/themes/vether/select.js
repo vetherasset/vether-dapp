@@ -8,7 +8,7 @@ export default {
 					background: 'white',
 				},
 				_focus: {
-					borderColor: '#ffd000',
+					borderColor: '#ff8ac0',
 					background: 'white',
 				},
 			},

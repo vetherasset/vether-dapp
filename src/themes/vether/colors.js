@@ -1,9 +1,9 @@
 export default {
-	primary: '#110D02',
-	accent: '#ffbf00',
+	primary: '#00000',
+	accent: '#ff65ac',
 	green: {
-		200: '#ffbf00',
-		500: '#ffbf00',
+		200: '#ffb611',
+		500: '#ffb611',
 	},
 	gray: {
 		300: '#f1f2f3',
@@ -11,7 +11,7 @@ export default {
 		700: '#1e1e1e',
 	},
 	vether: {
-		200: '#ffbf00',
-		500: '#ffbf00',
+		200: '#ff7789',
+		500: '#ff7789',
 	},
 }
